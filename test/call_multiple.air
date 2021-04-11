@@ -1,0 +1,10 @@
+(seq
+    (call init_relay ("peer" "identify") [] result)
+    (seq 
+        (call %init_peer_id% ("returnService" "run") [result])
+        (seq 
+            (call %init_peer_id% ("returnService" "run") [result])
+            (call %init_peer_id% ("returnService" "run") [result])
+        )
+    )
+)
