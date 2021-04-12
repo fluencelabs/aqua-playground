@@ -6,8 +6,9 @@ import { getPeerExternalAddresses } from "./compiled/helloWorld";
 
 const main = async () => {
   const client = await createClient(testNet[0]);
-  const addresses = getPeerExternalAddresses(client);
+  const addresses = await getPeerExternalAddresses(client, client.relayPeerId!);
   console.log("Relay external addresses: ", addresses);
+  client.disconnect();
 };
 
 main();

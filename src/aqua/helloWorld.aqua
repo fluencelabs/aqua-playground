@@ -4,6 +4,7 @@ data ExternalAddresses:
 service Peer("peer"):
     identify: -> ExternalAddresses
 
-func getPeerExternalAddresses() -> []string:
-    res <- Peer.identify()
+func getPeerExternalAddresses(otherNodePeerId: string) -> []string:
+    on otherNodePeerId:
+        res <- Peer.identify()
     <- res.external_addresses
