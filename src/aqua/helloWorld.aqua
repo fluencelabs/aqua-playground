@@ -1,10 +1,11 @@
-data ExternalAddresses:
-    external_addresses: []string
-
-service Peer("peer"):
-    identify: -> ExternalAddresses
+import "builtin.aqua"
 
 func getPeerExternalAddresses(otherNodePeerId: string) -> []string:
     on otherNodePeerId:
         res <- Peer.identify()
     <- res.external_addresses
+
+-- func getPeerExternalTimestamp(otherNodePeerId: string) -> u64:
+--     on otherNodePeerId:
+--         res <- Peer.timestamp_sec()
+--     <- res
