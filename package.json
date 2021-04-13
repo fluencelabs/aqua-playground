@@ -18,11 +18,13 @@
   "scripts": {
     "build": "tsc",
     "cli": "node -r ts-node/register src/index.ts",
-    "compile-aqua": "java -jar ./aqua-hll.jar -i ./src/aqua/ -o ./src/compiled"
+    "compile-aqua": "java -jar ./aqua-hll.jar -i ./src/aqua/ -o ./src/compiled",
+    "compile": "aquamarine -i ./src/aqua/ -o ./src/compiled"
   },
   "devDependencies": {
     "ts-node": "^9.1.1",
-    "typescript": "^4.2.4"
+    "typescript": "^4.2.4",
+    "@fluencelabs/aquamarine": "file:fluencelabs-aquamarine-1.0.0.tgz"
   },
   "dependencies": {
     "@fluencelabs/fluence": "0.9.34",
