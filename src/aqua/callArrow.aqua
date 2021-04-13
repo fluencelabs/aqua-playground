@@ -1,0 +1,5 @@
+import "println.aqua"
+
+func callArrowFunc(a: string -> string):
+    res <- a("hello")
+    print(res)

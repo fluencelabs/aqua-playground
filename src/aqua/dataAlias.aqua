@@ -1,0 +1,12 @@
+alias PeerId : string
+
+data NodeId:
+    peerId: PeerId
+    name: string
+
+service DataAlias("DataAlias"):
+    get: -> NodeId
+
+func dataAliasFunc() -> PeerId:
+    res <- DataAlias.get()
+    <- res.peerId
