@@ -1,5 +1,6 @@
 import "println.aqua"
 
-func callArrowFunc(c: string -> string):
+-- functions like `c` are called an 'arrow function' in Aqua
+func passFunctionAsArg(c: string -> string):
     res <- c("hello")
     print(res)

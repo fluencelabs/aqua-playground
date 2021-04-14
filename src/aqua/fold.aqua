@@ -1,9 +1,10 @@
 import "println.aqua"
 
-func foldFunc(strings: []string):
+-- showcases `for` instruction that compiles to `fold` in AIR
+func iterateAndPrint(strings: []string):
     for s <- strings:
         print(s)
 
-func parFoldFunc(strings: []string):
+func iterateAndPrintParallel(strings: []string):
     for s <- strings par:
         print(s)

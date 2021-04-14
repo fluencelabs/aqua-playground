@@ -1,5 +1,7 @@
+-- set `PeerId` name to be a type alias for `string` type
 alias PeerId : string
 
+-- define data structure (ADT)
 data NodeId:
     peerId: PeerId
     name: string
