@@ -7,3 +7,5 @@ func parFunc( node: string ):
     par y <- ParAbb.call()
     par on node:
         t <- Peer.identify
+    par y <- ParAbb.call()
+
