@@ -12,6 +12,8 @@ import {dataAliasCall} from "./dataAliasCall";
 import {onCall} from "./onCall";
 import {funcCall} from "./funcCall";
 import {helloWorldCall} from "./helloWorldCall";
+import {foldCall} from "./foldCall";
+import {ifCall} from "./if";
 
 const main = async () => {
   const client = await createClient(testNet[0]);
@@ -21,11 +23,15 @@ const main = async () => {
     return {}
   })
 
+  callArrowCall(client)
+  foldCall(client)
+  ifCall(client)
+
   await helloWorldCall(client)
   await funcCall(client)
   await onCall(client)
   await dataAliasCall(client)
-  callArrowCall(client)
+
 
   client.disconnect();
   process.exit(0)

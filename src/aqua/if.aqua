@@ -1,0 +1,7 @@
+import "println.aqua"
+
+func ifElseCall(condition: bool):
+    if condition:
+        Println.print("it is true")
+    else:
+        Println.print("it is false")

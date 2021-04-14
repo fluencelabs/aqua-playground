@@ -1,0 +1,9 @@
+import "println.aqua"
+
+func foldFunc(strings: []string):
+    for s <- strings:
+        print(s)
+
+func parFoldFunc(strings: []string):
+    for s <- strings par:
+        print(s)
