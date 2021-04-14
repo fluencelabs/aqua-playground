@@ -1,0 +1,10 @@
+import "helloWorld.aqua"
+import "println.aqua"
+import "on.aqua"
+import "func.aqua"
+
+func doStuff(a: string):
+    str <- Srv.str()
+    par Println.print(str)
+    par on a:
+        Peer.identify()

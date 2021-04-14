@@ -1,0 +1,7 @@
+service ParAbb("parabb"):
+    call: -> string
+
+func parFunc( node: string ):
+    par y <- ParAbb.call()
+    par on node:
+        t <- ParAbb.call()

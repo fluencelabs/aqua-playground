@@ -8,3 +8,9 @@ func getPeerExternalAddresses(otherNodePeerId: string) -> []string:
     on otherNodePeerId:
         res <- Peer.identify()
     <- res.external_addresses
+
+-- it could be possible to use `via` to built complex routes
+func getDistantAddresses(target: string, viaNode: string) -> []string:
+    on target via viaNode:
+        res <- Peer.identify()
+    <- res.external_addresses
