@@ -3,9 +3,9 @@ import "on.aqua"
 service ParAbb("parabb"):
     call: -> string
 
-func parFunc( node: string ):
-    par y <- ParAbb.call()
+func parFunc( node: string, c: ExternalAddresses -> () ):
+    y <- ParAbb.call()
     par on node:
         t <- Peer.identify
-    par y <- ParAbb.call()
-
+        c(t)
+    par x <- ParAbb.call()

@@ -6,7 +6,8 @@ func iterateAndPrint(strings: []string):
     for s <- strings:
         print(s)
 
-func iterateAndPrintParallel(strings: []string):
-    for s <- strings par:
-        on "s"
-        ads <- Peer.identify
+func iterateAndPrintParallel(nodes: []string, c: ExternalAddresses -> ()):
+    for s <- nodes par:
+        on s:
+            ads <- Peer.identify
+            c(ads)
