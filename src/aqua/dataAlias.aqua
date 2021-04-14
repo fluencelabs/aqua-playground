@@ -4,9 +4,9 @@ data NodeId:
     peerId: PeerId
     name: string
 
-service DataAlias("DataAlias"):
+service SomeSrv("somesrv"):
     get: -> NodeId
 
 func dataAliasFunc() -> PeerId:
-    res <- DataAlias.get()
+    res <- SomeSrv.get()
     <- res.peerId

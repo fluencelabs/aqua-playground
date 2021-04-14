@@ -2,11 +2,6 @@
 
 import {createClient, registerServiceFunction, SecurityTetraplet} from "@fluencelabs/fluence";
 import { testNet } from "@fluencelabs/fluence-network-environment";
-import {helloWorld} from "./compiled/helloWorld";
-import {testFunc} from "./compiled/func";
-import {getPeerExternalAddresses} from "./compiled/some";
-import {dataAliasFunc} from "./compiled/dataAlias";
-import {callArrowFunc} from "./compiled/callArrow";
 import {callArrowCall} from "./callArrowCall";
 import {dataAliasCall} from "./dataAliasCall";
 import {onCall} from "./onCall";
