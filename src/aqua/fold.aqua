@@ -1,4 +1,5 @@
 import "println.aqua"
+import "on.aqua"
 
 -- showcases `for` instruction that compiles to `fold` in AIR
 func iterateAndPrint(strings: []string):
@@ -7,4 +8,5 @@ func iterateAndPrint(strings: []string):
 
 func iterateAndPrintParallel(strings: []string):
     for s <- strings par:
-        print(s)
+        on "s"
+        ads <- Peer.identify
