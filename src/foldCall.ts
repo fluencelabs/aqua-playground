@@ -7,4 +7,3 @@
             console.log("iterateAndPrintParallel. external addresses: " + c.external_addresses)
         })
     }
-    
