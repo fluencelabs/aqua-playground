@@ -1,4 +1,4 @@
-service TestSrv("srv"):
+service TestSrv("test-service-id"):
     str: -> string
 
 func testFunc() -> string:

@@ -1,4 +1,4 @@
-service Println("println"):
+service Println("println-service-id"):
     print: string -> ()
 
 func print(str: string):

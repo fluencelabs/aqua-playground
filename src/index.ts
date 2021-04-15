@@ -16,7 +16,7 @@ const main = async () => {
   const client = await createClient(testNet[0]);
 
   // this could be called from `println.aqua`
-  registerServiceFunction(client, "println", "print", (args: any[], _) => {
+  registerServiceFunction(client, "println-service-id", "print", (args: any[], _) => {
     console.log("println:   " + args[0])
     return {}
   })
