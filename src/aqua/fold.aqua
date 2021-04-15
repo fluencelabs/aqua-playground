@@ -9,5 +9,5 @@ func iterateAndPrint(strings: []string):
 func iterateAndPrintParallel(nodes: []string, c: ExternalAddresses -> ()):
     for s <- nodes par:
         on s:
-            ads <- Peer.identify
+            ads <- Peer.identify()
             c(ads)

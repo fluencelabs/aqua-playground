@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import {createClient, registerServiceFunction, SecurityTetraplet} from "@fluencelabs/fluence";
+import {createClient, registerServiceFunction} from "@fluencelabs/fluence";
 import { testNet } from "@fluencelabs/fluence-network-environment";
 import {callArrowCall} from "./callArrowCall";
 import {dataAliasCall} from "./dataAliasCall";
@@ -20,6 +20,8 @@ const main = async () => {
     return {}
   })
 
+  // these calls return void, so they could be executed at any time,
+  // because promise waits only a fact that particle was sent
   await callArrowCall(client)
   await foldCall(client)
   await ifCall(client)

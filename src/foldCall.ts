@@ -2,6 +2,8 @@
     import {iterateAndPrint, iterateAndPrintParallel} from "./compiled/fold";
 
     export async function foldCall(client: FluenceClient) {
-        await iterateAndPrint(client, ["1", "2", "3"])
-        await iterateAndPrintParallel(client, ["4", "5", "6"])
+        await iterateAndPrint(client, [client.relayPeerId!])
+        await iterateAndPrintParallel(client, [client.relayPeerId!], (c) => {
+            console.log("iterateAndPrintParallel. external addresses: " + c.external_addresses)
+        })
     }

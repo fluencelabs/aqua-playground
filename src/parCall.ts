@@ -6,5 +6,7 @@ export async function parCall(client: FluenceClient) {
         return `hello`
     })
 
-    await parFunc(client, client.relayPeerId!)
+    await parFunc(client, client.relayPeerId!, (c) => {
+        console.log("parFunc. external addresses par: " + c.external_addresses)
+    })
 }

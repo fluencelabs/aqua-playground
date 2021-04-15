@@ -6,6 +6,6 @@ service ParAbb("parabb"):
 func parFunc( node: string, c: ExternalAddresses -> () ):
     y <- ParAbb.call()
     par on node:
-        t <- Peer.identify
+        t <- Peer.identify()
         c(t)
     par x <- ParAbb.call()
