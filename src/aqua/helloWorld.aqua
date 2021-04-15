@@ -1,11 +1,6 @@
-import "builtin.aqua"
+service StringExtra("service-id"):
+    addNameToHello: string -> string
 
-func getPeerExternalAddresses(otherNodePeerId: string) -> []string:
-    on otherNodePeerId:
-        res <- Peer.identify()
-    <- res.external_addresses
-
--- func getPeerExternalTimestamp(otherNodePeerId: string) -> u64:
---     on otherNodePeerId:
---         res <- Peer.timestamp_sec()
---     <- res
+func helloWorld(name: string) -> string:
+    res <- StringExtra.addNameToHello(name)
+    <- res

@@ -1,0 +1,11 @@
+import "helloWorld.aqua"
+import "println.aqua"
+import "builtin.aqua"
+import "func.aqua"
+
+-- just a lot of imports and calls
+func doStuff(a: string):
+    str <- TestSrv.str()
+    par Println.print(str)
+    par on a:
+        Peer.identify()

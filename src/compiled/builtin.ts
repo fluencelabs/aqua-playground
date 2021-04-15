@@ -41,6 +41,6 @@ export async function id(client: FluenceClient): Promise<void> {
             .build();
     });
     await client.initiateFlow(request);
-    return promise;
+    return Promise.race([promise, Promise.resolve()]);
 }
       
