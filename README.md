@@ -24,39 +24,17 @@ To start the program execute
 npm run cli
 ```
 
-If everything works correctly the following should be printed into the console:
+If everything works correctly logs without errors will be printed on a screen:
 
-```
-
-Relay external addresses:  [ '/ip4/165.227.164.206/tcp/7001', '/ip4/165.227.164.206/tcp/9001/ws' ]
-```
-
-Now try to uncomment the following lines in `helloWorld.aqua` and run the compiler once again
-
-```
--- func getPeerExternalTimestamp(otherNodePeerId: string) -> u64:
---     on otherNodePeerId:
---         res <- Peer.timestamp_sec()
---     <- res
-
-```
-
-Now, the new function should appear in generated `helloWorld.ts` Uncomment everything in `index.ts` and run the program again.
-
-The following should be printed to the console:
-
-```
-Relay external addresses:  [ '/ip4/165.227.164.206/tcp/7001', '/ip4/165.227.164.206/tcp/9001/ws' ]
-Relay timestamp:  1618429933
-```
-
-
+Then you can add or modify `aqua` files in `aqua` directory, these files will be compiled into `/src/compiled` and you can use it in a TypeScript in your preferable way.
 
 ## Project structure
 
 Aqua source files are located in `src/aqua`directory.
 
-Aqua files are compiled into .ts located in `/src/compiled` directory
+Aqua files are compiled into .ts located in `/src/compiled` directory.
+
+Entry point to use aqua compiled files from TypeScript: `/src/index.ts`
 
 ## References
 
