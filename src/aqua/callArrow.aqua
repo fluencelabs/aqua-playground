@@ -1,6 +1,12 @@
 import "println.aqua"
+import "builtin.aqua"
 
 -- functions like `c` are called an 'arrow function' in Aqua
-func passFunctionAsArg(c: string -> string):
-    res <- c("hello")
+-- `c` passed to a function from a client, so, it could be called only on a client
+
+func passFunctionAsArg(node: string, c: string -> string):
+    on node:
+        Peer.identify()
+        res <- c("hello")
+        Peer.identify()
     print(res)

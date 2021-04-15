@@ -1,5 +1,5 @@
 import "println.aqua"
-import "on.aqua"
+import "builtin.aqua"
 
 -- showcases `for` instruction that compiles to `fold` in AIR
 func iterateAndPrint(strings: []string):

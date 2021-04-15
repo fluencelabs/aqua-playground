@@ -15,10 +15,13 @@ import {complexCall} from "./complex";
 const main = async () => {
   const client = await createClient(testNet[0]);
 
+  // this could be called from `println.aqua`
   registerServiceFunction(client, "println", "print", (args: any[], _) => {
     console.log("println:   " + args[0])
     return {}
   })
+
+  // these is only list of calls. Take a look into functions to see what's going on
 
   // these calls return void, so they could be executed at any time,
   // because promise waits only a fact that particle was sent
@@ -27,6 +30,7 @@ const main = async () => {
   await ifCall(client)
   await parCall(client)
 
+  // these calls waiting for a result, so it will be called sequentially
   await helloWorldCall(client)
   await funcCall(client)
   await onCall(client)
