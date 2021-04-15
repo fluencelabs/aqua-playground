@@ -5,3 +5,9 @@ func ifElseCall(condition: bool):
         Println.print("it is true")
     else:
         Println.print("it is false")
+
+func ifElseNumCall(condition: u32):
+    if condition == 1:
+        Println.print("it is 1")
+    else:
+        Println.print("it is not 1")
