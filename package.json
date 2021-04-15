@@ -18,7 +18,7 @@
   "scripts": {
     "build": "tsc",
     "cli": "node -r ts-node/register src/index.ts",
-    "compile-aqua": "aqua-cli -i ./src/aqua/ -o ./src/compiled"
+    "compile-aqua": "aqua-cli -i ./aqua/ -o ./src/compiled"
   },
   "devDependencies": {
     "@fluencelabs/aqua-cli": "^0.1.1-76",
