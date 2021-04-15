@@ -6,9 +6,12 @@ data NodeId:
     peerId: PeerId
     name: string
 
-service SomeSrv("somesrv"):
+-- define service `NodeIdGetter` that will be callable on local client via `somesrv` service id
+service NodeIdGetter("somesrv"):
     get: -> NodeId
 
-func dataAliasFunc() -> PeerId:
-    res <- SomeSrv.get()
+-- showcases a function that gets data structure from a local service,
+-- and then retrieves aliased data type from that structure
+func getAliasedData() -> PeerId:
+    res <- NodeIdGetter.get()
     <- res.peerId

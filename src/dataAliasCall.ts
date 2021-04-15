@@ -1,5 +1,5 @@
 import {FluenceClient, registerServiceFunction} from "@fluencelabs/fluence";
-import {dataAliasFunc} from "./compiled/dataAlias";
+import {getAliasedData} from "./compiled/dataAlias";
 
 export async function dataAliasCall(client: FluenceClient) {
     registerServiceFunction(client, "somesrv", "get", (args: any[], _) => {
@@ -9,6 +9,6 @@ export async function dataAliasCall(client: FluenceClient) {
         }
     })
 
-    const peerId = await dataAliasFunc(client)
+    const peerId = await getAliasedData(client)
     console.log("PeerId: ", peerId);
 }
