@@ -3,10 +3,11 @@ import "builtin.aqua"
 
 -- functions like `c` are called an 'arrow function' in Aqua
 -- `c` passed to a function from a client, so, it could be called only on a client
-
 func passFunctionAsArg(node: string, c: string -> string):
     on node:
         Peer.identify()
+        -- we go here back on a client
         res <- c("hello")
+        -- then return on a node
         Peer.identify()
     print(res)

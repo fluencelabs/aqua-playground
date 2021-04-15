@@ -1,4 +1,4 @@
-service StringExtra("StringExtra"):
+service StringExtra("service-id"):
     addNameToHello: string -> string
 
 func helloWorld(name: string) -> string:

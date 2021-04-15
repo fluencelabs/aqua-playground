@@ -2,7 +2,8 @@ import {FluenceClient, registerServiceFunction} from "@fluencelabs/fluence";
 import {helloWorld} from "./compiled/helloWorld";
 
 export async function helloWorldCall(client: FluenceClient) {
-    registerServiceFunction(client, "StringExtra", "addNameToHello", (args: any[], _) => {
+    // helloWorld.aqua
+    registerServiceFunction(client, "service-id", "addNameToHello", (args: any[], _) => {
         return `Hello, ${args[0]}!`
     })
 
