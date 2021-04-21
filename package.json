@@ -18,10 +18,11 @@
   "scripts": {
     "build": "tsc",
     "cli": "node -r ts-node/register src/index.ts",
-    "compile-aqua": "aqua-cli -i ./aqua/ -o ./src/compiled"
+    "compile-aqua": "aqua-cli -i ./aqua/ -o ./src/compiled",
+    "compile-aqua:air": "aqua-cli -i ./aqua/ -o ./src/compiled -a"
   },
   "devDependencies": {
-    "@fluencelabs/aqua-cli": "^0.1.1-76",
+    "@fluencelabs/aqua-cli": "^0.1.1-83",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.4"
   },
