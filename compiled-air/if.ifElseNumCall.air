@@ -1,0 +1,15 @@
+(xor
+ (seq
+  (seq
+   (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+   (call %init_peer_id% ("getDataSrv" "condition") [] condition)
+  )
+  (xor
+   (match condition 1
+    (call %init_peer_id% ("println-service-id" "print") ["it is 1"])
+   )
+   (call %init_peer_id% ("println-service-id" "print") ["it is not 1"])
+  )
+ )
+ (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
+)

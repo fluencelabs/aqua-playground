@@ -1,0 +1,7 @@
+(xor
+ (seq
+  (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+  (call %init_peer_id% ("op" "identity") [])
+ )
+ (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
+)

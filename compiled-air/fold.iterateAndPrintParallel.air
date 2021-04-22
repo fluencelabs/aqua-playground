@@ -1,0 +1,21 @@
+(xor
+ (seq
+  (seq
+   (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+   (call %init_peer_id% ("getDataSrv" "nodes") [] nodes)
+  )
+  (fold nodes s
+   (par
+    (seq
+     (call relay ("op" "identity") [])
+     (seq
+      (call s ("peer" "identify") [] ads)
+      (null)
+     )
+    )
+    (next s)
+   )
+  )
+ )
+ (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
+)

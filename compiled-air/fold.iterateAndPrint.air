@@ -1,0 +1,15 @@
+(xor
+ (seq
+  (seq
+   (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+   (call %init_peer_id% ("getDataSrv" "strings") [] strings)
+  )
+  (fold strings s
+   (seq
+    (call %init_peer_id% ("println-service-id" "print") [s])
+    (next s)
+   )
+  )
+ )
+ (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
+)
