@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import {createClient, registerServiceFunction} from "@fluencelabs/fluence";
-import { testNet } from "@fluencelabs/fluence-network-environment";
+import {testNet} from "@fluencelabs/fluence-network-environment";
 import {callArrowCall} from "./callArrowCall";
 import {dataAliasCall} from "./dataAliasCall";
 import {onCall} from "./onCall";

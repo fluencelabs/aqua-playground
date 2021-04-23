@@ -3,6 +3,7 @@ import {parFunc} from "./compiled/par";
 
 export async function parCall(client: FluenceClient) {
     registerServiceFunction(client, "parservice-id", "call", (args: any[], _) => {
+        console.log("hello from parservice-id")
         return `hello`
     })
 

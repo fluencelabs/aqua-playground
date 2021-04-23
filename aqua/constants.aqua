@@ -1,0 +1,14 @@
+import "println.aqua"
+
+const c = "hello"
+
+-- a question mark means that this constant could be rewritten before this definition
+const c ?= "default string"
+
+const a = 1
+
+func printConstant():
+    if a == 1:
+        print(c)
+    else:
+        print(c)
