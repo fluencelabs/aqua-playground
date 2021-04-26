@@ -10,12 +10,16 @@
     ],
     "declaration": true,
     "outDir": "dist",
+    "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,
     "noImplicitAny": false
   },
   "exclude": [
     "node_modules",
-    "dist"
-  ]
+    "dist",
+    "bundle",
+    "src/__test__"
+  ],
+  "include": ["src/**/*"]
 }

@@ -31,7 +31,7 @@ export async function id(client: FluenceClient): Promise<void> {
                 h.on('getDataSrv', 'relay', () => {
                     return client.relayPeerId!;
                 });
-                h.on('getRelayService', 'hasReleay', () => {// Not Used
+                h.on('getRelayService', 'hasRelay', () => {// Not Used
                     return client.relayPeerId !== undefined;
                 });
                 

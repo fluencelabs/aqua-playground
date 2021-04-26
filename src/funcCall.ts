@@ -6,6 +6,5 @@ export async function funcCall(client: FluenceClient) {
         return `some str`
     })
 
-    const res = await testFunc(client);
-    console.log("Message: ", res);
+    return await testFunc(client);
 }

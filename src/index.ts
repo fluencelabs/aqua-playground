@@ -11,6 +11,16 @@ import {foldCall} from "./foldCall";
 import {ifCall} from "./if";
 import {parCall} from "./parCall";
 import {complexCall} from "./complex";
+let deepEqual = require('deep-equal')
+
+function checkCall(name: string, expected: any, actual: any, callBackOnError: () => void) {
+  if (!deepEqual(actual, expected)) {
+    console.error(`${name} call has the wrong result`)
+    console.error("expected: " + expected)
+    console.error("actual: " + actual)
+    callBackOnError()
+  }
+}
 
 const main = async () => {
   const client = await createClient(testNet[0]);
@@ -25,20 +35,64 @@ const main = async () => {
 
   // these calls return void, so they could be executed at any time,
   // because promise waits only a fact that particle was sent
-  await callArrowCall(client)
-  await foldCall(client)
+
+  // callArrow.aqua
+  let callArrowResult = await callArrowCall(client)
+
+  // fold.aqua
+  let foldCallResult = await foldCall(client)
+
+  //if.aqua
   await ifCall(client)
-  await parCall(client)
+
+  // par.aqua
+  let parCallResult = await parCall(client)
 
   // these calls waiting for a result, so it will be called sequentially
-  await helloWorldCall(client)
-  await funcCall(client)
-  await onCall(client)
-  await dataAliasCall(client)
-  await complexCall(client)
+  // helloWorld.aqua
+  let helloWorldResult = await helloWorldCall(client)
 
-  client.disconnect();
-  process.exit(0)
+  // func.aqua
+  let funcCallResult = await funcCall(client)
+
+  // on.aqua
+  let onCallResult = await onCall(client)
+
+  // dataAlias.aqua
+  let dataAliasResult = await dataAliasCall(client)
+
+  // complex.aqua
+  let complexCallResult = await complexCall(client)
+
+  await client.disconnect();
+
+  let success = true;
+  let cb: () => void = () => {
+    success = false;
+  }
+
+  checkCall("callArrow", callArrowResult, "Hello, callArrow call!", cb)
+
+  checkCall("foldCall", foldCallResult, ["/ip4/165.227.164.206/tcp/7001", "/ip4/165.227.164.206/tcp/9001/ws"], cb)
+
+  checkCall("onCall", onCallResult, ["/ip4/165.227.164.206/tcp/7001", "/ip4/165.227.164.206/tcp/9001/ws"], cb)
+
+  checkCall("parArrow", parCallResult, "hello", cb)
+
+  checkCall("helloWorldCall", helloWorldResult, "Hello, NAME!", cb)
+
+  checkCall("funcCall", funcCallResult, "some str", cb)
+
+  checkCall("dataAliasCall", dataAliasResult, "peer id str", cb)
+
+  checkCall("complexCall", complexCallResult, "some str", cb)
+
+  if (success) {
+    process.exit(0)
+  } else {
+    process.exit(1)
+  }
+
 };
 
 main();

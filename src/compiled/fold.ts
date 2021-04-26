@@ -34,7 +34,7 @@ export async function print(client: FluenceClient, str: string): Promise<void> {
                 h.on('getDataSrv', 'relay', () => {
                     return client.relayPeerId!;
                 });
-                h.on('getRelayService', 'hasReleay', () => {// Not Used
+                h.on('getRelayService', 'hasRelay', () => {// Not Used
                     return client.relayPeerId !== undefined;
                 });
                 h.on('getDataSrv', 'str', () => {return str;});
@@ -78,7 +78,7 @@ export async function id(client: FluenceClient): Promise<void> {
                 h.on('getDataSrv', 'relay', () => {
                     return client.relayPeerId!;
                 });
-                h.on('getRelayService', 'hasReleay', () => {// Not Used
+                h.on('getRelayService', 'hasRelay', () => {// Not Used
                     return client.relayPeerId !== undefined;
                 });
                 
@@ -130,7 +130,7 @@ export async function iterateAndPrint(client: FluenceClient, strings: string[]):
                 h.on('getDataSrv', 'relay', () => {
                     return client.relayPeerId!;
                 });
-                h.on('getRelayService', 'hasReleay', () => {// Not Used
+                h.on('getRelayService', 'hasRelay', () => {// Not Used
                     return client.relayPeerId !== undefined;
                 });
                 h.on('getDataSrv', 'strings', () => {return strings;});
@@ -191,7 +191,7 @@ export async function iterateAndPrintParallel(client: FluenceClient, nodes: stri
                 h.on('getDataSrv', 'relay', () => {
                     return client.relayPeerId!;
                 });
-                h.on('getRelayService', 'hasReleay', () => {// Not Used
+                h.on('getRelayService', 'hasRelay', () => {// Not Used
                     return client.relayPeerId !== undefined;
                 });
                 h.on('getDataSrv', 'nodes', () => {return nodes;});

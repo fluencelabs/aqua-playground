@@ -34,7 +34,7 @@ export async function print(client: FluenceClient, str: string): Promise<void> {
                 h.on('getDataSrv', 'relay', () => {
                     return client.relayPeerId!;
                 });
-                h.on('getRelayService', 'hasReleay', () => {// Not Used
+                h.on('getRelayService', 'hasRelay', () => {// Not Used
                     return client.relayPeerId !== undefined;
                 });
                 h.on('getDataSrv', 'str', () => {return str;});
@@ -83,7 +83,7 @@ export async function printConstant(client: FluenceClient): Promise<void> {
                 h.on('getDataSrv', 'relay', () => {
                     return client.relayPeerId!;
                 });
-                h.on('getRelayService', 'hasReleay', () => {// Not Used
+                h.on('getRelayService', 'hasRelay', () => {// Not Used
                     return client.relayPeerId !== undefined;
                 });
                 

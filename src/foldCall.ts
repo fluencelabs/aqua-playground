@@ -3,7 +3,11 @@
 
     export async function foldCall(client: FluenceClient) {
         await iterateAndPrint(client, [client.relayPeerId!])
-        await iterateAndPrintParallel(client, [client.relayPeerId!], (c) => {
-            console.log("iterateAndPrintParallel. external addresses: " + c.external_addresses)
+
+        return new Promise<string[]>((resolve, reject) => {
+            iterateAndPrintParallel(client, [client.relayPeerId!], (c) => {
+                console.log("iterateAndPrintParallel. external addresses: " + c.external_addresses)
+                resolve(c.external_addresses)
+            })
         })
     }

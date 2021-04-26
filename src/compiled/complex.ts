@@ -37,7 +37,7 @@ export async function helloWorld(client: FluenceClient, name: string): Promise<s
                 h.on('getDataSrv', 'relay', () => {
                     return client.relayPeerId!;
                 });
-                h.on('getRelayService', 'hasReleay', () => {// Not Used
+                h.on('getRelayService', 'hasRelay', () => {// Not Used
                     return client.relayPeerId !== undefined;
                 });
                 h.on('getDataSrv', 'name', () => {return name;});
@@ -88,7 +88,7 @@ export async function print(client: FluenceClient, str: string): Promise<void> {
                 h.on('getDataSrv', 'relay', () => {
                     return client.relayPeerId!;
                 });
-                h.on('getRelayService', 'hasReleay', () => {// Not Used
+                h.on('getRelayService', 'hasRelay', () => {// Not Used
                     return client.relayPeerId !== undefined;
                 });
                 h.on('getDataSrv', 'str', () => {return str;});
@@ -132,7 +132,7 @@ export async function id(client: FluenceClient): Promise<void> {
                 h.on('getDataSrv', 'relay', () => {
                     return client.relayPeerId!;
                 });
-                h.on('getRelayService', 'hasReleay', () => {// Not Used
+                h.on('getRelayService', 'hasRelay', () => {// Not Used
                     return client.relayPeerId !== undefined;
                 });
                 
@@ -179,7 +179,7 @@ export async function testFunc(client: FluenceClient): Promise<string> {
                 h.on('getDataSrv', 'relay', () => {
                     return client.relayPeerId!;
                 });
-                h.on('getRelayService', 'hasReleay', () => {// Not Used
+                h.on('getRelayService', 'hasRelay', () => {// Not Used
                     return client.relayPeerId !== undefined;
                 });
                 
@@ -206,9 +206,9 @@ export async function testFunc(client: FluenceClient): Promise<string> {
       
 
 
-export async function doStuff(client: FluenceClient, a: string): Promise<void> {
+export async function doStuff(client: FluenceClient, a: string): Promise<string> {
     let request;
-    const promise = new Promise<void>((resolve, reject) => {
+    const promise = new Promise<string>((resolve, reject) => {
         request = new RequestFlowBuilder()
             .disableInjections()
             .withRawScript(
@@ -216,19 +216,22 @@ export async function doStuff(client: FluenceClient, a: string): Promise<void> {
 (xor
  (seq
   (seq
-   (call %init_peer_id% ("getDataSrv" "relay") [] relay)
-   (call %init_peer_id% ("getDataSrv" "a") [] a)
-  )
-  (par
-   (par
-    (call %init_peer_id% ("test-service-id" "str") [] str)
-    (call %init_peer_id% ("println-service-id" "print") [str])
-   )
    (seq
-    (call relay ("op" "identity") [])
-    (call a ("peer" "identify") [])
+    (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+    (call %init_peer_id% ("getDataSrv" "a") [] a)
+   )
+   (par
+    (par
+     (call %init_peer_id% ("test-service-id" "str") [] str)
+     (call %init_peer_id% ("println-service-id" "print") [str])
+    )
+    (seq
+     (call relay ("op" "identity") [])
+     (call a ("peer" "identify") [])
+    )
    )
   )
+  (call %init_peer_id% ("callbackSrv" "response") [str])
  )
  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
 )
@@ -239,11 +242,15 @@ export async function doStuff(client: FluenceClient, a: string): Promise<void> {
                 h.on('getDataSrv', 'relay', () => {
                     return client.relayPeerId!;
                 });
-                h.on('getRelayService', 'hasReleay', () => {// Not Used
+                h.on('getRelayService', 'hasRelay', () => {// Not Used
                     return client.relayPeerId !== undefined;
                 });
                 h.on('getDataSrv', 'a', () => {return a;});
-                
+                h.onEvent('callbackSrv', 'response', (args) => {
+  const [res] = args;
+  resolve(res);
+});
+
                 h.onEvent('errorHandlingSrv', 'error', (args) => {
                     // assuming error is the single argument
                     const [err] = args;
@@ -257,6 +264,6 @@ export async function doStuff(client: FluenceClient, a: string): Promise<void> {
             .build();
     });
     await client.initiateFlow(request);
-    return Promise.race([promise, Promise.resolve()]);
+    return promise;
 }
       

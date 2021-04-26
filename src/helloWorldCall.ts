@@ -7,6 +7,5 @@ export async function helloWorldCall(client: FluenceClient) {
         return `Hello, ${args[0]}!`
     })
 
-    const hello = await helloWorld(client, "NAME");
-    console.log("Message: ", hello);
+    return await helloWorld(client, "NAME");
 }

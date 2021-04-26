@@ -31,7 +31,7 @@ export async function id(client: FluenceClient): Promise<void> {
                 h.on('getDataSrv', 'relay', () => {
                     return client.relayPeerId!;
                 });
-                h.on('getRelayService', 'hasReleay', () => {// Not Used
+                h.on('getRelayService', 'hasRelay', () => {// Not Used
                     return client.relayPeerId !== undefined;
                 });
                 
@@ -87,7 +87,7 @@ export async function getPeerExternalAddresses(client: FluenceClient, otherNodeP
                 h.on('getDataSrv', 'relay', () => {
                     return client.relayPeerId!;
                 });
-                h.on('getRelayService', 'hasReleay', () => {// Not Used
+                h.on('getRelayService', 'hasRelay', () => {// Not Used
                     return client.relayPeerId !== undefined;
                 });
                 h.on('getDataSrv', 'otherNodePeerId', () => {return otherNodePeerId;});
@@ -156,7 +156,7 @@ export async function getDistantAddresses(client: FluenceClient, target: string,
                 h.on('getDataSrv', 'relay', () => {
                     return client.relayPeerId!;
                 });
-                h.on('getRelayService', 'hasReleay', () => {// Not Used
+                h.on('getRelayService', 'hasRelay', () => {// Not Used
                     return client.relayPeerId !== undefined;
                 });
                 h.on('getDataSrv', 'target', () => {return target;});

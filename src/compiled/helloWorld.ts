@@ -37,7 +37,7 @@ export async function helloWorld(client: FluenceClient, name: string): Promise<s
                 h.on('getDataSrv', 'relay', () => {
                     return client.relayPeerId!;
                 });
-                h.on('getRelayService', 'hasReleay', () => {// Not Used
+                h.on('getRelayService', 'hasRelay', () => {// Not Used
                     return client.relayPeerId !== undefined;
                 });
                 h.on('getDataSrv', 'name', () => {return name;});

@@ -9,6 +9,5 @@ export async function dataAliasCall(client: FluenceClient) {
         }
     })
 
-    const peerId = await getAliasedData(client)
-    console.log("PeerId: ", peerId);
+    return await getAliasedData(client)
 }

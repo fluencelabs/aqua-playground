@@ -34,7 +34,7 @@ export async function print(client: FluenceClient, str: string): Promise<void> {
                 h.on('getDataSrv', 'relay', () => {
                     return client.relayPeerId!;
                 });
-                h.on('getRelayService', 'hasReleay', () => {// Not Used
+                h.on('getRelayService', 'hasRelay', () => {// Not Used
                     return client.relayPeerId !== undefined;
                 });
                 h.on('getDataSrv', 'str', () => {return str;});
@@ -78,7 +78,7 @@ export async function id(client: FluenceClient): Promise<void> {
                 h.on('getDataSrv', 'relay', () => {
                     return client.relayPeerId!;
                 });
-                h.on('getRelayService', 'hasReleay', () => {// Not Used
+                h.on('getRelayService', 'hasRelay', () => {// Not Used
                     return client.relayPeerId !== undefined;
                 });
                 
@@ -101,7 +101,7 @@ export async function id(client: FluenceClient): Promise<void> {
       
 
 
-export async function passFunctionAsArg(client: FluenceClient, node: string, c: (arg0: string) => string): Promise<void> {
+export async function passFunctionAsArg(client: FluenceClient, node: string, str: string, c: (arg0: string) => string): Promise<void> {
     let request;
     const promise = new Promise<void>((resolve, reject) => {
         request = new RequestFlowBuilder()
@@ -111,8 +111,11 @@ export async function passFunctionAsArg(client: FluenceClient, node: string, c: 
 (xor
  (seq
   (seq
-   (call %init_peer_id% ("getDataSrv" "relay") [] relay)
-   (call %init_peer_id% ("getDataSrv" "node") [] node)
+   (seq
+    (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+    (call %init_peer_id% ("getDataSrv" "node") [] node)
+   )
+   (call %init_peer_id% ("getDataSrv" "str") [] str)
   )
   (seq
    (seq
@@ -124,7 +127,7 @@ export async function passFunctionAsArg(client: FluenceClient, node: string, c: 
         (call node ("peer" "identify") [])
         (seq
          (call relay ("op" "identity") [])
-         (call %init_peer_id% ("callbackSrv" "c") ["hello"] init_call_res)
+         (call %init_peer_id% ("callbackSrv" "c") [str] init_call_res)
         )
        )
        (call relay ("op" "identity") [])
@@ -146,10 +149,11 @@ export async function passFunctionAsArg(client: FluenceClient, node: string, c: 
                 h.on('getDataSrv', 'relay', () => {
                     return client.relayPeerId!;
                 });
-                h.on('getRelayService', 'hasReleay', () => {// Not Used
+                h.on('getRelayService', 'hasRelay', () => {// Not Used
                     return client.relayPeerId !== undefined;
                 });
                 h.on('getDataSrv', 'node', () => {return node;});
+h.on('getDataSrv', 'str', () => {return str;});
 h.on('callbackSrv', 'c', (args) => {return c(args[0]);});
                 
                 h.onEvent('errorHandlingSrv', 'error', (args) => {

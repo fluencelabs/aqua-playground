@@ -4,8 +4,9 @@ import "builtin.aqua"
 import "func.aqua"
 
 -- just a lot of imports and calls
-func doStuff(a: string):
+func doStuff(a: string) -> string:
     str <- TestSrv.str()
     par Println.print(str)
     par on a:
         Peer.identify()
+    <- str
