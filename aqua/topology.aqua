@@ -1,0 +1,12 @@
+service Testo("testo"):
+    getString: string -> string
+
+service LocalPrint("lp"):
+    print: string -> ()
+
+
+func topologyTest(me: string, myRelay: string, friend: string, friendRelay: string) -> string:
+    on friend via friendRelay:
+        str2 <- Testo.getString("friends string via")
+    par LocalPrint.print(str2)
+    <- "finish"

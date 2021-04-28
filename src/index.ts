@@ -13,6 +13,7 @@ import {parCall} from "./parCall";
 import {complexCall} from "./complex";
 import {constantsCall} from "./constantsCall";
 import {streamCall} from "./streamCall";
+import {topologyCall} from "./topologyCall";
 let deepEqual = require('deep-equal')
 
 function checkCall(name: string, expected: any, actual: any, callBackOnError: () => void) {
@@ -26,6 +27,7 @@ function checkCall(name: string, expected: any, actual: any, callBackOnError: ()
 
 const main = async () => {
   const client = await createClient(testNet[0]);
+  const client2 = await createClient(testNet[1]);
 
   // this could be called from `println.aqua`
   registerServiceFunction(client, "println-service-id", "print", (args: any[], _) => {
@@ -72,6 +74,9 @@ const main = async () => {
   // stream.aqua
   let streamResult = await streamCall(client)
 
+  // topology.aqua
+  let topologyResult = await topologyCall(client, client2)
+
   await client.disconnect();
 
   let success = true;
@@ -98,6 +103,8 @@ const main = async () => {
   checkCall("constantCall", constantCallResult, "non-default string", cb)
 
   checkCall("streamCall", streamResult, ["first updated", "second updated", "third updated", "fourth updated"], cb)
+
+  checkCall("topologyCall", topologyResult, "finish", cb)
 
   if (success) {
     process.exit(0)
