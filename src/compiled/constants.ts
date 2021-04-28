@@ -57,7 +57,7 @@ export async function print(client: FluenceClient, str: string): Promise<void> {
       
 
 
-export async function printConstant(client: FluenceClient): Promise<void> {
+export async function callConstant(client: FluenceClient, cb: (arg0: string) => void): Promise<void> {
     let request;
     const promise = new Promise<void>((resolve, reject) => {
         request = new RequestFlowBuilder()
@@ -67,11 +67,14 @@ export async function printConstant(client: FluenceClient): Promise<void> {
 (xor
  (seq
   (call %init_peer_id% ("getDataSrv" "relay") [] relay)
-  (xor
-   (match 1 1
-    (call %init_peer_id% ("println-service-id" "print") ["hello"])
+  (seq
+   (call %init_peer_id% ("test" "getNum") [] n)
+   (xor
+    (match n 1
+     (call %init_peer_id% ("callbackSrv" "cb") ["non-default string"])
+    )
+    (call %init_peer_id% ("callbackSrv" "cb") ["non-default string"])
    )
-   (call %init_peer_id% ("println-service-id" "print") ["hello"])
   )
  )
  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
@@ -86,7 +89,7 @@ export async function printConstant(client: FluenceClient): Promise<void> {
                 h.on('getRelayService', 'hasRelay', () => {// Not Used
                     return client.relayPeerId !== undefined;
                 });
-                
+                h.on('callbackSrv', 'cb', (args) => {cb(args[0]); return {};});
                 
                 h.onEvent('errorHandlingSrv', 'error', (args) => {
                     // assuming error is the single argument
@@ -96,7 +99,7 @@ export async function printConstant(client: FluenceClient): Promise<void> {
             })
             .handleScriptError(reject)
             .handleTimeout(() => {
-                reject('Request timed out for printConstant');
+                reject('Request timed out for callConstant');
             })
             .build();
     });

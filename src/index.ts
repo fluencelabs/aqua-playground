@@ -11,6 +11,8 @@ import {foldCall} from "./foldCall";
 import {ifCall} from "./if";
 import {parCall} from "./parCall";
 import {complexCall} from "./complex";
+import {constantsCall} from "./constantsCall";
+import {streamCall} from "./streamCall";
 let deepEqual = require('deep-equal')
 
 function checkCall(name: string, expected: any, actual: any, callBackOnError: () => void) {
@@ -64,6 +66,12 @@ const main = async () => {
   // complex.aqua
   let complexCallResult = await complexCall(client)
 
+  // constants.aqua
+  let constantCallResult = await constantsCall(client)
+
+  // stream.aqua
+  let streamResult = await streamCall(client)
+
   await client.disconnect();
 
   let success = true;
@@ -87,6 +95,10 @@ const main = async () => {
 
   checkCall("complexCall", complexCallResult, "some str", cb)
 
+  checkCall("constantCall", constantCallResult, "non-default string", cb)
+
+  checkCall("streamCall", streamResult, ["first updated", "second updated", "third updated", "fourth updated"], cb)
+
   if (success) {
     process.exit(0)
   } else {
@@ -95,4 +107,7 @@ const main = async () => {
 
 };
 
-main();
+main().catch((err) => {
+  console.log(err)
+  process.exit(1)
+})

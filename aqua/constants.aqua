@@ -1,14 +1,18 @@
 import "println.aqua"
 
-const c = "hello"
+service Getter("test"):
+    getNum: -> u32
+
+const c = "non-default string"
 
 -- a question mark means that this constant could be rewritten before this definition
 const c ?= "default string"
 
 const a = 1
 
-func printConstant():
-    if a == 1:
-        print(c)
+func callConstant(cb: string -> ()):
+    n <- Getter.getNum()
+    if n == a:
+        cb(c)
     else:
-        print(c)
+        cb(c)
