@@ -17,7 +17,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "cli": "node -r ts-node/register src/index.ts",
+    "exec": "node -r ts-node/register src/index.ts",
     "compile-aqua": "aqua-cli -i ./aqua/ -o ./src/compiled",
     "compile-aqua:air": "aqua-cli -i ./aqua/ -o ./compiled-air -a"
   },
