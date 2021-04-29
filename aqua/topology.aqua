@@ -1,3 +1,5 @@
+import "builtin.aqua"
+
 service Testo("testo"):
     getString: string -> string
 
@@ -8,5 +10,6 @@ service LocalPrint("lp"):
 func topologyTest(me: string, myRelay: string, friend: string, friendRelay: string) -> string:
     on friend via friendRelay:
         str2 <- Testo.getString("friends string via")
-    par LocalPrint.print(str2)
+    par LocalPrint.print("my string in par")
+    LocalPrint.print(str2)
     <- "finish"

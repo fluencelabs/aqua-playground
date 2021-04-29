@@ -58,72 +58,9 @@ export async function id(client: FluenceClient): Promise<void> {
       
 
 
-export async function getPeerExternalAddresses(client: FluenceClient, otherNodePeerId: string): Promise<string[]> {
+export async function topologyTest(client: FluenceClient, me: string, myRelay: string, friend: string, friendRelay: string): Promise<string> {
     let request;
-    const promise = new Promise<string[]>((resolve, reject) => {
-        request = new RequestFlowBuilder()
-            .disableInjections()
-            .withRawScript(
-                `
-(xor
- (seq
-  (seq
-   (seq
-    (seq
-     (seq
-      (call %init_peer_id% ("getDataSrv" "relay") [] relay)
-      (call %init_peer_id% ("getDataSrv" "otherNodePeerId") [] otherNodePeerId)
-     )
-     (call relay ("op" "identity") [])
-    )
-    (call otherNodePeerId ("peer" "identify") [] res)
-   )
-   (call relay ("op" "identity") [])
-  )
-  (call %init_peer_id% ("callbackSrv" "response") [res.$.external_addresses!])
- )
- (seq
-  (call relay ("op" "identity") [])
-  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
- )
-)
-
-            `,
-            )
-            .configHandler((h) => {
-                h.on('getDataSrv', 'relay', () => {
-                    return client.relayPeerId!;
-                });
-                h.on('getRelayService', 'hasRelay', () => {// Not Used
-                    return client.relayPeerId !== undefined;
-                });
-                h.on('getDataSrv', 'otherNodePeerId', () => {return otherNodePeerId;});
-                h.onEvent('callbackSrv', 'response', (args) => {
-  const [res] = args;
-  resolve(res);
-});
-
-                h.onEvent('errorHandlingSrv', 'error', (args) => {
-                    // assuming error is the single argument
-                    const [err] = args;
-                    reject(err);
-                });
-            })
-            .handleScriptError(reject)
-            .handleTimeout(() => {
-                reject('Request timed out for getPeerExternalAddresses');
-            })
-            .build();
-    });
-    await client.initiateFlow(request);
-    return promise;
-}
-      
-
-
-export async function getDistantAddresses(client: FluenceClient, target: string, viaNode: string): Promise<string[]> {
-    let request;
-    const promise = new Promise<string[]>((resolve, reject) => {
+    const promise = new Promise<string>((resolve, reject) => {
         request = new RequestFlowBuilder()
             .disableInjections()
             .withRawScript(
@@ -136,23 +73,35 @@ export async function getDistantAddresses(client: FluenceClient, target: string,
      (seq
       (seq
        (seq
-        (seq
-         (call %init_peer_id% ("getDataSrv" "relay") [] relay)
-         (call %init_peer_id% ("getDataSrv" "target") [] target)
-        )
-        (call %init_peer_id% ("getDataSrv" "viaNode") [] viaNode)
+        (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+        (call %init_peer_id% ("getDataSrv" "me") [] me)
        )
-       (call relay ("op" "identity") [])
+       (call %init_peer_id% ("getDataSrv" "myRelay") [] myRelay)
       )
-      (call viaNode ("op" "identity") [])
+      (call %init_peer_id% ("getDataSrv" "friend") [] friend)
      )
-     (call target ("peer" "identify") [] res)
+     (call %init_peer_id% ("getDataSrv" "friendRelay") [] friendRelay)
     )
-    (call viaNode ("op" "identity") [])
+    (par
+     (seq
+      (seq
+       (seq
+        (seq
+         (call relay ("op" "identity") [])
+         (call friendRelay ("op" "identity") [])
+        )
+        (call friend ("testo" "getString") ["friends string via"] str2)
+       )
+       (call friendRelay ("op" "identity") [])
+      )
+      (call relay ("op" "identity") [])
+     )
+     (call %init_peer_id% ("lp" "print") ["my string in par"])
+    )
    )
-   (call relay ("op" "identity") [])
+   (call %init_peer_id% ("lp" "print") [str2])
   )
-  (call %init_peer_id% ("callbackSrv" "response") [res.$.external_addresses!])
+  (call %init_peer_id% ("callbackSrv" "response") ["finish"])
  )
  (seq
   (call relay ("op" "identity") [])
@@ -169,8 +118,10 @@ export async function getDistantAddresses(client: FluenceClient, target: string,
                 h.on('getRelayService', 'hasRelay', () => {// Not Used
                     return client.relayPeerId !== undefined;
                 });
-                h.on('getDataSrv', 'target', () => {return target;});
-h.on('getDataSrv', 'viaNode', () => {return viaNode;});
+                h.on('getDataSrv', 'me', () => {return me;});
+h.on('getDataSrv', 'myRelay', () => {return myRelay;});
+h.on('getDataSrv', 'friend', () => {return friend;});
+h.on('getDataSrv', 'friendRelay', () => {return friendRelay;});
                 h.onEvent('callbackSrv', 'response', (args) => {
   const [res] = args;
   resolve(res);
@@ -184,7 +135,7 @@ h.on('getDataSrv', 'viaNode', () => {return viaNode;});
             })
             .handleScriptError(reject)
             .handleTimeout(() => {
-                reject('Request timed out for getDistantAddresses');
+                reject('Request timed out for topologyTest');
             })
             .build();
     });

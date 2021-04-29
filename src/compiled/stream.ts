@@ -11,9 +11,9 @@ import { RequestFlowBuilder } from '@fluencelabs/fluence/dist/api.unstable';
 
 
 
-export async function helloWorld(client: FluenceClient, name: string): Promise<string> {
+export async function checkStreams(client: FluenceClient, ch: string[]): Promise<string[]> {
     let request;
-    const promise = new Promise<string>((resolve, reject) => {
+    const promise = new Promise<string[]>((resolve, reject) => {
         request = new RequestFlowBuilder()
             .disableInjections()
             .withRawScript(
@@ -22,12 +22,23 @@ export async function helloWorld(client: FluenceClient, name: string): Promise<s
  (seq
   (seq
    (seq
-    (call %init_peer_id% ("getDataSrv" "relay") [] relay)
-    (call %init_peer_id% ("getDataSrv" "name") [] name)
+    (seq
+     (seq
+      (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+      (call %init_peer_id% ("getDataSrv" "ch") [] ch)
+     )
+     (call %init_peer_id% ("stringer-id" "returnString") ["first"] $stream)
+    )
+    (call %init_peer_id% ("stringer-id" "returnString") ["second"] $stream)
    )
-   (call %init_peer_id% ("service-id" "addNameToHello") [name] res)
+   (fold ch b
+    (seq
+     (call %init_peer_id% ("stringer-id" "returnString") [b] $stream)
+     (next b)
+    )
+   )
   )
-  (call %init_peer_id% ("callbackSrv" "response") [res])
+  (call %init_peer_id% ("callbackSrv" "response") [$stream])
  )
  (seq
   (call relay ("op" "identity") [])
@@ -44,7 +55,7 @@ export async function helloWorld(client: FluenceClient, name: string): Promise<s
                 h.on('getRelayService', 'hasRelay', () => {// Not Used
                     return client.relayPeerId !== undefined;
                 });
-                h.on('getDataSrv', 'name', () => {return name;});
+                h.on('getDataSrv', 'ch', () => {return ch;});
                 h.onEvent('callbackSrv', 'response', (args) => {
   const [res] = args;
   resolve(res);
@@ -58,7 +69,7 @@ export async function helloWorld(client: FluenceClient, name: string): Promise<s
             })
             .handleScriptError(reject)
             .handleTimeout(() => {
-                reject('Request timed out for helloWorld');
+                reject('Request timed out for checkStreams');
             })
             .build();
     });
