@@ -11,53 +11,6 @@ import { RequestFlowBuilder } from '@fluencelabs/fluence/dist/api.unstable';
 
 
 
-export async function id(client: FluenceClient): Promise<void> {
-    let request;
-    const promise = new Promise<void>((resolve, reject) => {
-        request = new RequestFlowBuilder()
-            .disableInjections()
-            .withRawScript(
-                `
-(xor
- (seq
-  (call %init_peer_id% ("getDataSrv" "relay") [] relay)
-  (call %init_peer_id% ("op" "identity") [])
- )
- (seq
-  (call relay ("op" "identity") [])
-  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
- )
-)
-
-            `,
-            )
-            .configHandler((h) => {
-                h.on('getDataSrv', 'relay', () => {
-                    return client.relayPeerId!;
-                });
-                h.on('getRelayService', 'hasRelay', () => {// Not Used
-                    return client.relayPeerId !== undefined;
-                });
-                
-                
-                h.onEvent('errorHandlingSrv', 'error', (args) => {
-                    // assuming error is the single argument
-                    const [err] = args;
-                    reject(err);
-                });
-            })
-            .handleScriptError(reject)
-            .handleTimeout(() => {
-                reject('Request timed out for id');
-            })
-            .build();
-    });
-    await client.initiateFlow(request);
-    return Promise.race([promise, Promise.resolve()]);
-}
-      
-
-
 export async function topologyTest(client: FluenceClient, me: string, myRelay: string, friend: string, friendRelay: string): Promise<string> {
     let request;
     const promise = new Promise<string>((resolve, reject) => {
@@ -87,14 +40,17 @@ export async function topologyTest(client: FluenceClient, me: string, myRelay: s
       (seq
        (seq
         (seq
-         (call relay ("op" "identity") [])
-         (call friendRelay ("op" "identity") [])
+         (seq
+          (call relay ("op" "identity") [])
+          (call friendRelay ("op" "identity") [])
+         )
+         (call friend ("testo" "getString") ["friends string via"] str2)
         )
-        (call friend ("testo" "getString") ["friends string via"] str2)
+        (call friendRelay ("op" "identity") [])
        )
-       (call friendRelay ("op" "identity") [])
+       (call relay ("op" "identity") [])
       )
-      (call relay ("op" "identity") [])
+      (call %init_peer_id% ("op" "identity") [])
      )
      (call %init_peer_id% ("lp" "print") ["my string in par"])
     )

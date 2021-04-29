@@ -1,5 +1,3 @@
-import "builtin.aqua"
-
 service Testo("testo"):
     getString: string -> string
 

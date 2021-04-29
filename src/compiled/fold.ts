@@ -182,14 +182,17 @@ export async function iterateAndPrintParallel(client: FluenceClient, nodes: stri
      (seq
       (seq
        (seq
+        (seq
+         (call relay ("op" "identity") [])
+         (call s ("peer" "identify") [] ads)
+        )
         (call relay ("op" "identity") [])
-        (call s ("peer" "identify") [] ads)
        )
-       (call relay ("op" "identity") [])
+       (call %init_peer_id% ("callbackSrv" "c") [ads])
       )
-      (call %init_peer_id% ("callbackSrv" "c") [ads])
+      (call relay ("op" "identity") [])
      )
-     (call relay ("op" "identity") [])
+     (call %init_peer_id% ("op" "identity") [])
     )
     (next s)
    )

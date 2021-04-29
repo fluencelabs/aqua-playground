@@ -78,14 +78,17 @@ export async function parFunc(client: FluenceClient, node: string, c: (arg0: {ex
      (seq
       (seq
        (seq
+        (seq
+         (call relay ("op" "identity") [])
+         (call node ("peer" "identify") [] t)
+        )
         (call relay ("op" "identity") [])
-        (call node ("peer" "identify") [] t)
        )
-       (call relay ("op" "identity") [])
+       (call %init_peer_id% ("callbackSrv" "c") [t])
       )
-      (call %init_peer_id% ("callbackSrv" "c") [t])
+      (call relay ("op" "identity") [])
      )
-     (call relay ("op" "identity") [])
+     (call %init_peer_id% ("op" "identity") [])
     )
    )
    (call %init_peer_id% ("parservice-id" "call") [] x)

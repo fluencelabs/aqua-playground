@@ -240,10 +240,13 @@ export async function doStuff(client: FluenceClient, a: string): Promise<string>
     )
     (seq
      (seq
+      (seq
+       (call relay ("op" "identity") [])
+       (call a ("peer" "identify") [])
+      )
       (call relay ("op" "identity") [])
-      (call a ("peer" "identify") [])
      )
-     (call relay ("op" "identity") [])
+     (call %init_peer_id% ("op" "identity") [])
     )
    )
   )

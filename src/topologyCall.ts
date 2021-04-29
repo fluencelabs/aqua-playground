@@ -4,7 +4,7 @@ import {topologyTest} from "./compiled/topology";
 export async function topologyCall(client: FluenceClient, client2: FluenceClient): Promise<string> {
 
     registerServiceFunction(client2, "testo", "getString", (args: any[], _) => {
-        console.log("hello from client2")
+        console.log("hello from client2: " + args[0])
         return "hello from client2: " + args[0]
     })
 
