@@ -21,25 +21,25 @@ export async function testFunc(client: FluenceClient): Promise<string> {
 (xor
  (seq
   (seq
-   (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+   (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
    (call %init_peer_id% ("test-service-id" "str") [] res)
   )
-  (call %init_peer_id% ("callbackSrv" "response") [res])
+  (xor
+   (call %init_peer_id% ("callbackSrv" "response") [res])
+   (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+  )
  )
  (seq
-  (call relay ("op" "identity") [])
-  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
+  (call -relay- ("op" "identity") [])
+  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
  )
 )
 
             `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', 'relay', () => {
+                h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
-                });
-                h.on('getRelayService', 'hasRelay', () => {// Not Used
-                    return client.relayPeerId !== undefined;
                 });
                 
                 h.onEvent('callbackSrv', 'response', (args) => {

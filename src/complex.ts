@@ -1,6 +1,14 @@
-import {FluenceClient} from "@fluencelabs/fluence";
+import {FluenceClient, registerServiceFunction} from "@fluencelabs/fluence";
 import {doStuff} from "./compiled/complex";
+import {testNet} from "@fluencelabs/fluence-network-environment";
 
 export async function complexCall(client: FluenceClient) {
-    return await doStuff(client, client.relayPeerId!)
+
+    registerServiceFunction(client, "some-id", "t", (args: any[], _) => {
+        return args[0]
+    })
+
+    let peer2 = testNet[0]
+
+    return await doStuff(client, client.relayPeerId!, client.selfPeerId, true, true, ["1", "2"], ["3", "4"])
 }

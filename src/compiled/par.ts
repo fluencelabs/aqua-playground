@@ -20,23 +20,17 @@ export async function id(client: FluenceClient): Promise<void> {
                 `
 (xor
  (seq
-  (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+  (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
   (call %init_peer_id% ("op" "identity") [])
  )
- (seq
-  (call relay ("op" "identity") [])
-  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
- )
+ (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
 )
 
             `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', 'relay', () => {
+                h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
-                });
-                h.on('getRelayService', 'hasRelay', () => {// Not Used
-                    return client.relayPeerId !== undefined;
                 });
                 
                 
@@ -68,7 +62,7 @@ export async function parFunc(client: FluenceClient, node: string, c: (arg0: {ex
 (xor
  (seq
   (seq
-   (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+   (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
    (call %init_peer_id% ("getDataSrv" "node") [] node)
   )
   (par
@@ -77,16 +71,25 @@ export async function parFunc(client: FluenceClient, node: string, c: (arg0: {ex
     (seq
      (seq
       (seq
-       (seq
+       (call -relay- ("op" "identity") [])
+       (xor
         (seq
-         (call relay ("op" "identity") [])
-         (call node ("peer" "identify") [] t)
+         (seq
+          (call node ("peer" "identify") [] t)
+          (call -relay- ("op" "identity") [])
+         )
+         (xor
+          (call %init_peer_id% ("callbackSrv" "c") [t])
+          (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+         )
         )
-        (call relay ("op" "identity") [])
+        (seq
+         (call -relay- ("op" "identity") [])
+         (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+        )
        )
-       (call %init_peer_id% ("callbackSrv" "c") [t])
       )
-      (call relay ("op" "identity") [])
+      (call -relay- ("op" "identity") [])
      )
      (call %init_peer_id% ("op" "identity") [])
     )
@@ -94,20 +97,14 @@ export async function parFunc(client: FluenceClient, node: string, c: (arg0: {ex
    (call %init_peer_id% ("parservice-id" "call") [] x)
   )
  )
- (seq
-  (call relay ("op" "identity") [])
-  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
- )
+ (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
 )
 
             `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', 'relay', () => {
+                h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
-                });
-                h.on('getRelayService', 'hasRelay', () => {// Not Used
-                    return client.relayPeerId !== undefined;
                 });
                 h.on('getDataSrv', 'node', () => {return node;});
 h.on('callbackSrv', 'c', (args) => {c(args[0]); return {};});

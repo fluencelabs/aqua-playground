@@ -22,27 +22,27 @@ export async function helloWorld(client: FluenceClient, name: string): Promise<s
  (seq
   (seq
    (seq
-    (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+    (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
     (call %init_peer_id% ("getDataSrv" "name") [] name)
    )
    (call %init_peer_id% ("service-id" "addNameToHello") [name] res)
   )
-  (call %init_peer_id% ("callbackSrv" "response") [res])
+  (xor
+   (call %init_peer_id% ("callbackSrv" "response") [res])
+   (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+  )
  )
  (seq
-  (call relay ("op" "identity") [])
-  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
+  (call -relay- ("op" "identity") [])
+  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
  )
 )
 
             `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', 'relay', () => {
+                h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
-                });
-                h.on('getRelayService', 'hasRelay', () => {// Not Used
-                    return client.relayPeerId !== undefined;
                 });
                 h.on('getDataSrv', 'name', () => {return name;});
                 h.onEvent('callbackSrv', 'response', (args) => {

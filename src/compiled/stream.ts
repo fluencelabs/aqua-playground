@@ -24,7 +24,7 @@ export async function checkStreams(client: FluenceClient, ch: string[]): Promise
    (seq
     (seq
      (seq
-      (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+      (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
       (call %init_peer_id% ("getDataSrv" "ch") [] ch)
      )
      (call %init_peer_id% ("stringer-id" "returnString") ["first"] $stream)
@@ -38,22 +38,22 @@ export async function checkStreams(client: FluenceClient, ch: string[]): Promise
     )
    )
   )
-  (call %init_peer_id% ("callbackSrv" "response") [$stream])
+  (xor
+   (call %init_peer_id% ("callbackSrv" "response") [$stream])
+   (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+  )
  )
  (seq
-  (call relay ("op" "identity") [])
-  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
+  (call -relay- ("op" "identity") [])
+  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
  )
 )
 
             `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', 'relay', () => {
+                h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
-                });
-                h.on('getRelayService', 'hasRelay', () => {// Not Used
-                    return client.relayPeerId !== undefined;
                 });
                 h.on('getDataSrv', 'ch', () => {return ch;});
                 h.onEvent('callbackSrv', 'response', (args) => {

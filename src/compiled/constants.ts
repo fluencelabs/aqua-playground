@@ -21,25 +21,19 @@ export async function print(client: FluenceClient, str: string): Promise<void> {
 (xor
  (seq
   (seq
-   (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+   (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
    (call %init_peer_id% ("getDataSrv" "str") [] str)
   )
   (call %init_peer_id% ("println-service-id" "print") [str])
  )
- (seq
-  (call relay ("op" "identity") [])
-  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
- )
+ (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
 )
 
             `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', 'relay', () => {
+                h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
-                });
-                h.on('getRelayService', 'hasRelay', () => {// Not Used
-                    return client.relayPeerId !== undefined;
                 });
                 h.on('getDataSrv', 'str', () => {return str;});
                 
@@ -71,36 +65,36 @@ export async function callConstant(client: FluenceClient, cb: (arg0: string) => 
 (xor
  (seq
   (seq
-   (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+   (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
    (call %init_peer_id% ("test" "getNum") [] n)
   )
   (xor
    (match n 1
-    (call %init_peer_id% ("callbackSrv" "cb") ["non-default string"])
+    (xor
+     (call %init_peer_id% ("callbackSrv" "cb") ["non-default string"])
+     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+    )
    )
    (seq
     (seq
-     (call relay ("op" "identity") [])
-     (call %init_peer_id% ("callbackSrv" "cb") ["non-default string"])
+     (call -relay- ("op" "identity") [])
+     (xor
+      (call %init_peer_id% ("callbackSrv" "cb") ["non-default string"])
+      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+     )
     )
-    (call relay ("op" "identity") [])
+    (call -relay- ("op" "identity") [])
    )
   )
  )
- (seq
-  (call relay ("op" "identity") [])
-  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
- )
+ (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
 )
 
             `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', 'relay', () => {
+                h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
-                });
-                h.on('getRelayService', 'hasRelay', () => {// Not Used
-                    return client.relayPeerId !== undefined;
                 });
                 h.on('callbackSrv', 'cb', (args) => {cb(args[0]); return {};});
                 

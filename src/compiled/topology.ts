@@ -26,7 +26,7 @@ export async function topologyTest(client: FluenceClient, me: string, myRelay: s
      (seq
       (seq
        (seq
-        (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
         (call %init_peer_id% ("getDataSrv" "me") [] me)
        )
        (call %init_peer_id% ("getDataSrv" "myRelay") [] myRelay)
@@ -41,14 +41,23 @@ export async function topologyTest(client: FluenceClient, me: string, myRelay: s
        (seq
         (seq
          (seq
-          (call relay ("op" "identity") [])
+          (call -relay- ("op" "identity") [])
           (call friendRelay ("op" "identity") [])
          )
-         (call friend ("testo" "getString") ["friends string via"] str2)
+         (xor
+          (call friend ("testo" "getString") ["friends string via"] str2)
+          (seq
+           (seq
+            (call friendRelay ("op" "identity") [])
+            (call -relay- ("op" "identity") [])
+           )
+           (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+          )
+         )
         )
         (call friendRelay ("op" "identity") [])
        )
-       (call relay ("op" "identity") [])
+       (call -relay- ("op" "identity") [])
       )
       (call %init_peer_id% ("op" "identity") [])
      )
@@ -57,22 +66,22 @@ export async function topologyTest(client: FluenceClient, me: string, myRelay: s
    )
    (call %init_peer_id% ("lp" "print") [str2])
   )
-  (call %init_peer_id% ("callbackSrv" "response") ["finish"])
+  (xor
+   (call %init_peer_id% ("callbackSrv" "response") ["finish"])
+   (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+  )
  )
  (seq
-  (call relay ("op" "identity") [])
-  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
+  (call -relay- ("op" "identity") [])
+  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
  )
 )
 
             `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', 'relay', () => {
+                h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
-                });
-                h.on('getRelayService', 'hasRelay', () => {// Not Used
-                    return client.relayPeerId !== undefined;
                 });
                 h.on('getDataSrv', 'me', () => {return me;});
 h.on('getDataSrv', 'myRelay', () => {return myRelay;});

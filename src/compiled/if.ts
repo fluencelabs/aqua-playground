@@ -21,25 +21,19 @@ export async function print(client: FluenceClient, str: string): Promise<void> {
 (xor
  (seq
   (seq
-   (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+   (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
    (call %init_peer_id% ("getDataSrv" "str") [] str)
   )
   (call %init_peer_id% ("println-service-id" "print") [str])
  )
- (seq
-  (call relay ("op" "identity") [])
-  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
- )
+ (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
 )
 
             `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', 'relay', () => {
+                h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
-                });
-                h.on('getRelayService', 'hasRelay', () => {// Not Used
-                    return client.relayPeerId !== undefined;
                 });
                 h.on('getDataSrv', 'str', () => {return str;});
                 
@@ -71,7 +65,7 @@ export async function ifElseCall(client: FluenceClient, condition: boolean): Pro
 (xor
  (seq
   (seq
-   (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+   (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
    (call %init_peer_id% ("getDataSrv" "condition") [] condition)
   )
   (xor
@@ -81,20 +75,14 @@ export async function ifElseCall(client: FluenceClient, condition: boolean): Pro
    (call %init_peer_id% ("println-service-id" "print") ["it is false"])
   )
  )
- (seq
-  (call relay ("op" "identity") [])
-  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
- )
+ (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
 )
 
             `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', 'relay', () => {
+                h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
-                });
-                h.on('getRelayService', 'hasRelay', () => {// Not Used
-                    return client.relayPeerId !== undefined;
                 });
                 h.on('getDataSrv', 'condition', () => {return condition;});
                 
@@ -126,7 +114,7 @@ export async function ifElseNumCall(client: FluenceClient, condition: number): P
 (xor
  (seq
   (seq
-   (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+   (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
    (call %init_peer_id% ("getDataSrv" "condition") [] condition)
   )
   (xor
@@ -136,20 +124,14 @@ export async function ifElseNumCall(client: FluenceClient, condition: number): P
    (call %init_peer_id% ("println-service-id" "print") ["it is not 1"])
   )
  )
- (seq
-  (call relay ("op" "identity") [])
-  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
- )
+ (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
 )
 
             `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', 'relay', () => {
+                h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
-                });
-                h.on('getRelayService', 'hasRelay', () => {// Not Used
-                    return client.relayPeerId !== undefined;
                 });
                 h.on('getDataSrv', 'condition', () => {return condition;});
                 

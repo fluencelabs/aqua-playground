@@ -3,10 +3,23 @@ import "println.aqua"
 import "builtin.aqua"
 import "func.aqua"
 
+service TestS("some-id"):
+    t: string -> string
+
 -- just a lot of imports and calls
-func doStuff(a: string) -> string:
-    str <- TestSrv.str()
-    par Println.print(str)
+func doStuff(a: string, b: string, c: bool, d: bool, e: []string, g: []string, str: string) -> []string:
+    stream: *string
+    stream <- TestS.t(str)
+    par Println.print(a)
     par on a:
         Peer.identify()
-    <- str
+    on a:
+        on b:
+            if c:
+                if d:
+                    for eEl <- e:
+                        for gEl <- g:
+                            stream <- TestS.t(gEl)
+                            stream <- TestS.t(eEl)
+                        stream <- TestS.t(eEl)
+    <- stream

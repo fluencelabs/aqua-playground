@@ -21,25 +21,19 @@ export async function print(client: FluenceClient, str: string): Promise<void> {
 (xor
  (seq
   (seq
-   (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+   (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
    (call %init_peer_id% ("getDataSrv" "str") [] str)
   )
   (call %init_peer_id% ("println-service-id" "print") [str])
  )
- (seq
-  (call relay ("op" "identity") [])
-  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
- )
+ (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
 )
 
             `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', 'relay', () => {
+                h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
-                });
-                h.on('getRelayService', 'hasRelay', () => {// Not Used
-                    return client.relayPeerId !== undefined;
                 });
                 h.on('getDataSrv', 'str', () => {return str;});
                 
@@ -70,23 +64,17 @@ export async function id(client: FluenceClient): Promise<void> {
                 `
 (xor
  (seq
-  (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+  (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
   (call %init_peer_id% ("op" "identity") [])
  )
- (seq
-  (call relay ("op" "identity") [])
-  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
- )
+ (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
 )
 
             `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', 'relay', () => {
+                h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
-                });
-                h.on('getRelayService', 'hasRelay', () => {// Not Used
-                    return client.relayPeerId !== undefined;
                 });
                 
                 
@@ -122,45 +110,48 @@ export async function passFunctionAsArg(client: FluenceClient, node: string, str
     (seq
      (seq
       (seq
+       (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+       (call %init_peer_id% ("getDataSrv" "node") [] node)
+      )
+      (call %init_peer_id% ("getDataSrv" "str") [] str)
+     )
+     (call -relay- ("op" "identity") [])
+    )
+    (xor
+     (seq
+      (seq
        (seq
         (seq
-         (seq
-          (seq
-           (call %init_peer_id% ("getDataSrv" "relay") [] relay)
-           (call %init_peer_id% ("getDataSrv" "node") [] node)
-          )
-          (call %init_peer_id% ("getDataSrv" "str") [] str)
-         )
-         (call relay ("op" "identity") [])
+         (call node ("peer" "identify") [])
+         (call -relay- ("op" "identity") [])
         )
-        (call node ("peer" "identify") [])
+        (xor
+         (call %init_peer_id% ("callbackSrv" "c") [str] init_call_res)
+         (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+        )
        )
-       (call relay ("op" "identity") [])
+       (call -relay- ("op" "identity") [])
       )
-      (call %init_peer_id% ("callbackSrv" "c") [str] init_call_res)
+      (call node ("peer" "identify") [])
      )
-     (call relay ("op" "identity") [])
+     (seq
+      (call -relay- ("op" "identity") [])
+      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+     )
     )
-    (call node ("peer" "identify") [])
    )
-   (call relay ("op" "identity") [])
+   (call -relay- ("op" "identity") [])
   )
   (call %init_peer_id% ("println-service-id" "print") [init_call_res])
  )
- (seq
-  (call relay ("op" "identity") [])
-  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
- )
+ (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
 )
 
             `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', 'relay', () => {
+                h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
-                });
-                h.on('getRelayService', 'hasRelay', () => {// Not Used
-                    return client.relayPeerId !== undefined;
                 });
                 h.on('getDataSrv', 'node', () => {return node;});
 h.on('getDataSrv', 'str', () => {return str;});

@@ -21,25 +21,19 @@ export async function print(client: FluenceClient, str: string): Promise<void> {
 (xor
  (seq
   (seq
-   (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+   (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
    (call %init_peer_id% ("getDataSrv" "str") [] str)
   )
   (call %init_peer_id% ("println-service-id" "print") [str])
  )
- (seq
-  (call relay ("op" "identity") [])
-  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
- )
+ (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
 )
 
             `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', 'relay', () => {
+                h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
-                });
-                h.on('getRelayService', 'hasRelay', () => {// Not Used
-                    return client.relayPeerId !== undefined;
                 });
                 h.on('getDataSrv', 'str', () => {return str;});
                 
@@ -70,23 +64,17 @@ export async function id(client: FluenceClient): Promise<void> {
                 `
 (xor
  (seq
-  (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+  (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
   (call %init_peer_id% ("op" "identity") [])
  )
- (seq
-  (call relay ("op" "identity") [])
-  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
- )
+ (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
 )
 
             `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', 'relay', () => {
+                h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
-                });
-                h.on('getRelayService', 'hasRelay', () => {// Not Used
-                    return client.relayPeerId !== undefined;
                 });
                 
                 
@@ -118,7 +106,7 @@ export async function iterateAndPrint(client: FluenceClient, strings: string[]):
 (xor
  (seq
   (seq
-   (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+   (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
    (call %init_peer_id% ("getDataSrv" "strings") [] strings)
   )
   (fold strings s
@@ -128,20 +116,14 @@ export async function iterateAndPrint(client: FluenceClient, strings: string[]):
    )
   )
  )
- (seq
-  (call relay ("op" "identity") [])
-  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
- )
+ (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
 )
 
             `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', 'relay', () => {
+                h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
-                });
-                h.on('getRelayService', 'hasRelay', () => {// Not Used
-                    return client.relayPeerId !== undefined;
                 });
                 h.on('getDataSrv', 'strings', () => {return strings;});
                 
@@ -173,7 +155,7 @@ export async function iterateAndPrintParallel(client: FluenceClient, nodes: stri
 (xor
  (seq
   (seq
-   (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+   (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
    (call %init_peer_id% ("getDataSrv" "nodes") [] nodes)
   )
   (fold nodes s
@@ -181,16 +163,25 @@ export async function iterateAndPrintParallel(client: FluenceClient, nodes: stri
     (seq
      (seq
       (seq
-       (seq
+       (call -relay- ("op" "identity") [])
+       (xor
         (seq
-         (call relay ("op" "identity") [])
-         (call s ("peer" "identify") [] ads)
+         (seq
+          (call s ("peer" "identify") [] ads)
+          (call -relay- ("op" "identity") [])
+         )
+         (xor
+          (call %init_peer_id% ("callbackSrv" "c") [ads])
+          (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+         )
         )
-        (call relay ("op" "identity") [])
+        (seq
+         (call -relay- ("op" "identity") [])
+         (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+        )
        )
-       (call %init_peer_id% ("callbackSrv" "c") [ads])
       )
-      (call relay ("op" "identity") [])
+      (call -relay- ("op" "identity") [])
      )
      (call %init_peer_id% ("op" "identity") [])
     )
@@ -198,20 +189,14 @@ export async function iterateAndPrintParallel(client: FluenceClient, nodes: stri
    )
   )
  )
- (seq
-  (call relay ("op" "identity") [])
-  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
- )
+ (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
 )
 
             `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', 'relay', () => {
+                h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
-                });
-                h.on('getRelayService', 'hasRelay', () => {// Not Used
-                    return client.relayPeerId !== undefined;
                 });
                 h.on('getDataSrv', 'nodes', () => {return nodes;});
 h.on('callbackSrv', 'c', (args) => {c(args[0]); return {};});

@@ -20,23 +20,17 @@ export async function id(client: FluenceClient): Promise<void> {
                 `
 (xor
  (seq
-  (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+  (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
   (call %init_peer_id% ("op" "identity") [])
  )
- (seq
-  (call relay ("op" "identity") [])
-  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
- )
+ (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
 )
 
             `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', 'relay', () => {
+                h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
-                });
-                h.on('getRelayService', 'hasRelay', () => {// Not Used
-                    return client.relayPeerId !== undefined;
                 });
                 
                 
@@ -71,31 +65,40 @@ export async function getPeerExternalAddresses(client: FluenceClient, otherNodeP
    (seq
     (seq
      (seq
-      (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+      (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
       (call %init_peer_id% ("getDataSrv" "otherNodePeerId") [] otherNodePeerId)
      )
-     (call relay ("op" "identity") [])
+     (call -relay- ("op" "identity") [])
     )
-    (call otherNodePeerId ("peer" "identify") [] res)
+    (xor
+     (call otherNodePeerId ("peer" "identify") [] res)
+     (seq
+      (seq
+       (call -relay- ("op" "identity") [])
+       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+      )
+      (call -relay- ("op" "identity") [])
+     )
+    )
    )
-   (call relay ("op" "identity") [])
+   (call -relay- ("op" "identity") [])
   )
-  (call %init_peer_id% ("callbackSrv" "response") [res.$.external_addresses!])
+  (xor
+   (call %init_peer_id% ("callbackSrv" "response") [res.$.external_addresses!])
+   (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+  )
  )
  (seq
-  (call relay ("op" "identity") [])
-  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
+  (call -relay- ("op" "identity") [])
+  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
  )
 )
 
             `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', 'relay', () => {
+                h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
-                });
-                h.on('getRelayService', 'hasRelay', () => {// Not Used
-                    return client.relayPeerId !== undefined;
                 });
                 h.on('getDataSrv', 'otherNodePeerId', () => {return otherNodePeerId;});
                 h.onEvent('callbackSrv', 'response', (args) => {
@@ -137,37 +140,49 @@ export async function getDistantAddresses(client: FluenceClient, target: string,
       (seq
        (seq
         (seq
-         (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+         (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
          (call %init_peer_id% ("getDataSrv" "target") [] target)
         )
         (call %init_peer_id% ("getDataSrv" "viaNode") [] viaNode)
        )
-       (call relay ("op" "identity") [])
+       (call -relay- ("op" "identity") [])
       )
       (call viaNode ("op" "identity") [])
      )
-     (call target ("peer" "identify") [] res)
+     (xor
+      (call target ("peer" "identify") [] res)
+      (seq
+       (seq
+        (seq
+         (call viaNode ("op" "identity") [])
+         (call -relay- ("op" "identity") [])
+        )
+        (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+       )
+       (call -relay- ("op" "identity") [])
+      )
+     )
     )
     (call viaNode ("op" "identity") [])
    )
-   (call relay ("op" "identity") [])
+   (call -relay- ("op" "identity") [])
   )
-  (call %init_peer_id% ("callbackSrv" "response") [res.$.external_addresses!])
+  (xor
+   (call %init_peer_id% ("callbackSrv" "response") [res.$.external_addresses!])
+   (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+  )
  )
  (seq
-  (call relay ("op" "identity") [])
-  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
+  (call -relay- ("op" "identity") [])
+  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
  )
 )
 
             `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', 'relay', () => {
+                h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
-                });
-                h.on('getRelayService', 'hasRelay', () => {// Not Used
-                    return client.relayPeerId !== undefined;
                 });
                 h.on('getDataSrv', 'target', () => {return target;});
 h.on('getDataSrv', 'viaNode', () => {return viaNode;});
