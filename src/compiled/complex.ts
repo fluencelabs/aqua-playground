@@ -207,7 +207,7 @@ export async function testFunc(client: FluenceClient): Promise<string> {
       
 
 
-export async function doStuff(client: FluenceClient, a: string, b: string, c: boolean, d: boolean, e: string[], g: string[]): Promise<string[]> {
+export async function doStuff(client: FluenceClient, a: string, b: string, c: boolean, d: boolean, e: string[], g: string[], str: string): Promise<string[]> {
     let request;
     const promise = new Promise<string[]>((resolve, reject) => {
         request = new RequestFlowBuilder()
@@ -226,22 +226,25 @@ export async function doStuff(client: FluenceClient, a: string, b: string, c: bo
          (seq
           (seq
            (seq
-            (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-            (call %init_peer_id% ("getDataSrv" "a") [] a)
+            (seq
+             (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+             (call %init_peer_id% ("getDataSrv" "a") [] a)
+            )
+            (call %init_peer_id% ("getDataSrv" "b") [] b)
            )
-           (call %init_peer_id% ("getDataSrv" "b") [] b)
+           (call %init_peer_id% ("getDataSrv" "c") [] c)
           )
-          (call %init_peer_id% ("getDataSrv" "c") [] c)
+          (call %init_peer_id% ("getDataSrv" "d") [] d)
          )
-         (call %init_peer_id% ("getDataSrv" "d") [] d)
+         (call %init_peer_id% ("getDataSrv" "e") [] e)
         )
-        (call %init_peer_id% ("getDataSrv" "e") [] e)
+        (call %init_peer_id% ("getDataSrv" "g") [] g)
        )
-       (call %init_peer_id% ("getDataSrv" "g") [] g)
+       (call %init_peer_id% ("getDataSrv" "str") [] str)
       )
       (par
        (par
-        (call %init_peer_id% ("test-service-id" "str") [] $stream)
+        (call %init_peer_id% ("some-id" "t") [str] $stream)
         (call %init_peer_id% ("println-service-id" "print") [a])
        )
        (seq
@@ -329,6 +332,7 @@ h.on('getDataSrv', 'c', () => {return c;});
 h.on('getDataSrv', 'd', () => {return d;});
 h.on('getDataSrv', 'e', () => {return e;});
 h.on('getDataSrv', 'g', () => {return g;});
+h.on('getDataSrv', 'str', () => {return str;});
                 h.onEvent('callbackSrv', 'response', (args) => {
   const [res] = args;
   resolve(res);

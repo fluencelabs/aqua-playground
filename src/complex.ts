@@ -8,7 +8,5 @@ export async function complexCall(client: FluenceClient) {
         return args[0]
     })
 
-    let peer2 = testNet[0]
-
-    return await doStuff(client, client.relayPeerId!, client.selfPeerId, true, true, ["1", "2"], ["3", "4"])
+    return await doStuff(client, client.relayPeerId!, client.selfPeerId, true, true, ["1", "2"], ["3", "4"], "some str")
 }
