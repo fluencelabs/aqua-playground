@@ -12,7 +12,7 @@ import { RequestFlow } from '@fluencelabs/fluence/dist/internal/RequestFlow';
 
 
 
-export async function print(client: FluenceClient, str: string): Promise<void> {
+export async function id(client: FluenceClient): Promise<void> {
     let request: RequestFlow;
     const promise = new Promise<void>((resolve, reject) => {
         request = new RequestFlowBuilder()
@@ -21,11 +21,8 @@ export async function print(client: FluenceClient, str: string): Promise<void> {
                 `
 (xor
  (seq
-  (seq
-   (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-   (call %init_peer_id% ("getDataSrv" "str") [] str)
-  )
-  (call %init_peer_id% ("println-service-id" "print") [str])
+  (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+  (call %init_peer_id% ("op" "identity") [])
  )
  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
 )
@@ -36,7 +33,7 @@ export async function print(client: FluenceClient, str: string): Promise<void> {
                 h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
                 });
-                h.on('getDataSrv', 'str', () => {return str;});
+                
                 
                 h.onEvent('errorHandlingSrv', 'error', (args) => {
                     // assuming error is the single argument
@@ -46,7 +43,7 @@ export async function print(client: FluenceClient, str: string): Promise<void> {
             })
             .handleScriptError(reject)
             .handleTimeout(() => {
-                reject('Request timed out for print');
+                reject('Request timed out for id');
             })
             .build();
     });
@@ -56,7 +53,7 @@ export async function print(client: FluenceClient, str: string): Promise<void> {
       
 
 
-export async function callConstant(client: FluenceClient, cb: (arg0: string) => void): Promise<void> {
+export async function test(client: FluenceClient, node: string): Promise<void> {
     let request: RequestFlow;
     const promise = new Promise<void>((resolve, reject) => {
         request = new RequestFlowBuilder()
@@ -66,29 +63,27 @@ export async function callConstant(client: FluenceClient, cb: (arg0: string) => 
 (xor
  (seq
   (seq
-   (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-   (call %init_peer_id% ("test" "getNum") [] n)
-  )
-  (xor
-   (match n 1
-    (xor
-     (call %init_peer_id% ("callbackSrv" "cb") ["non-default string"])
-     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
-    )
-   )
    (seq
     (seq
+     (seq
+      (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+      (call %init_peer_id% ("getDataSrv" "node") [] node)
+     )
      (call -relay- ("op" "identity") [])
-     (xor
-      (call %init_peer_id% ("callbackSrv" "cb") ["non-default string"])
-      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+    )
+    (xor
+     (call node ("peer" "identify") [] res)
+     (seq
+      (call -relay- ("op" "identity") [])
+      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
      )
     )
-    (call -relay- ("op" "identity") [])
    )
+   (call -relay- ("op" "identity") [])
   )
+  (call %init_peer_id% ("returnService" "run") [res])
  )
- (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
+ (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
 )
 
             `,
@@ -97,7 +92,7 @@ export async function callConstant(client: FluenceClient, cb: (arg0: string) => 
                 h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
                 });
-                h.on('callbackSrv', 'cb', (args) => {cb(args[0]); return {};});
+                h.on('getDataSrv', 'node', () => {return node;});
                 
                 h.onEvent('errorHandlingSrv', 'error', (args) => {
                     // assuming error is the single argument
@@ -107,7 +102,7 @@ export async function callConstant(client: FluenceClient, cb: (arg0: string) => 
             })
             .handleScriptError(reject)
             .handleTimeout(() => {
-                reject('Request timed out for callConstant');
+                reject('Request timed out for test');
             })
             .build();
     });
