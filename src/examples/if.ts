@@ -1,5 +1,5 @@
 import {FluenceClient} from "@fluencelabs/fluence";
-import {ifElseCall, ifElseNumCall} from "./compiled/if";
+import {ifElseCall, ifElseNumCall} from "../compiled/if";
 
 export async function ifCall(client: FluenceClient) {
     await ifElseCall(client, false)

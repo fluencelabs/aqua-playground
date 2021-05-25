@@ -1,4 +1,4 @@
-import {testFunc} from "./compiled/func";
+import {testFunc} from "../compiled/func";
 import {FluenceClient, registerServiceFunction} from "@fluencelabs/fluence";
 
 export async function funcCall(client: FluenceClient) {

@@ -1,5 +1,5 @@
 import {FluenceClient, registerServiceFunction} from "@fluencelabs/fluence";
-import {checkStreams} from "./compiled/stream";
+import {checkStreams} from "../compiled/stream";
 
 export async function streamCall(client: FluenceClient) {
     registerServiceFunction(client, "stringer-id", "returnString", (args: any[], _) => {

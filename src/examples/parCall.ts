@@ -1,5 +1,5 @@
 import {FluenceClient, registerServiceFunction} from "@fluencelabs/fluence";
-import {parFunc} from "./compiled/par";
+import {parFunc} from "../compiled/par";
 
 export async function parCall(client: FluenceClient) {
 

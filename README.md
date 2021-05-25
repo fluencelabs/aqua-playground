@@ -18,10 +18,15 @@ To compile the aqua files execute
 npm run compile-aqua
 ```
 
-To start the program execute
+To start the `index.ts` execute
 
 ```
-npm run cli
+npm run run
+```
+
+To run all examples in `example` directory
+```
+npm run exec
 ```
 
 If everything works correctly logs without errors will be printed on a screen:
@@ -35,6 +40,8 @@ Aqua source files are located in `src/aqua`directory.
 Aqua files are compiled into .ts located in `/src/compiled` directory.
 
 Entry point to use aqua compiled files from TypeScript: `/src/index.ts`
+
+Code that call all examples and check results: `/src/run-examples.ts`
 
 ## References
 
