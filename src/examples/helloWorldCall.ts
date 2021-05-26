@@ -1,5 +1,5 @@
 import {FluenceClient, registerServiceFunction} from "@fluencelabs/fluence";
-import {helloWorld} from "../compiled/helloWorld";
+import {helloWorld} from "../compiled/examples/helloWorld";
 
 export async function helloWorldCall(client: FluenceClient) {
     // helloWorld.aqua

@@ -1,5 +1,5 @@
 import {FluenceClient, registerServiceFunction} from "@fluencelabs/fluence";
-import {topologyTest} from "../compiled/topology";
+import {topologyTest} from "../compiled/examples/topology";
 
 export async function topologyCall(client: FluenceClient, client2: FluenceClient): Promise<string> {
 

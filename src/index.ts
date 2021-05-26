@@ -2,7 +2,7 @@
 
 import {createClient, registerServiceFunction} from "@fluencelabs/fluence";
 import {testNet} from "@fluencelabs/fluence-network-environment";
-import {helloWorld} from "./compiled/helloWorld";
+import {helloWorld} from "./compiled/examples/helloWorld";
 
 const main = async () => {
     // each compiled aqua function require a connected client

@@ -1,5 +1,5 @@
 import {FluenceClient, registerServiceFunction} from "@fluencelabs/fluence";
-import {doStuff} from "../compiled/complex";
+import {doStuff} from "../compiled/examples/complex";
 import {testNet} from "@fluencelabs/fluence-network-environment";
 
 export async function complexCall(client: FluenceClient) {

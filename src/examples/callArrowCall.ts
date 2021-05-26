@@ -1,5 +1,5 @@
 import {FluenceClient} from "@fluencelabs/fluence";
-import {passFunctionAsArg} from "../compiled/callArrow";
+import {passFunctionAsArg} from "../compiled/examples/callArrow";
 
 export async function callArrowCall(client: FluenceClient): Promise<string> {
   return new Promise<string>((resolve, reject) => {

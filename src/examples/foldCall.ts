@@ -1,5 +1,5 @@
     import {FluenceClient} from "@fluencelabs/fluence";
-    import {iterateAndPrint, iterateAndPrintParallel} from "../compiled/fold";
+    import {iterateAndPrint, iterateAndPrintParallel} from "../compiled/examples/fold";
 
     export async function foldCall(client: FluenceClient) {
         await iterateAndPrint(client, [client.relayPeerId!])

@@ -1,5 +1,5 @@
 import {FluenceClient, registerServiceFunction} from "@fluencelabs/fluence";
-import {callConstant} from "../compiled/constants";
+import {callConstant} from "../compiled/examples/constants";
 
 export async function constantsCall(client: FluenceClient) {
     registerServiceFunction(client, "test", "getNum", (args: any[], _) => {
