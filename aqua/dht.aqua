@@ -1,0 +1,43 @@
+import "@fluencelabs/aqua-dht/dht.aqua"
+import "@fluencelabs/aqua-lib/builtin.aqua"
+
+service OpHack("op"):
+  identity(r: []Record) -> []Record
+
+
+service OpHack2("op"):
+  identity(r: [][]Record) -> [][]Record  
+
+func setKey(node_id: string, key: string, value: string, relay_id: string, ack: string, string -> ()) -> []string:
+  on node_id:
+    k <- Op.string_to_b58(key)
+    nodes <- Kademlia.neighborhood(k, false)
+    tt <- Peer.timestamp_sec()
+    AquaDHT.register_key(key, tt)
+    ack("node end", node_id)
+  for n <- nodes par:
+    on n:
+      try:
+        ack("begin", n)
+        t <- Peer.timestamp_sec()
+        AquaDHT.register_key(key, t)
+        AquaDHT.put_value_relay(key, value, t, relay_id)
+        ack("end", n)
+  <- nodes
+
+func getValues(node_id: string, key: string) -> []Record:
+  on node_id:
+    k <- Op.string_to_b58(key)
+    nodes <- Kademlia.neighborhood(k, false)
+  res: *[]Record  
+  for n <- nodes:
+    on n:
+      try:
+        t <- Peer.timestamp_sec()
+        val_res <- AquaDHT.get_values(key, t)
+        res <- OpHack.identity(val_res.result)
+  -- join when 2 results are there
+  on node_id:
+    flattened <- OpHack2.identity(res)
+    v <- AquaDHT.merge(flattened, "shit")      
+  <- v.result

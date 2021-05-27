@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 
 import {createClient, registerServiceFunction} from "@fluencelabs/fluence";
-import {testNet} from "@fluencelabs/fluence-network-environment";
-import {helloWorld} from "./compiled/examples/helloWorld";
+
+import {krasnodar} from "@fluencelabs/fluence-network-environment";
+import {setKey, getValues} from "./compiled/dht";
+
 
 const main = async () => {
     // each compiled aqua function require a connected client
-    const client = await createClient(testNet[0]);
+    const client = await createClient(krasnodar[0]);
 
     // example to how register a local service
     // it could be used in aqua code as follows
@@ -18,8 +20,10 @@ const main = async () => {
     })
 
     // call an aqua function thet presented in ../aqua/helloWorld.aqua
-    const result = await helloWorld(client, "NAME");
-    console.log(result)
+    //await setKey(client, krasnodar[0].peerId, "Test Hello2", "some value2", client.relayPeerId!, (x, y) => console.log("Ack: ", x, y));
+    let values = await getValues(client, krasnodar[0].peerId, "Test Hello2");
+    console.log(values)
+    
 
     process.exit(0)
 };
