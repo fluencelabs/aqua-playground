@@ -6,7 +6,7 @@ service OpHack("op"):
 
 
 service OpHack2("op"):
-  identity(r: [][]Record) -> [][]Record  
+  identity(r: [][]Record) -> [][][]Record  
 
 func setKey(node_id: string, key: string, value: string, relay_id: string, ack: string, string -> ()) -> []string:
   on node_id:
@@ -25,19 +25,18 @@ func setKey(node_id: string, key: string, value: string, relay_id: string, ack: 
         ack("end", n)
   <- nodes
 
-func getValues(node_id: string, key: string) -> []Record:
+func getValues(node_id: string, key: string, ack: string, []GetValuesResult -> ()) -> []Record:
   on node_id:
     k <- Op.string_to_b58(key)
     nodes <- Kademlia.neighborhood(k, false)
-  res: *[]Record  
+  res: *GetValuesResult  
   for n <- nodes:
     on n:
       try:
         t <- Peer.timestamp_sec()
-        val_res <- AquaDHT.get_values(key, t)
-        res <- OpHack.identity(val_res.result)
+        res <- AquaDHT.get_values(key, t)
   -- join when 2 results are there
   on node_id:
-    flattened <- OpHack2.identity(res)
-    v <- AquaDHT.merge(flattened, "shit")      
+    ack("values", res)
+    v <- AquaDHT.merge_hack_get_values(res)      
   <- v.result

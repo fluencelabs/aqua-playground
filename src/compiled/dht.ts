@@ -159,7 +159,7 @@ h.on('callbackSrv', 'ack', (args) => {ack(args[0], args[1]); return {};});
       
 
 
-export async function getValues(client: FluenceClient, node_id: string, key: string): Promise<{peer_id:string;relay_id:string[];service_id:string[];timestamp_created:number;value:string}[]> {
+export async function getValues(client: FluenceClient, node_id: string, key: string, ack: (arg0: string, arg1: {error:string;result:{peer_id:string;relay_id:string[];service_id:string[];timestamp_created:number;value:string}[];success:boolean}[]) => void): Promise<{peer_id:string;relay_id:string[];service_id:string[];timestamp_created:number;value:string}[]> {
     let request: RequestFlow;
     const promise = new Promise<{peer_id:string;relay_id:string[];service_id:string[];timestamp_created:number;value:string}[]>((resolve, reject) => {
         request = new RequestFlowBuilder()
@@ -207,11 +207,8 @@ export async function getValues(client: FluenceClient, node_id: string, key: str
           (call -relay- ("op" "identity") [])
           (xor
            (seq
-            (seq
-             (call n ("peer" "timestamp_sec") [] t)
-             (call n ("aqua-dht" "get_values") [key t] val_res)
-            )
-            (call n ("op" "identity") [val_res.$.result!] $res)
+            (call n ("peer" "timestamp_sec") [] t)
+            (call n ("aqua-dht" "get_values") [key t] $res)
            )
            (null)
           )
@@ -226,13 +223,22 @@ export async function getValues(client: FluenceClient, node_id: string, key: str
     )
     (xor
      (seq
-      (call node_id ("op" "identity") [$res] flattened)
-      (call node_id ("aqua-dht" "merge") [flattened "shit"] v)
+      (seq
+       (seq
+        (call -relay- ("op" "identity") [])
+        (xor
+         (call %init_peer_id% ("callbackSrv" "ack") ["values" $res])
+         (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+        )
+       )
+       (call -relay- ("op" "identity") [])
+      )
+      (call node_id ("aqua-dht" "merge_hack_get_values") [$res] v)
      )
      (seq
       (seq
        (call -relay- ("op" "identity") [])
-       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
       )
       (call -relay- ("op" "identity") [])
      )
@@ -242,12 +248,12 @@ export async function getValues(client: FluenceClient, node_id: string, key: str
   )
   (xor
    (call %init_peer_id% ("callbackSrv" "response") [v.$.result!])
-   (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
+   (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 4])
   )
  )
  (seq
   (call -relay- ("op" "identity") [])
-  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 4])
+  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 5])
  )
 )
 
@@ -259,6 +265,7 @@ export async function getValues(client: FluenceClient, node_id: string, key: str
                 });
                 h.on('getDataSrv', 'node_id', () => {return node_id;});
 h.on('getDataSrv', 'key', () => {return key;});
+h.on('callbackSrv', 'ack', (args) => {ack(args[0], args[1]); return {};});
                 h.onEvent('callbackSrv', 'response', (args) => {
   const [res] = args;
   resolve(res);

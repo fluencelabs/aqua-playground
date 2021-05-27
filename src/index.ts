@@ -20,8 +20,8 @@ const main = async () => {
     })
 
     // call an aqua function thet presented in ../aqua/helloWorld.aqua
-    //await setKey(client, krasnodar[0].peerId, "Test Hello2", "some value2", client.relayPeerId!, (x, y) => console.log("Ack: ", x, y));
-    let values = await getValues(client, krasnodar[0].peerId, "Test Hello2");
+    await setKey(client, krasnodar[0].peerId, "Test Hello2", "some value2", client.relayPeerId!, (x, y) => console.log("Ack: ", x, y));
+    let values = await getValues(client, krasnodar[0].peerId, "Test Hello2", (x, y) => console.log("Ack: ", x, y));
     console.log(values)
     
 
