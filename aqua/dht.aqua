@@ -1,31 +1,62 @@
 import "@fluencelabs/aqua-dht/dht.aqua"
 import "@fluencelabs/aqua-lib/builtin.aqua"
 
-service OpHack("op"):
-  identity(r: []Record) -> []Record
+-- putValue
+-- putHostValue
+-- setKeyPutHostValue
+-- clearHostValue
 
 
-service OpHack2("op"):
-  identity(r: [][]Record) -> [][][]Record  
+-- separate file for node
+-- replicate
+-- neighborhood -> timestamp -> getRecords (evictStale) -> republish_key -> republish_values
+-- clearExpired
+-- timestamp -> call clearExpired
 
-func setKey(node_id: string, key: string, value: string, relay_id: string, ack: string, string -> ()) -> []string:
+func getNeighbours(key: string, node_id: string) -> []PeerId:
   on node_id:
     k <- Op.string_to_b58(key)
     nodes <- Kademlia.neighborhood(k, false)
-    tt <- Peer.timestamp_sec()
-    AquaDHT.register_key(key, tt)
-    ack("node end", node_id)
+  <- nodes
+
+func registerKey(node_id: string, key: string) -> []string:
+  nodes <- getNeighbours(key, node_id)
   for n <- nodes par:
     on n:
       try:
-        ack("begin", n)
         t <- Peer.timestamp_sec()
-        AquaDHT.register_key(key, t)
-        AquaDHT.put_value_relay(key, value, t, relay_id)
-        ack("end", n)
+        AquaDHT.register_key(key, t, true, 0)
   <- nodes
 
-func getValues(node_id: string, key: string, ack: string, []GetValuesResult -> ()) -> []Record:
+func setKeyPutValue(node_id: string, key: string, value: string, relay_id: string, weight: u32) -> []string:
+  nodes <- getNeighbours(key, node_id)
+  for n <- nodes par:
+    on n:
+      try:
+        t <- Peer.timestamp_sec()
+        AquaDHT.register_key(key, t, true, weight)
+        AquaDHT.put_value_relay(key, value, t, relay_id, weight)
+  <- nodes
+
+func putValue(node_id: string, key: string, value: string, relay_id: string, weight: u32) -> []string:
+  nodes <- getNeighbours(key, node_id)
+  for n <- nodes par:
+    on n:
+      try:
+        t <- Peer.timestamp_sec()
+        AquaDHT.put_value_relay(key, value, t, relay_id, weight)
+  <- nodes
+
+func putHostValue(node_id: string, key: string, value: string, relay_id: []string, service_id: []string, weight: u32) -> []string:
+  nodes <- getNeighbours(key, node_id)
+  for n <- nodes par:
+    on n:
+      try:
+        t <- Peer.timestamp_sec()
+        AquaDHT.put_host_value(key, value, t, relay_id, service_id, weight)
+  <- nodes
+
+func getValues(node_id: string, key: string) -> []Record:
   on node_id:
     k <- Op.string_to_b58(key)
     nodes <- Kademlia.neighborhood(k, false)
@@ -37,6 +68,5 @@ func getValues(node_id: string, key: string, ack: string, []GetValuesResult -> (
         res <- AquaDHT.get_values(key, t)
   -- join when 2 results are there
   on node_id:
-    ack("values", res)
     v <- AquaDHT.merge_hack_get_values(res)      
   <- v.result

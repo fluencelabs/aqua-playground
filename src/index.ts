@@ -3,7 +3,7 @@
 import {createClient, registerServiceFunction} from "@fluencelabs/fluence";
 
 import {krasnodar} from "@fluencelabs/fluence-network-environment";
-import {setKey, getValues} from "./compiled/dht";
+import {setKeyPutValue, getValues} from "./compiled/dht";
 
 
 const main = async () => {
@@ -19,9 +19,8 @@ const main = async () => {
         return `Hello, ${args[0]}!`
     })
 
-    // call an aqua function thet presented in ../aqua/helloWorld.aqua
-    await setKey(client, krasnodar[0].peerId, "Test Hello2", "some value2", client.relayPeerId!, (x, y) => console.log("Ack: ", x, y));
-    let values = await getValues(client, krasnodar[0].peerId, "Test Hello2", (x, y) => console.log("Ack: ", x, y));
+    await setKeyPutValue(client, krasnodar[0].peerId, "Test Hello2", "some value2", client.relayPeerId!, 0);
+    let values = await getValues(client, krasnodar[0].peerId, "Test Hello2");
     console.log(values)
     
 
