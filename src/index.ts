@@ -3,7 +3,7 @@
 import {createClient, registerServiceFunction} from "@fluencelabs/fluence";
 
 import {krasnodar} from "@fluencelabs/fluence-network-environment";
-import {setKeyPutValue, getValues} from "./compiled/dht";
+import {setKeyPutValue, getValues, putHostValue} from "./compiled/dht";
 
 
 const main = async () => {
@@ -19,10 +19,16 @@ const main = async () => {
         return `Hello, ${args[0]}!`
     })
 
-    await setKeyPutValue(client, krasnodar[0].peerId, "Test Hello2", "some value2", client.relayPeerId!, 0);
+    console.log("SET KEY")
+    let nodes = await putHostValue(client, krasnodar[0].peerId, "Test Hello2", "some value2", [client.relayPeerId!], [], 0);
+    console.log(nodes.length)
+    console.log("GET VALUES")
+
+
     let values = await getValues(client, krasnodar[0].peerId, "Test Hello2");
-    console.log(values)
-    
+    console.dir(values)
+    console.log(values.length)
+
 
     process.exit(0)
 };
