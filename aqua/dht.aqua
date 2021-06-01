@@ -19,13 +19,21 @@ func getNeighbours(key: string, node_id: string) -> []PeerId:
     nodes <- Kademlia.neighborhood(k, false)
   <- nodes
 
-func registerKey(node_id: string, key: string) -> []string:
+func clearHostValue(key: string, node_id: string):
   nodes <- getNeighbours(key, node_id)
   for n <- nodes par:
     on n:
       try:
         t <- Peer.timestamp_sec()
-        AquaDHT.register_key(key, t, true, 0)
+        AquaDHT.clear_host_value(key, t)
+
+func registerKey(node_id: string, key: string, weight: u32) -> []string:
+  nodes <- getNeighbours(key, node_id)
+  for n <- nodes par:
+    on n:
+      try:
+        t <- Peer.timestamp_sec()
+        AquaDHT.register_key(key, t, true, weight)
   <- nodes
 
 func setKeyPutValue(node_id: string, key: string, value: string, relay_id: string, weight: u32) -> []string:
