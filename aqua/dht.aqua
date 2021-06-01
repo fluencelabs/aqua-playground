@@ -75,5 +75,5 @@ func getValues(node_id: string, key: string) -> []Record:
         try:
           t <- Peer.timestamp_sec()
           res <- AquaDHT.get_values(key, t)
-    v <- AquaDHT.merge_hack_get_values(res)      
-  <- v.result
+    v <- AquaDHT.merge_two(res!.result, res!1.result)
+  <- v

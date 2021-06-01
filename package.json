@@ -19,6 +19,7 @@
     "build": "tsc",
     "examples": "node -r ts-node/register src/run-examples.ts",
     "exec": "npm run compile-aqua && node -r ts-node/register src/index.ts",
+    "run": "node -r ts-node/register src/index.ts",
     "compile-aqua": "aqua-cli -i ./aqua/ -o ./src/compiled",
     "compile-aqua:air": "aqua-cli -i ./aqua/ -o ./compiled-air -a",
     "aqua-v": "aqua-cli -v"
