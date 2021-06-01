@@ -1,4 +1,4 @@
-import "builtin.aqua"
+import "@fluencelabs/aqua-lib/builtin.aqua"
 
 service ParService("parservice-id"):
     call: -> string
