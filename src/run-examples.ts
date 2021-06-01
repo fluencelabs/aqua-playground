@@ -14,12 +14,21 @@ import {complexCall} from "./examples/complex";
 import {constantsCall} from "./examples/constantsCall";
 import {streamCall} from "./examples/streamCall";
 import {topologyCall} from "./examples/topologyCall";
+import {foldJoinCall} from "./examples/foldJoinCall";
 let deepEqual = require('deep-equal')
 
 function checkCall(name: string, expected: any, actual: any, callBackOnError: () => void) {
   if (!deepEqual(actual, expected)) {
     console.error(`${name} call has the wrong result`)
     console.error("expected: " + expected)
+    console.error("actual: " + actual)
+    callBackOnError()
+  }
+}
+
+function checkCallBy(name: string, actual: any, by: (res: any) => boolean, callBackOnError: () => void) {
+  if (!by(actual)) {
+    console.error(`${name} call has the wrong result`)
     console.error("actual: " + actual)
     callBackOnError()
   }
@@ -77,6 +86,9 @@ const main = async () => {
   // topology.aqua
   let topologyResult = await topologyCall(client, client2)
 
+  // foldJoin.aqua
+  let foldJoinResult = await foldJoinCall(client)
+
   await client.disconnect();
 
   let success = true;
@@ -105,6 +117,8 @@ const main = async () => {
   checkCall("streamCall", streamResult, ["first updated", "second updated", "third updated", "fourth updated"], cb)
 
   checkCall("topologyCall", topologyResult, "finish", cb)
+
+  checkCallBy("foldJoinCall", foldJoinResult, (res) => res.length == 3, cb)
 
   if (success) {
     process.exit(0)

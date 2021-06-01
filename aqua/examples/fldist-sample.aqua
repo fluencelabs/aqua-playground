@@ -1,4 +1,4 @@
-import "builtin.aqua"
+import "@fluencelabs/aqua-lib/builtin.aqua"
 
 -- this service is used by fldist to print something into console
 service Return("returnService"):
