@@ -1,10 +1,16 @@
 (xor
  (seq
   (seq
-   (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+   (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
    (call %init_peer_id% ("test-service-id" "str") [] res)
   )
-  (call %init_peer_id% ("callbackSrv" "response") [res])
+  (xor
+   (call %init_peer_id% ("callbackSrv" "response") [res])
+   (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+  )
  )
- (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
+ (seq
+  (call -relay- ("op" "identity") [])
+  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+ )
 )

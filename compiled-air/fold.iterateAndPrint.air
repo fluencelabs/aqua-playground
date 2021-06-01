@@ -1,7 +1,7 @@
 (xor
  (seq
   (seq
-   (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+   (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
    (call %init_peer_id% ("getDataSrv" "strings") [] strings)
   )
   (fold strings s
@@ -11,5 +11,5 @@
    )
   )
  )
- (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
+ (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
 )

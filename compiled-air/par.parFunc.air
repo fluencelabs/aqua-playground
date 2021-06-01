@@ -1,22 +1,40 @@
 (xor
  (seq
   (seq
-   (call %init_peer_id% ("getDataSrv" "relay") [] relay)
-   (call %init_peer_id% ("getDataSrv" "node") [] node)
-  )
-  (par
+   (seq
+    (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+    (call %init_peer_id% ("getDataSrv" "node") [] node)
+   )
    (par
     (call %init_peer_id% ("parservice-id" "call") [] y)
     (seq
-     (call relay ("op" "identity") [])
      (seq
-      (call node ("peer" "identify") [] t)
-      (null)
+      (seq
+       (call -relay- ("op" "identity") [])
+       (xor
+        (seq
+         (seq
+          (call node ("peer" "identify") [] t)
+          (call -relay- ("op" "identity") [])
+         )
+         (xor
+          (call %init_peer_id% ("callbackSrv" "c") [t])
+          (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+         )
+        )
+        (seq
+         (call -relay- ("op" "identity") [])
+         (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+        )
+       )
+      )
+      (call -relay- ("op" "identity") [])
      )
+     (call %init_peer_id% ("op" "identity") [])
     )
    )
-   (call %init_peer_id% ("parservice-id" "call") [] x)
   )
+  (call %init_peer_id% ("parservice-id" "call") [] x)
  )
- (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
+ (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
 )

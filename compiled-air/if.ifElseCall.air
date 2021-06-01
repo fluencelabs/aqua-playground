@@ -1,15 +1,24 @@
 (xor
  (seq
   (seq
-   (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+   (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
    (call %init_peer_id% ("getDataSrv" "condition") [] condition)
   )
   (xor
    (match condition true
-    (call %init_peer_id% ("println-service-id" "print") ["it is true"])
+    (xor
+     (call %init_peer_id% ("println-service-id" "print") ["it is true"])
+     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+    )
    )
-   (call %init_peer_id% ("println-service-id" "print") ["it is false"])
+   (seq
+    (seq
+     (call -relay- ("op" "identity") [])
+     (call %init_peer_id% ("println-service-id" "print") ["it is false"])
+    )
+    (call -relay- ("op" "identity") [])
+   )
   )
  )
- (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error%])
+ (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
 )
