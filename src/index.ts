@@ -12,19 +12,8 @@ const main = async () => {
     const client = await createClient(krasnodar[0]);
 
 
-    // example to how register a local service
-    // it could be used in aqua code as follows
-    // service StringExtra("service-id"):
-    //     addNameToHello: string -> string
-    // see more in helloWorld.aqua
-    registerServiceFunction(client, "aqua-dht", "merge_two", (args: any[], _) => {
-        console.log("aquadht")
-        console.log(args)
-        return []
-    })
-
     console.log("SET KEY")
-    // await setKeyPutValue(client, krasnodar[0].peerId, "Test Hello3", "some value4", client.relayPeerId!, 0);
+    await setKeyPutValue(client, krasnodar[0].peerId, "Test Hello3", "some value4", client.relayPeerId!, 0);
     // await clearHostValue(client, "Test Hello2", krasnodar[0].peerId);
     // console.log(nodes.length)
     console.log("GET VALUES")

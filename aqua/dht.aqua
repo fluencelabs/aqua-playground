@@ -64,7 +64,6 @@ func putHostValue(node_id: string, key: string, value: string, relay_id: []strin
         AquaDHT.put_host_value(key, value, t, relay_id, service_id, weight)
   <- nodes
 
--- not working
 func getValues(node_id: string, key: string) -> []Record:
   on node_id:
     k <- Op.string_to_b58(key)
@@ -76,4 +75,4 @@ func getValues(node_id: string, key: string) -> []Record:
           t <- Peer.timestamp_sec()
           res <- AquaDHT.get_values(key, t)
     v <- AquaDHT.merge_two(res!.result, res!1.result)
-  <- v
+  <- v.result

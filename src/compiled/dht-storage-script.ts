@@ -12,7 +12,7 @@ import { RequestFlow } from '@fluencelabs/fluence/dist/internal/RequestFlow';
 
 
 
-export async function betterMessage(client: FluenceClient, relay: string): Promise<void> {
+export async function replicate(client: FluenceClient): Promise<void> {
     let request: RequestFlow;
     const promise = new Promise<void>((resolve, reject) => {
         request = new RequestFlowBuilder()
@@ -23,37 +23,45 @@ export async function betterMessage(client: FluenceClient, relay: string): Promi
  (seq
   (seq
    (seq
+    (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+    (call %init_peer_id% ("peer" "timestamp_sec") [] t)
+   )
+   (call %init_peer_id% ("aqua-dht" "evict_stale") [t] res)
+  )
+  (fold res.$.results! r
+   (par
     (seq
      (seq
-      (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-      (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+      (call %init_peer_id% ("op" "string_to_b58") [r.$.key.key!] k)
+      (call %init_peer_id% ("kad" "neighborhood") [k false] nodes)
      )
-     (call -relay- ("op" "identity") [])
-    )
-    (xor
-     (call relay ("peer" "is_connected") [relay] isOnline)
-     (seq
-      (call -relay- ("op" "identity") [])
-      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+     (fold nodes n
+      (par
+       (seq
+        (call -relay- ("op" "identity") [])
+        (xor
+         (seq
+          (call n ("aqua-dht" "republish_key") [r.$.key! t])
+          (call n ("aqua-dht" "republish_values") [r.$.key.key! r.$.records! t])
+         )
+         (seq
+          (call -relay- ("op" "identity") [])
+          (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+         )
+        )
+       )
+       (seq
+        (call -relay- ("op" "identity") [])
+        (next n)
+       )
+      )
      )
     )
+    (next r)
    )
-   (call -relay- ("op" "identity") [])
-  )
-  (xor
-   (match isOnline true
-    (xor
-     (call %init_peer_id% ("test" "doSomething") [])
-     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
-    )
-   )
-   (null)
   )
  )
- (seq
-  (call -relay- ("op" "identity") [])
-  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
- )
+ (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
 )
 
             `,
@@ -62,7 +70,7 @@ export async function betterMessage(client: FluenceClient, relay: string): Promi
                 h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
                 });
-                h.on('getDataSrv', 'relay', () => {return relay;});
+                
                 
                 h.onEvent('errorHandlingSrv', 'error', (args) => {
                     // assuming error is the single argument
@@ -72,7 +80,7 @@ export async function betterMessage(client: FluenceClient, relay: string): Promi
             })
             .handleScriptError(reject)
             .handleTimeout(() => {
-                reject('Request timed out for betterMessage');
+                reject('Request timed out for replicate');
             })
             .build();
     });
