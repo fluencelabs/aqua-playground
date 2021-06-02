@@ -36,26 +36,27 @@ func registerKey(node_id: string, key: string, weight: u32) -> []string:
         AquaDHT.register_key(key, t, true, weight)
   <- nodes
 
-func setKeyPutValue(node_id: string, key: string, value: string, relay_id: string, weight: u32) -> []string:
+func registerKeyPutValue(node_id: string, key: string, value: string, relay_id: ?string, service_id: ?string, weight: u32) -> []string:
+  nodes <- getNeighbours(key, node_id)
+  on node_id:
+      for n <- nodes par:
+        on n:
+          try:
+            t <- Peer.timestamp_sec()
+            AquaDHT.register_key(key, t, true, weight)
+            AquaDHT.put_value(key, value, t, relay_id, service_id, weight)
+  <- nodes
+
+func putValue(node_id: string, key: string, value: string, relay_id: ?string, service_id: ?string, weight: u32) -> []string:
   nodes <- getNeighbours(key, node_id)
   for n <- nodes par:
     on n:
       try:
         t <- Peer.timestamp_sec()
-        AquaDHT.register_key(key, t, true, weight)
-        AquaDHT.put_value_relay(key, value, t, relay_id, weight)
+        AquaDHT.put_value(key, value, t, relay_id, service_id, weight)
   <- nodes
 
-func putValue(node_id: string, key: string, value: string, relay_id: string, weight: u32) -> []string:
-  nodes <- getNeighbours(key, node_id)
-  for n <- nodes par:
-    on n:
-      try:
-        t <- Peer.timestamp_sec()
-        AquaDHT.put_value_relay(key, value, t, relay_id, weight)
-  <- nodes
-
-func putHostValue(node_id: string, key: string, value: string, relay_id: []string, service_id: []string, weight: u32) -> []string:
+func putHostValue(node_id: string, key: string, value: string, relay_id: ?string, service_id: ?string, weight: u32) -> []string:
   nodes <- getNeighbours(key, node_id)
   for n <- nodes par:
     on n:
@@ -69,7 +70,7 @@ func getValues(node_id: string, key: string) -> []Record:
     k <- Op.string_to_b58(key)
     nodes <- Kademlia.neighborhood(k, false)
     res: *GetValuesResult
-    for n <- nodes:
+    for n <- nodes par:
       on n:
         try:
           t <- Peer.timestamp_sec()

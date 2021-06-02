@@ -3,17 +3,17 @@
 import {createClient, registerServiceFunction, setLogLevel} from "@fluencelabs/fluence";
 
 import {krasnodar} from "@fluencelabs/fluence-network-environment";
-import {setKeyPutValue, getValues, putHostValue, clearHostValue} from "./compiled/dht";
+import {registerKeyPutValue, getValues, putHostValue, clearHostValue} from "./compiled/dht";
 
 
 const main = async () => {
-    setLogLevel("warn")
+    setLogLevel("info")
     // each compiled aqua function require a connected client
     const client = await createClient(krasnodar[0]);
 
 
     console.log("SET KEY")
-    await setKeyPutValue(client, krasnodar[0].peerId, "Test Hello3", "some value4", client.relayPeerId!, 0);
+    await registerKeyPutValue(client, krasnodar[0].peerId, "Test Hello3", "some value01", client.relayPeerId || null, null, 0);
     // await clearHostValue(client, "Test Hello2", krasnodar[0].peerId);
     // console.log(nodes.length)
     console.log("GET VALUES")
