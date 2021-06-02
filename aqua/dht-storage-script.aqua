@@ -7,6 +7,10 @@ import "@fluencelabs/aqua-lib/builtin.aqua"
 -- clearExpired
 -- timestamp -> call clearExpired
 
+func clearExpired():
+  t <- Peer.timestamp_sec()
+  AquaDHT.clear_expired(t)
+
 func replicate():
   t <- Peer.timestamp_sec()
   res <- AquaDHT.evict_stale(t)

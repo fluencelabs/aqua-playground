@@ -1,18 +1,6 @@
 import "@fluencelabs/aqua-dht/dht.aqua"
 import "@fluencelabs/aqua-lib/builtin.aqua"
 
--- putValue
--- putHostValue
--- setKeyPutHostValue
--- clearHostValue
-
-
--- separate file for node
--- replicate
--- neighborhood -> timestamp -> getRecords (evictStale) -> republish_key -> republish_values
--- clearExpired
--- timestamp -> call clearExpired
-
 func getNeighbours(key: string, node_id: string) -> []PeerId:
   on node_id:
     k <- Op.string_to_b58(key)
