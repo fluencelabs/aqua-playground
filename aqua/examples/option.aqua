@@ -1,0 +1,8 @@
+service SomeS("test2"):
+    getStr: ?string -> ?string
+    getStr2: string -> string
+
+func useOptional(opt: ?string, ackEm: string -> (), ack: string, ?string -> (), ack2: string, string -> ()) -> string:
+    ackEm("before")
+    ack("first", opt)
+    <- opt!

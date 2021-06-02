@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import {createClient, registerServiceFunction} from "@fluencelabs/fluence";
+import {createClient, registerServiceFunction, setLogLevel} from "@fluencelabs/fluence";
 import {testNet} from "@fluencelabs/fluence-network-environment";
 import {callArrowCall} from "./examples/callArrowCall";
 import {dataAliasCall} from "./examples/dataAliasCall";
@@ -15,13 +15,16 @@ import {constantsCall} from "./examples/constantsCall";
 import {streamCall} from "./examples/streamCall";
 import {topologyCall} from "./examples/topologyCall";
 import {foldJoinCall} from "./examples/foldJoinCall";
+import {useOptionalCall} from "./examples/useOptionalCall";
 let deepEqual = require('deep-equal')
 
 function checkCall(name: string, expected: any, actual: any, callBackOnError: () => void) {
   if (!deepEqual(actual, expected)) {
     console.error(`${name} call has the wrong result`)
-    console.error("expected: " + expected)
-    console.error("actual: " + actual)
+    console.error("expected: ")
+    console.dir(expected)
+    console.error("actual: ")
+    console.dir(actual)
     callBackOnError()
   }
 }
@@ -35,6 +38,7 @@ function checkCallBy(name: string, actual: any, by: (res: any) => boolean, callB
 }
 
 const main = async () => {
+  // setLogLevel("trace")
   const client = await createClient(testNet[0]);
   const client2 = await createClient(testNet[1]);
 
@@ -89,6 +93,9 @@ const main = async () => {
   // foldJoin.aqua
   let foldJoinResult = await foldJoinCall(client)
 
+  // option.aqua
+  let optionResult = await useOptionalCall(client)
+
   await client.disconnect();
 
   let success = true;
@@ -119,6 +126,8 @@ const main = async () => {
   checkCall("topologyCall", topologyResult, "finish", cb)
 
   checkCallBy("foldJoinCall", foldJoinResult, (res) => res.length == 3, cb)
+
+  checkCall("useOptional", optionResult, "hello", cb)
 
   if (success) {
     process.exit(0)

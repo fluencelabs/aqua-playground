@@ -19,11 +19,12 @@
     "build": "tsc",
     "examples": "node -r ts-node/register src/run-examples.ts",
     "exec": "npm run compile-aqua && node -r ts-node/register src/index.ts",
+    "run": "node -r ts-node/register src/index.ts",
     "compile-aqua": "aqua-cli -i ./aqua/ -o ./src/compiled",
     "compile-aqua:air": "aqua-cli -i ./aqua/ -o ./compiled-air -a"
   },
   "devDependencies": {
-    "@fluencelabs/aqua-cli": "^0.1.2-129",
+    "@fluencelabs/aqua-cli": "^0.1.4-133",
     "@fluencelabs/aqua-lib": "^0.1.3",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.4"
