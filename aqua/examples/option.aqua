@@ -1,0 +1,9 @@
+service SomeS("test2"):
+    getStr: ?string -> ?string
+    getStr2: string -> string
+
+func useOptional(opt: ?string) -> string:
+    res <- SomeS.getStr(opt)
+    for i <- opt:
+        SomeS.getStr2(i)
+    <- res!
