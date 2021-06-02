@@ -15,7 +15,5 @@ export async function useOptionalCall(client: FluenceClient): Promise<string> {
         return args[0]
     })
 
-    let cbEm = (str: string) => console.log(str)
-    let cb = (str: string, arg: any) => console.log(str, arg)
-    return await useOptional(client, "hello", cbEm, cb, cb)
+    return await useOptional(client, "hello")
 }
