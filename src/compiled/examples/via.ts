@@ -132,18 +132,18 @@ export async function viaStream(client: FluenceClient, node_id: string, viaStr: 
           (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
           (call %init_peer_id% ("getDataSrv" "node_id") [] node_id)
          )
-         (call %init_peer_id% ("getDataSrv" "viaStr") [] viaStr)
+         (call %init_peer_id% ("getDataSrv" "viaStr") [] viaStr-iter)
         )
-        (fold viaStr v
+        (fold viaStr-iter viaStr-item
          (seq
-          (call %init_peer_id% ("cid" "id") [v] $str)
-          (next v)
+          (call %init_peer_id% ("op" "identity") [viaStr-item] $viaStr)
+          (next viaStr-item)
          )
         )
        )
        (call -relay- ("op" "identity") [])
       )
-      (fold $str -via-peer-
+      (fold $viaStr -via-peer-
        (seq
         (call -via-peer- ("op" "identity") [])
         (next -via-peer-)
@@ -155,7 +155,7 @@ export async function viaStream(client: FluenceClient, node_id: string, viaStr: 
       (seq
        (seq
         (seq
-         (fold $str -via-peer-
+         (fold $viaStr -via-peer-
           (seq
            (call -via-peer- ("op" "identity") [])
            (next -via-peer-)
@@ -169,7 +169,7 @@ export async function viaStream(client: FluenceClient, node_id: string, viaStr: 
       )
      )
     )
-    (fold $str -via-peer-
+    (fold $viaStr -via-peer-
      (seq
       (call -via-peer- ("op" "identity") [])
       (next -via-peer-)

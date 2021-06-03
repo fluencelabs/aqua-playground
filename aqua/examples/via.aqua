@@ -9,11 +9,8 @@ func viaArr(node_id: string, viaAr: []string) -> Info:
     <- p
 
 
-func viaStream(node_id: string, viaStr: []string) -> Info:
-    str: *string
-    for v <- viaStr:
-        str <- CustomId.id(v)
-    on node_id via str:
+func viaStream(node_id: string, viaStr: *string) -> Info:
+    on node_id via viaStr:
         p <- Peer.identify()
     <- p
 
