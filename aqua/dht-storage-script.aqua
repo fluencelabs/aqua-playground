@@ -1,12 +1,6 @@
 import "@fluencelabs/aqua-dht/dht.aqua"
 import "@fluencelabs/aqua-lib/builtin.aqua"
 
--- separate file for node
--- replicate
--- neighborhood -> timestamp -> getRecords (evictStale) -> republish_key -> republish_values
--- clearExpired
--- timestamp -> call clearExpired
-
 func clearExpired():
   t <- Peer.timestamp_sec()
   AquaDHT.clear_expired(t)

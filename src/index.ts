@@ -13,7 +13,7 @@ const main = async () => {
 
 
     console.log("SET KEY")
-    await registerKeyPutValue(client, krasnodar[0].peerId, "Test Hello3", "some value01", client.relayPeerId || null, null, 0);
+    await registerKeyPutValue(client, krasnodar[0].peerId, "Test Hello3", "some value01", null, null);
     // await clearHostValue(client, "Test Hello2", krasnodar[0].peerId);
     // console.log(nodes.length)
     console.log("GET VALUES")
