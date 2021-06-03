@@ -69,3 +69,13 @@ func getValues(node_id: string, key: string) -> []Record:
           res <- AquaDHT.get_values(key, t)
     v <- AquaDHT.merge_two(res!.result, res!1.result)
   <- v.result
+
+func onProviders(node_id: string, key: string, callback: Record -> ()):
+  on node_id:
+    k <- Op.string_to_b58(key)
+    t <- Peer.timestamp_sec()
+    res <- AquaDHT.get_values(key, t)
+    for r <- res.result:
+      on r.peer_id via r.relay_id:
+        callback(r)
+
