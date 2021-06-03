@@ -15,3 +15,21 @@ func replicate():
       on n:
         AquaDHT.republish_key(r.key, t)
         AquaDHT.republish_values(r.key.key, r.records, t)
+
+func replicate_check(node_id: string, ackstr: string -> (), ack: EvictStaleResult -> (), ack2: string, DhtResult -> (), ack3: string, RepublishValuesResult -> ()):
+  on node_id:
+      t <- Peer.timestamp_sec()
+      ackstr("pop")
+      res <- AquaDHT.evict_stale(t)
+      ack(res)
+      for r <- res.results:
+        ackstr("op")
+        k <- Op.string_to_b58(r.key.key)
+        ackstr(k)
+        par nodes <- Kademlia.neighborhood(k, false)
+        for n <- nodes par:
+          on n:
+            rk <- AquaDHT.republish_key(r.key, t)
+            par ack2(n, rk)
+            rv <- AquaDHT.republish_values(r.key.key, r.records, t)
+            par ack3(n, rv)

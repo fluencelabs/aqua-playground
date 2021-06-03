@@ -132,3 +132,157 @@ export async function replicate(client: FluenceClient): Promise<void> {
     return Promise.race([promise, Promise.resolve()]);
 }
       
+
+
+export async function replicate_check(client: FluenceClient, node_id: string, ackstr: (arg0: string) => void, ack: (arg0: {error:string;results:{key:{key:string;peer_id:string;pinned:boolean;timestamp_created:number;weight:number};records:{peer_id:string;relay_id:string[];service_id:string[];set_by:string;timestamp_created:number;value:string;weight:number}[]}[];success:boolean}) => void, ack2: (arg0: string, arg1: {error:string;success:boolean}) => void, ack3: (arg0: string, arg1: {error:string;success:boolean;updated:number}) => void): Promise<void> {
+    let request: RequestFlow;
+    const promise = new Promise<void>((resolve, reject) => {
+        request = new RequestFlowBuilder()
+            .disableInjections()
+            .withRawScript(
+                `
+(xor
+ (seq
+  (seq
+   (seq
+    (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+    (call %init_peer_id% ("getDataSrv" "node_id") [] node_id)
+   )
+   (call -relay- ("op" "identity") [])
+  )
+  (xor
+   (seq
+    (seq
+     (seq
+      (seq
+       (seq
+        (call node_id ("peer" "timestamp_sec") [] t)
+        (call node_id ("aqua-dht" "evict_stale") [t] res)
+       )
+       (call -relay- ("op" "identity") [])
+      )
+      (xor
+       (call %init_peer_id% ("callbackSrv" "ack") [res])
+       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+      )
+     )
+     (call -relay- ("op" "identity") [])
+    )
+    (fold res.$.results! r
+     (seq
+      (seq
+       (seq
+        (seq
+         (seq
+          (seq
+           (seq
+            (seq
+             (seq
+              (call -relay- ("op" "identity") [])
+              (xor
+               (call %init_peer_id% ("callbackSrv" "ackstr") ["op"])
+               (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+              )
+             )
+             (call -relay- ("op" "identity") [])
+            )
+            (call node_id ("op" "string_to_b58") [r.$.key.key!] k)
+           )
+           (call -relay- ("op" "identity") [])
+          )
+          (xor
+           (call %init_peer_id% ("callbackSrv" "ackstr") [k])
+           (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
+          )
+         )
+         (call -relay- ("op" "identity") [])
+        )
+        (call node_id ("kad" "neighborhood") [k false] nodes)
+       )
+       (fold nodes n
+        (par
+         (xor
+          (seq
+           (seq
+            (seq
+             (seq
+              (seq
+               (seq
+                (call n ("aqua-dht" "republish_key") [r.$.key! t] rk)
+                (call -relay- ("op" "identity") [])
+               )
+               (xor
+                (call %init_peer_id% ("callbackSrv" "ack2") [n rk])
+                (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 4])
+               )
+              )
+              (call -relay- ("op" "identity") [])
+             )
+             (call n ("aqua-dht" "republish_values") [r.$.key.key! r.$.records! t] rv)
+            )
+            (call -relay- ("op" "identity") [])
+           )
+           (xor
+            (call %init_peer_id% ("callbackSrv" "ack3") [n rv])
+            (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 5])
+           )
+          )
+          (seq
+           (call -relay- ("op" "identity") [])
+           (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 6])
+          )
+         )
+         (seq
+          (call -relay- ("op" "identity") [])
+          (next n)
+         )
+        )
+       )
+      )
+      (next r)
+     )
+    )
+   )
+   (seq
+    (seq
+     (call -relay- ("op" "identity") [])
+     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 7])
+    )
+    (call -relay- ("op" "identity") [])
+   )
+  )
+ )
+ (seq
+  (call -relay- ("op" "identity") [])
+  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 8])
+ )
+)
+
+            `,
+            )
+            .configHandler((h) => {
+                h.on('getDataSrv', '-relay-', () => {
+                    return client.relayPeerId!;
+                });
+                h.on('getDataSrv', 'node_id', () => {return node_id;});
+h.on('callbackSrv', 'ackstr', (args) => {ackstr(args[0]); return {};});
+h.on('callbackSrv', 'ack', (args) => {ack(args[0]); return {};});
+h.on('callbackSrv', 'ack2', (args) => {ack2(args[0], args[1]); return {};});
+h.on('callbackSrv', 'ack3', (args) => {ack3(args[0], args[1]); return {};});
+                
+                h.onEvent('errorHandlingSrv', 'error', (args) => {
+                    // assuming error is the single argument
+                    const [err] = args;
+                    reject(err);
+                });
+            })
+            .handleScriptError(reject)
+            .handleTimeout(() => {
+                reject('Request timed out for replicate_check');
+            })
+            .build();
+    });
+    await client.initiateFlow(request!);
+    return Promise.race([promise, Promise.resolve()]);
+}
+      
