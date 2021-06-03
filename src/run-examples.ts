@@ -16,6 +16,7 @@ import {streamCall} from "./examples/streamCall";
 import {topologyCall} from "./examples/topologyCall";
 import {foldJoinCall} from "./examples/foldJoinCall";
 import {useOptionalCall} from "./examples/useOptionalCall";
+import {viaCall} from "./examples/viaCall";
 let deepEqual = require('deep-equal')
 
 function checkCall(name: string, expected: any, actual: any, callBackOnError: () => void) {
@@ -96,6 +97,9 @@ const main = async () => {
   // option.aqua
   let optionResult = await useOptionalCall(client)
 
+  // via.aqua
+  let viaResult = await viaCall(client)
+
   await client.disconnect();
 
   let success = true;
@@ -128,6 +132,8 @@ const main = async () => {
   checkCallBy("foldJoinCall", foldJoinResult, (res) => res.length == 3, cb)
 
   checkCall("useOptional", optionResult, "hello", cb)
+
+  checkCallBy("via", viaResult, (res) => res.every( (val, i, arr) => deepEqual(val, arr[0]) ), cb)
 
   if (success) {
     process.exit(0)
