@@ -139,7 +139,7 @@ const main = async () => {
 
   checkCallBy("via", viaResult, (res) => res.every( (val, i, arr) => deepEqual(val, arr[0]) ), cb)
 
-  checkCall("nestedFuncsCall", optionResult, "some-str", cb)
+  checkCall("nestedFuncsCall", nestedFuncsResult, "some-str", cb)
 
   if (success) {
     process.exit(0)
