@@ -26,7 +26,7 @@
   "devDependencies": {
     "@fluencelabs/aqua-cli": "^0.1.4-136",
     "@fluencelabs/aqua-lib": "^0.1.3",
-    "@fluencelabs/aqua-dht": "^0.1.15",
+    "@fluencelabs/aqua-dht": "^0.1.19",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.4"
   },

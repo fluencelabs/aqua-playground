@@ -1,0 +1,19 @@
+import "@fluencelabs/aqua-dht/dht-api.aqua"
+import "@fluencelabs/aqua-dht/dht.aqua"
+import "@fluencelabs/aqua-lib/builtin.aqua"
+
+service DoSmth("dt"):
+  ds(r: Record)
+
+func someCallback(r: Record):
+  DoSmth.ds(r)
+
+func stuffOnProviders(node_id: string, key: string, cb: Record -> ()):
+  onProviders(node_id, key, cb)
+
+func rkpv(node_id: string, key: string, value: string, relay_id: ?string, service_id: ?string):
+    registerKeyPutValue(node_id, key, value, relay_id, service_id)
+
+func getValuesByKey(node_id: string, key: string) -> []Record:
+    recs <- getValues(node_id, key)
+    <- recs
