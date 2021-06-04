@@ -70,10 +70,13 @@ export async function passFunctionAsArg(client: FluenceClient, node: string, str
     (seq
      (seq
       (seq
-       (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-       (call %init_peer_id% ("getDataSrv" "node") [] node)
+       (seq
+        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+        (call %init_peer_id% ("getDataSrv" "node") [] node)
+       )
+       (call %init_peer_id% ("getDataSrv" "str") [] str)
       )
-      (call %init_peer_id% ("getDataSrv" "str") [] str)
+      (call %init_peer_id% ("op" "identity") [])
      )
      (call -relay- ("op" "identity") [])
     )

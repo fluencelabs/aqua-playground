@@ -1,6 +1,6 @@
 import "@fluencelabs/aqua-lib/builtin.aqua"
 
-service OpH("op"):
+service OpH("opa"):
   identity(s: string) -> string
 
 func a(b: string) -> string:

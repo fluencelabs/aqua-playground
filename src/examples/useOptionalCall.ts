@@ -1,5 +1,4 @@
 import {FluenceClient, registerServiceFunction} from "@fluencelabs/fluence";
-import {getTwoResults} from "../compiled/examples/foldJoin";
 import {useOptional} from "../compiled/examples/option";
 
 export async function useOptionalCall(client: FluenceClient): Promise<string> {

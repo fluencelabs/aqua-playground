@@ -17,6 +17,7 @@ import {topologyCall} from "./examples/topologyCall";
 import {foldJoinCall} from "./examples/foldJoinCall";
 import {useOptionalCall} from "./examples/useOptionalCall";
 import {viaCall} from "./examples/viaCall";
+import {nestedFuncsCall} from "./examples/nestedFuncsCall";
 let deepEqual = require('deep-equal')
 
 function checkCall(name: string, expected: any, actual: any, callBackOnError: () => void) {
@@ -100,6 +101,9 @@ const main = async () => {
   // via.aqua
   let viaResult = await viaCall(client)
 
+  // nestedFuncs.aqua
+  let nestedFuncsResult = await nestedFuncsCall(client)
+
   await client.disconnect();
 
   let success = true;
@@ -134,6 +138,8 @@ const main = async () => {
   checkCall("useOptional", optionResult, "hello", cb)
 
   checkCallBy("via", viaResult, (res) => res.every( (val, i, arr) => deepEqual(val, arr[0]) ), cb)
+
+  checkCall("nestedFuncsCall", optionResult, "some-str", cb)
 
   if (success) {
     process.exit(0)
