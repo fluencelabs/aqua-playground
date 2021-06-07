@@ -145,7 +145,7 @@ const main = async () => {
 
   checkCall("nestedFuncsCall", nestedFuncsResult, "some-str", cb)
 
-  checkCall("assignmentCall", assignmentResult, "abc", cb)
+  checkCall("assignmentCall", assignmentResult, ["abc", "hello"], cb)
 
   if (success) {
     process.exit(0)

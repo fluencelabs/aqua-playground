@@ -12,9 +12,9 @@ import { RequestFlow } from '@fluencelabs/fluence/dist/internal/RequestFlow';
 
 
 
-export async function doSmth(client: FluenceClient, arg: {value:string}): Promise<string> {
+export async function doSmth(client: FluenceClient, arg: {value:string}): Promise<string[]> {
     let request: RequestFlow;
-    const promise = new Promise<string>((resolve, reject) => {
+    const promise = new Promise<string[]>((resolve, reject) => {
         request = new RequestFlowBuilder()
             .disableInjections()
             .withRawScript(
@@ -23,13 +23,16 @@ export async function doSmth(client: FluenceClient, arg: {value:string}): Promis
  (seq
   (seq
    (seq
-    (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-    (call %init_peer_id% ("getDataSrv" "arg") [] arg)
+    (seq
+     (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+     (call %init_peer_id% ("getDataSrv" "arg") [] arg)
+    )
+    (call %init_peer_id% ("op" "identity") [arg.$.value!] a)
    )
-   (call %init_peer_id% ("op" "identity") [arg.$.value!] a)
+   (call %init_peer_id% ("op" "array") [a "hello"] res)
   )
   (xor
-   (call %init_peer_id% ("callbackSrv" "response") [a])
+   (call %init_peer_id% ("callbackSrv" "response") [res])
    (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
   )
  )
