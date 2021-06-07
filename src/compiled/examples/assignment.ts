@@ -12,9 +12,9 @@ import { RequestFlow } from '@fluencelabs/fluence/dist/internal/RequestFlow';
 
 
 
-export async function print(client: FluenceClient, str: string): Promise<void> {
+export async function doSmth(client: FluenceClient, arg: {value:string}): Promise<string> {
     let request: RequestFlow;
-    const promise = new Promise<void>((resolve, reject) => {
+    const promise = new Promise<string>((resolve, reject) => {
         request = new RequestFlowBuilder()
             .disableInjections()
             .withRawScript(
@@ -22,12 +22,21 @@ export async function print(client: FluenceClient, str: string): Promise<void> {
 (xor
  (seq
   (seq
-   (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-   (call %init_peer_id% ("getDataSrv" "str") [] str)
+   (seq
+    (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+    (call %init_peer_id% ("getDataSrv" "arg") [] arg)
+   )
+   (call %init_peer_id% ("op" "identity") [arg.$.value!] a)
   )
-  (call %init_peer_id% ("println-service-id" "print") [str])
+  (xor
+   (call %init_peer_id% ("callbackSrv" "response") [a])
+   (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+  )
  )
- (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+ (seq
+  (call -relay- ("op" "identity") [])
+  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+ )
 )
 
             `,
@@ -36,8 +45,12 @@ export async function print(client: FluenceClient, str: string): Promise<void> {
                 h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
                 });
-                h.on('getDataSrv', 'str', () => {return str;});
-                
+                h.on('getDataSrv', 'arg', () => {return arg;});
+                h.onEvent('callbackSrv', 'response', (args) => {
+  const [res] = args;
+  resolve(res);
+});
+
                 h.onEvent('errorHandlingSrv', 'error', (args) => {
                     // assuming error is the single argument
                     const [err] = args;
@@ -46,11 +59,11 @@ export async function print(client: FluenceClient, str: string): Promise<void> {
             })
             .handleScriptError(reject)
             .handleTimeout(() => {
-                reject('Request timed out for print');
+                reject('Request timed out for doSmth');
             })
             .build();
     });
     await client.initiateFlow(request!);
-    return Promise.race([promise, Promise.resolve()]);
+    return promise;
 }
       

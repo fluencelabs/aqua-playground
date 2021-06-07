@@ -1,0 +1,10 @@
+data Prod:
+   value: string
+
+service OpHa("op"):
+    identity(a: string) -> string
+
+func doSmth(arg: Prod) -> string:
+    v = arg.value
+    a <- OpHa.identity(v)
+    <- a
