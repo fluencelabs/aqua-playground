@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import {createClient, registerServiceFunction, setLogLevel} from "@fluencelabs/fluence";
-import {testNet} from "@fluencelabs/fluence-network-environment";
+import {krasnodar, testNet} from "@fluencelabs/fluence-network-environment";
 import {callArrowCall} from "./examples/callArrowCall";
 import {dataAliasCall} from "./examples/dataAliasCall";
 import {onCall} from "./examples/onCall";
@@ -19,6 +19,7 @@ import {useOptionalCall} from "./examples/useOptionalCall";
 import {viaCall} from "./examples/viaCall";
 import {nestedFuncsCall} from "./examples/nestedFuncsCall";
 import {assignmentCall} from "./examples/assignment";
+import {tryCatchCall} from "./examples/tryCatchCall";
 let deepEqual = require('deep-equal')
 
 function checkCall(name: string, expected: any, actual: any, callBackOnError: () => void) {
@@ -42,8 +43,8 @@ function checkCallBy(name: string, actual: any, by: (res: any) => boolean, callB
 
 const main = async () => {
   // setLogLevel("trace")
-  const client = await createClient(testNet[0]);
-  const client2 = await createClient(testNet[1]);
+  const client = await createClient(krasnodar[0]);
+  const client2 = await createClient(krasnodar[1]);
 
   // this could be called from `println.aqua`
   registerServiceFunction(client, "println-service-id", "print", (args: any[], _) => {
@@ -108,6 +109,11 @@ const main = async () => {
   // assignment.aqua
   let assignmentResult = await assignmentCall(client)
 
+  // tryCatch.aqua
+  let tryCatchResult = await tryCatchCall(client)
+
+  console.log(tryCatchResult[0])
+
   await client.disconnect();
 
   let success = true;
@@ -146,6 +152,8 @@ const main = async () => {
   checkCall("nestedFuncsCall", nestedFuncsResult, "some-str", cb)
 
   checkCall("assignmentCall", assignmentResult, ["abc", "hello"], cb)
+
+  checkCallBy("tryCatchCall", tryCatchResult, (res) => (res[0] as string).includes("Local service error: ret_code is 1024"), cb)
 
   if (success) {
     process.exit(0)

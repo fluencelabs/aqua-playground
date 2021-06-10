@@ -1,0 +1,19 @@
+service Unexisted("unex"):
+  getStr() -> string
+
+data LastError:
+  instruction: string
+  msg: string
+  peer_id: string
+
+service OpA("op"):
+  identity(s: string) -> string
+
+func tryCatchTest(node_id: string) -> []string:
+    on node_id:
+        f: *string
+        try:
+          f <- Unexisted.getStr()
+        catch err:
+          f <- OpA.identity(err.msg)
+    <- f
