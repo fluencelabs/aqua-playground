@@ -20,6 +20,7 @@ import {viaCall} from "./examples/viaCall";
 import {nestedFuncsCall} from "./examples/nestedFuncsCall";
 import {assignmentCall} from "./examples/assignment";
 import {tryCatchCall} from "./examples/tryCatchCall";
+import {tryOtherwiseCall} from "./examples/tryOtherwiseCall";
 let deepEqual = require('deep-equal')
 
 function checkCall(name: string, expected: any, actual: any, callBackOnError: () => void) {
@@ -109,6 +110,9 @@ const main = async () => {
   // assignment.aqua
   let assignmentResult = await assignmentCall(client)
 
+  // tryOtherwise.aqua
+  let tryOtherwiseResult = await tryOtherwiseCall(client)
+
   // tryCatch.aqua
   let tryCatchResult = await tryCatchCall(client)
 
@@ -152,6 +156,8 @@ const main = async () => {
   checkCall("nestedFuncsCall", nestedFuncsResult, "some-str", cb)
 
   checkCall("assignmentCall", assignmentResult, ["abc", "hello"], cb)
+
+  checkCall("tryOtherwiseCall", tryOtherwiseResult, "error", cb)
 
   checkCallBy("tryCatchCall", tryCatchResult, (res) => (res[0] as string).includes("Local service error: ret_code is 1024"), cb)
 
