@@ -9,11 +9,11 @@ data LastError:
 service OpE("op"):
   identity(s: string) -> string
 
-func tryOtherwiseTest(node_id: string) -> []string:
+func tryOtherwiseTest(node_id: string) -> string:
     on node_id:
         f: *string
         try:
           f <- Unexisted.getStr()
         otherwise:
           f <- OpE.identity("error")
-    <- f
+    <- f!

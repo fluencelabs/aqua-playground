@@ -1,3 +1,5 @@
+import "@fluencelabs/aqua-lib/builtin.aqua"
+
 service Unexisted("unex"):
   getStr() -> string
 
@@ -15,5 +17,9 @@ func tryCatchTest(node_id: string) -> []string:
         try:
           f <- Unexisted.getStr()
         catch err:
+          c: *string
           f <- OpA.identity(err.msg)
+          -- check if the call takes place on the node
+          i <- Peer.identify()
+          f <- OpA.identity(i.external_addresses!)
     <- f

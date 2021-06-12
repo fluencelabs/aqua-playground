@@ -127,9 +127,9 @@ const main = async () => {
 
   checkCall("callArrow", callArrowResult, "Hello, callArrow call!", cb)
 
-  checkCall("foldCall", foldCallResult, ["/ip4/165.227.164.206/tcp/7001", "/ip4/165.227.164.206/tcp/9001/ws"], cb)
+  checkCall("foldCall", foldCallResult, ['/ip4/164.90.171.139/tcp/7770', '/ip4/164.90.171.139/tcp/9990/ws'], cb)
 
-  checkCall("onCall", onCallResult, ["/ip4/165.227.164.206/tcp/7001", "/ip4/165.227.164.206/tcp/9001/ws"], cb)
+  checkCall("onCall", onCallResult, ['/ip4/164.90.171.139/tcp/7770', '/ip4/164.90.171.139/tcp/9990/ws'], cb)
 
   checkCall("parArrow", parCallResult, "hello", cb)
 
@@ -159,7 +159,9 @@ const main = async () => {
 
   checkCall("tryOtherwiseCall", tryOtherwiseResult, "error", cb)
 
-  checkCallBy("tryCatchCall", tryCatchResult, (res) => (res[0] as string).includes("Local service error: ret_code is 1024"), cb)
+  checkCallBy("tryCatchCall", tryCatchResult, (res) => {
+    return (res[0] as string).includes("Error: Service with id 'unex' not found") && res[1] === '/ip4/164.90.171.139/tcp/7770'
+  }, cb)
 
   if (success) {
     process.exit(0)
