@@ -1,18 +1,16 @@
-import "println.aqua"
+import "@fluencelabs/aqua-lib/builtin.aqua"
 
 service Getter("test"):
-    getNum: -> u32
+    createStr: u32 -> string
 
-const c = "non-default string"
+service OpO("op"):
+    identity: string -> string
 
 -- a question mark means that this constant could be rewritten before this definition
-const c ?= "default string"
+const anotherConst ?= "default-str"
 
-const a = 1
-
-func callConstant(cb: string -> ()):
-    n <- Getter.getNum()
-    if n == a:
-        cb(c)
-    else:
-        cb(c)
+func callConstant() -> []string:
+    res: *string
+    res <- Getter.createStr(uniqueConst)
+    res <- OpO.identity(anotherConst)
+    <- res

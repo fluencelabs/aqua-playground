@@ -1,14 +1,11 @@
 import {FluenceClient, registerServiceFunction} from "@fluencelabs/fluence";
 import {callConstant} from "../compiled/examples/constants";
 
-export async function constantsCall(client: FluenceClient) {
-    registerServiceFunction(client, "test", "getNum", (args: any[], _) => {
-        return 1
+export async function constantsCall(client: FluenceClient): Promise<string[]> {
+    registerServiceFunction(client, "test", "createStr", (args: any[], _) => {
+        return "" + args[0]
     })
 
-    return new Promise<string>(async (resolve, reject) => {
-        await callConstant(client, (a: string) => {
-                resolve(a)
-        });
-    })
+
+    return await callConstant(client);
 }

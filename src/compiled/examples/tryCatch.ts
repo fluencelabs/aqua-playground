@@ -12,9 +12,9 @@ import { RequestFlow } from '@fluencelabs/fluence/dist/internal/RequestFlow';
 
 
 
-export async function helloWorld(client: FluenceClient, name: string, config?: {ttl?: number}): Promise<string> {
+export async function tryCatchTest(client: FluenceClient, node_id: string, config?: {ttl?: number}): Promise<string[]> {
     let request: RequestFlow;
-    const promise = new Promise<string>((resolve, reject) => {
+    const promise = new Promise<string[]>((resolve, reject) => {
         request = new RequestFlowBuilder()
             .disableInjections()
             .withTTL(config?.ttl || 5000)
@@ -24,19 +24,43 @@ export async function helloWorld(client: FluenceClient, name: string, config?: {
  (seq
   (seq
    (seq
-    (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-    (call %init_peer_id% ("getDataSrv" "name") [] name)
+    (seq
+     (seq
+      (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+      (call %init_peer_id% ("getDataSrv" "node_id") [] node_id)
+     )
+     (call -relay- ("op" "identity") [])
+    )
+    (xor
+     (xor
+      (call node_id ("unex" "getStr") [] $f)
+      (seq
+       (seq
+        (call node_id ("op" "identity") [%last_error%.$.msg!] $f)
+        (call node_id ("peer" "identify") [] i)
+       )
+       (call node_id ("op" "identity") [i.$.external_addresses.[0]!] $f)
+      )
+     )
+     (seq
+      (seq
+       (call -relay- ("op" "identity") [])
+       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+      )
+      (call -relay- ("op" "identity") [])
+     )
+    )
    )
-   (call %init_peer_id% ("service-id" "addNameToHello") [name] res)
+   (call -relay- ("op" "identity") [])
   )
   (xor
-   (call %init_peer_id% ("callbackSrv" "response") [res])
-   (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+   (call %init_peer_id% ("callbackSrv" "response") [$f])
+   (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
   )
  )
  (seq
   (call -relay- ("op" "identity") [])
-  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
  )
 )
 
@@ -46,7 +70,7 @@ export async function helloWorld(client: FluenceClient, name: string, config?: {
                 h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
                 });
-                h.on('getDataSrv', 'name', () => {return name;});
+                h.on('getDataSrv', 'node_id', () => {return node_id;});
                 h.onEvent('callbackSrv', 'response', (args) => {
   const [res] = args;
   resolve(res);
@@ -60,7 +84,7 @@ export async function helloWorld(client: FluenceClient, name: string, config?: {
             })
             .handleScriptError(reject)
             .handleTimeout(() => {
-                reject('Request timed out for helloWorld');
+                reject('Request timed out for tryCatchTest');
             })
             .build();
     });

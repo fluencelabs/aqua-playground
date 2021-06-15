@@ -20,8 +20,8 @@
     "examples": "node -r ts-node/register src/run-examples.ts",
     "exec": "npm run compile-aqua && node -r ts-node/register src/index.ts",
     "run": "node -r ts-node/register src/index.ts",
-    "compile-aqua": "aqua-cli -i ./aqua/ -o ./src/compiled",
-    "compile-aqua:air": "aqua-cli -i ./aqua/ -o ./compiled-air -a"
+    "compile-aqua": "aqua-cli -i ./aqua/ -o ./src/compiled -c \"uniqueConst = 1\" -c \"anotherConst = \\\"ab\\\"\"",
+    "compile-aqua:air": "aqua-cli -i ./aqua/ -o ./compiled-air -a  -c \"uniqueConst = 1\" -c \"anotherConst = \\\"ab\\\"\""
   },
   "devDependencies": {
     "@fluencelabs/aqua-cli": "^0.1.6-144",

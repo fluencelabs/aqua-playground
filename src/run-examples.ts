@@ -141,7 +141,7 @@ const main = async () => {
 
   checkCall("complexCall", complexCallResult, ["some str", "3", "1", "4", "1", "1", "3", "2", "4", "2", "2"], cb)
 
-  checkCall("constantCall", constantCallResult, "non-default string", cb)
+  checkCall("constantCall", constantCallResult, ['1', 'ab'], cb)
 
   checkCall("streamCall", streamResult, ["first updated", "second updated", "third updated", "fourth updated"], cb)
 
