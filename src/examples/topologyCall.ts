@@ -13,5 +13,5 @@ export async function topologyCall(client: FluenceClient, client2: FluenceClient
         return {}
     })
 
-    return await topologyTest(client, client.selfPeerId, client.relayPeerId!, client2.selfPeerId, client2.relayPeerId!)
+    return await topologyTest(client, client.selfPeerId, client.relayPeerId!, client2.selfPeerId, client2.relayPeerId!, {ttl: 10000})
 }

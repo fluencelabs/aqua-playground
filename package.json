@@ -24,7 +24,7 @@
     "compile-aqua:air": "aqua-cli -i ./aqua/ -o ./compiled-air -a"
   },
   "devDependencies": {
-    "@fluencelabs/aqua-cli": "^0.1.6-143",
+    "@fluencelabs/aqua-cli": "^0.1.6-144",
     "@fluencelabs/aqua-lib": "^0.1.5",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.4"
