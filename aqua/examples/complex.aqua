@@ -5,15 +5,19 @@ import "func.aqua"
 
 service TestS("some-id"):
     t: string -> string
-    multiline(a: string,
-              b: string,
-              c: bool) -> string
+    multiline(  -- comments
+              a: string, -- comments
+              b: string, -- comments
+              c: bool -- comments
+              ) -> string -- comments
 
 -- just a lot of imports and calls
-func doStuff(a: string,
-             b: string,
+func doStuff( -- comments
+             a: string, -- comments
+             b: string, -- comments
              c: bool,
-             d: bool, e: []string, g: []string, str: string) -> []string:
+             d: bool, e: []string, g: []string, str: string -- comments
+             ) -> []string: -- comments
     stream: *string
     stream <- TestS.t(str)
     par Println.print(a)
@@ -25,10 +29,12 @@ func doStuff(a: string,
                 if d:
                     for eEl <- e:
                         for gEl <- g:
-                            stream <- TestS.t(gEl)
+                            stream <- TestS.t(gEl) -- comments
                             stream <- TestS.t(eEl)
                         stream <- TestS.t(eEl)
-    stream <- TestS.multiline(a,
-                              b,
-                              c)
+    stream <- TestS.multiline( -- comments
+                              a, -- comments
+                              b, -- comments
+                              c -- comments
+                              ) -- comments
     <- stream
