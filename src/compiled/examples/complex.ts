@@ -34,92 +34,92 @@ export async function doStuff(client: FluenceClient, a: string, b: string, c: bo
            (seq
             (seq
              (seq
-              (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-              (call %init_peer_id% ("getDataSrv" "a") [] a)
+              (seq
+               (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+               (call %init_peer_id% ("getDataSrv" "a") [] a)
+              )
+              (call %init_peer_id% ("getDataSrv" "b") [] b)
              )
-             (call %init_peer_id% ("getDataSrv" "b") [] b)
+             (call %init_peer_id% ("getDataSrv" "c") [] c)
             )
-            (call %init_peer_id% ("getDataSrv" "c") [] c)
+            (call %init_peer_id% ("getDataSrv" "d") [] d)
            )
-           (call %init_peer_id% ("getDataSrv" "d") [] d)
+           (call %init_peer_id% ("getDataSrv" "e") [] e)
           )
-          (call %init_peer_id% ("getDataSrv" "e") [] e)
+          (call %init_peer_id% ("getDataSrv" "g") [] g)
          )
-         (call %init_peer_id% ("getDataSrv" "g") [] g)
+         (call %init_peer_id% ("getDataSrv" "str") [] str)
         )
-        (call %init_peer_id% ("getDataSrv" "str") [] str)
+        (call %init_peer_id% ("some-id" "t") [str] $stream)
        )
-       (call %init_peer_id% ("some-id" "t") [str] $stream)
-      )
-      (par
-       (call %init_peer_id% ("println-service-id" "print") [a])
-       (seq
+       (par
+        (call %init_peer_id% ("println-service-id" "print") [a])
         (seq
          (seq
-          (call -relay- ("op" "identity") [])
-          (xor
-           (call a ("peer" "identify") [])
-           (seq
-            (call -relay- ("op" "identity") [])
-            (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+          (seq
+           (call -relay- ("op" "identity") [])
+           (xor
+            (call a ("peer" "identify") [])
+            (seq
+             (call -relay- ("op" "identity") [])
+             (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+            )
            )
           )
+          (call -relay- ("op" "identity") [])
          )
-         (call -relay- ("op" "identity") [])
+         (call %init_peer_id% ("op" "identity") [])
         )
-        (call %init_peer_id% ("op" "identity") [])
        )
       )
+      (call -relay- ("op" "identity") [])
      )
-     (call -relay- ("op" "identity") [])
-    )
-    (xor
      (xor
-      (match c true
-       (xor
-        (match d true
-         (xor
-          (fold e eEl
+      (xor
+       (match c true
+        (xor
+         (match d true
+          (xor
+           (fold e eEl
+            (seq
+             (seq
+              (fold g gEl
+               (seq
+                (seq
+                 (call b ("some-id" "t") [gEl] $stream)
+                 (call b ("some-id" "t") [eEl] $stream)
+                )
+                (next gEl)
+               )
+              )
+              (call b ("some-id" "t") [eEl] $stream)
+             )
+             (next eEl)
+            )
+           )
            (seq
             (seq
-             (fold g gEl
-              (seq
-               (seq
-                (call b ("some-id" "t") [gEl] $stream)
-                (call b ("some-id" "t") [eEl] $stream)
-               )
-               (next gEl)
-              )
-             )
-             (call b ("some-id" "t") [eEl] $stream)
+             (call -relay- ("op" "identity") [])
+             (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
             )
-            (next eEl)
-           )
-          )
-          (seq
-           (seq
             (call -relay- ("op" "identity") [])
-            (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
            )
-           (call -relay- ("op" "identity") [])
           )
          )
+         (null)
         )
-        (null)
        )
+       (null)
       )
-      (null)
-     )
-     (seq
       (seq
        (call -relay- ("op" "identity") [])
        (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
       )
-      (call -relay- ("op" "identity") [])
      )
     )
+    (call -relay- ("op" "identity") [])
    )
-   (call -relay- ("op" "identity") [])
+   (call %init_peer_id% ("some-id" "multiline") [a b c] $stream)
   )
   (xor
    (call %init_peer_id% ("callbackSrv" "response") [$stream])

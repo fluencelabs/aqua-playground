@@ -8,6 +8,7 @@ service OpO("op"):
 
 -- a question mark means that this constant could be rewritten before this definition
 const anotherConst ?= "default-str"
+const uniqueConst ?= 5
 
 func callConstant() -> []string:
     res: *string

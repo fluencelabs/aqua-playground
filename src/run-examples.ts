@@ -139,7 +139,7 @@ const main = async () => {
 
   checkCall("dataAliasCall", dataAliasResult, "peer id str", cb)
 
-  checkCall("complexCall", complexCallResult, ["some str", "3", "1", "4", "1", "1", "3", "2", "4", "2", "2"], cb)
+  checkCall("complexCall", complexCallResult, ["some str", "3", "1", "4", "1", "1", "3", "2", "4", "2", "2", client.selfPeerId], cb)
 
   checkCall("constantCall", constantCallResult, ['1', 'ab'], cb)
 
