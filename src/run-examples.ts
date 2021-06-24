@@ -21,6 +21,7 @@ import {nestedFuncsCall} from "./examples/nestedFuncsCall";
 import {assignmentCall} from "./examples/assignment";
 import {tryCatchCall} from "./examples/tryCatchCall";
 import {tryOtherwiseCall} from "./examples/tryOtherwiseCall";
+import {coCall} from "./examples/coCall";
 let deepEqual = require('deep-equal')
 
 function checkCall(name: string, expected: any, actual: any, callBackOnError: () => void) {
@@ -116,6 +117,9 @@ const main = async () => {
   // tryCatch.aqua
   let tryCatchResult = await tryCatchCall(client)
 
+  // coCall.aqua
+  let coCallResult = await coCall(client)
+
   console.log(tryCatchResult[0])
 
   await client.disconnect();
@@ -158,6 +162,8 @@ const main = async () => {
   checkCall("assignmentCall", assignmentResult, ["abc", "hello"], cb)
 
   checkCall("tryOtherwiseCall", tryOtherwiseResult, "error", cb)
+
+  checkCall("coCall", coCallResult, [ '/ip4/164.90.171.139/tcp/7770', '/ip4/164.90.171.139/tcp/9990/ws' ], cb)
 
   checkCallBy("tryCatchCall", tryCatchResult, (res) => {
     return (res[0] as string).includes("Error: Service with id 'unex' not found") && res[1] === '/ip4/164.90.171.139/tcp/7770'
