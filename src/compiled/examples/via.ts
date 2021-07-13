@@ -15,9 +15,8 @@ import { RequestFlow } from '@fluencelabs/fluence/dist/internal/RequestFlow';
 export async function viaArr(client: FluenceClient, node_id: string, viaAr: string[], config?: {ttl?: number}): Promise<{external_addresses:string[]}> {
     let request: RequestFlow;
     const promise = new Promise<{external_addresses:string[]}>((resolve, reject) => {
-        request = new RequestFlowBuilder()
+        const r = new RequestFlowBuilder()
             .disableInjections()
-            .withTTL(config?.ttl || 5000)
             .withRawScript(
                 `
 (xor
@@ -102,7 +101,10 @@ h.on('getDataSrv', 'viaAr', () => {return viaAr;});
             .handleTimeout(() => {
                 reject('Request timed out for viaArr');
             })
-            .build();
+        if(config?.ttl) {
+            r.withTTL(config.ttl)
+        }
+        request = r.build();
     });
     await client.initiateFlow(request!);
     return promise;
@@ -113,9 +115,8 @@ h.on('getDataSrv', 'viaAr', () => {return viaAr;});
 export async function viaStream(client: FluenceClient, node_id: string, viaStr: string[], config?: {ttl?: number}): Promise<{external_addresses:string[]}> {
     let request: RequestFlow;
     const promise = new Promise<{external_addresses:string[]}>((resolve, reject) => {
-        request = new RequestFlowBuilder()
+        const r = new RequestFlowBuilder()
             .disableInjections()
-            .withTTL(config?.ttl || 5000)
             .withRawScript(
                 `
 (xor
@@ -208,7 +209,10 @@ h.on('getDataSrv', 'viaStr', () => {return viaStr;});
             .handleTimeout(() => {
                 reject('Request timed out for viaStream');
             })
-            .build();
+        if(config?.ttl) {
+            r.withTTL(config.ttl)
+        }
+        request = r.build();
     });
     await client.initiateFlow(request!);
     return promise;
@@ -219,9 +223,8 @@ h.on('getDataSrv', 'viaStr', () => {return viaStr;});
 export async function viaOpt(client: FluenceClient, relay: string, node_id: string, viaOpt: string | null, config?: {ttl?: number}): Promise<{external_addresses:string[]}> {
     let request: RequestFlow;
     const promise = new Promise<{external_addresses:string[]}>((resolve, reject) => {
-        request = new RequestFlowBuilder()
+        const r = new RequestFlowBuilder()
             .disableInjections()
-            .withTTL(config?.ttl || 5000)
             .withRawScript(
                 `
 (xor
@@ -310,7 +313,10 @@ h.on('getDataSrv', 'viaOpt', () => {return viaOpt === null ? [] : [viaOpt];});
             .handleTimeout(() => {
                 reject('Request timed out for viaOpt');
             })
-            .build();
+        if(config?.ttl) {
+            r.withTTL(config.ttl)
+        }
+        request = r.build();
     });
     await client.initiateFlow(request!);
     return promise;

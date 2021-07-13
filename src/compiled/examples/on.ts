@@ -15,9 +15,8 @@ import { RequestFlow } from '@fluencelabs/fluence/dist/internal/RequestFlow';
 export async function getPeerExternalAddresses(client: FluenceClient, otherNodePeerId: string, config?: {ttl?: number}): Promise<string[]> {
     let request: RequestFlow;
     const promise = new Promise<string[]>((resolve, reject) => {
-        request = new RequestFlowBuilder()
+        const r = new RequestFlowBuilder()
             .disableInjections()
-            .withTTL(config?.ttl || 5000)
             .withRawScript(
                 `
 (xor
@@ -71,7 +70,10 @@ export async function getPeerExternalAddresses(client: FluenceClient, otherNodeP
             .handleTimeout(() => {
                 reject('Request timed out for getPeerExternalAddresses');
             })
-            .build();
+        if(config?.ttl) {
+            r.withTTL(config.ttl)
+        }
+        request = r.build();
     });
     await client.initiateFlow(request!);
     return promise;
@@ -82,9 +84,8 @@ export async function getPeerExternalAddresses(client: FluenceClient, otherNodeP
 export async function getDistantAddresses(client: FluenceClient, target: string, viaNode: string, config?: {ttl?: number}): Promise<string[]> {
     let request: RequestFlow;
     const promise = new Promise<string[]>((resolve, reject) => {
-        request = new RequestFlowBuilder()
+        const r = new RequestFlowBuilder()
             .disableInjections()
-            .withTTL(config?.ttl || 5000)
             .withRawScript(
                 `
 (xor
@@ -154,7 +155,10 @@ h.on('getDataSrv', 'viaNode', () => {return viaNode;});
             .handleTimeout(() => {
                 reject('Request timed out for getDistantAddresses');
             })
-            .build();
+        if(config?.ttl) {
+            r.withTTL(config.ttl)
+        }
+        request = r.build();
     });
     await client.initiateFlow(request!);
     return promise;

@@ -15,9 +15,8 @@ import { RequestFlow } from '@fluencelabs/fluence/dist/internal/RequestFlow';
 export async function betterMessage(client: FluenceClient, relay: string, config?: {ttl?: number}): Promise<void> {
     let request: RequestFlow;
     const promise = new Promise<void>((resolve, reject) => {
-        request = new RequestFlowBuilder()
+        const r = new RequestFlowBuilder()
             .disableInjections()
-            .withTTL(config?.ttl || 5000)
             .withRawScript(
                 `
 (xor
@@ -72,7 +71,10 @@ export async function betterMessage(client: FluenceClient, relay: string, config
             .handleTimeout(() => {
                 reject('Request timed out for betterMessage');
             })
-            .build();
+        if(config?.ttl) {
+            r.withTTL(config.ttl)
+        }
+        request = r.build();
     });
     await client.initiateFlow(request!);
     return Promise.race([promise, Promise.resolve()]);

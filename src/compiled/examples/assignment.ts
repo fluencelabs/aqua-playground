@@ -15,9 +15,8 @@ import { RequestFlow } from '@fluencelabs/fluence/dist/internal/RequestFlow';
 export async function doSmth(client: FluenceClient, arg: {value:string}, config?: {ttl?: number}): Promise<string[]> {
     let request: RequestFlow;
     const promise = new Promise<string[]>((resolve, reject) => {
-        request = new RequestFlowBuilder()
+        const r = new RequestFlowBuilder()
             .disableInjections()
-            .withTTL(config?.ttl || 5000)
             .withRawScript(
                 `
 (xor
@@ -62,7 +61,10 @@ export async function doSmth(client: FluenceClient, arg: {value:string}, config?
             .handleTimeout(() => {
                 reject('Request timed out for doSmth');
             })
-            .build();
+        if(config?.ttl) {
+            r.withTTL(config.ttl)
+        }
+        request = r.build();
     });
     await client.initiateFlow(request!);
     return promise;

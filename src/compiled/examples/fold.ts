@@ -15,9 +15,8 @@ import { RequestFlow } from '@fluencelabs/fluence/dist/internal/RequestFlow';
 export async function print(client: FluenceClient, str: string, config?: {ttl?: number}): Promise<void> {
     let request: RequestFlow;
     const promise = new Promise<void>((resolve, reject) => {
-        request = new RequestFlowBuilder()
+        const r = new RequestFlowBuilder()
             .disableInjections()
-            .withTTL(config?.ttl || 5000)
             .withRawScript(
                 `
 (xor
@@ -49,7 +48,10 @@ export async function print(client: FluenceClient, str: string, config?: {ttl?: 
             .handleTimeout(() => {
                 reject('Request timed out for print');
             })
-            .build();
+        if(config?.ttl) {
+            r.withTTL(config.ttl)
+        }
+        request = r.build();
     });
     await client.initiateFlow(request!);
     return Promise.race([promise, Promise.resolve()]);
@@ -60,9 +62,8 @@ export async function print(client: FluenceClient, str: string, config?: {ttl?: 
 export async function iterateAndPrint(client: FluenceClient, strings: string[], config?: {ttl?: number}): Promise<void> {
     let request: RequestFlow;
     const promise = new Promise<void>((resolve, reject) => {
-        request = new RequestFlowBuilder()
+        const r = new RequestFlowBuilder()
             .disableInjections()
-            .withTTL(config?.ttl || 5000)
             .withRawScript(
                 `
 (xor
@@ -99,7 +100,10 @@ export async function iterateAndPrint(client: FluenceClient, strings: string[], 
             .handleTimeout(() => {
                 reject('Request timed out for iterateAndPrint');
             })
-            .build();
+        if(config?.ttl) {
+            r.withTTL(config.ttl)
+        }
+        request = r.build();
     });
     await client.initiateFlow(request!);
     return Promise.race([promise, Promise.resolve()]);
@@ -110,9 +114,8 @@ export async function iterateAndPrint(client: FluenceClient, strings: string[], 
 export async function iterateAndPrintParallel(client: FluenceClient, nodes: string[], c: (arg0: {external_addresses:string[]}) => void, config?: {ttl?: number}): Promise<void> {
     let request: RequestFlow;
     const promise = new Promise<void>((resolve, reject) => {
-        request = new RequestFlowBuilder()
+        const r = new RequestFlowBuilder()
             .disableInjections()
-            .withTTL(config?.ttl || 5000)
             .withRawScript(
                 `
 (xor
@@ -165,7 +168,10 @@ h.on('callbackSrv', 'c', (args) => {c(args[0]); return {};});
             .handleTimeout(() => {
                 reject('Request timed out for iterateAndPrintParallel');
             })
-            .build();
+        if(config?.ttl) {
+            r.withTTL(config.ttl)
+        }
+        request = r.build();
     });
     await client.initiateFlow(request!);
     return Promise.race([promise, Promise.resolve()]);

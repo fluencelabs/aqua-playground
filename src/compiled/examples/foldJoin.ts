@@ -15,9 +15,8 @@ import { RequestFlow } from '@fluencelabs/fluence/dist/internal/RequestFlow';
 export async function getTwoResults(client: FluenceClient, relay: string, config?: {ttl?: number}): Promise<number[]> {
     let request: RequestFlow;
     const promise = new Promise<number[]>((resolve, reject) => {
-        request = new RequestFlowBuilder()
+        const r = new RequestFlowBuilder()
             .disableInjections()
-            .withTTL(config?.ttl || 5000)
             .withRawScript(
                 `
 (xor
@@ -97,7 +96,10 @@ export async function getTwoResults(client: FluenceClient, relay: string, config
             .handleTimeout(() => {
                 reject('Request timed out for getTwoResults');
             })
-            .build();
+        if(config?.ttl) {
+            r.withTTL(config.ttl)
+        }
+        request = r.build();
     });
     await client.initiateFlow(request!);
     return promise;

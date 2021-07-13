@@ -15,9 +15,8 @@ import { RequestFlow } from '@fluencelabs/fluence/dist/internal/RequestFlow';
 export async function topologyTest(client: FluenceClient, me: string, myRelay: string, friend: string, friendRelay: string, config?: {ttl?: number}): Promise<string> {
     let request: RequestFlow;
     const promise = new Promise<string>((resolve, reject) => {
-        request = new RequestFlowBuilder()
+        const r = new RequestFlowBuilder()
             .disableInjections()
-            .withTTL(config?.ttl || 5000)
             .withRawScript(
                 `
 (xor
@@ -101,7 +100,10 @@ h.on('getDataSrv', 'friendRelay', () => {return friendRelay;});
             .handleTimeout(() => {
                 reject('Request timed out for topologyTest');
             })
-            .build();
+        if(config?.ttl) {
+            r.withTTL(config.ttl)
+        }
+        request = r.build();
     });
     await client.initiateFlow(request!);
     return promise;

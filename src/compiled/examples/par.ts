@@ -15,9 +15,8 @@ import { RequestFlow } from '@fluencelabs/fluence/dist/internal/RequestFlow';
 export async function parFunc(client: FluenceClient, node: string, c: (arg0: {external_addresses:string[]}) => void, config?: {ttl?: number}): Promise<void> {
     let request: RequestFlow;
     const promise = new Promise<void>((resolve, reject) => {
-        request = new RequestFlowBuilder()
+        const r = new RequestFlowBuilder()
             .disableInjections()
-            .withTTL(config?.ttl || 5000)
             .withRawScript(
                 `
 (xor
@@ -71,7 +70,10 @@ h.on('callbackSrv', 'c', (args) => {c(args[0]); return {};});
             .handleTimeout(() => {
                 reject('Request timed out for parFunc');
             })
-            .build();
+        if(config?.ttl) {
+            r.withTTL(config.ttl)
+        }
+        request = r.build();
     });
     await client.initiateFlow(request!);
     return Promise.race([promise, Promise.resolve()]);

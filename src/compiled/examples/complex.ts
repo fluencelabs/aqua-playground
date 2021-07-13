@@ -15,9 +15,8 @@ import { RequestFlow } from '@fluencelabs/fluence/dist/internal/RequestFlow';
 export async function helloWorld(client: FluenceClient, name: string, config?: {ttl?: number}): Promise<string> {
     let request: RequestFlow;
     const promise = new Promise<string>((resolve, reject) => {
-        request = new RequestFlowBuilder()
+        const r = new RequestFlowBuilder()
             .disableInjections()
-            .withTTL(config?.ttl || 5000)
             .withRawScript(
                 `
 (xor
@@ -59,7 +58,10 @@ export async function helloWorld(client: FluenceClient, name: string, config?: {
             .handleTimeout(() => {
                 reject('Request timed out for helloWorld');
             })
-            .build();
+        if(config?.ttl) {
+            r.withTTL(config.ttl)
+        }
+        request = r.build();
     });
     await client.initiateFlow(request!);
     return promise;
@@ -70,9 +72,8 @@ export async function helloWorld(client: FluenceClient, name: string, config?: {
 export async function print(client: FluenceClient, str: string, config?: {ttl?: number}): Promise<void> {
     let request: RequestFlow;
     const promise = new Promise<void>((resolve, reject) => {
-        request = new RequestFlowBuilder()
+        const r = new RequestFlowBuilder()
             .disableInjections()
-            .withTTL(config?.ttl || 5000)
             .withRawScript(
                 `
 (xor
@@ -104,7 +105,10 @@ export async function print(client: FluenceClient, str: string, config?: {ttl?: 
             .handleTimeout(() => {
                 reject('Request timed out for print');
             })
-            .build();
+        if(config?.ttl) {
+            r.withTTL(config.ttl)
+        }
+        request = r.build();
     });
     await client.initiateFlow(request!);
     return Promise.race([promise, Promise.resolve()]);
@@ -115,9 +119,8 @@ export async function print(client: FluenceClient, str: string, config?: {ttl?: 
 export async function testFunc(client: FluenceClient, config?: {ttl?: number}): Promise<string> {
     let request: RequestFlow;
     const promise = new Promise<string>((resolve, reject) => {
-        request = new RequestFlowBuilder()
+        const r = new RequestFlowBuilder()
             .disableInjections()
-            .withTTL(config?.ttl || 5000)
             .withRawScript(
                 `
 (xor
@@ -156,7 +159,10 @@ export async function testFunc(client: FluenceClient, config?: {ttl?: number}): 
             .handleTimeout(() => {
                 reject('Request timed out for testFunc');
             })
-            .build();
+        if(config?.ttl) {
+            r.withTTL(config.ttl)
+        }
+        request = r.build();
     });
     await client.initiateFlow(request!);
     return promise;
@@ -167,9 +173,8 @@ export async function testFunc(client: FluenceClient, config?: {ttl?: number}): 
 export async function doStuff(client: FluenceClient, a: string, b: string, c: boolean, d: boolean, e: string[], g: string[], str: string, config?: {ttl?: number}): Promise<string[]> {
     let request: RequestFlow;
     const promise = new Promise<string[]>((resolve, reject) => {
-        request = new RequestFlowBuilder()
+        const r = new RequestFlowBuilder()
             .disableInjections()
-            .withTTL(config?.ttl || 5000)
             .withRawScript(
                 `
 (xor
@@ -186,91 +191,103 @@ export async function doStuff(client: FluenceClient, a: string, b: string, c: bo
            (seq
             (seq
              (seq
-              (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-              (call %init_peer_id% ("getDataSrv" "a") [] a)
+              (seq
+               (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+               (call %init_peer_id% ("getDataSrv" "a") [] a)
+              )
+              (call %init_peer_id% ("getDataSrv" "b") [] b)
              )
-             (call %init_peer_id% ("getDataSrv" "b") [] b)
+             (call %init_peer_id% ("getDataSrv" "c") [] c)
             )
-            (call %init_peer_id% ("getDataSrv" "c") [] c)
+            (call %init_peer_id% ("getDataSrv" "d") [] d)
            )
-           (call %init_peer_id% ("getDataSrv" "d") [] d)
+           (call %init_peer_id% ("getDataSrv" "e") [] e)
           )
-          (call %init_peer_id% ("getDataSrv" "e") [] e)
+          (call %init_peer_id% ("getDataSrv" "g") [] g)
          )
-         (call %init_peer_id% ("getDataSrv" "g") [] g)
+         (call %init_peer_id% ("getDataSrv" "str") [] str)
         )
-        (call %init_peer_id% ("getDataSrv" "str") [] str)
-       )
-       (par
         (par
-         (seq
-          (seq
-           (call %init_peer_id% ("some-id" "t") [str] $stream)
-           (call -relay- ("op" "noop") [])
-          )
-          (call b ("op" "noop") [])
-         )
-         (call %init_peer_id% ("println-service-id" "print") [a])
-        )
-        (seq
-         (call -relay- ("op" "noop") [])
-         (xor
-          (call a ("peer" "identify") [])
+         (par
           (seq
            (seq
-            (call -relay- ("op" "noop") [])
-            (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
-           )
-           (call -relay- ("op" "noop") [])
-          )
-         )
-        )
-       )
-      )
-      (call -relay- ("op" "noop") [])
-     )
-     (xor
-      (seq
-       (call -relay- ("op" "noop") [])
-       (xor
-        (match c true
-         (xor
-          (match d true
-           (xor
-            (fold e eEl
-             (seq
-              (seq
-               (fold g gEl
-                (seq
-                 (seq
-                  (call b ("some-id" "t") [gEl] $stream)
-                  (call b ("some-id" "t") [eEl] $stream)
-                 )
-                 (next gEl)
-                )
-               )
-               (call b ("some-id" "t") [eEl] $stream)
-              )
-              (next eEl)
-             )
+            (seq
+             (call %init_peer_id% ("some-id" "t") [str] $stream)
+             (call -relay- ("op" "noop") [])
             )
+            (call a ("op" "noop") [])
+           )
+           (call b ("op" "noop") [])
+          )
+          (call %init_peer_id% ("println-service-id" "print") [a])
+         )
+         (seq
+          (call -relay- ("op" "noop") [])
+          (xor
+           (call a ("peer" "identify") [])
+           (seq
             (seq
              (call -relay- ("op" "noop") [])
-             (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+             (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
             )
+            (call -relay- ("op" "noop") [])
            )
           )
-          (null)
          )
         )
-        (null)
+       )
+       (call -relay- ("op" "noop") [])
+      )
+      (xor
+       (seq
+        (seq
+         (call -relay- ("op" "noop") [])
+         (call a ("op" "noop") [])
+        )
+        (xor
+         (match c true
+          (xor
+           (match d true
+            (xor
+             (fold e eEl
+              (seq
+               (seq
+                (fold g gEl
+                 (seq
+                  (seq
+                   (call b ("some-id" "t") [gEl] $stream)
+                   (call b ("some-id" "t") [eEl] $stream)
+                  )
+                  (next gEl)
+                 )
+                )
+                (call b ("some-id" "t") [eEl] $stream)
+               )
+               (next eEl)
+              )
+             )
+             (seq
+              (call -relay- ("op" "noop") [])
+              (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+             )
+            )
+           )
+           (null)
+          )
+         )
+         (null)
+        )
+       )
+       (seq
+        (seq
+         (call -relay- ("op" "noop") [])
+         (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
+        )
+        (call -relay- ("op" "noop") [])
        )
       )
-      (seq
-       (call -relay- ("op" "noop") [])
-       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
-      )
      )
+     (call a ("op" "noop") [])
     )
     (call -relay- ("op" "noop") [])
    )
@@ -312,7 +329,10 @@ h.on('getDataSrv', 'str', () => {return str;});
             .handleTimeout(() => {
                 reject('Request timed out for doStuff');
             })
-            .build();
+        if(config?.ttl) {
+            r.withTTL(config.ttl)
+        }
+        request = r.build();
     });
     await client.initiateFlow(request!);
     return promise;
