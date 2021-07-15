@@ -18,6 +18,7 @@
   "scripts": {
     "build": "tsc",
     "examples": "node -r ts-node/register src/run-examples.ts",
+    "pubsub": "node -r ts-node/register src/pubsub.ts",
     "exec": "npm run compile-aqua && node -r ts-node/register src/index.ts",
     "run": "node -r ts-node/register src/index.ts",
     "compile-aqua": "aqua-cli -i ./aqua/ -o ./src/compiled",
@@ -26,6 +27,7 @@
   "devDependencies": {
     "@fluencelabs/aqua-cli": "^0.1.8-157",
     "@fluencelabs/aqua-lib": "^0.1.5",
+    "@fluencelabs/aqua-dht": "^0.1.33",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.4"
   },
