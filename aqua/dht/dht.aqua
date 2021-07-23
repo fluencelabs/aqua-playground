@@ -1,8 +1,0 @@
-import "@fluencelabs/aqua-dht/pubsub.aqua"
-
-func put_value(initial_peer: string, value: string) -> string:
-    none_service_id: *string
-    on initial_peer:
-        -- Op.noop()
-        initTopicAndSubscribe(initial_peer, "some-const3", value, nil, nil)
-    <- "OK"
