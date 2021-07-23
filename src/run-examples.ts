@@ -25,6 +25,7 @@ import {coCall} from "./examples/coCall";
 import {passArgsCall} from "./examples/passArgsCall";
 import {streamArgsCall} from "./examples/streamArgsCall";
 import {streamResultsCall} from "./examples/streamResultsCall";
+import {pushToStreamCall} from "./examples/pushToStreamCall";
 let deepEqual = require('deep-equal')
 
 function checkCall(name: string, expected: any, actual: any, callBackOnError: () => void) {
@@ -127,10 +128,13 @@ const main = async () => {
   let passArgsResult = await passArgsCall(client)
 
   // streamArgs.aqua
-  let streamArgsResult = await streamArgsCall(client)
+  // let streamArgsResult = await streamArgsCall(client)
 
   // streamResults.aqua
-  let streamResultsResult = await streamResultsCall(client)
+  // let streamResultsResult = await streamResultsCall(client)
+
+  // pushToStream.aqua
+  let pushToStreamResult = await pushToStreamCall(client)
 
   await client.disconnect();
 
@@ -177,9 +181,11 @@ const main = async () => {
 
   checkCall("passArgsCall", passArgsResult, "client-utilsid", cb)
 
-  checkCall("streamArgsCall", streamArgsResult, [["peer_id", "peer_id"]], cb)
+  // checkCall("streamArgsCall", streamArgsResult, [["peer_id", "peer_id"]], cb)
 
-  checkCall("streamResultsCall", streamResultsResult, ["new_name", "new_name", "new_name"], cb)
+  // checkCall("streamResultsCall", streamResultsResult, ["new_name", "new_name", "new_name"], cb)
+
+  checkCall("pushToStreamCall", pushToStreamResult, ["hello", "get_string"], cb)
 
   checkCallBy("tryCatchCall", tryCatchResult, (res) => {
     return (res[0] as string).includes("Error: Service with id 'unex' not found") && res[1] === '/ip4/164.90.171.139/tcp/7770'
