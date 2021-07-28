@@ -128,10 +128,10 @@ const main = async () => {
   let passArgsResult = await passArgsCall(client)
 
   // streamArgs.aqua
-  // let streamArgsResult = await streamArgsCall(client)
+  let streamArgsResult = await streamArgsCall(client)
 
   // streamResults.aqua
-  // let streamResultsResult = await streamResultsCall(client)
+  let streamResultsResult = await streamResultsCall(client)
 
   // pushToStream.aqua
   let pushToStreamResult = await pushToStreamCall(client)
@@ -181,9 +181,9 @@ const main = async () => {
 
   checkCall("passArgsCall", passArgsResult, "client-utilsid", cb)
 
-  // checkCall("streamArgsCall", streamArgsResult, [["peer_id", "peer_id"]], cb)
+  checkCall("streamArgsCall", streamArgsResult, [["peer_id", "peer_id"]], cb)
 
-  // checkCall("streamResultsCall", streamResultsResult, ["new_name", "new_name", "new_name"], cb)
+  checkCall("streamResultsCall", streamResultsResult, ["new_name", "new_name", "new_name"], cb)
 
   checkCall("pushToStreamCall", pushToStreamResult, ["hello", "get_string"], cb)
 
