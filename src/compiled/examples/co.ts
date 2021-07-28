@@ -12,7 +12,7 @@ import { RequestFlow } from '@fluencelabs/fluence/dist/internal/RequestFlow';
 
 
 
-export async function parFunc(client: FluenceClient, node: string, c: (arg0: {external_addresses:string[]}) => void, config?: {ttl?: number}): Promise<void> {
+export async function coFunc(client: FluenceClient, node: string, c: (arg0: {external_addresses:string[]}) => void, config?: {ttl?: number}): Promise<void> {
     let request: RequestFlow;
     const promise = new Promise<void>((resolve, reject) => {
         const r = new RequestFlowBuilder()
@@ -22,31 +22,34 @@ export async function parFunc(client: FluenceClient, node: string, c: (arg0: {ex
 (xor
  (seq
   (seq
-   (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-   (call %init_peer_id% ("getDataSrv" "node") [] node)
-  )
-  (par
-   (par
-    (call %init_peer_id% ("parservice-id" "call") [] y)
+   (seq
     (seq
-     (call -relay- ("op" "noop") [])
-     (xor
+     (seq
+      (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+      (call %init_peer_id% ("getDataSrv" "node") [] node)
+     )
+     (call %init_peer_id% ("coservice-id" "call") [] y)
+    )
+    (call -relay- ("op" "noop") [])
+   )
+   (xor
+    (seq
+     (call node ("peer" "identify") [] t)
+     (par
       (seq
-       (seq
-        (call node ("peer" "identify") [] t)
-        (call -relay- ("op" "noop") [])
-       )
+       (call -relay- ("op" "noop") [])
        (xor
         (call %init_peer_id% ("callbackSrv" "c") [t])
         (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
        )
       )
-      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+      (null)
      )
     )
+    (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
    )
-   (call %init_peer_id% ("parservice-id" "call") [] x)
   )
+  (call %init_peer_id% ("coservice-id" "call") [] x)
  )
  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
 )
@@ -68,7 +71,7 @@ h.on('callbackSrv', 'c', (args) => {c(args[0]); return {};});
             })
             .handleScriptError(reject)
             .handleTimeout(() => {
-                reject('Request timed out for parFunc');
+                reject('Request timed out for coFunc');
             })
         if(config && config.ttl) {
             r.withTTL(config.ttl)

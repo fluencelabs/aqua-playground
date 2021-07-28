@@ -1,5 +1,8 @@
+import "@fluencelabs/aqua-lib/builtin.aqua"
+
 service SomeS("test2"):
     getStr: ?string -> ?string
+    getStr1: -> ?string
     getStr2: string -> string
 
 func useOptional(opt: ?string) -> string:
@@ -7,3 +10,12 @@ func useOptional(opt: ?string) -> string:
     for i <- opt:
         SomeS.getStr2(i)
     <- res!
+
+func returnOptional() -> ?string:
+    res <- SomeS.getStr1()
+    <- res
+
+func returnNone() -> ?string:
+    result: *string
+    Op.noop()
+    <- result

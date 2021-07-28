@@ -15,7 +15,7 @@ import {constantsCall} from "./examples/constantsCall";
 import {streamCall} from "./examples/streamCall";
 import {topologyCall} from "./examples/topologyCall";
 import {foldJoinCall} from "./examples/foldJoinCall";
-import {useOptionalCall} from "./examples/useOptionalCall";
+import {returnNull, returnOptionalCall, useOptionalCall} from "./examples/useOptionalCall";
 import {viaCall} from "./examples/viaCall";
 import {nestedFuncsCall} from "./examples/nestedFuncsCall";
 import {assignmentCall} from "./examples/assignment";
@@ -105,6 +105,8 @@ const main = async () => {
 
   // option.aqua
   let optionResult = await useOptionalCall(client)
+  let optionalResult = await returnOptionalCall(client)
+  let noneResult = await returnNull(client)
 
   // via.aqua
   let viaResult = await viaCall(client)
@@ -168,6 +170,8 @@ const main = async () => {
   checkCallBy("foldJoinCall", foldJoinResult, (res) => res.length == 3, cb)
 
   checkCall("useOptional", optionResult, "hello", cb)
+  checkCall("returnOptional", optionalResult, "optional", cb)
+  checkCall("returnNone", noneResult, null, cb)
 
   checkCallBy("via", viaResult, (res) => res.every( (val, i, arr) => deepEqual(val, arr[0]) ), cb)
 

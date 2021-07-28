@@ -12,9 +12,9 @@ import { RequestFlow } from '@fluencelabs/fluence/dist/internal/RequestFlow';
 
 
 
-export async function parFunc(client: FluenceClient, node: string, c: (arg0: {external_addresses:string[]}) => void, config?: {ttl?: number}): Promise<void> {
+export async function get_results(client: FluenceClient, config?: {ttl?: number}): Promise<string[]> {
     let request: RequestFlow;
-    const promise = new Promise<void>((resolve, reject) => {
+    const promise = new Promise<string[]>((resolve, reject) => {
         const r = new RequestFlowBuilder()
             .disableInjections()
             .withRawScript(
@@ -22,33 +22,21 @@ export async function parFunc(client: FluenceClient, node: string, c: (arg0: {ex
 (xor
  (seq
   (seq
-   (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-   (call %init_peer_id% ("getDataSrv" "node") [] node)
-  )
-  (par
-   (par
-    (call %init_peer_id% ("parservice-id" "call") [] y)
+   (seq
     (seq
-     (call -relay- ("op" "noop") [])
-     (xor
-      (seq
-       (seq
-        (call node ("peer" "identify") [] t)
-        (call -relay- ("op" "noop") [])
-       )
-       (xor
-        (call %init_peer_id% ("callbackSrv" "c") [t])
-        (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
-       )
-      )
-      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
-     )
+     (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+     (call %init_peer_id% ("op" "identity") ["hello"] $results)
     )
+    (call %init_peer_id% ("pop" "get_str") [] str)
    )
-   (call %init_peer_id% ("parservice-id" "call") [] x)
+   (call %init_peer_id% ("op" "identity") [str] $results)
+  )
+  (xor
+   (call %init_peer_id% ("callbackSrv" "response") [$results])
+   (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
   )
  )
- (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
+ (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
 )
 
             `,
@@ -57,9 +45,12 @@ export async function parFunc(client: FluenceClient, node: string, c: (arg0: {ex
                 h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
                 });
-                h.on('getDataSrv', 'node', () => {return node;});
-h.on('callbackSrv', 'c', (args) => {c(args[0]); return {};});
                 
+                h.onEvent('callbackSrv', 'response', (args) => {
+    const [res] = args;
+  resolve(res);
+});
+
                 h.onEvent('errorHandlingSrv', 'error', (args) => {
                     // assuming error is the single argument
                     const [err] = args;
@@ -68,7 +59,7 @@ h.on('callbackSrv', 'c', (args) => {c(args[0]); return {};});
             })
             .handleScriptError(reject)
             .handleTimeout(() => {
-                reject('Request timed out for parFunc');
+                reject('Request timed out for get_results');
             })
         if(config && config.ttl) {
             r.withTTL(config.ttl)
@@ -76,6 +67,6 @@ h.on('callbackSrv', 'c', (args) => {c(args[0]); return {};});
         request = r.build();
     });
     await client.initiateFlow(request!);
-    return Promise.race([promise, Promise.resolve()]);
+    return promise;
 }
       

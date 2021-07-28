@@ -12,9 +12,9 @@ import { RequestFlow } from '@fluencelabs/fluence/dist/internal/RequestFlow';
 
 
 
-export async function getPeerExternalAddresses(client: FluenceClient, otherNodePeerId: string, config?: {ttl?: number}): Promise<string[]> {
+export async function putHostValue(client: FluenceClient, key: string, value: string, service_id: string | null, config?: {ttl?: number}): Promise<string> {
     let request: RequestFlow;
-    const promise = new Promise<string[]>((resolve, reject) => {
+    const promise = new Promise<string>((resolve, reject) => {
         const r = new RequestFlowBuilder()
             .disableInjections()
             .withRawScript(
@@ -26,26 +26,20 @@ export async function getPeerExternalAddresses(client: FluenceClient, otherNodeP
     (seq
      (seq
       (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-      (call %init_peer_id% ("getDataSrv" "otherNodePeerId") [] otherNodePeerId)
+      (call %init_peer_id% ("getDataSrv" "key") [] key)
      )
-     (call -relay- ("op" "noop") [])
+     (call %init_peer_id% ("getDataSrv" "value") [] value)
     )
-    (xor
-     (call otherNodePeerId ("peer" "identify") [] res)
-     (seq
-      (call -relay- ("op" "noop") [])
-      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
-     )
-    )
+    (call %init_peer_id% ("getDataSrv" "service_id") [] service_id)
    )
-   (call -relay- ("op" "noop") [])
+   (call %init_peer_id% ("test-dht" "put_host_value") [key value service_id] res)
   )
   (xor
-   (call %init_peer_id% ("callbackSrv" "response") [res.$.external_addresses!])
-   (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+   (call %init_peer_id% ("callbackSrv" "response") [res])
+   (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
   )
  )
- (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
+ (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
 )
 
             `,
@@ -54,7 +48,9 @@ export async function getPeerExternalAddresses(client: FluenceClient, otherNodeP
                 h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
                 });
-                h.on('getDataSrv', 'otherNodePeerId', () => {return otherNodePeerId;});
+                h.on('getDataSrv', 'key', () => {return key;});
+h.on('getDataSrv', 'value', () => {return value;});
+h.on('getDataSrv', 'service_id', () => {return service_id === null ? [] : [service_id];});
                 h.onEvent('callbackSrv', 'response', (args) => {
     const [res] = args;
   resolve(res);
@@ -68,7 +64,7 @@ export async function getPeerExternalAddresses(client: FluenceClient, otherNodeP
             })
             .handleScriptError(reject)
             .handleTimeout(() => {
-                reject('Request timed out for getPeerExternalAddresses');
+                reject('Request timed out for putHostValue');
             })
         if(config && config.ttl) {
             r.withTTL(config.ttl)
@@ -81,9 +77,9 @@ export async function getPeerExternalAddresses(client: FluenceClient, otherNodeP
       
 
 
-export async function getDistantAddresses(client: FluenceClient, target: string, viaNode: string, config?: {ttl?: number}): Promise<string[]> {
+export async function create_client_util(client: FluenceClient, service_id: string, config?: {ttl?: number}): Promise<string> {
     let request: RequestFlow;
-    const promise = new Promise<string[]>((resolve, reject) => {
+    const promise = new Promise<string>((resolve, reject) => {
         const r = new RequestFlowBuilder()
             .disableInjections()
             .withRawScript(
@@ -92,44 +88,17 @@ export async function getDistantAddresses(client: FluenceClient, target: string,
  (seq
   (seq
    (seq
-    (seq
-     (seq
-      (seq
-       (seq
-        (seq
-         (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-         (call %init_peer_id% ("getDataSrv" "target") [] target)
-        )
-        (call %init_peer_id% ("getDataSrv" "viaNode") [] viaNode)
-       )
-       (call -relay- ("op" "noop") [])
-      )
-      (call viaNode ("op" "noop") [])
-     )
-     (xor
-      (call target ("peer" "identify") [] res)
-      (seq
-       (seq
-        (seq
-         (call viaNode ("op" "noop") [])
-         (call -relay- ("op" "noop") [])
-        )
-        (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
-       )
-       (call -relay- ("op" "noop") [])
-      )
-     )
-    )
-    (call viaNode ("op" "noop") [])
+    (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+    (call %init_peer_id% ("getDataSrv" "service_id") [] service_id)
    )
-   (call -relay- ("op" "noop") [])
+   (call %init_peer_id% ("test-dht" "put_host_value") ["client-util" service_id $nil] res)
   )
   (xor
-   (call %init_peer_id% ("callbackSrv" "response") [res.$.external_addresses!])
-   (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+   (call %init_peer_id% ("callbackSrv" "response") [res])
+   (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
   )
  )
- (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
+ (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
 )
 
             `,
@@ -138,8 +107,7 @@ export async function getDistantAddresses(client: FluenceClient, target: string,
                 h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
                 });
-                h.on('getDataSrv', 'target', () => {return target;});
-h.on('getDataSrv', 'viaNode', () => {return viaNode;});
+                h.on('getDataSrv', 'service_id', () => {return service_id;});
                 h.onEvent('callbackSrv', 'response', (args) => {
     const [res] = args;
   resolve(res);
@@ -153,7 +121,7 @@ h.on('getDataSrv', 'viaNode', () => {return viaNode;});
             })
             .handleScriptError(reject)
             .handleTimeout(() => {
-                reject('Request timed out for getDistantAddresses');
+                reject('Request timed out for create_client_util');
             })
         if(config && config.ttl) {
             r.withTTL(config.ttl)
