@@ -201,7 +201,7 @@ const main = async () => {
 
   checkCall("literalCall", literalCallResult, "some literal", cb)
 
-  checkCall("multiReturnResult", multiReturnResult, [ [ 'some-str', 'random-str' ], 5, 5, 'some-str', [ 1, 2 ] ], cb)
+  checkCall("multiReturnResult", multiReturnResult, [ [ 'some-str', 'random-str' ], 5, 5, 'some-str', [ 1, 2 ], null], cb)
 
   checkCallBy("tryCatchCall", tryCatchResult, (res) => {
     return (res[0] as string).includes("Error: Service with id 'unex' not found") && res[1] === '/ip4/164.90.171.139/tcp/7770'

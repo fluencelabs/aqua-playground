@@ -4,8 +4,8 @@ service GetStr("multiret-test"):
 const someNum = 5
 const someStr = "some-str"
 
-func multiReturnFunc(somethingToReturn: []u8) -> []string, u8, u8, string, []u8 :
+func multiReturnFunc(somethingToReturn: []u8, smthOption: ?string) -> []string, u8, u8, string, []u8, ?string :
     res: *string
     res <- GetStr.retStr(someStr)
     res <- GetStr.retStr("random-str")
-    <- res, 5, someNum, someStr, somethingToReturn
+    <- res, 5, someNum, someStr, somethingToReturn, smthOption
