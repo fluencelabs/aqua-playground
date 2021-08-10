@@ -1,11 +1,20 @@
 service GetStr("multiret-test"):
     retStr: string -> string
 
+service GetNum("multiret-num"):
+    retNum: -> u8
+
 const someNum = 5
 const someStr = "some-str"
 
-func multiReturnFunc(somethingToReturn: []u8, smthOption: ?string) -> []string, u8, u8, string, []u8, ?string :
+func tupleFunc() -> string, u8:
+    str <- GetStr.retStr(someStr)
+    n <- GetNum.retNum()
+    <- str, n
+
+func multiReturnFunc(somethingToReturn: []u8, smthOption: ?string) -> []string, u8, string, []u8, ?string, u8 :
     res: *string
     res <- GetStr.retStr(someStr)
     res <- GetStr.retStr("random-str")
-    <- res, 5, someNum, someStr, somethingToReturn, smthOption
+    res, tNum <- tupleFunc()
+    <- res, 5, someStr, somethingToReturn, smthOption, tNum

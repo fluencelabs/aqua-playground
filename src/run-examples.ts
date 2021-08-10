@@ -30,13 +30,13 @@ import {literalCall} from "./examples/returnLiteralCall";
 import {multiReturnCall} from "./examples/multiReturnCall";
 let deepEqual = require('deep-equal')
 
-function checkCall(name: string, expected: any, actual: any, callBackOnError: () => void) {
-  if (!deepEqual(actual, expected)) {
+function checkCall(name: string, actual: any, expected: any, callBackOnError: () => void) {
+  if (!deepEqual(expected, actual)) {
     console.error(`${name} call has the wrong result`)
-    console.error("expected: ")
-    console.dir(expected)
     console.error("actual: ")
     console.dir(actual)
+    console.error("expected: ")
+    console.dir(expected)
     callBackOnError()
   }
 }
@@ -201,7 +201,7 @@ const main = async () => {
 
   checkCall("literalCall", literalCallResult, "some literal", cb)
 
-  checkCall("multiReturnResult", multiReturnResult, [ [ 'some-str', 'random-str' ], 5, 5, 'some-str', [ 1, 2 ], null], cb)
+  checkCall("multiReturnResult", multiReturnResult, [ [ 'some-str', 'random-str', 'some-str' ], 5, 'some-str', [ 1, 2 ], null, 10], cb)
 
   checkCallBy("tryCatchCall", tryCatchResult, (res) => {
     return (res[0] as string).includes("Error: Service with id 'unex' not found") && res[1] === '/ip4/164.90.171.139/tcp/7770'
