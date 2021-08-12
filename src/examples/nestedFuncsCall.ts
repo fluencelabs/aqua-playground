@@ -1,6 +1,4 @@
 import {FluenceClient, registerServiceFunction} from "@fluencelabs/fluence";
-import {getTwoResults} from "../compiled/examples/foldJoin";
-import {useOptional} from "../compiled/examples/option";
 import {d} from "../compiled/examples/nestedFuncs";
 
 export async function nestedFuncsCall(client: FluenceClient): Promise<string> {
