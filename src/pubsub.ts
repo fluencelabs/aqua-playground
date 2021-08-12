@@ -1,4 +1,4 @@
-import {findSubscribers, getNeighbours, initTopicAndSubscribe} from "@fluencelabs/aqua-dht/dist/pubsub";
+import {findSubscribers, getNeighbours, initTopicAndSubscribe} from "@fluencelabs/aqua-dht-ts";
 import {createClient} from "@fluencelabs/fluence";
 import {krasnodar} from "@fluencelabs/fluence-network-environment";
 
