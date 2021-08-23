@@ -28,6 +28,7 @@ import {streamResultsCall} from "./examples/streamResultsCall";
 import {pushToStreamCall} from "./examples/pushToStreamCall";
 import {literalCall} from "./examples/returnLiteralCall";
 import {multiReturnCall} from "./examples/multiReturnCall";
+import {declareCall} from "./examples/declareCall";
 let deepEqual = require('deep-equal')
 
 function checkCall(name: string, actual: any, expected: any, callBackOnError: () => void) {
@@ -146,6 +147,9 @@ const main = async () => {
   // multiReturn.aqua
   let multiReturnResult = await multiReturnCall(client)
 
+  // declare.aqua
+  let declareResult = await declareCall(client)
+
   await client.disconnect();
 
   let success = true;
@@ -202,6 +206,8 @@ const main = async () => {
   checkCall("literalCall", literalCallResult, "some literal", cb)
 
   checkCall("multiReturnResult", multiReturnResult, [ [ 'some-str', 'random-str', 'some-str' ], 5, 'some-str', [ 1, 2 ], null, 10], cb)
+
+  checkCall("declareResult", declareResult, 'declare all foodeclare all barsmall_foo', cb)
 
   checkCallBy("tryCatchCall", tryCatchResult, (res) => {
     return (res[0] as string).includes("Error: Service with id 'unex' not found") && res[1] === '/ip4/164.90.171.139/tcp/7770'
