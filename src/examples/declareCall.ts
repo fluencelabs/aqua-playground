@@ -10,5 +10,9 @@ export async function declareCall(client: FluenceClient) {
         return args[0] + args[1]
     })
 
+    registerServiceFunction(client, "my_export_srv", "another_str", (args: any[], _) => {
+        return "str_from_my_export_srv"
+    })
+
     return await concat_foobars(client)
 }
