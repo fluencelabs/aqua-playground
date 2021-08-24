@@ -42,7 +42,7 @@ export async function append_records(client: FluenceClient, peer: string, srum: 
    )
    (fold srum-iter srum-item
     (seq
-     (call %init_peer_id% ("op" "identity") [srum-item] $srum)
+     (ap srum-item $srum)
      (next srum-item)
     )
    )
