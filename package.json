@@ -1,41 +1,43 @@
 {
-  "name": "aquamarine-template",
-  "version": "0.3.9",
-  "keywords": [
-    "typescript",
-    "template"
-  ],
-  "author": "FluenceLabs (https://github.com/fluencelabs)",
-  "license": "MIT",
-  "main": "dist/index.js",
-  "bin": {
-    "fldist": "./dist/index.js"
-  },
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist/"
-  ],
-  "scripts": {
-    "build": "tsc",
-    "examples": "node -r ts-node/register src/run-examples.ts",
-    "pubsub": "node -r ts-node/register src/pubsub.ts",
-    "exec": "npm run compile-aqua && node -r ts-node/register src/index.ts",
-    "run": "node -r ts-node/register src/index.ts",
-    "compile-aqua": "aqua-cli -i ./aqua/ -o ./src/compiled",
-    "compile-aqua:air": "aqua-cli -i ./aqua/ -o ./compiled-air -a"
-  },
-  "devDependencies": {
-    "@fluencelabs/aqua-cli": "0.1.13-202",
-    "@fluencelabs/aqua-lib": "0.1.14",
-    "@fluencelabs/aqua-dht": "0.1.36",
-    "ts-node": "^9.1.1",
-    "typescript": "^4.2.4"
-  },
-  "dependencies": {
-    "@fluencelabs/fluence": "0.9.53",
-    "@fluencelabs/fluence-network-environment": "^1.0.10",
-    "@fluencelabs/aqua-dht-ts": "0.1.36",
-    "deep-equal": "^2.0.5"
-  },
-  "description": "Minimal template for aquamarine project."
+    "name": "aquamarine-template",
+    "version": "0.3.9",
+    "keywords": [
+        "typescript",
+        "template"
+    ],
+    "author": "FluenceLabs (https://github.com/fluencelabs)",
+    "license": "MIT",
+    "main": "dist/index.js",
+    "bin": {
+        "fldist": "./dist/index.js"
+    },
+    "types": "dist/index.d.ts",
+    "files": [
+        "dist/"
+    ],
+    "scripts": {
+        "build": "tsc",
+        "examples": "node -r ts-node/register src/run-examples.ts",
+        "pubsub": "node -r ts-node/register src/pubsub.ts",
+        "exec": "npm run compile-aqua && node -r ts-node/register src/index.ts",
+        "run": "node -r ts-node/register src/index.ts",
+        "compile-aqua": "aqua-cli -i ./aqua/ -o ./src/compiled",
+        "compile-aqua:air": "aqua-cli -i ./aqua/ -o ./compiled-air -a",
+        "compile-with-local": "java -jar ../aqua/cli/.jvm/target/scala-3.0.1/aqua-cli-0.1.14-SNAPSHOT.jar -m node_modules --import . -i ./aqua/ -o ./src/compiled",
+        "prettify-compiled": "prettier --write src/compiled"
+    },
+    "devDependencies": {
+        "@fluencelabs/aqua-cli": "0.1.13-202",
+        "@fluencelabs/aqua-lib": "0.1.14",
+        "@fluencelabs/aqua-dht": "0.1.36",
+        "ts-node": "^9.1.1",
+        "typescript": "^4.2.4"
+    },
+    "dependencies": {
+        "@fluencelabs/fluence": "0.9.14-new-js-sdk-api.1",
+        "@fluencelabs/fluence-network-environment": "^1.0.10",
+        "@fluencelabs/aqua-dht-ts": "0.1.36",
+        "deep-equal": "^2.0.5"
+    },
+    "description": "Minimal template for aquamarine project."
 }

@@ -16,29 +16,33 @@ import {
 
 // Services
 
-export function registerStringer(service: {
-    returnString: (arg0: string, callParams: CallParams<'arg0'>) => string;
+export function registerHelloWorld(service: {
+    getNumber: (callParams: CallParams<null>) => number;
+    sayHello: (s: string, callParams: CallParams<'s'>) => void;
 }): void;
-export function registerStringer(
+export function registerHelloWorld(
     serviceId: string,
     service: {
-        returnString: (arg0: string, callParams: CallParams<'arg0'>) => string;
+        getNumber: (callParams: CallParams<null>) => number;
+        sayHello: (s: string, callParams: CallParams<'s'>) => void;
     },
 ): void;
-export function registerStringer(
+export function registerHelloWorld(
     peer: FluencePeer,
     service: {
-        returnString: (arg0: string, callParams: CallParams<'arg0'>) => string;
+        getNumber: (callParams: CallParams<null>) => number;
+        sayHello: (s: string, callParams: CallParams<'s'>) => void;
     },
 ): void;
-export function registerStringer(
+export function registerHelloWorld(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        returnString: (arg0: string, callParams: CallParams<'arg0'>) => string;
+        getNumber: (callParams: CallParams<null>) => number;
+        sayHello: (s: string, callParams: CallParams<'s'>) => void;
     },
 ): void;
-export function registerStringer(...args) {
+export function registerHelloWorld(...args) {
     let peer: FluencePeer;
     let serviceId;
     let service;
@@ -53,7 +57,7 @@ export function registerStringer(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"stringer-id"';
+        serviceId = '"default"';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {
@@ -70,15 +74,25 @@ export function registerStringer(...args) {
             return;
         }
 
-        if (req.fnName === 'returnString') {
+        if (req.fnName === 'getNumber') {
+            const callParams = {
+                ...req.particleContext,
+                tetraplets: {},
+            };
+            resp.retCode = ResultCodes.success;
+            resp.result = service.getNumber(callParams);
+        }
+
+        if (req.fnName === 'sayHello') {
             const callParams = {
                 ...req.particleContext,
                 tetraplets: {
-                    arg0: req.tetraplets[0],
+                    s: req.tetraplets[0],
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.returnString(req.args[0], callParams);
+            service.sayHello(req.args[0], callParams);
+            resp.result = {};
         }
 
         next();
@@ -87,50 +101,40 @@ export function registerStringer(...args) {
 
 // Functions
 
-export async function checkStreams(ch: string[], config?: { ttl?: number }): Promise<string[]>;
-export async function checkStreams(peer: FluencePeer, ch: string[], config?: { ttl?: number }): Promise<string[]>;
-export async function checkStreams(...args) {
+export async function callMeBack(
+    callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void,
+    config?: { ttl?: number },
+): Promise<void>;
+export async function callMeBack(
+    peer: FluencePeer,
+    callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void,
+    config?: { ttl?: number },
+): Promise<void>;
+export async function callMeBack(...args) {
     let peer: FluencePeer;
-    let ch;
+    let callback;
     let config;
     if (args[0] instanceof FluencePeer) {
         peer = args[0];
-        ch = args[1];
+        callback = args[1];
         config = args[2];
     } else {
         peer = FluencePeer.default;
-        ch = args[0];
+        callback = args[0];
         config = args[1];
     }
 
     let request: RequestFlow;
-    const promise = new Promise<string[]>((resolve, reject) => {
+    const promise = new Promise<void>((resolve, reject) => {
         const r = new RequestFlowBuilder()
             .disableInjections()
             .withRawScript(
                 `
      (xor
  (seq
-  (seq
-   (seq
-    (seq
-     (seq
-      (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-      (call %init_peer_id% ("getDataSrv" "ch") [] ch)
-     )
-     (call %init_peer_id% ("stringer-id" "returnString") ["first"] $stream)
-    )
-    (call %init_peer_id% ("stringer-id" "returnString") ["second"] $stream)
-   )
-   (fold ch b
-    (seq
-     (call %init_peer_id% ("stringer-id" "returnString") [b] $stream)
-     (next b)
-    )
-   )
-  )
+  (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
   (xor
-   (call %init_peer_id% ("callbackSrv" "response") [$stream])
+   (call %init_peer_id% ("callbackSrv" "callback") ["hello, world" 42])
    (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
   )
  )
@@ -143,13 +147,24 @@ export async function checkStreams(...args) {
                 h.on('getDataSrv', '-relay-', () => {
                     return peer.connectionInfo.connectedRelays[0];
                 });
-                h.on('getDataSrv', 'ch', () => {
-                    return ch;
+
+                h.use((req, resp, next) => {
+                    if (req.serviceId === 'callbackSrv' && req.fnaAme === 'callback') {
+                        const callParams = {
+                            ...req.particleContext,
+                            tetraplets: {
+                                arg0: req.tetraplets[0],
+                                arg1: req.tetraplets[1],
+                            },
+                        };
+                        resp.retCode = ResultCodes.success;
+                        callback(req.args[0], req.args[1], callParams);
+                        resp.result = {};
+                    }
+                    next();
                 });
-                h.onEvent('callbackSrv', 'response', (args) => {
-                    const [res] = args;
-                    resolve(res);
-                });
+
+                h.onEvent('callbackSrv', 'response', (args) => {});
 
                 h.onEvent('errorHandlingSrv', 'error', (args) => {
                     const [err] = args;
@@ -158,7 +173,7 @@ export async function checkStreams(...args) {
             })
             .handleScriptError(reject)
             .handleTimeout(() => {
-                reject('Request timed out for checkStreams');
+                reject('Request timed out for callMeBack');
             });
         if (config && config.ttl) {
             r.withTTL(config.ttl);
@@ -166,5 +181,5 @@ export async function checkStreams(...args) {
         request = r.build();
     });
     await peer.initiateFlow(request!);
-    return promise;
+    return Promise.race([promise, Promise.resolve()]);
 }
