@@ -1,14 +1,20 @@
-import {FluenceClient, registerServiceFunction} from "@fluencelabs/fluence";
-import {multiReturnFunc} from "../compiled/examples/multiReturn";
+import { FluencePeer } from '@fluencelabs/fluence';
+import { multiReturnFunc, registerGetStr, registerGetNum } from '../compiled/examples/multiReturn';
 
-export async function multiReturnCall(client: FluenceClient): Promise<[string[], number, string, number[], string | null, number]> {
-    registerServiceFunction(client, "multiret-test", "retStr", (args: any[], _) => {
-        return args[0]
-    })
+export async function multiReturnCall(
+    peer: FluencePeer,
+): Promise<[string[], number, string, number[], string | null, number]> {
+    registerGetStr(peer, {
+        retStr: (args0) => {
+            return args0;
+        },
+    });
 
-    registerServiceFunction(client, "multiret-num", "retNum", (args: any[], _) => {
-        return 10
-    })
+    registerGetNum(peer, {
+        retNum: () => {
+            return 10;
+        },
+    });
 
-    return await multiReturnFunc(client, [1, 2], null)
+    return await multiReturnFunc(peer, [1, 2], null);
 }

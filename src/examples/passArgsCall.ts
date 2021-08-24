@@ -1,10 +1,12 @@
-import {FluenceClient, registerServiceFunction} from "@fluencelabs/fluence";
-import {create_client_util} from "../compiled/examples/passArgs";
+import { FluencePeer } from '@fluencelabs/fluence';
+import { create_client_util, registerAquaDHT } from '../compiled/examples/passArgs';
 
-export async function passArgsCall(client: FluenceClient) {
-    registerServiceFunction(client, "test-dht", "put_host_value", (args: any[], _) => {
-        return args[0] + args[1]
-    })
+export async function passArgsCall(peer: FluencePeer) {
+    registerAquaDHT(peer, {
+        put_host_value: (args0, args1) => {
+            return args0 + args1;
+        },
+    });
 
-    return await create_client_util(client, "sid")
+    return await create_client_util(peer, 'sid');
 }

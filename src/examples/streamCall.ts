@@ -1,10 +1,12 @@
-import {FluenceClient, registerServiceFunction} from "@fluencelabs/fluence";
-import {checkStreams} from "../compiled/examples/stream";
+import { FluencePeer } from '@fluencelabs/fluence';
+import { checkStreams, registerStringer } from '../compiled/examples/stream';
 
-export async function streamCall(client: FluenceClient) {
-    registerServiceFunction(client, "stringer-id", "returnString", (args: any[], _) => {
-        return args[0] + " updated"
-    })
+export async function streamCall(peer: FluencePeer) {
+    registerStringer(peer, {
+        returnString: (args0) => {
+            return args0 + ' updated';
+        },
+    });
 
-    return checkStreams(client, ["third", "fourth"])
+    return checkStreams(peer, ['third', 'fourth']);
 }

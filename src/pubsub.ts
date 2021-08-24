@@ -1,24 +1,26 @@
-import {findSubscribers, getNeighbours, initTopicAndSubscribe} from "@fluencelabs/aqua-dht-ts";
-import {createClient} from "@fluencelabs/fluence";
-import {krasnodar} from "@fluencelabs/fluence-network-environment";
+import { FluencePeer } from '@fluencelabs/fluence';
+import { krasnodar } from '@fluencelabs/fluence-network-environment';
+import { getNeighbours, initTopicAndSubscribe, findSubscribers } from './compiled/dht/dht-example';
 
 const main = async () => {
-    const client = await createClient(krasnodar[0]);
-    const peer = krasnodar[0].peerId
-    const nodes = await getNeighbours(client, peer, "random")
-    console.log(nodes)
+    const peer = new FluencePeer();
+    await peer.init({ connectTo: krasnodar[0] });
+    const relayPeerId = krasnodar[0].peerId;
 
-    const topic = "random"
-    await initTopicAndSubscribe(client, peer, topic, "random value", null, null)
+    const nodes = await getNeighbours(peer, relayPeerId, 'random');
+    console.log(nodes);
 
-    const result = await findSubscribers(client, peer, topic)
+    const topic = 'random';
+    await initTopicAndSubscribe(peer, relayPeerId, topic, 'random value', null, null);
 
-    console.log(result)
+    const result = await findSubscribers(peer, relayPeerId, topic);
 
-    process.exit(0)
-}
+    console.log(result);
+
+    process.exit(0);
+};
 
 main().catch((err) => {
-    console.log(err)
-    process.exit(1)
-})
+    console.log(err);
+    process.exit(1);
+});

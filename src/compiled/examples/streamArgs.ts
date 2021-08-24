@@ -87,26 +87,26 @@ export function registerTestService(...args) {
 
 // Functions
 
-export async function append_records(peer: string, srum: string[][], config?: { ttl?: number }): Promise<void>;
+export async function append_records(peer_: string, srum: string[][], config?: { ttl?: number }): Promise<void>;
 export async function append_records(
     peer: FluencePeer,
-    peer: string,
+    peer_: string,
     srum: string[][],
     config?: { ttl?: number },
 ): Promise<void>;
 export async function append_records(...args) {
     let peer: FluencePeer;
-    let peer;
+    let peer_;
     let srum;
     let config;
     if (args[0] instanceof FluencePeer) {
         peer = args[0];
-        peer = args[1];
+        peer_ = args[1];
         srum = args[2];
         config = args[3];
     } else {
         peer = FluencePeer.default;
-        peer = args[0];
+        peer_ = args[0];
         srum = args[1];
         config = args[2];
     }
@@ -171,19 +171,23 @@ export async function append_records(...args) {
     return Promise.race([promise, Promise.resolve()]);
 }
 
-export async function retrieve_records(peer: string, config?: { ttl?: number }): Promise<string[][]>;
-export async function retrieve_records(peer: FluencePeer, peer: string, config?: { ttl?: number }): Promise<string[][]>;
+export async function retrieve_records(peer_: string, config?: { ttl?: number }): Promise<string[][]>;
+export async function retrieve_records(
+    peer: FluencePeer,
+    peer_: string,
+    config?: { ttl?: number },
+): Promise<string[][]>;
 export async function retrieve_records(...args) {
     let peer: FluencePeer;
-    let peer;
+    let peer_;
     let config;
     if (args[0] instanceof FluencePeer) {
         peer = args[0];
-        peer = args[1];
+        peer_ = args[1];
         config = args[2];
     } else {
         peer = FluencePeer.default;
-        peer = args[0];
+        peer_ = args[0];
         config = args[1];
     }
 

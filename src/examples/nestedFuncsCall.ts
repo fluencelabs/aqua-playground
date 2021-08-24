@@ -1,10 +1,12 @@
-import {FluenceClient, registerServiceFunction} from "@fluencelabs/fluence";
-import {d} from "../compiled/examples/nestedFuncs";
+import { FluencePeer } from '@fluencelabs/fluence';
+import { d, registerOpH } from '../compiled/examples/nestedFuncs';
 
-export async function nestedFuncsCall(client: FluenceClient): Promise<string> {
-    registerServiceFunction(client, "opa", "identity", (args: any[], _) => {
-        return args[0]
-    })
+export async function nestedFuncsCall(peer: FluencePeer): Promise<string> {
+    registerOpH(peer, {
+        identity: (args0) => {
+            return args0;
+        },
+    });
 
-    return await d(client, "some-str")
+    return await d(peer, 'some-str');
 }

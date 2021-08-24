@@ -1,227 +1,250 @@
 #!/usr/bin/env node
 
-import {createClient, registerServiceFunction, setLogLevel} from "@fluencelabs/fluence";
-import {krasnodar, testNet} from "@fluencelabs/fluence-network-environment";
-import {callArrowCall} from "./examples/callArrowCall";
-import {dataAliasCall} from "./examples/dataAliasCall";
-import {onCall} from "./examples/onCall";
-import {funcCall} from "./examples/funcCall";
-import {helloWorldCall} from "./examples/helloWorldCall";
-import {foldCall} from "./examples/foldCall";
-import {ifCall} from "./examples/if";
-import {parCall} from "./examples/parCall";
-import {complexCall} from "./examples/complex";
-import {constantsCall} from "./examples/constantsCall";
-import {streamCall} from "./examples/streamCall";
-import {topologyCall} from "./examples/topologyCall";
-import {foldJoinCall} from "./examples/foldJoinCall";
-import {returnNull, returnOptionalCall, useOptionalCall} from "./examples/useOptionalCall";
-import {viaCall} from "./examples/viaCall";
-import {nestedFuncsCall} from "./examples/nestedFuncsCall";
-import {assignmentCall} from "./examples/assignment";
-import {tryCatchCall} from "./examples/tryCatchCall";
-import {tryOtherwiseCall} from "./examples/tryOtherwiseCall";
-import {coCall} from "./examples/coCall";
-import {passArgsCall} from "./examples/passArgsCall";
-import {streamArgsCall} from "./examples/streamArgsCall";
-import {streamResultsCall} from "./examples/streamResultsCall";
-import {pushToStreamCall} from "./examples/pushToStreamCall";
-import {literalCall} from "./examples/returnLiteralCall";
-import {multiReturnCall} from "./examples/multiReturnCall";
-import {declareCall} from "./examples/declareCall";
-let deepEqual = require('deep-equal')
+import { FluencePeer } from '@fluencelabs/fluence';
+import { krasnodar, testNet } from '@fluencelabs/fluence-network-environment';
+import { registerPrintln } from './compiled/examples/println';
+import { callArrowCall } from './examples/callArrowCall';
+import { dataAliasCall } from './examples/dataAliasCall';
+import { onCall } from './examples/onCall';
+import { funcCall } from './examples/funcCall';
+import { helloWorldCall } from './examples/helloWorldCall';
+import { foldCall } from './examples/foldCall';
+import { ifCall } from './examples/if';
+import { parCall } from './examples/parCall';
+import { complexCall } from './examples/complex';
+import { constantsCall } from './examples/constantsCall';
+import { streamCall } from './examples/streamCall';
+import { topologyCall } from './examples/topologyCall';
+import { foldJoinCall } from './examples/foldJoinCall';
+import { returnNull, returnOptionalCall, useOptionalCall } from './examples/useOptionalCall';
+import { viaCall } from './examples/viaCall';
+import { nestedFuncsCall } from './examples/nestedFuncsCall';
+import { assignmentCall } from './examples/assignment';
+import { tryCatchCall } from './examples/tryCatchCall';
+import { tryOtherwiseCall } from './examples/tryOtherwiseCall';
+import { coCall } from './examples/coCall';
+import { passArgsCall } from './examples/passArgsCall';
+import { streamArgsCall } from './examples/streamArgsCall';
+import { streamResultsCall } from './examples/streamResultsCall';
+import { pushToStreamCall } from './examples/pushToStreamCall';
+import { literalCall } from './examples/returnLiteralCall';
+import { multiReturnCall } from './examples/multiReturnCall';
+import { declareCall } from './examples/declareCall';
+let deepEqual = require('deep-equal');
 
 function checkCall(name: string, actual: any, expected: any, callBackOnError: () => void) {
-  if (!deepEqual(expected, actual)) {
-    console.error(`${name} call has the wrong result`)
-    console.error("actual: ")
-    console.dir(actual)
-    console.error("expected: ")
-    console.dir(expected)
-    callBackOnError()
-  }
+    if (!deepEqual(expected, actual)) {
+        console.error(`${name} call has the wrong result`);
+        console.error('actual: ');
+        console.dir(actual);
+        console.error('expected: ');
+        console.dir(expected);
+        callBackOnError();
+    }
 }
 
 function checkCallBy(name: string, actual: any, by: (res: any) => boolean, callBackOnError: () => void) {
-  if (!by(actual)) {
-    console.error(`${name} call has the wrong result`)
-    console.error("actual: " + actual)
-    callBackOnError()
-  }
+    if (!by(actual)) {
+        console.error(`${name} call has the wrong result`);
+        console.error('actual: ' + actual);
+        callBackOnError();
+    }
 }
 
 const main = async () => {
-  // setLogLevel("trace")
-  const client = await createClient(krasnodar[0]);
-  const client2 = await createClient(krasnodar[1]);
+    // setLogLevel("trace")
+    const peer = new FluencePeer();
+    const peer2 = new FluencePeer();
+    await peer.init({ connectTo: krasnodar[0] });
+    await peer2.init({ connectTo: krasnodar[1] });
 
-  // this could be called from `println.aqua`
-  registerServiceFunction(client, "println-service-id", "print", (args: any[], _) => {
-    console.log("println:   " + args[0])
-    return {}
-  })
+    const selfPeerId = peer.connectionInfo.selfPeerId;
 
-  // these is only list of calls. Take a look into functions to see what's going on
+    // this could be called from `println.aqua`
+    registerPrintln(peer, {
+        print: (arg0) => {
+            console.log('println:   ' + arg0);
+        },
+    });
 
-  // these calls return void, so they could be executed at any time,
-  // because promise waits only a fact that particle was sent
+    // these is only list of calls. Take a look into functions to see what's going on
 
-  // callArrow.aqua
-  let callArrowResult = await callArrowCall(client)
+    // these calls return void, so they could be executed at any time,
+    // because promise waits only a fact that particle was sent
 
-  // fold.aqua
-  let foldCallResult = await foldCall(client)
+    // callArrow.aqua
+    let callArrowResult = await callArrowCall(peer);
 
-  //if.aqua
-  await ifCall(client)
+    // fold.aqua
+    let foldCallResult = await foldCall(peer);
 
-  // par.aqua
-  let parCallResult = await parCall(client)
+    //if.aqua
+    await ifCall(peer);
 
-  // these calls waiting for a result, so it will be called sequentially
-  // helloWorld.aqua
-  let helloWorldResult = await helloWorldCall(client)
+    // par.aqua
+    let parCallResult = await parCall(peer);
 
-  // func.aqua
-  let funcCallResult = await funcCall(client)
+    // these calls waiting for a result, so it will be called sequentially
+    // helloWorld.aqua
+    let helloWorldResult = await helloWorldCall(peer);
 
-  // on.aqua
-  let onCallResult = await onCall(client)
+    // func.aqua
+    let funcCallResult = await funcCall(peer);
 
-  // dataAlias.aqua
-  let dataAliasResult = await dataAliasCall(client)
+    // on.aqua
+    let onCallResult = await onCall(peer);
 
-  // complex.aqua
-  let complexCallResult = await complexCall(client)
+    // dataAlias.aqua
+    let dataAliasResult = await dataAliasCall(peer);
 
-  // constants.aqua
-  let constantCallResult = await constantsCall(client)
+    // complex.aqua
+    let complexCallResult = await complexCall(peer);
 
-  // stream.aqua
-  let streamResult = await streamCall(client)
+    // constants.aqua
+    let constantCallResult = await constantsCall(peer);
 
-  // topology.aqua
-  let topologyResult = await topologyCall(client, client2)
+    // stream.aqua
+    let streamResult = await streamCall(peer);
 
-  // foldJoin.aqua
-  let foldJoinResult = await foldJoinCall(client)
+    // topology.aqua
+    let topologyResult = await topologyCall(peer, peer2);
 
-  // option.aqua
-  let optionResult = await useOptionalCall(client)
-  let optionalResult = await returnOptionalCall(client)
-  let noneResult = await returnNull(client)
+    // foldJoin.aqua
+    let foldJoinResult = await foldJoinCall(peer);
 
-  // via.aqua
-  let viaResult = await viaCall(client)
+    // option.aqua
+    let optionResult = await useOptionalCall(peer);
+    let optionalResult = await returnOptionalCall(peer);
+    let noneResult = await returnNull(peer);
 
-  // nestedFuncs.aqua
-  let nestedFuncsResult = await nestedFuncsCall(client)
+    // via.aqua
+    let viaResult = await viaCall(peer);
 
-  // assignment.aqua
-  let assignmentResult = await assignmentCall(client)
+    // nestedFuncs.aqua
+    let nestedFuncsResult = await nestedFuncsCall(peer);
 
-  // tryOtherwise.aqua
-  let tryOtherwiseResult = await tryOtherwiseCall(client)
+    // assignment.aqua
+    let assignmentResult = await assignmentCall(peer);
 
-  // tryCatch.aqua
-  let tryCatchResult = await tryCatchCall(client)
+    // tryOtherwise.aqua
+    let tryOtherwiseResult = await tryOtherwiseCall(peer);
 
-  // coCall.aqua
-  let coCallResult = await coCall(client)
+    // tryCatch.aqua
+    let tryCatchResult = await tryCatchCall(peer);
 
-  // passArgsCall.aqua
-  let passArgsResult = await passArgsCall(client)
+    // coCall.aqua
+    let coCallResult = await coCall(peer);
 
-  // streamArgs.aqua
-  let streamArgsResult = await streamArgsCall(client)
+    // passArgsCall.aqua
+    let passArgsResult = await passArgsCall(peer);
 
-  // streamResults.aqua
-  let streamResultsResult = await streamResultsCall(client)
+    // streamArgs.aqua
+    let streamArgsResult = await streamArgsCall(peer);
 
-  // pushToStream.aqua
-  let pushToStreamResult = await pushToStreamCall(client)
+    // streamResults.aqua
+    let streamResultsResult = await streamResultsCall(peer);
 
-  // literalCall.aqua
-  let literalCallResult = await literalCall(client)
+    // pushToStream.aqua
+    let pushToStreamResult = await pushToStreamCall(peer);
 
-  // multiReturn.aqua
-  let multiReturnResult = await multiReturnCall(client)
+    // literalCall.aqua
+    let literalCallResult = await literalCall(peer);
 
-  // declare.aqua
-  let declareResult = await declareCall(client)
+    // multiReturn.aqua
+    let multiReturnResult = await multiReturnCall(peer);
 
-  await client.disconnect();
+    // declare.aqua
+    let declareResult = await declareCall(peer);
 
-  let success = true;
-  let cb: () => void = () => {
-    success = false;
-  }
+    await peer.uninit();
 
-  checkCall("callArrow", callArrowResult, "Hello, callArrow call!", cb)
+    let success = true;
+    let cb: () => void = () => {
+        success = false;
+    };
 
-  checkCall("foldCall", foldCallResult, ['/ip4/164.90.171.139/tcp/7770', '/ip4/164.90.171.139/tcp/9990/ws'], cb)
+    checkCall('callArrow', callArrowResult, 'Hello, callArrow call!', cb);
 
-  checkCall("onCall", onCallResult, ['/ip4/164.90.171.139/tcp/7770', '/ip4/164.90.171.139/tcp/9990/ws'], cb)
+    checkCall('foldCall', foldCallResult, ['/ip4/164.90.171.139/tcp/7770', '/ip4/164.90.171.139/tcp/9990/ws'], cb);
 
-  checkCall("parArrow", parCallResult, "hello", cb)
+    checkCall('onCall', onCallResult, ['/ip4/164.90.171.139/tcp/7770', '/ip4/164.90.171.139/tcp/9990/ws'], cb);
 
-  checkCall("helloWorldCall", helloWorldResult, "Hello, NAME!", cb)
+    checkCall('parArrow', parCallResult, 'hello', cb);
 
-  checkCall("funcCall", funcCallResult, "some str", cb)
+    checkCall('helloWorldCall', helloWorldResult, 'Hello, NAME!', cb);
 
-  checkCall("dataAliasCall", dataAliasResult, "peer id str", cb)
+    checkCall('funcCall', funcCallResult, 'some str', cb);
 
-  checkCall("complexCall", complexCallResult, ["some str", "3", "1", "4", "1", "1", "3", "2", "4", "2", "2", client.selfPeerId], cb)
+    checkCall('dataAliasCall', dataAliasResult, 'peer id str', cb);
 
-  checkCall("constantCall", constantCallResult, ['1', 'ab'], cb)
+    checkCall(
+        'complexCall',
+        complexCallResult,
+        ['some str', '3', '1', '4', '1', '1', '3', '2', '4', '2', '2', selfPeerId],
+        cb,
+    );
 
-  checkCall("streamCall", streamResult, ["first updated", "second updated", "third updated", "fourth updated"], cb)
+    checkCall('constantCall', constantCallResult, ['1', 'ab'], cb);
 
-  checkCall("topologyCall", topologyResult, "finish", cb)
+    checkCall('streamCall', streamResult, ['first updated', 'second updated', 'third updated', 'fourth updated'], cb);
 
-  checkCallBy("foldJoinCall", foldJoinResult, (res) => res.length == 3, cb)
+    checkCall('topologyCall', topologyResult, 'finish', cb);
 
-  checkCall("useOptional", optionResult, "hello", cb)
-  checkCall("returnOptional", optionalResult, "optional", cb)
-  checkCall("returnNone", noneResult, null, cb)
+    checkCallBy('foldJoinCall', foldJoinResult, (res) => res.length == 3, cb);
 
-  checkCallBy("via", viaResult, (res) => res.every( (val, i, arr) => deepEqual(val, arr[0]) ), cb)
+    checkCall('useOptional', optionResult, 'hello', cb);
+    checkCall('returnOptional', optionalResult, 'optional', cb);
+    checkCall('returnNone', noneResult, null, cb);
 
-  checkCall("nestedFuncsCall", nestedFuncsResult, "some-str", cb)
+    checkCallBy('via', viaResult, (res) => res.every((val, i, arr) => deepEqual(val, arr[0])), cb);
 
-  checkCall("assignmentCall", assignmentResult, ["abc", "hello"], cb)
+    checkCall('nestedFuncsCall', nestedFuncsResult, 'some-str', cb);
 
-  checkCall("tryOtherwiseCall", tryOtherwiseResult, "error", cb)
+    checkCall('assignmentCall', assignmentResult, ['abc', 'hello'], cb);
 
-  checkCall("coCall", coCallResult, [ '/ip4/164.90.171.139/tcp/7770', '/ip4/164.90.171.139/tcp/9990/ws' ], cb)
+    checkCall('tryOtherwiseCall', tryOtherwiseResult, 'error', cb);
 
-  checkCall("passArgsCall", passArgsResult, "client-utilsid", cb)
+    checkCall('coCall', coCallResult, ['/ip4/164.90.171.139/tcp/7770', '/ip4/164.90.171.139/tcp/9990/ws'], cb);
 
-  checkCall("streamArgsCall", streamArgsResult, [["peer_id", "peer_id"]], cb)
+    checkCall('passArgsCall', passArgsResult, 'client-utilsid', cb);
 
-  checkCall("streamResultsCall", streamResultsResult, ["new_name", "new_name", "new_name"], cb)
+    checkCall('streamArgsCall', streamArgsResult, [['peer_id', 'peer_id']], cb);
 
-  checkCall("pushToStreamCall", pushToStreamResult, ["hello", "get_string"], cb)
+    checkCall('streamResultsCall', streamResultsResult, ['new_name', 'new_name', 'new_name'], cb);
 
-  checkCall("literalCall", literalCallResult, "some literal", cb)
+    checkCall('pushToStreamCall', pushToStreamResult, ['hello', 'get_string'], cb);
 
-  checkCall("multiReturnResult", multiReturnResult, [ [ 'some-str', 'random-str', 'some-str' ], 5, 'some-str', [ 1, 2 ], null, 10], cb)
+    checkCall('literalCall', literalCallResult, 'some literal', cb);
 
-  checkCall("declareResult", declareResult, 'declare all foodeclare all barsmall_foo', cb)
+    checkCall(
+        'multiReturnResult',
+        multiReturnResult,
+        [['some-str', 'random-str', 'some-str'], 5, 'some-str', [1, 2], null, 10],
+        cb,
+    );
 
-  checkCallBy("tryCatchCall", tryCatchResult, (res) => {
-    return (res[0] as string).includes("Error: Service with id 'unex' not found") && res[1] === '/ip4/164.90.171.139/tcp/7770'
-  }, cb)
+    checkCall('declareResult', declareResult, 'declare all foodeclare all barsmall_foo', cb);
 
-  if (success) {
-    process.exit(0)
-  } else {
-    process.exit(1)
-  }
+    checkCallBy(
+        'tryCatchCall',
+        tryCatchResult,
+        (res) => {
+            return (
+                (res[0] as string).includes("Error: Service with id 'unex' not found") &&
+                res[1] === '/ip4/164.90.171.139/tcp/7770'
+            );
+        },
+        cb,
+    );
 
+    if (success) {
+        process.exit(0);
+    } else {
+        process.exit(1);
+    }
 };
 
 main().catch((err) => {
-  console.log(err)
-  process.exit(1)
-})
+    console.log(err);
+    process.exit(1);
+});
