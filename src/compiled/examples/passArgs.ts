@@ -102,7 +102,7 @@ export async function create_client_util(client: FluenceClient, service_id: stri
     (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
     (call %init_peer_id% ("getDataSrv" "service_id") [] service_id)
    )
-   (call %init_peer_id% ("test-dht" "put_host_value") ["client-util" service_id $nil] res)
+   (call %init_peer_id% ("test-dht" "put_host_value") ["client-util" service_id []] res)
   )
   (xor
    (call %init_peer_id% ("callbackSrv" "response") [res])

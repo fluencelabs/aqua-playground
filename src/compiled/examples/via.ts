@@ -232,7 +232,7 @@ export async function viaStream(client: FluenceClient, node_id: string, viaStr: 
         )
         (fold viaStr-iter viaStr-item
          (seq
-          (call %init_peer_id% ("op" "identity") [viaStr-item] $viaStr)
+          (ap viaStr-item $viaStr)
           (next viaStr-item)
          )
         )

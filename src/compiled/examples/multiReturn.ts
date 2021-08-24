@@ -119,7 +119,7 @@ export async function multiReturnFunc(client: FluenceClient, somethingToReturn: 
     )
     (call %init_peer_id% ("multiret-num" "retNum") [] n)
    )
-   (call %init_peer_id% ("op" "identity") [str] $res)
+   (ap str $res)
   )
   (xor
    (call %init_peer_id% ("callbackSrv" "response") [$res 5 "some-str" somethingToReturn smthOption n])

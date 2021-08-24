@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import {createClient, registerServiceFunction, setLogLevel} from "@fluencelabs/fluence";
-import {krasnodar, testNet} from "@fluencelabs/fluence-network-environment";
+import {krasnodar, testNet, stage} from "@fluencelabs/fluence-network-environment";
 import {callArrowCall} from "./examples/callArrowCall";
 import {dataAliasCall} from "./examples/dataAliasCall";
 import {onCall} from "./examples/onCall";
@@ -52,8 +52,8 @@ function checkCallBy(name: string, actual: any, by: (res: any) => boolean, callB
 
 const main = async () => {
   // setLogLevel("trace")
-  const client = await createClient(krasnodar[0]);
-  const client2 = await createClient(krasnodar[1]);
+  const client = await createClient(stage[0]);
+  const client2 = await createClient(stage[1]);
 
   // this could be called from `println.aqua`
   registerServiceFunction(client, "println-service-id", "print", (args: any[], _) => {
@@ -159,9 +159,9 @@ const main = async () => {
 
   checkCall("callArrow", callArrowResult, "Hello, callArrow call!", cb)
 
-  checkCall("foldCall", foldCallResult, ['/ip4/164.90.171.139/tcp/7770', '/ip4/164.90.171.139/tcp/9990/ws'], cb)
+  checkCall("foldCall", foldCallResult, ['/ip4/134.209.186.43/tcp/7001', '/ip4/134.209.186.43/tcp/9001/ws'], cb)
 
-  checkCall("onCall", onCallResult, ['/ip4/164.90.171.139/tcp/7770', '/ip4/164.90.171.139/tcp/9990/ws'], cb)
+  checkCall("onCall", onCallResult, ['/ip4/134.209.186.43/tcp/7001', '/ip4/134.209.186.43/tcp/9001/ws'], cb)
 
   checkCall("parArrow", parCallResult, "hello", cb)
 
@@ -193,7 +193,7 @@ const main = async () => {
 
   checkCall("tryOtherwiseCall", tryOtherwiseResult, "error", cb)
 
-  checkCall("coCall", coCallResult, [ '/ip4/164.90.171.139/tcp/7770', '/ip4/164.90.171.139/tcp/9990/ws' ], cb)
+  checkCall("coCall", coCallResult, [ '/ip4/134.209.186.43/tcp/7001', '/ip4/134.209.186.43/tcp/9001/ws' ], cb)
 
   checkCall("passArgsCall", passArgsResult, "client-utilsid", cb)
 
@@ -210,7 +210,7 @@ const main = async () => {
   checkCall("declareResult", declareResult, 'declare all foodeclare all barsmall_foo', cb)
 
   checkCallBy("tryCatchCall", tryCatchResult, (res) => {
-    return (res[0] as string).includes("Error: Service with id 'unex' not found") && res[1] === '/ip4/164.90.171.139/tcp/7770'
+    return (res[0] as string).includes("Error: Service with id 'unex' not found") && res[1] === '/ip4/134.209.186.43/tcp/7001'
   }, cb)
 
   if (success) {

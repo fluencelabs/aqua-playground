@@ -133,7 +133,7 @@ export async function getTwoResults(client: FluenceClient, relay: string, config
         (seq
          (seq
           (call relay ("op" "string_to_b58") [%init_peer_id%] k)
-          (call relay ("kad" "neighborhood") [k $nil $nil] nodes)
+          (call relay ("kad" "neighborhood") [k [] []] nodes)
          )
          (fold nodes n
           (par
