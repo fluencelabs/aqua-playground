@@ -43,7 +43,7 @@ export async function get_results(client: FluenceClient, config?: {ttl?: number}
    (ap str $results)
   )
   (xor
-   (call %init_peer_id% ("callbackSrv" "response") [str])
+   (call %init_peer_id% ("callbackSrv" "response") [$results])
    (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
   )
  )
