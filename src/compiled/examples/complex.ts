@@ -97,7 +97,7 @@ export function registerSrv(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"srv"';
+        serviceId = 'srv';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {
@@ -226,7 +226,7 @@ export function registerTestS(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"some-id"';
+        serviceId = 'some-id';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {
@@ -328,7 +328,7 @@ export function registerPeer(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"peer"';
+        serviceId = 'peer';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {
@@ -447,7 +447,7 @@ export function registerStringExtra(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"service-id"';
+        serviceId = 'service-id';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {
@@ -604,7 +604,7 @@ export function registerOp(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"op"';
+        serviceId = 'op';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {
@@ -821,7 +821,7 @@ export function registerScript(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"script"';
+        serviceId = 'script';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {
@@ -909,7 +909,7 @@ export function registerTestSrv(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"test-service-id"';
+        serviceId = 'test-service-id';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {
@@ -1165,7 +1165,7 @@ export function registerDist(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"dist"';
+        serviceId = 'dist';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {
@@ -1386,7 +1386,7 @@ export function registerKademlia(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"kad"';
+        serviceId = 'kad';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {
@@ -1469,7 +1469,7 @@ export function registerPrintln(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"println-service-id"';
+        serviceId = 'println-service-id';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {

@@ -51,7 +51,7 @@ export function registerUnexisted(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"unex"';
+        serviceId = 'unex';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {
@@ -116,7 +116,7 @@ export function registerOpE(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"op"';
+        serviceId = 'op';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {

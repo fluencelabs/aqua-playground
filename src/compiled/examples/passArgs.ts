@@ -73,7 +73,7 @@ export function registerAquaDHT(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"test-dht"';
+        serviceId = 'test-dht';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {

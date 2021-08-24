@@ -97,7 +97,7 @@ export function registerSrv(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"srv"';
+        serviceId = 'srv';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {
@@ -220,7 +220,7 @@ export function registerOp2(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"op"';
+        serviceId = 'op';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {
@@ -310,7 +310,7 @@ export function registerPeer(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"peer"';
+        serviceId = 'peer';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {
@@ -517,7 +517,7 @@ export function registerOp(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"op"';
+        serviceId = 'op';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {
@@ -750,7 +750,7 @@ export function registerKademlia(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"kad"';
+        serviceId = 'kad';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {
@@ -867,7 +867,7 @@ export function registerScript(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"script"';
+        serviceId = 'script';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {
@@ -1146,7 +1146,7 @@ export function registerDist(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"dist"';
+        serviceId = 'dist';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {

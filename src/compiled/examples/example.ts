@@ -53,7 +53,7 @@ export function registerPeer(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"peer"';
+        serviceId = 'peer';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {
@@ -120,7 +120,7 @@ export function registerOp(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"op"';
+        serviceId = 'op';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {
@@ -192,7 +192,7 @@ export function registerTest(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"test"';
+        serviceId = 'test';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {

@@ -51,7 +51,7 @@ export function registerTestSrv(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"test-service-id"';
+        serviceId = 'test-service-id';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {

@@ -51,7 +51,7 @@ export function registerHelloWorld(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"hello_world"';
+        serviceId = 'hello_world';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {
@@ -119,8 +119,6 @@ export function registerMoreMembers(...args) {
         serviceId = args[0];
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
-    } else {
-        serviceId = '';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {

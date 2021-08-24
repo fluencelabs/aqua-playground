@@ -51,7 +51,7 @@ export function registerTesto(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"testo"';
+        serviceId = 'testo';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {
@@ -118,7 +118,7 @@ export function registerLocalPrint(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"lp"';
+        serviceId = 'lp';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {

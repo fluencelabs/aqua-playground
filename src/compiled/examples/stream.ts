@@ -53,7 +53,7 @@ export function registerStringer(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"stringer-id"';
+        serviceId = 'stringer-id';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {

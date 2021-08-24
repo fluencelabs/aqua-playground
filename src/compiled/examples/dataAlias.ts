@@ -53,7 +53,7 @@ export function registerNodeIdGetter(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"somesrv"';
+        serviceId = 'somesrv';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {

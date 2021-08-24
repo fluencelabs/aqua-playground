@@ -51,7 +51,7 @@ export function registerGetStr(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"multiret-test"';
+        serviceId = 'multiret-test';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {
@@ -118,7 +118,7 @@ export function registerGetNum(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = '"multiret-num"';
+        serviceId = 'multiret-num';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {
