@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import {createClient, registerServiceFunction, setLogLevel} from "@fluencelabs/fluence";
-import {krasnodar, testNet} from "@fluencelabs/fluence-network-environment";
+import {krasnodar, testNet, stage} from "@fluencelabs/fluence-network-environment";
 import {callArrowCall} from "./examples/callArrowCall";
 import {dataAliasCall} from "./examples/dataAliasCall";
 import {onCall} from "./examples/onCall";
@@ -52,8 +52,8 @@ function checkCallBy(name: string, actual: any, by: (res: any) => boolean, callB
 
 const main = async () => {
   // setLogLevel("trace")
-  const client = await createClient(krasnodar[0]);
-  const client2 = await createClient(krasnodar[1]);
+  const client = await createClient(stage[0]);
+  const client2 = await createClient(stage[1]);
 
   // this could be called from `println.aqua`
   registerServiceFunction(client, "println-service-id", "print", (args: any[], _) => {

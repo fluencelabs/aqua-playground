@@ -36,14 +36,14 @@ export async function get_results(client: FluenceClient, config?: {ttl?: number}
    (seq
     (seq
      (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-     (call %init_peer_id% ("op" "identity") ["hello"] $results)
+     (ap "hello" $results)
     )
     (call %init_peer_id% ("pop" "get_str") [] str)
    )
-   (call %init_peer_id% ("op" "identity") [str] $results)
+   (ap str $results)
   )
   (xor
-   (call %init_peer_id% ("callbackSrv" "response") [$results])
+   (call %init_peer_id% ("callbackSrv" "response") [str])
    (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
   )
  )
