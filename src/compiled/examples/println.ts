@@ -124,15 +124,15 @@ export async function print(...args) {
                  `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', '-relay-', () => {
+                h.on('getDataSrv', '-relay-', async () => {
                     return peer.connectionInfo.connectedRelays[0];
                 });
-                h.on('getDataSrv', 'str', () => {
+                h.on('getDataSrv', 'str', async () => {
                     return str;
                 });
-                h.onEvent('callbackSrv', 'response', (args) => {});
+                h.onEvent('callbackSrv', 'response', async (args) => {});
 
-                h.onEvent('errorHandlingSrv', 'error', (args) => {
+                h.onEvent('errorHandlingSrv', 'error', async (args) => {
                     const [err] = args;
                     reject(err);
                 });

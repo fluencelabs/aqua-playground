@@ -1370,18 +1370,18 @@ export async function a(...args) {
                  `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', '-relay-', () => {
+                h.on('getDataSrv', '-relay-', async () => {
                     return peer.connectionInfo.connectedRelays[0];
                 });
-                h.on('getDataSrv', 'b', () => {
+                h.on('getDataSrv', 'b', async () => {
                     return b;
                 });
-                h.onEvent('callbackSrv', 'response', (args) => {
+                h.onEvent('callbackSrv', 'response', async (args) => {
                     const [res] = args;
                     resolve(res);
                 });
 
-                h.onEvent('errorHandlingSrv', 'error', (args) => {
+                h.onEvent('errorHandlingSrv', 'error', async (args) => {
                     const [err] = args;
                     reject(err);
                 });
@@ -1441,18 +1441,18 @@ export async function d(...args) {
                  `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', '-relay-', () => {
+                h.on('getDataSrv', '-relay-', async () => {
                     return peer.connectionInfo.connectedRelays[0];
                 });
-                h.on('getDataSrv', 'e', () => {
+                h.on('getDataSrv', 'e', async () => {
                     return e;
                 });
-                h.onEvent('callbackSrv', 'response', (args) => {
+                h.onEvent('callbackSrv', 'response', async (args) => {
                     const [res] = args;
                     resolve(res);
                 });
 
-                h.onEvent('errorHandlingSrv', 'error', (args) => {
+                h.onEvent('errorHandlingSrv', 'error', async (args) => {
                     const [err] = args;
                     reject(err);
                 });

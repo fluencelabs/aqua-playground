@@ -1408,18 +1408,18 @@ export async function useOptional(...args) {
                  `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', '-relay-', () => {
+                h.on('getDataSrv', '-relay-', async () => {
                     return peer.connectionInfo.connectedRelays[0];
                 });
-                h.on('getDataSrv', 'opt', () => {
+                h.on('getDataSrv', 'opt', async () => {
                     return opt === null ? [] : [opt];
                 });
-                h.onEvent('callbackSrv', 'response', (args) => {
+                h.onEvent('callbackSrv', 'response', async (args) => {
                     const [res] = args;
                     resolve(res);
                 });
 
-                h.onEvent('errorHandlingSrv', 'error', (args) => {
+                h.onEvent('errorHandlingSrv', 'error', async (args) => {
                     const [err] = args;
                     reject(err);
                 });
@@ -1474,11 +1474,11 @@ export async function returnOptional(...args) {
                  `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', '-relay-', () => {
+                h.on('getDataSrv', '-relay-', async () => {
                     return peer.connectionInfo.connectedRelays[0];
                 });
 
-                h.onEvent('callbackSrv', 'response', (args) => {
+                h.onEvent('callbackSrv', 'response', async (args) => {
                     let [opt] = args;
                     if (Array.isArray(opt)) {
                         if (opt.length === 0) {
@@ -1489,7 +1489,7 @@ export async function returnOptional(...args) {
                     return resolve(opt);
                 });
 
-                h.onEvent('errorHandlingSrv', 'error', (args) => {
+                h.onEvent('errorHandlingSrv', 'error', async (args) => {
                     const [err] = args;
                     reject(err);
                 });
@@ -1544,11 +1544,11 @@ export async function returnNone(...args) {
                  `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', '-relay-', () => {
+                h.on('getDataSrv', '-relay-', async () => {
                     return peer.connectionInfo.connectedRelays[0];
                 });
 
-                h.onEvent('callbackSrv', 'response', (args) => {
+                h.onEvent('callbackSrv', 'response', async (args) => {
                     let [opt] = args;
                     if (Array.isArray(opt)) {
                         if (opt.length === 0) {
@@ -1559,7 +1559,7 @@ export async function returnNone(...args) {
                     return resolve(opt);
                 });
 
-                h.onEvent('errorHandlingSrv', 'error', (args) => {
+                h.onEvent('errorHandlingSrv', 'error', async (args) => {
                     const [err] = args;
                     reject(err);
                 });

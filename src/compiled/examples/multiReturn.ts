@@ -192,17 +192,17 @@ export async function tupleFunc(...args) {
                  `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', '-relay-', () => {
+                h.on('getDataSrv', '-relay-', async () => {
                     return peer.connectionInfo.connectedRelays[0];
                 });
 
-                h.onEvent('callbackSrv', 'response', (args) => {
+                h.onEvent('callbackSrv', 'response', async (args) => {
                     let opt: any = args;
 
                     return resolve(opt);
                 });
 
-                h.onEvent('errorHandlingSrv', 'error', (args) => {
+                h.onEvent('errorHandlingSrv', 'error', async (args) => {
                     const [err] = args;
                     reject(err);
                 });
@@ -289,16 +289,16 @@ export async function multiReturnFunc(...args) {
                  `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', '-relay-', () => {
+                h.on('getDataSrv', '-relay-', async () => {
                     return peer.connectionInfo.connectedRelays[0];
                 });
-                h.on('getDataSrv', 'somethingToReturn', () => {
+                h.on('getDataSrv', 'somethingToReturn', async () => {
                     return somethingToReturn;
                 });
-                h.on('getDataSrv', 'smthOption', () => {
+                h.on('getDataSrv', 'smthOption', async () => {
                     return smthOption === null ? [] : [smthOption];
                 });
-                h.onEvent('callbackSrv', 'response', (args) => {
+                h.onEvent('callbackSrv', 'response', async (args) => {
                     let opt: any = args;
 
                     if (Array.isArray(opt[4])) {
@@ -311,7 +311,7 @@ export async function multiReturnFunc(...args) {
                     return resolve(opt);
                 });
 
-                h.onEvent('errorHandlingSrv', 'error', (args) => {
+                h.onEvent('errorHandlingSrv', 'error', async (args) => {
                     const [err] = args;
                     reject(err);
                 });

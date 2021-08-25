@@ -1395,10 +1395,10 @@ export async function parFunc(...args) {
                  `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', '-relay-', () => {
+                h.on('getDataSrv', '-relay-', async () => {
                     return peer.connectionInfo.connectedRelays[0];
                 });
-                h.on('getDataSrv', 'node', () => {
+                h.on('getDataSrv', 'node', async () => {
                     return node;
                 });
 
@@ -1417,9 +1417,9 @@ export async function parFunc(...args) {
                     await next();
                 });
 
-                h.onEvent('callbackSrv', 'response', (args) => {});
+                h.onEvent('callbackSrv', 'response', async (args) => {});
 
-                h.onEvent('errorHandlingSrv', 'error', (args) => {
+                h.onEvent('errorHandlingSrv', 'error', async (args) => {
                     const [err] = args;
                     reject(err);
                 });

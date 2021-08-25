@@ -54,15 +54,15 @@ export async function print(...args) {
                  `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', '-relay-', () => {
+                h.on('getDataSrv', '-relay-', async () => {
                     return peer.connectionInfo.connectedRelays[0];
                 });
-                h.on('getDataSrv', 'str', () => {
+                h.on('getDataSrv', 'str', async () => {
                     return str;
                 });
-                h.onEvent('callbackSrv', 'response', (args) => {});
+                h.onEvent('callbackSrv', 'response', async (args) => {});
 
-                h.onEvent('errorHandlingSrv', 'error', (args) => {
+                h.onEvent('errorHandlingSrv', 'error', async (args) => {
                     const [err] = args;
                     reject(err);
                 });
@@ -121,15 +121,15 @@ export async function iterateAndPrint(...args) {
                  `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', '-relay-', () => {
+                h.on('getDataSrv', '-relay-', async () => {
                     return peer.connectionInfo.connectedRelays[0];
                 });
-                h.on('getDataSrv', 'strings', () => {
+                h.on('getDataSrv', 'strings', async () => {
                     return strings;
                 });
-                h.onEvent('callbackSrv', 'response', (args) => {});
+                h.onEvent('callbackSrv', 'response', async (args) => {});
 
-                h.onEvent('errorHandlingSrv', 'error', (args) => {
+                h.onEvent('errorHandlingSrv', 'error', async (args) => {
                     const [err] = args;
                     reject(err);
                 });
@@ -215,10 +215,10 @@ export async function iterateAndPrintParallel(...args) {
                  `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', '-relay-', () => {
+                h.on('getDataSrv', '-relay-', async () => {
                     return peer.connectionInfo.connectedRelays[0];
                 });
-                h.on('getDataSrv', 'nodes', () => {
+                h.on('getDataSrv', 'nodes', async () => {
                     return nodes;
                 });
 
@@ -237,9 +237,9 @@ export async function iterateAndPrintParallel(...args) {
                     await next();
                 });
 
-                h.onEvent('callbackSrv', 'response', (args) => {});
+                h.onEvent('callbackSrv', 'response', async (args) => {});
 
-                h.onEvent('errorHandlingSrv', 'error', (args) => {
+                h.onEvent('errorHandlingSrv', 'error', async (args) => {
                     const [err] = args;
                     reject(err);
                 });

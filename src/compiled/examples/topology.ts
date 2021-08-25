@@ -260,27 +260,27 @@ export async function topologyTest(...args) {
                  `,
             )
             .configHandler((h) => {
-                h.on('getDataSrv', '-relay-', () => {
+                h.on('getDataSrv', '-relay-', async () => {
                     return peer.connectionInfo.connectedRelays[0];
                 });
-                h.on('getDataSrv', 'me', () => {
+                h.on('getDataSrv', 'me', async () => {
                     return me;
                 });
-                h.on('getDataSrv', 'myRelay', () => {
+                h.on('getDataSrv', 'myRelay', async () => {
                     return myRelay;
                 });
-                h.on('getDataSrv', 'friend', () => {
+                h.on('getDataSrv', 'friend', async () => {
                     return friend;
                 });
-                h.on('getDataSrv', 'friendRelay', () => {
+                h.on('getDataSrv', 'friendRelay', async () => {
                     return friendRelay;
                 });
-                h.onEvent('callbackSrv', 'response', (args) => {
+                h.onEvent('callbackSrv', 'response', async (args) => {
                     const [res] = args;
                     resolve(res);
                 });
 
-                h.onEvent('errorHandlingSrv', 'error', (args) => {
+                h.onEvent('errorHandlingSrv', 'error', async (args) => {
                     const [err] = args;
                     reject(err);
                 });

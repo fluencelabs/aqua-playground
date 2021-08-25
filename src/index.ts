@@ -6,22 +6,21 @@ import { helloWorld, registerStringExtra } from './compiled/examples/helloWorld'
 
 const main = async () => {
     // each compiled aqua function require a connected client
-    const peer = new FluencePeer();
-    await peer.init({ connectTo: krasnodar[0] });
+    await FluencePeer.default.init({ connectTo: krasnodar[0] });
 
     // example to how register a local service
     // it could be used in aqua code as follows
     // service StringExtra("service-id"):
     //     addNameToHello: string -> string
     // see more in helloWorld.aqua
-    registerStringExtra(peer, {
+    registerStringExtra({
         addNameToHello: async (arg0) => {
             return `Hello, ${arg0}!`;
         },
     });
 
     // call an aqua function thet presented in ../aqua/helloWorld.aqua
-    const result = await helloWorld(peer, 'NAME');
+    const result = await helloWorld('NAME');
     console.log(result);
 
     process.exit(0);
