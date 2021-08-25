@@ -149,7 +149,7 @@ export async function callMeBack(...args) {
                 });
 
                 h.use((req, resp, next) => {
-                    if (req.serviceId === 'callbackSrv' && req.fnaAme === 'callback') {
+                    if (req.serviceId === 'callbackSrv' && req.fnName === 'callback') {
                         const callParams = {
                             ...req.particleContext,
                             tetraplets: {

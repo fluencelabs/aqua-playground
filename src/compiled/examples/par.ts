@@ -1358,7 +1358,7 @@ export async function parFunc(...args) {
                 });
 
                 h.use((req, resp, next) => {
-                    if (req.serviceId === 'callbackSrv' && req.fnaAme === 'c') {
+                    if (req.serviceId === 'callbackSrv' && req.fnName === 'c') {
                         const callParams = {
                             ...req.particleContext,
                             tetraplets: {

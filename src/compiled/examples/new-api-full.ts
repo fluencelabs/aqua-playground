@@ -311,7 +311,7 @@ export async function f1(...args) {
                 });
 
                 h.use((req, resp, next) => {
-                    if (req.serviceId === 'callbackSrv' && req.fnaAme === 'callback') {
+                    if (req.serviceId === 'callbackSrv' && req.fnName === 'callback') {
                         const callParams = {
                             ...req.particleContext,
                             tetraplets: {
@@ -405,7 +405,7 @@ export async function f2(...args) {
                 });
 
                 h.use((req, resp, next) => {
-                    if (req.serviceId === 'callbackSrv' && req.fnaAme === 'callback') {
+                    if (req.serviceId === 'callbackSrv' && req.fnName === 'callback') {
                         const callParams = {
                             ...req.particleContext,
                             tetraplets: {
@@ -505,7 +505,7 @@ export async function f3(...args) {
                 });
 
                 h.use((req, resp, next) => {
-                    if (req.serviceId === 'callbackSrv' && req.fnaAme === 'callback') {
+                    if (req.serviceId === 'callbackSrv' && req.fnName === 'callback') {
                         const callParams = {
                             ...req.particleContext,
                             tetraplets: {
@@ -591,7 +591,7 @@ export async function callBackZeroArgs(...args) {
                 });
 
                 h.use((req, resp, next) => {
-                    if (req.serviceId === 'callbackSrv' && req.fnaAme === 'callback') {
+                    if (req.serviceId === 'callbackSrv' && req.fnName === 'callback') {
                         const callParams = {
                             ...req.particleContext,
                             tetraplets: {},

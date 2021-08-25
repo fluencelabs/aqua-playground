@@ -1375,7 +1375,7 @@ export async function executeOnSubscribers(...args) {
                 });
 
                 h.use((req, resp, next) => {
-                    if (req.serviceId === 'callbackSrv' && req.fnaAme === 'call') {
+                    if (req.serviceId === 'callbackSrv' && req.fnName === 'call') {
                         const callParams = {
                             ...req.particleContext,
                             tetraplets: {
