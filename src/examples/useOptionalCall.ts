@@ -1,8 +1,8 @@
 import { FluencePeer } from '@fluencelabs/fluence';
 import { returnNone, returnOptional, useOptional, registerSomeS } from '../compiled/examples/option';
 
-export function registerHandlers(peer: FluencePeer): void {
-    registerSomeS(peer, {
+export function registerHandlers(): void {
+    registerSomeS({
         getStr: async (arg0) => {
             return arg0;
         },
@@ -15,14 +15,14 @@ export function registerHandlers(peer: FluencePeer): void {
     });
 }
 
-export async function useOptionalCall(peer: FluencePeer): Promise<string> {
-    return await useOptional(peer, 'hello');
+export async function useOptionalCall(): Promise<string> {
+    return await useOptional('hello');
 }
 
-export async function returnOptionalCall(peer: FluencePeer): Promise<string | null> {
-    return await returnOptional(peer);
+export async function returnOptionalCall(): Promise<string | null> {
+    return await returnOptional();
 }
 
-export async function returnNull(peer: FluencePeer): Promise<string | null> {
-    return await returnNone(peer);
+export async function returnNull(): Promise<string | null> {
+    return await returnNone();
 }

@@ -1,11 +1,11 @@
 import { FluencePeer } from '@fluencelabs/fluence';
 import { parFunc, registerParService } from '../compiled/examples/par';
 
-export async function parCall(peer: FluencePeer) {
-    const relayPeerId = peer.connectionInfo.connectedRelays[0];
+export async function parCall() {
+    const relayPeerId = FluencePeer.default.connectionInfo.connectedRelays[0];
 
     let promise = new Promise<string>((resolve, reject) => {
-        registerParService(peer, {
+        registerParService({
             call: async () => {
                 console.log('hello from parservice-id');
                 let result = 'hello';
@@ -15,7 +15,7 @@ export async function parCall(peer: FluencePeer) {
         });
     });
 
-    await parFunc(peer, relayPeerId, async (c) => {
+    await parFunc(relayPeerId, async (c) => {
         console.log('parFunc. external addresses par: ' + c.external_addresses);
     });
 

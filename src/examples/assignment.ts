@@ -1,6 +1,6 @@
 import { FluencePeer } from '@fluencelabs/fluence';
 import { doSmth } from '../compiled/examples/assignment';
 
-export async function assignmentCall(peer: FluencePeer): Promise<string[]> {
-    return await doSmth(peer, { value: 'abc' }, { ttl: 6000 });
+export async function assignmentCall(): Promise<string[]> {
+    return await doSmth({ value: 'abc' }, { ttl: 6000 });
 }

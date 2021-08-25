@@ -1,8 +1,8 @@
 import { FluencePeer } from '@fluencelabs/fluence';
 import { use_name2, registerDTGetter } from '../compiled/examples/streamResults';
 
-export async function streamResultsCall(peer: FluencePeer) {
-    registerDTGetter(peer, {
+export async function streamResultsCall() {
+    registerDTGetter({
         get_dt: async (args0) => {
             return {
                 field: args0,
@@ -10,5 +10,5 @@ export async function streamResultsCall(peer: FluencePeer) {
         },
     });
 
-    return await use_name2(peer, 'new_name');
+    return await use_name2('new_name');
 }

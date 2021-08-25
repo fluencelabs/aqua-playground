@@ -1,8 +1,8 @@
 import { FluencePeer } from '@fluencelabs/fluence';
 import { getAliasedData, registerNodeIdGetter } from '../compiled/examples/dataAlias';
 
-export async function dataAliasCall(peer: FluencePeer) {
-    registerNodeIdGetter(peer, {
+export async function dataAliasCall() {
+    registerNodeIdGetter({
         get: async () => {
             return {
                 peerId: 'peer id str',
@@ -11,5 +11,5 @@ export async function dataAliasCall(peer: FluencePeer) {
         },
     });
 
-    return await getAliasedData(peer);
+    return await getAliasedData();
 }

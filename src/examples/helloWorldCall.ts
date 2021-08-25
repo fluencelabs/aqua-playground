@@ -1,13 +1,13 @@
 import { FluencePeer } from '@fluencelabs/fluence';
 import { helloWorld, registerStringExtra } from '../compiled/examples/helloWorld';
 
-export async function helloWorldCall(peer: FluencePeer) {
+export async function helloWorldCall() {
     // helloWorld.aqua
-    registerStringExtra(peer, {
+    registerStringExtra({
         addNameToHello: async (args0) => {
             return `Hello, ${args0}!`;
         },
     });
 
-    return await helloWorld(peer, 'NAME');
+    return await helloWorld('NAME');
 }

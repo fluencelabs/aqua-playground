@@ -3,17 +3,16 @@ import { krasnodar } from '@fluencelabs/fluence-network-environment';
 import { getNeighbours, initTopicAndSubscribe, findSubscribers } from './compiled/dht/dht-example';
 
 const main = async () => {
-    const peer = new FluencePeer();
-    await peer.init({ connectTo: krasnodar[0] });
+    await FluencePeer.default.init({ connectTo: krasnodar[0] });
     const relayPeerId = krasnodar[0].peerId;
 
-    const nodes = await getNeighbours(peer, relayPeerId, 'random');
+    const nodes = await getNeighbours(relayPeerId, 'random');
     console.log(nodes);
 
     const topic = 'random';
-    await initTopicAndSubscribe(peer, relayPeerId, topic, 'random value', null, null);
+    await initTopicAndSubscribe(relayPeerId, topic, 'random value', null, null);
 
-    const result = await findSubscribers(peer, relayPeerId, topic);
+    const result = await findSubscribers(relayPeerId, topic);
 
     console.log(result);
 

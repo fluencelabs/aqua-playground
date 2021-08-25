@@ -1,12 +1,12 @@
 import { FluencePeer } from '@fluencelabs/fluence';
 import { retrieve_records, registerTestService } from '../compiled/examples/streamArgs';
 
-export async function streamArgsCall(peer: FluencePeer) {
-    registerTestService(peer, {
+export async function streamArgsCall() {
+    registerTestService({
         get_records: async (key) => {
             return [key, key];
         },
     });
 
-    return await retrieve_records(peer, 'peer_id');
+    return await retrieve_records('peer_id');
 }

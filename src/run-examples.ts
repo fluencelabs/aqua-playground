@@ -55,15 +55,15 @@ function checkCallBy(name: string, actual: any, by: (res: any) => boolean, callB
 
 const main = async () => {
     // setLogLevel("trace")
-    const peer = new FluencePeer();
+
+    await FluencePeer.default.init({ connectTo: krasnodar[0] });
+    const selfPeerId = FluencePeer.default.connectionInfo.selfPeerId;
+
     const peer2 = new FluencePeer();
-    await peer.init({ connectTo: krasnodar[0] });
     await peer2.init({ connectTo: krasnodar[1] });
 
-    const selfPeerId = peer.connectionInfo.selfPeerId;
-
     // this could be called from `println.aqua`
-    registerPrintln(peer, {
+    registerPrintln({
         print: async (arg0) => {
             console.log('println:   ' + arg0);
         },
@@ -75,91 +75,92 @@ const main = async () => {
     // because promise waits only a fact that particle was sent
 
     // callArrow.aqua
-    let callArrowResult = await callArrowCall(peer);
+    let callArrowResult = await callArrowCall();
 
     // fold.aqua
-    let foldCallResult = await foldCall(peer);
+    let foldCallResult = await foldCall();
 
     //if.aqua
-    await ifCall(peer);
+    await ifCall();
 
     // par.aqua
-    let parCallResult = await parCall(peer);
+    let parCallResult = await parCall();
 
     // these calls waiting for a result, so it will be called sequentially
     // helloWorld.aqua
-    let helloWorldResult = await helloWorldCall(peer);
+    let helloWorldResult = await helloWorldCall();
 
     // func.aqua
-    let funcCallResult = await funcCall(peer);
+    let funcCallResult = await funcCall();
 
     // on.aqua
-    let onCallResult = await onCall(peer);
+    let onCallResult = await onCall();
 
     // dataAlias.aqua
-    let dataAliasResult = await dataAliasCall(peer);
+    let dataAliasResult = await dataAliasCall();
 
     // complex.aqua
-    let complexCallResult = await complexCall(peer);
+    let complexCallResult = await complexCall();
 
     // constants.aqua
-    let constantCallResult = await constantsCall(peer);
+    let constantCallResult = await constantsCall();
 
     // stream.aqua
-    let streamResult = await streamCall(peer);
+    let streamResult = await streamCall();
 
     // topology.aqua
-    let topologyResult = await topologyCall(peer, peer2);
+    let topologyResult = await topologyCall(peer2);
 
     // foldJoin.aqua
-    let foldJoinResult = await foldJoinCall(peer);
+    let foldJoinResult = await foldJoinCall();
 
     // option.aqua
-    registerHandlers(peer);
-    let optionResult = await useOptionalCall(peer);
-    let optionalResult = await returnOptionalCall(peer);
-    let noneResult = await returnNull(peer);
+    registerHandlers();
+    let optionResult = await useOptionalCall();
+    let optionalResult = await returnOptionalCall();
+    let noneResult = await returnNull();
 
     // via.aqua
-    let viaResult = await viaCall(peer);
+    let viaResult = await viaCall();
 
     // nestedFuncs.aqua
-    let nestedFuncsResult = await nestedFuncsCall(peer);
+    let nestedFuncsResult = await nestedFuncsCall();
 
     // assignment.aqua
-    let assignmentResult = await assignmentCall(peer);
+    let assignmentResult = await assignmentCall();
 
     // tryOtherwise.aqua
-    let tryOtherwiseResult = await tryOtherwiseCall(peer);
+    let tryOtherwiseResult = await tryOtherwiseCall();
 
     // tryCatch.aqua
-    let tryCatchResult = await tryCatchCall(peer);
+    let tryCatchResult = await tryCatchCall();
 
     // coCall.aqua
-    let coCallResult = await coCall(peer);
+    let coCallResult = await coCall();
 
     // passArgsCall.aqua
-    let passArgsResult = await passArgsCall(peer);
+    let passArgsResult = await passArgsCall();
 
     // streamArgs.aqua
-    let streamArgsResult = await streamArgsCall(peer);
+    let streamArgsResult = await streamArgsCall();
 
     // streamResults.aqua
-    let streamResultsResult = await streamResultsCall(peer);
+    let streamResultsResult = await streamResultsCall();
 
     // pushToStream.aqua
-    let pushToStreamResult = await pushToStreamCall(peer);
+    let pushToStreamResult = await pushToStreamCall();
 
     // literalCall.aqua
-    let literalCallResult = await literalCall(peer);
+    let literalCallResult = await literalCall();
 
     // multiReturn.aqua
-    let multiReturnResult = await multiReturnCall(peer);
+    let multiReturnResult = await multiReturnCall();
 
     // declare.aqua
-    let declareResult = await declareCall(peer);
+    let declareResult = await declareCall();
 
-    await peer.uninit();
+    await FluencePeer.default.uninit();
+    await peer2.uninit();
 
     let success = true;
     let cb: () => void = () => {
