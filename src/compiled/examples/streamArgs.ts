@@ -146,7 +146,7 @@ export async function append_records(...args) {
                     return peer.connectionInfo.connectedRelays[0];
                 });
                 h.on('getDataSrv', 'peer', () => {
-                    return peer;
+                    return peer_;
                 });
                 h.on('getDataSrv', 'srum', () => {
                     return srum;
@@ -221,7 +221,7 @@ export async function retrieve_records(...args) {
                     return peer.connectionInfo.connectedRelays[0];
                 });
                 h.on('getDataSrv', 'peer', () => {
-                    return peer;
+                    return peer_;
                 });
                 h.onEvent('callbackSrv', 'response', (args) => {
                     const [res] = args;

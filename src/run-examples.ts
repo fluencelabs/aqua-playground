@@ -16,7 +16,7 @@ import { constantsCall } from './examples/constantsCall';
 import { streamCall } from './examples/streamCall';
 import { topologyCall } from './examples/topologyCall';
 import { foldJoinCall } from './examples/foldJoinCall';
-import { returnNull, returnOptionalCall, useOptionalCall } from './examples/useOptionalCall';
+import { registerHandlers, returnNull, returnOptionalCall, useOptionalCall } from './examples/useOptionalCall';
 import { viaCall } from './examples/viaCall';
 import { nestedFuncsCall } from './examples/nestedFuncsCall';
 import { assignmentCall } from './examples/assignment';
@@ -33,6 +33,7 @@ import { declareCall } from './examples/declareCall';
 let deepEqual = require('deep-equal');
 
 function checkCall(name: string, actual: any, expected: any, callBackOnError: () => void) {
+    console.log('-- checking ' + name + ' --');
     if (!deepEqual(expected, actual)) {
         console.error(`${name} call has the wrong result`);
         console.error('actual: ');
@@ -44,6 +45,7 @@ function checkCall(name: string, actual: any, expected: any, callBackOnError: ()
 }
 
 function checkCallBy(name: string, actual: any, by: (res: any) => boolean, callBackOnError: () => void) {
+    console.log('-- checking ' + name + ' --');
     if (!by(actual)) {
         console.error(`${name} call has the wrong result`);
         console.error('actual: ' + actual);
@@ -113,6 +115,7 @@ const main = async () => {
     let foldJoinResult = await foldJoinCall(peer);
 
     // option.aqua
+    registerHandlers(peer);
     let optionResult = await useOptionalCall(peer);
     let optionalResult = await returnOptionalCall(peer);
     let noneResult = await returnNull(peer);

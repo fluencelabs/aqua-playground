@@ -5,8 +5,8 @@ export async function topologyCall(peer: FluencePeer, peer2: FluencePeer): Promi
     const relayPeerId = peer.connectionInfo.connectedRelays[0];
     const selfPeerId = peer.connectionInfo.selfPeerId;
 
-    const relayPeerId2 = peer.connectionInfo.connectedRelays[0];
-    const selfPeerId2 = peer.connectionInfo.selfPeerId;
+    const relayPeerId2 = peer2.connectionInfo.connectedRelays[0];
+    const selfPeerId2 = peer2.connectionInfo.selfPeerId;
 
     registerTesto(peer2, {
         getString: (args0) => {
