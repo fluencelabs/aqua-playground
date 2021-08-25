@@ -1,8 +1,8 @@
-service HelloWorld("hello_world"):
+service ServiceWithDefaultId("defaultId"):
     hello(s: string)
 
-func sayHello():
-    HelloWorld.hello("hello, world")
+service ServiceWithOUTDefaultId:
+    hello(s: string)
 
 service MoreMembers:
     member1()
