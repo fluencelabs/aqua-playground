@@ -23,7 +23,7 @@
         "run": "node -r ts-node/register src/index.ts",
         "compile-aqua": "aqua-cli -i ./aqua/ -o ./src/compiled",
         "compile-aqua:air": "aqua-cli -i ./aqua/ -o ./compiled-air -a",
-        "compile-with-local": "java -jar ../aqua/cli/.jvm/target/scala-3.0.1/aqua-cli-0.1.14-SNAPSHOT.jar -m node_modules --import . -i ./aqua/ -o ./src/compiled",
+        "compile-with-local": "java -jar ../aqua/cli/.jvm/target/scala-3.0.1/aqua-cli-0.2.0-SNAPSHOT.jar -m node_modules --import . -i ./aqua/ -o ./src/compiled",
         "prettify-compiled": "prettier --write src/compiled"
     },
     "devDependencies": {

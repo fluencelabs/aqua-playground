@@ -1,0 +1,15 @@
+import decl_foo, decl_bar from "declare.aqua"
+use SuperFoo from "declare.aqua" as Declare
+import Op as Noop from "@fluencelabs/aqua-lib/builtin.aqua"
+import some_string, MyExportSrv from "exports.aqua"
+
+service StringService("string_service"):
+    concat(a: string, b: string) -> string
+
+func concat_foobars() -> string:
+    res1 <- decl_foo()
+    res2 <- decl_bar()
+    res3 <- StringService.concat(res1, res2)
+    res4 <- Declare.SuperFoo.small_foo()
+    res5 <- StringService.concat(res3, res4)
+    <- res5

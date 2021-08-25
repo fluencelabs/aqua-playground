@@ -16,33 +16,27 @@ import {
 
 // Services
 
-export function registerHelloWorld(service: {
-    getNumber: (callParams: CallParams<null>) => number;
-    sayHello: (s: string, callParams: CallParams<'s'>) => void;
-}): void;
-export function registerHelloWorld(
+export function registerMyExportSrv(service: { another_str: (callParams: CallParams<null>) => string }): void;
+export function registerMyExportSrv(
     serviceId: string,
     service: {
-        getNumber: (callParams: CallParams<null>) => number;
-        sayHello: (s: string, callParams: CallParams<'s'>) => void;
+        another_str: (callParams: CallParams<null>) => string;
     },
 ): void;
-export function registerHelloWorld(
+export function registerMyExportSrv(
     peer: FluencePeer,
     service: {
-        getNumber: (callParams: CallParams<null>) => number;
-        sayHello: (s: string, callParams: CallParams<'s'>) => void;
+        another_str: (callParams: CallParams<null>) => string;
     },
 ): void;
-export function registerHelloWorld(
+export function registerMyExportSrv(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        getNumber: (callParams: CallParams<null>) => number;
-        sayHello: (s: string, callParams: CallParams<'s'>) => void;
+        another_str: (callParams: CallParams<null>) => string;
     },
 ): void;
-export function registerHelloWorld(...args) {
+export function registerMyExportSrv(...args) {
     let peer: FluencePeer;
     let serviceId;
     let service;
@@ -57,7 +51,7 @@ export function registerHelloWorld(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = 'default';
+        serviceId = 'my_export_srv';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {
@@ -74,25 +68,13 @@ export function registerHelloWorld(...args) {
             return;
         }
 
-        if (req.fnName === 'getNumber') {
+        if (req.fnName === 'another_str') {
             const callParams = {
                 ...req.particleContext,
                 tetraplets: {},
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.getNumber(callParams);
-        }
-
-        if (req.fnName === 'sayHello') {
-            const callParams = {
-                ...req.particleContext,
-                tetraplets: {
-                    s: req.tetraplets[0],
-                },
-            };
-            resp.retCode = ResultCodes.success;
-            service.sayHello(req.args[0], callParams);
-            resp.result = {};
+            resp.result = service.another_str(callParams);
         }
 
         next();
@@ -101,31 +83,22 @@ export function registerHelloWorld(...args) {
 
 // Functions
 
-export async function callMeBack(
-    callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void,
-    config?: { ttl?: number },
-): Promise<void>;
-export async function callMeBack(
-    peer: FluencePeer,
-    callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void,
-    config?: { ttl?: number },
-): Promise<void>;
-export async function callMeBack(...args) {
+export async function string_from_lib(config?: { ttl?: number }): Promise<string>;
+export async function string_from_lib(peer: FluencePeer, config?: { ttl?: number }): Promise<string>;
+export async function string_from_lib(...args) {
     let peer: FluencePeer;
-    let callback;
+
     let config;
     if (args[0] instanceof FluencePeer) {
         peer = args[0];
-        callback = args[1];
-        config = args[2];
+        config = args[1];
     } else {
         peer = FluencePeer.default;
-        callback = args[0];
-        config = args[1];
+        config = args[0];
     }
 
     let request: RequestFlow;
-    const promise = new Promise<void>((resolve, reject) => {
+    const promise = new Promise<string>((resolve, reject) => {
         const r = new RequestFlowBuilder()
             .disableInjections()
             .withRawScript(
@@ -134,7 +107,7 @@ export async function callMeBack(...args) {
  (seq
   (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
   (xor
-   (call %init_peer_id% ("callbackSrv" "callback") ["hello, world" 42])
+   (call %init_peer_id% ("callbackSrv" "response") ["some_string_func"])
    (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
   )
  )
@@ -148,23 +121,10 @@ export async function callMeBack(...args) {
                     return peer.connectionInfo.connectedRelays[0];
                 });
 
-                h.use((req, resp, next) => {
-                    if (req.serviceId === 'callbackSrv' && req.fnaAme === 'callback') {
-                        const callParams = {
-                            ...req.particleContext,
-                            tetraplets: {
-                                arg0: req.tetraplets[0],
-                                arg1: req.tetraplets[1],
-                            },
-                        };
-                        resp.retCode = ResultCodes.success;
-                        callback(req.args[0], req.args[1], callParams);
-                        resp.result = {};
-                    }
-                    next();
+                h.onEvent('callbackSrv', 'response', (args) => {
+                    const [res] = args;
+                    resolve(res);
                 });
-
-                h.onEvent('callbackSrv', 'response', (args) => {});
 
                 h.onEvent('errorHandlingSrv', 'error', (args) => {
                     const [err] = args;
@@ -173,7 +133,7 @@ export async function callMeBack(...args) {
             })
             .handleScriptError(reject)
             .handleTimeout(() => {
-                reject('Request timed out for callMeBack');
+                reject('Request timed out for string_from_lib');
             });
         if (config && config.ttl) {
             r.withTTL(config.ttl);
@@ -181,5 +141,5 @@ export async function callMeBack(...args) {
         request = r.build();
     });
     await peer.initiateFlow(request!);
-    return Promise.race([promise, Promise.resolve()]);
+    return promise;
 }

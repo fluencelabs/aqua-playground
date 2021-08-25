@@ -1,0 +1,10 @@
+module Exports declares *
+
+export some_string as string_from_lib
+export MyExportSrv
+
+service MyExportSrv("my_export_srv"):
+  another_str() -> string
+
+func some_string() -> string:
+  <- "some_string_func"

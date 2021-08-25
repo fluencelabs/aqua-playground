@@ -1,0 +1,11 @@
+module FooBars declares decl_foo, decl_bar, SuperFoo
+
+service SuperFoo("super_foo"):
+    small_foo() -> string
+
+
+func decl_foo() -> string:
+    <- "declare all foo"
+
+func decl_bar() -> string:
+    <- "declare all bar"
