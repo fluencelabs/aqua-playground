@@ -4,11 +4,13 @@ import {
     registerMyExportSrv,
     registerStringService,
 } from '../compiled/examples/imports_exports/imports';
+import { registerSuperFoo } from '../compiled/examples/imports_exports/declare';
 
 export async function declareCall(peer: FluencePeer) {
-    // super foo is not exported
-    registerServiceFunction(peer, 'super_foo', 'small_foo', (args: any[], _) => {
-        return 'small_foo';
+    registerSuperFoo(peer, {
+        small_foo: () => {
+            return 'small_foo';
+        },
     });
 
     registerStringService(peer, {

@@ -1,4 +1,5 @@
 module FooBars declares decl_foo, decl_bar, SuperFoo
+export SuperFoo
 
 service SuperFoo("super_foo"):
     small_foo() -> string
