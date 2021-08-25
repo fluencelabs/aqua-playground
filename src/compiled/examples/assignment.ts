@@ -17,29 +17,29 @@ import {
 // Services
 
 export function registerOpHa(service: {
-    array: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => string[];
-    identity: (a: string, callParams: CallParams<'a'>) => string;
+    array: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => Promise<string[]>;
+    identity: (a: string, callParams: CallParams<'a'>) => Promise<string>;
 }): void;
 export function registerOpHa(
     serviceId: string,
     service: {
-        array: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => string[];
-        identity: (a: string, callParams: CallParams<'a'>) => string;
+        array: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => Promise<string[]>;
+        identity: (a: string, callParams: CallParams<'a'>) => Promise<string>;
     },
 ): void;
 export function registerOpHa(
     peer: FluencePeer,
     service: {
-        array: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => string[];
-        identity: (a: string, callParams: CallParams<'a'>) => string;
+        array: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => Promise<string[]>;
+        identity: (a: string, callParams: CallParams<'a'>) => Promise<string>;
     },
 ): void;
 export function registerOpHa(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        array: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => string[];
-        identity: (a: string, callParams: CallParams<'a'>) => string;
+        array: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => Promise<string[]>;
+        identity: (a: string, callParams: CallParams<'a'>) => Promise<string>;
     },
 ): void;
 export function registerOpHa(...args) {
@@ -68,9 +68,9 @@ export function registerOpHa(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -83,7 +83,7 @@ export function registerOpHa(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.array(req.args[0], req.args[1], callParams);
+            resp.result = await service.array(req.args[0], req.args[1], callParams);
         }
 
         if (req.fnName === 'identity') {
@@ -94,10 +94,10 @@ export function registerOpHa(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.identity(req.args[0], callParams);
+            resp.result = await service.identity(req.args[0], callParams);
         }
 
-        next();
+        await next();
     });
 }
 

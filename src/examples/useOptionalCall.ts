@@ -3,13 +3,13 @@ import { returnNone, returnOptional, useOptional, registerSomeS } from '../compi
 
 export function registerHandlers(peer: FluencePeer): void {
     registerSomeS(peer, {
-        getStr: (arg0) => {
+        getStr: async (arg0) => {
             return arg0;
         },
-        getStr1: () => {
+        getStr1: async () => {
             return 'optional';
         },
-        getStr2: (arg0) => {
+        getStr2: async (arg0) => {
             return arg0;
         },
     });

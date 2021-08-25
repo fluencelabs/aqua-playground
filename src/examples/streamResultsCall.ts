@@ -3,7 +3,7 @@ import { use_name2, registerDTGetter } from '../compiled/examples/streamResults'
 
 export async function streamResultsCall(peer: FluencePeer) {
     registerDTGetter(peer, {
-        get_dt: (args0) => {
+        get_dt: async (args0) => {
             return {
                 field: args0,
             };

@@ -6,7 +6,7 @@ export async function viaCall(peer: FluencePeer): Promise<string[][]> {
     const relayPeerId = peer.connectionInfo.connectedRelays[0];
 
     registerCustomId(peer, {
-        id: (args0) => {
+        id: async (args0) => {
             return args0;
         },
     });

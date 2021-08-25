@@ -22,7 +22,7 @@ export function registerAquaDHT(service: {
         value: string,
         service_id: string[],
         callParams: CallParams<'key' | 'value' | 'service_id'>,
-    ) => string;
+    ) => Promise<string>;
 }): void;
 export function registerAquaDHT(
     serviceId: string,
@@ -32,7 +32,7 @@ export function registerAquaDHT(
             value: string,
             service_id: string[],
             callParams: CallParams<'key' | 'value' | 'service_id'>,
-        ) => string;
+        ) => Promise<string>;
     },
 ): void;
 export function registerAquaDHT(
@@ -43,7 +43,7 @@ export function registerAquaDHT(
             value: string,
             service_id: string[],
             callParams: CallParams<'key' | 'value' | 'service_id'>,
-        ) => string;
+        ) => Promise<string>;
     },
 ): void;
 export function registerAquaDHT(
@@ -55,7 +55,7 @@ export function registerAquaDHT(
             value: string,
             service_id: string[],
             callParams: CallParams<'key' | 'value' | 'service_id'>,
-        ) => string;
+        ) => Promise<string>;
     },
 ): void;
 export function registerAquaDHT(...args) {
@@ -84,9 +84,9 @@ export function registerAquaDHT(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -100,10 +100,10 @@ export function registerAquaDHT(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.put_host_value(req.args[0], req.args[1], req.args[2], callParams);
+            resp.result = await service.put_host_value(req.args[0], req.args[1], req.args[2], callParams);
         }
 
-        next();
+        await next();
     });
 }
 

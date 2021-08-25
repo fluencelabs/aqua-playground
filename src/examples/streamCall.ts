@@ -3,7 +3,7 @@ import { checkStreams, registerStringer } from '../compiled/examples/stream';
 
 export async function streamCall(peer: FluencePeer) {
     registerStringer(peer, {
-        returnString: (args0) => {
+        returnString: async (args0) => {
             return args0 + ' updated';
         },
     });

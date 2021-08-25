@@ -149,13 +149,13 @@ export async function iterateAndPrint(...args) {
 
 export async function iterateAndPrintParallel(
     nodes: string[],
-    c: (arg0: { external_addresses: string[] }, callParams: CallParams<'arg0'>) => void,
+    c: (arg0: { external_addresses: string[] }, callParams: CallParams<'arg0'>) => Promise<void>,
     config?: { ttl?: number },
 ): Promise<void>;
 export async function iterateAndPrintParallel(
     peer: FluencePeer,
     nodes: string[],
-    c: (arg0: { external_addresses: string[] }, callParams: CallParams<'arg0'>) => void,
+    c: (arg0: { external_addresses: string[] }, callParams: CallParams<'arg0'>) => Promise<void>,
     config?: { ttl?: number },
 ): Promise<void>;
 export async function iterateAndPrintParallel(...args) {
@@ -222,7 +222,7 @@ export async function iterateAndPrintParallel(...args) {
                     return nodes;
                 });
 
-                h.use((req, resp, next) => {
+                h.use(async (req, resp, next) => {
                     if (req.serviceId === 'callbackSrv' && req.fnName === 'c') {
                         const callParams = {
                             ...req.particleContext,
@@ -231,10 +231,10 @@ export async function iterateAndPrintParallel(...args) {
                             },
                         };
                         resp.retCode = ResultCodes.success;
-                        c(req.args[0], callParams);
+                        await c(req.args[0], callParams);
                         resp.result = {};
                     }
-                    next();
+                    await next();
                 });
 
                 h.onEvent('callbackSrv', 'response', (args) => {});

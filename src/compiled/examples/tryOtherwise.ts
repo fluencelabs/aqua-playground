@@ -16,24 +16,24 @@ import {
 
 // Services
 
-export function registerUnexisted(service: { getStr: (callParams: CallParams<null>) => string }): void;
+export function registerUnexisted(service: { getStr: (callParams: CallParams<null>) => Promise<string> }): void;
 export function registerUnexisted(
     serviceId: string,
     service: {
-        getStr: (callParams: CallParams<null>) => string;
+        getStr: (callParams: CallParams<null>) => Promise<string>;
     },
 ): void;
 export function registerUnexisted(
     peer: FluencePeer,
     service: {
-        getStr: (callParams: CallParams<null>) => string;
+        getStr: (callParams: CallParams<null>) => Promise<string>;
     },
 ): void;
 export function registerUnexisted(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        getStr: (callParams: CallParams<null>) => string;
+        getStr: (callParams: CallParams<null>) => Promise<string>;
     },
 ): void;
 export function registerUnexisted(...args) {
@@ -62,9 +62,9 @@ export function registerUnexisted(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -74,31 +74,31 @@ export function registerUnexisted(...args) {
                 tetraplets: {},
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.getStr(callParams);
+            resp.result = await service.getStr(callParams);
         }
 
-        next();
+        await next();
     });
 }
 
-export function registerOpE(service: { identity: (s: string, callParams: CallParams<'s'>) => string }): void;
+export function registerOpE(service: { identity: (s: string, callParams: CallParams<'s'>) => Promise<string> }): void;
 export function registerOpE(
     serviceId: string,
     service: {
-        identity: (s: string, callParams: CallParams<'s'>) => string;
+        identity: (s: string, callParams: CallParams<'s'>) => Promise<string>;
     },
 ): void;
 export function registerOpE(
     peer: FluencePeer,
     service: {
-        identity: (s: string, callParams: CallParams<'s'>) => string;
+        identity: (s: string, callParams: CallParams<'s'>) => Promise<string>;
     },
 ): void;
 export function registerOpE(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        identity: (s: string, callParams: CallParams<'s'>) => string;
+        identity: (s: string, callParams: CallParams<'s'>) => Promise<string>;
     },
 ): void;
 export function registerOpE(...args) {
@@ -127,9 +127,9 @@ export function registerOpE(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -141,10 +141,10 @@ export function registerOpE(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.identity(req.args[0], callParams);
+            resp.result = await service.identity(req.args[0], callParams);
         }
 
-        next();
+        await next();
     });
 }
 

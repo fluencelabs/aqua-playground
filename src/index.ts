@@ -15,7 +15,7 @@ const main = async () => {
     //     addNameToHello: string -> string
     // see more in helloWorld.aqua
     registerStringExtra(peer, {
-        addNameToHello: (arg0) => {
+        addNameToHello: async (arg0) => {
             return `Hello, ${arg0}!`;
         },
     });

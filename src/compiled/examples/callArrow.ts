@@ -83,14 +83,14 @@ export async function print(...args) {
 export async function passFunctionAsArg(
     node: string,
     str: string,
-    c: (arg0: string, callParams: CallParams<'arg0'>) => string,
+    c: (arg0: string, callParams: CallParams<'arg0'>) => Promise<string>,
     config?: { ttl?: number },
 ): Promise<void>;
 export async function passFunctionAsArg(
     peer: FluencePeer,
     node: string,
     str: string,
-    c: (arg0: string, callParams: CallParams<'arg0'>) => string,
+    c: (arg0: string, callParams: CallParams<'arg0'>) => Promise<string>,
     config?: { ttl?: number },
 ): Promise<void>;
 export async function passFunctionAsArg(...args) {
@@ -176,7 +176,7 @@ export async function passFunctionAsArg(...args) {
                     return str;
                 });
 
-                h.use((req, resp, next) => {
+                h.use(async (req, resp, next) => {
                     if (req.serviceId === 'callbackSrv' && req.fnName === 'c') {
                         const callParams = {
                             ...req.particleContext,
@@ -185,9 +185,9 @@ export async function passFunctionAsArg(...args) {
                             },
                         };
                         resp.retCode = ResultCodes.success;
-                        resp.result = c(req.args[0], callParams);
+                        resp.result = await c(req.args[0], callParams);
                     }
-                    next();
+                    await next();
                 });
 
                 h.onEvent('callbackSrv', 'response', (args) => {});

@@ -23,23 +23,23 @@ export function registerNoop(service: {
         c: string | null,
         d: string | null,
         callParams: CallParams<'a' | 'b' | 'c' | 'd'>,
-    ) => string[];
-    array_length: (array: string[], callParams: CallParams<'array'>) => number;
-    bytes_from_b58: (b: string, callParams: CallParams<'b'>) => number[];
-    bytes_to_b58: (bs: number[], callParams: CallParams<'bs'>) => string;
+    ) => Promise<string[]>;
+    array_length: (array: string[], callParams: CallParams<'array'>) => Promise<number>;
+    bytes_from_b58: (b: string, callParams: CallParams<'b'>) => Promise<number[]>;
+    bytes_to_b58: (bs: number[], callParams: CallParams<'bs'>) => Promise<string>;
     concat: (
         a: string[],
         b: string[] | null,
         c: string[] | null,
         d: string[] | null,
         callParams: CallParams<'a' | 'b' | 'c' | 'd'>,
-    ) => string[];
-    concat_strings: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => string;
-    identity: (s: string | null, callParams: CallParams<'s'>) => string | null;
-    noop: (callParams: CallParams<null>) => void;
-    sha256_string: (s: string, callParams: CallParams<'s'>) => string;
-    string_from_b58: (b: string, callParams: CallParams<'b'>) => string;
-    string_to_b58: (s: string, callParams: CallParams<'s'>) => string;
+    ) => Promise<string[]>;
+    concat_strings: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => Promise<string>;
+    identity: (s: string | null, callParams: CallParams<'s'>) => Promise<string | null>;
+    noop: (callParams: CallParams<null>) => Promise<void>;
+    sha256_string: (s: string, callParams: CallParams<'s'>) => Promise<string>;
+    string_from_b58: (b: string, callParams: CallParams<'b'>) => Promise<string>;
+    string_to_b58: (s: string, callParams: CallParams<'s'>) => Promise<string>;
 }): void;
 export function registerNoop(
     serviceId: string,
@@ -50,23 +50,23 @@ export function registerNoop(
             c: string | null,
             d: string | null,
             callParams: CallParams<'a' | 'b' | 'c' | 'd'>,
-        ) => string[];
-        array_length: (array: string[], callParams: CallParams<'array'>) => number;
-        bytes_from_b58: (b: string, callParams: CallParams<'b'>) => number[];
-        bytes_to_b58: (bs: number[], callParams: CallParams<'bs'>) => string;
+        ) => Promise<string[]>;
+        array_length: (array: string[], callParams: CallParams<'array'>) => Promise<number>;
+        bytes_from_b58: (b: string, callParams: CallParams<'b'>) => Promise<number[]>;
+        bytes_to_b58: (bs: number[], callParams: CallParams<'bs'>) => Promise<string>;
         concat: (
             a: string[],
             b: string[] | null,
             c: string[] | null,
             d: string[] | null,
             callParams: CallParams<'a' | 'b' | 'c' | 'd'>,
-        ) => string[];
-        concat_strings: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => string;
-        identity: (s: string | null, callParams: CallParams<'s'>) => string | null;
-        noop: (callParams: CallParams<null>) => void;
-        sha256_string: (s: string, callParams: CallParams<'s'>) => string;
-        string_from_b58: (b: string, callParams: CallParams<'b'>) => string;
-        string_to_b58: (s: string, callParams: CallParams<'s'>) => string;
+        ) => Promise<string[]>;
+        concat_strings: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => Promise<string>;
+        identity: (s: string | null, callParams: CallParams<'s'>) => Promise<string | null>;
+        noop: (callParams: CallParams<null>) => Promise<void>;
+        sha256_string: (s: string, callParams: CallParams<'s'>) => Promise<string>;
+        string_from_b58: (b: string, callParams: CallParams<'b'>) => Promise<string>;
+        string_to_b58: (s: string, callParams: CallParams<'s'>) => Promise<string>;
     },
 ): void;
 export function registerNoop(
@@ -78,23 +78,23 @@ export function registerNoop(
             c: string | null,
             d: string | null,
             callParams: CallParams<'a' | 'b' | 'c' | 'd'>,
-        ) => string[];
-        array_length: (array: string[], callParams: CallParams<'array'>) => number;
-        bytes_from_b58: (b: string, callParams: CallParams<'b'>) => number[];
-        bytes_to_b58: (bs: number[], callParams: CallParams<'bs'>) => string;
+        ) => Promise<string[]>;
+        array_length: (array: string[], callParams: CallParams<'array'>) => Promise<number>;
+        bytes_from_b58: (b: string, callParams: CallParams<'b'>) => Promise<number[]>;
+        bytes_to_b58: (bs: number[], callParams: CallParams<'bs'>) => Promise<string>;
         concat: (
             a: string[],
             b: string[] | null,
             c: string[] | null,
             d: string[] | null,
             callParams: CallParams<'a' | 'b' | 'c' | 'd'>,
-        ) => string[];
-        concat_strings: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => string;
-        identity: (s: string | null, callParams: CallParams<'s'>) => string | null;
-        noop: (callParams: CallParams<null>) => void;
-        sha256_string: (s: string, callParams: CallParams<'s'>) => string;
-        string_from_b58: (b: string, callParams: CallParams<'b'>) => string;
-        string_to_b58: (s: string, callParams: CallParams<'s'>) => string;
+        ) => Promise<string[]>;
+        concat_strings: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => Promise<string>;
+        identity: (s: string | null, callParams: CallParams<'s'>) => Promise<string | null>;
+        noop: (callParams: CallParams<null>) => Promise<void>;
+        sha256_string: (s: string, callParams: CallParams<'s'>) => Promise<string>;
+        string_from_b58: (b: string, callParams: CallParams<'b'>) => Promise<string>;
+        string_to_b58: (s: string, callParams: CallParams<'s'>) => Promise<string>;
     },
 ): void;
 export function registerNoop(
@@ -107,23 +107,23 @@ export function registerNoop(
             c: string | null,
             d: string | null,
             callParams: CallParams<'a' | 'b' | 'c' | 'd'>,
-        ) => string[];
-        array_length: (array: string[], callParams: CallParams<'array'>) => number;
-        bytes_from_b58: (b: string, callParams: CallParams<'b'>) => number[];
-        bytes_to_b58: (bs: number[], callParams: CallParams<'bs'>) => string;
+        ) => Promise<string[]>;
+        array_length: (array: string[], callParams: CallParams<'array'>) => Promise<number>;
+        bytes_from_b58: (b: string, callParams: CallParams<'b'>) => Promise<number[]>;
+        bytes_to_b58: (bs: number[], callParams: CallParams<'bs'>) => Promise<string>;
         concat: (
             a: string[],
             b: string[] | null,
             c: string[] | null,
             d: string[] | null,
             callParams: CallParams<'a' | 'b' | 'c' | 'd'>,
-        ) => string[];
-        concat_strings: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => string;
-        identity: (s: string | null, callParams: CallParams<'s'>) => string | null;
-        noop: (callParams: CallParams<null>) => void;
-        sha256_string: (s: string, callParams: CallParams<'s'>) => string;
-        string_from_b58: (b: string, callParams: CallParams<'b'>) => string;
-        string_to_b58: (s: string, callParams: CallParams<'s'>) => string;
+        ) => Promise<string[]>;
+        concat_strings: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => Promise<string>;
+        identity: (s: string | null, callParams: CallParams<'s'>) => Promise<string | null>;
+        noop: (callParams: CallParams<null>) => Promise<void>;
+        sha256_string: (s: string, callParams: CallParams<'s'>) => Promise<string>;
+        string_from_b58: (b: string, callParams: CallParams<'b'>) => Promise<string>;
+        string_to_b58: (s: string, callParams: CallParams<'s'>) => Promise<string>;
     },
 ): void;
 export function registerNoop(...args) {
@@ -152,9 +152,9 @@ export function registerNoop(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -169,7 +169,7 @@ export function registerNoop(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.array(req.args[0], req.args[1], req.args[2], req.args[3], callParams);
+            resp.result = await service.array(req.args[0], req.args[1], req.args[2], req.args[3], callParams);
         }
 
         if (req.fnName === 'array_length') {
@@ -180,7 +180,7 @@ export function registerNoop(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.array_length(req.args[0], callParams);
+            resp.result = await service.array_length(req.args[0], callParams);
         }
 
         if (req.fnName === 'bytes_from_b58') {
@@ -191,7 +191,7 @@ export function registerNoop(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.bytes_from_b58(req.args[0], callParams);
+            resp.result = await service.bytes_from_b58(req.args[0], callParams);
         }
 
         if (req.fnName === 'bytes_to_b58') {
@@ -202,7 +202,7 @@ export function registerNoop(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.bytes_to_b58(req.args[0], callParams);
+            resp.result = await service.bytes_to_b58(req.args[0], callParams);
         }
 
         if (req.fnName === 'concat') {
@@ -216,7 +216,7 @@ export function registerNoop(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.concat(req.args[0], req.args[1], req.args[2], req.args[3], callParams);
+            resp.result = await service.concat(req.args[0], req.args[1], req.args[2], req.args[3], callParams);
         }
 
         if (req.fnName === 'concat_strings') {
@@ -228,7 +228,7 @@ export function registerNoop(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.concat_strings(req.args[0], req.args[1], callParams);
+            resp.result = await service.concat_strings(req.args[0], req.args[1], callParams);
         }
 
         if (req.fnName === 'identity') {
@@ -239,7 +239,7 @@ export function registerNoop(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.identity(req.args[0], callParams);
+            resp.result = await service.identity(req.args[0], callParams);
         }
 
         if (req.fnName === 'noop') {
@@ -248,7 +248,7 @@ export function registerNoop(...args) {
                 tetraplets: {},
             };
             resp.retCode = ResultCodes.success;
-            service.noop(callParams);
+            await service.noop(callParams);
             resp.result = {};
         }
 
@@ -260,7 +260,7 @@ export function registerNoop(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.sha256_string(req.args[0], callParams);
+            resp.result = await service.sha256_string(req.args[0], callParams);
         }
 
         if (req.fnName === 'string_from_b58') {
@@ -271,7 +271,7 @@ export function registerNoop(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.string_from_b58(req.args[0], callParams);
+            resp.result = await service.string_from_b58(req.args[0], callParams);
         }
 
         if (req.fnName === 'string_to_b58') {
@@ -282,31 +282,31 @@ export function registerNoop(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.string_to_b58(req.args[0], callParams);
+            resp.result = await service.string_to_b58(req.args[0], callParams);
         }
 
-        next();
+        await next();
     });
 }
 
-export function registerMyExportSrv(service: { another_str: (callParams: CallParams<null>) => string }): void;
+export function registerMyExportSrv(service: { another_str: (callParams: CallParams<null>) => Promise<string> }): void;
 export function registerMyExportSrv(
     serviceId: string,
     service: {
-        another_str: (callParams: CallParams<null>) => string;
+        another_str: (callParams: CallParams<null>) => Promise<string>;
     },
 ): void;
 export function registerMyExportSrv(
     peer: FluencePeer,
     service: {
-        another_str: (callParams: CallParams<null>) => string;
+        another_str: (callParams: CallParams<null>) => Promise<string>;
     },
 ): void;
 export function registerMyExportSrv(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        another_str: (callParams: CallParams<null>) => string;
+        another_str: (callParams: CallParams<null>) => Promise<string>;
     },
 ): void;
 export function registerMyExportSrv(...args) {
@@ -335,9 +335,9 @@ export function registerMyExportSrv(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -347,33 +347,33 @@ export function registerMyExportSrv(...args) {
                 tetraplets: {},
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.another_str(callParams);
+            resp.result = await service.another_str(callParams);
         }
 
-        next();
+        await next();
     });
 }
 
 export function registerStringService(service: {
-    concat: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => string;
+    concat: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => Promise<string>;
 }): void;
 export function registerStringService(
     serviceId: string,
     service: {
-        concat: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => string;
+        concat: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => Promise<string>;
     },
 ): void;
 export function registerStringService(
     peer: FluencePeer,
     service: {
-        concat: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => string;
+        concat: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => Promise<string>;
     },
 ): void;
 export function registerStringService(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        concat: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => string;
+        concat: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => Promise<string>;
     },
 ): void;
 export function registerStringService(...args) {
@@ -402,9 +402,9 @@ export function registerStringService(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -417,10 +417,10 @@ export function registerStringService(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.concat(req.args[0], req.args[1], callParams);
+            resp.result = await service.concat(req.args[0], req.args[1], callParams);
         }
 
-        next();
+        await next();
     });
 }
 

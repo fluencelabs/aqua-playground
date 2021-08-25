@@ -16,24 +16,24 @@ import {
 
 // Services
 
-export function registerSuperFoo(service: { small_foo: (callParams: CallParams<null>) => string }): void;
+export function registerSuperFoo(service: { small_foo: (callParams: CallParams<null>) => Promise<string> }): void;
 export function registerSuperFoo(
     serviceId: string,
     service: {
-        small_foo: (callParams: CallParams<null>) => string;
+        small_foo: (callParams: CallParams<null>) => Promise<string>;
     },
 ): void;
 export function registerSuperFoo(
     peer: FluencePeer,
     service: {
-        small_foo: (callParams: CallParams<null>) => string;
+        small_foo: (callParams: CallParams<null>) => Promise<string>;
     },
 ): void;
 export function registerSuperFoo(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        small_foo: (callParams: CallParams<null>) => string;
+        small_foo: (callParams: CallParams<null>) => Promise<string>;
     },
 ): void;
 export function registerSuperFoo(...args) {
@@ -62,9 +62,9 @@ export function registerSuperFoo(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -74,10 +74,10 @@ export function registerSuperFoo(...args) {
                 tetraplets: {},
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.small_foo(callParams);
+            resp.result = await service.small_foo(callParams);
         }
 
-        next();
+        await next();
     });
 }
 

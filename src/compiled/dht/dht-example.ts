@@ -1214,7 +1214,7 @@ export async function executeOnSubscribers(
             weight: number;
         },
         callParams: CallParams<'arg0'>,
-    ) => void,
+    ) => Promise<void>,
     config?: { ttl?: number },
 ): Promise<void>;
 export async function executeOnSubscribers(
@@ -1232,7 +1232,7 @@ export async function executeOnSubscribers(
             weight: number;
         },
         callParams: CallParams<'arg0'>,
-    ) => void,
+    ) => Promise<void>,
     config?: { ttl?: number },
 ): Promise<void>;
 export async function executeOnSubscribers(...args) {
@@ -1374,7 +1374,7 @@ export async function executeOnSubscribers(...args) {
                     return topic;
                 });
 
-                h.use((req, resp, next) => {
+                h.use(async (req, resp, next) => {
                     if (req.serviceId === 'callbackSrv' && req.fnName === 'call') {
                         const callParams = {
                             ...req.particleContext,
@@ -1383,10 +1383,10 @@ export async function executeOnSubscribers(...args) {
                             },
                         };
                         resp.retCode = ResultCodes.success;
-                        call(req.args[0], callParams);
+                        await call(req.args[0], callParams);
                         resp.result = {};
                     }
-                    next();
+                    await next();
                 });
 
                 h.onEvent('callbackSrv', 'response', (args) => {});

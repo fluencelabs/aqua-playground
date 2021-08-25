@@ -16,24 +16,26 @@ import {
 
 // Services
 
-export function registerTesto(service: { getString: (arg0: string, callParams: CallParams<'arg0'>) => string }): void;
+export function registerTesto(service: {
+    getString: (arg0: string, callParams: CallParams<'arg0'>) => Promise<string>;
+}): void;
 export function registerTesto(
     serviceId: string,
     service: {
-        getString: (arg0: string, callParams: CallParams<'arg0'>) => string;
+        getString: (arg0: string, callParams: CallParams<'arg0'>) => Promise<string>;
     },
 ): void;
 export function registerTesto(
     peer: FluencePeer,
     service: {
-        getString: (arg0: string, callParams: CallParams<'arg0'>) => string;
+        getString: (arg0: string, callParams: CallParams<'arg0'>) => Promise<string>;
     },
 ): void;
 export function registerTesto(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        getString: (arg0: string, callParams: CallParams<'arg0'>) => string;
+        getString: (arg0: string, callParams: CallParams<'arg0'>) => Promise<string>;
     },
 ): void;
 export function registerTesto(...args) {
@@ -62,9 +64,9 @@ export function registerTesto(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -76,31 +78,33 @@ export function registerTesto(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.getString(req.args[0], callParams);
+            resp.result = await service.getString(req.args[0], callParams);
         }
 
-        next();
+        await next();
     });
 }
 
-export function registerLocalPrint(service: { print: (arg0: string, callParams: CallParams<'arg0'>) => void }): void;
+export function registerLocalPrint(service: {
+    print: (arg0: string, callParams: CallParams<'arg0'>) => Promise<void>;
+}): void;
 export function registerLocalPrint(
     serviceId: string,
     service: {
-        print: (arg0: string, callParams: CallParams<'arg0'>) => void;
+        print: (arg0: string, callParams: CallParams<'arg0'>) => Promise<void>;
     },
 ): void;
 export function registerLocalPrint(
     peer: FluencePeer,
     service: {
-        print: (arg0: string, callParams: CallParams<'arg0'>) => void;
+        print: (arg0: string, callParams: CallParams<'arg0'>) => Promise<void>;
     },
 ): void;
 export function registerLocalPrint(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        print: (arg0: string, callParams: CallParams<'arg0'>) => void;
+        print: (arg0: string, callParams: CallParams<'arg0'>) => Promise<void>;
     },
 ): void;
 export function registerLocalPrint(...args) {
@@ -129,9 +133,9 @@ export function registerLocalPrint(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -143,11 +147,11 @@ export function registerLocalPrint(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            service.print(req.args[0], callParams);
+            await service.print(req.args[0], callParams);
             resp.result = {};
         }
 
-        next();
+        await next();
     });
 }
 

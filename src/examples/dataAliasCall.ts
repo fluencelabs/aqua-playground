@@ -3,7 +3,7 @@ import { getAliasedData, registerNodeIdGetter } from '../compiled/examples/dataA
 
 export async function dataAliasCall(peer: FluencePeer) {
     registerNodeIdGetter(peer, {
-        get: () => {
+        get: async () => {
             return {
                 peerId: 'peer id str',
                 name: 'name str',

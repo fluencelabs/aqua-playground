@@ -5,13 +5,13 @@ export async function multiReturnCall(
     peer: FluencePeer,
 ): Promise<[string[], number, string, number[], string | null, number]> {
     registerGetStr(peer, {
-        retStr: (args0) => {
+        retStr: async (args0) => {
             return args0;
         },
     });
 
     registerGetNum(peer, {
-        retNum: () => {
+        retNum: async () => {
             return 10;
         },
     });

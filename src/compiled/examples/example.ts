@@ -17,25 +17,25 @@ import {
 // Services
 
 export function registerPeer(service: {
-    is_connected: (arg0: string, callParams: CallParams<'arg0'>) => boolean;
+    is_connected: (arg0: string, callParams: CallParams<'arg0'>) => Promise<boolean>;
 }): void;
 export function registerPeer(
     serviceId: string,
     service: {
-        is_connected: (arg0: string, callParams: CallParams<'arg0'>) => boolean;
+        is_connected: (arg0: string, callParams: CallParams<'arg0'>) => Promise<boolean>;
     },
 ): void;
 export function registerPeer(
     peer: FluencePeer,
     service: {
-        is_connected: (arg0: string, callParams: CallParams<'arg0'>) => boolean;
+        is_connected: (arg0: string, callParams: CallParams<'arg0'>) => Promise<boolean>;
     },
 ): void;
 export function registerPeer(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        is_connected: (arg0: string, callParams: CallParams<'arg0'>) => boolean;
+        is_connected: (arg0: string, callParams: CallParams<'arg0'>) => Promise<boolean>;
     },
 ): void;
 export function registerPeer(...args) {
@@ -64,9 +64,9 @@ export function registerPeer(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -78,31 +78,31 @@ export function registerPeer(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.is_connected(req.args[0], callParams);
+            resp.result = await service.is_connected(req.args[0], callParams);
         }
 
-        next();
+        await next();
     });
 }
 
-export function registerOp(service: { identity: (callParams: CallParams<null>) => void }): void;
+export function registerOp(service: { identity: (callParams: CallParams<null>) => Promise<void> }): void;
 export function registerOp(
     serviceId: string,
     service: {
-        identity: (callParams: CallParams<null>) => void;
+        identity: (callParams: CallParams<null>) => Promise<void>;
     },
 ): void;
 export function registerOp(
     peer: FluencePeer,
     service: {
-        identity: (callParams: CallParams<null>) => void;
+        identity: (callParams: CallParams<null>) => Promise<void>;
     },
 ): void;
 export function registerOp(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        identity: (callParams: CallParams<null>) => void;
+        identity: (callParams: CallParams<null>) => Promise<void>;
     },
 ): void;
 export function registerOp(...args) {
@@ -131,9 +131,9 @@ export function registerOp(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -143,38 +143,38 @@ export function registerOp(...args) {
                 tetraplets: {},
             };
             resp.retCode = ResultCodes.success;
-            service.identity(callParams);
+            await service.identity(callParams);
             resp.result = {};
         }
 
-        next();
+        await next();
     });
 }
 
 export function registerTest(service: {
-    doSomething: (callParams: CallParams<null>) => boolean;
-    getUserList: (callParams: CallParams<null>) => { name: string; peer_id: string; relay_id: string }[];
+    doSomething: (callParams: CallParams<null>) => Promise<boolean>;
+    getUserList: (callParams: CallParams<null>) => Promise<{ name: string; peer_id: string; relay_id: string }[]>;
 }): void;
 export function registerTest(
     serviceId: string,
     service: {
-        doSomething: (callParams: CallParams<null>) => boolean;
-        getUserList: (callParams: CallParams<null>) => { name: string; peer_id: string; relay_id: string }[];
+        doSomething: (callParams: CallParams<null>) => Promise<boolean>;
+        getUserList: (callParams: CallParams<null>) => Promise<{ name: string; peer_id: string; relay_id: string }[]>;
     },
 ): void;
 export function registerTest(
     peer: FluencePeer,
     service: {
-        doSomething: (callParams: CallParams<null>) => boolean;
-        getUserList: (callParams: CallParams<null>) => { name: string; peer_id: string; relay_id: string }[];
+        doSomething: (callParams: CallParams<null>) => Promise<boolean>;
+        getUserList: (callParams: CallParams<null>) => Promise<{ name: string; peer_id: string; relay_id: string }[]>;
     },
 ): void;
 export function registerTest(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        doSomething: (callParams: CallParams<null>) => boolean;
-        getUserList: (callParams: CallParams<null>) => { name: string; peer_id: string; relay_id: string }[];
+        doSomething: (callParams: CallParams<null>) => Promise<boolean>;
+        getUserList: (callParams: CallParams<null>) => Promise<{ name: string; peer_id: string; relay_id: string }[]>;
     },
 ): void;
 export function registerTest(...args) {
@@ -203,9 +203,9 @@ export function registerTest(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -215,7 +215,7 @@ export function registerTest(...args) {
                 tetraplets: {},
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.doSomething(callParams);
+            resp.result = await service.doSomething(callParams);
         }
 
         if (req.fnName === 'getUserList') {
@@ -224,10 +224,10 @@ export function registerTest(...args) {
                 tetraplets: {},
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.getUserList(callParams);
+            resp.result = await service.getUserList(callParams);
         }
 
-        next();
+        await next();
     });
 }
 

@@ -17,25 +17,25 @@ import {
 // Services
 
 export function registerTestService(service: {
-    get_records: (key: string, callParams: CallParams<'key'>) => string[];
+    get_records: (key: string, callParams: CallParams<'key'>) => Promise<string[]>;
 }): void;
 export function registerTestService(
     serviceId: string,
     service: {
-        get_records: (key: string, callParams: CallParams<'key'>) => string[];
+        get_records: (key: string, callParams: CallParams<'key'>) => Promise<string[]>;
     },
 ): void;
 export function registerTestService(
     peer: FluencePeer,
     service: {
-        get_records: (key: string, callParams: CallParams<'key'>) => string[];
+        get_records: (key: string, callParams: CallParams<'key'>) => Promise<string[]>;
     },
 ): void;
 export function registerTestService(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        get_records: (key: string, callParams: CallParams<'key'>) => string[];
+        get_records: (key: string, callParams: CallParams<'key'>) => Promise<string[]>;
     },
 ): void;
 export function registerTestService(...args) {
@@ -64,9 +64,9 @@ export function registerTestService(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -78,10 +78,10 @@ export function registerTestService(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.get_records(req.args[0], callParams);
+            resp.result = await service.get_records(req.args[0], callParams);
         }
 
-        next();
+        await next();
     });
 }
 

@@ -64,7 +64,7 @@ const main = async () => {
 
     // this could be called from `println.aqua`
     registerPrintln(peer, {
-        print: (arg0) => {
+        print: async (arg0) => {
             console.log('println:   ' + arg0);
         },
     });

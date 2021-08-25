@@ -6,7 +6,7 @@ export async function parCall(peer: FluencePeer) {
 
     let promise = new Promise<string>((resolve, reject) => {
         registerParService(peer, {
-            call: () => {
+            call: async () => {
                 console.log('hello from parservice-id');
                 let result = 'hello';
                 resolve(result);
@@ -15,7 +15,7 @@ export async function parCall(peer: FluencePeer) {
         });
     });
 
-    await parFunc(peer, relayPeerId, (c) => {
+    await parFunc(peer, relayPeerId, async (c) => {
         console.log('parFunc. external addresses par: ' + c.external_addresses);
     });
 

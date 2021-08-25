@@ -6,10 +6,10 @@ export async function complexCall(peer: FluencePeer) {
     const selfPeerId = peer.connectionInfo.selfPeerId;
 
     registerTestS(peer, {
-        t: (arg0) => {
+        t: async (arg0) => {
             return arg0;
         },
-        multiline: (a, b, c) => {
+        multiline: async (a, b, c) => {
             return b;
         },
     });

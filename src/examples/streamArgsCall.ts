@@ -3,7 +3,7 @@ import { retrieve_records, registerTestService } from '../compiled/examples/stre
 
 export async function streamArgsCall(peer: FluencePeer) {
     registerTestService(peer, {
-        get_records: (key) => {
+        get_records: async (key) => {
             return [key, key];
         },
     });

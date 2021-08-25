@@ -17,25 +17,25 @@ import {
 // Services
 
 export function registerStringExtra(service: {
-    addNameToHello: (arg0: string, callParams: CallParams<'arg0'>) => string;
+    addNameToHello: (arg0: string, callParams: CallParams<'arg0'>) => Promise<string>;
 }): void;
 export function registerStringExtra(
     serviceId: string,
     service: {
-        addNameToHello: (arg0: string, callParams: CallParams<'arg0'>) => string;
+        addNameToHello: (arg0: string, callParams: CallParams<'arg0'>) => Promise<string>;
     },
 ): void;
 export function registerStringExtra(
     peer: FluencePeer,
     service: {
-        addNameToHello: (arg0: string, callParams: CallParams<'arg0'>) => string;
+        addNameToHello: (arg0: string, callParams: CallParams<'arg0'>) => Promise<string>;
     },
 ): void;
 export function registerStringExtra(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        addNameToHello: (arg0: string, callParams: CallParams<'arg0'>) => string;
+        addNameToHello: (arg0: string, callParams: CallParams<'arg0'>) => Promise<string>;
     },
 ): void;
 export function registerStringExtra(...args) {
@@ -64,9 +64,9 @@ export function registerStringExtra(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -78,10 +78,10 @@ export function registerStringExtra(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.addNameToHello(req.args[0], callParams);
+            resp.result = await service.addNameToHello(req.args[0], callParams);
         }
 
-        next();
+        await next();
     });
 }
 

@@ -17,25 +17,25 @@ import {
 // Services
 
 export function registerStringer(service: {
-    returnString: (arg0: string, callParams: CallParams<'arg0'>) => string;
+    returnString: (arg0: string, callParams: CallParams<'arg0'>) => Promise<string>;
 }): void;
 export function registerStringer(
     serviceId: string,
     service: {
-        returnString: (arg0: string, callParams: CallParams<'arg0'>) => string;
+        returnString: (arg0: string, callParams: CallParams<'arg0'>) => Promise<string>;
     },
 ): void;
 export function registerStringer(
     peer: FluencePeer,
     service: {
-        returnString: (arg0: string, callParams: CallParams<'arg0'>) => string;
+        returnString: (arg0: string, callParams: CallParams<'arg0'>) => Promise<string>;
     },
 ): void;
 export function registerStringer(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        returnString: (arg0: string, callParams: CallParams<'arg0'>) => string;
+        returnString: (arg0: string, callParams: CallParams<'arg0'>) => Promise<string>;
     },
 ): void;
 export function registerStringer(...args) {
@@ -64,9 +64,9 @@ export function registerStringer(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -78,10 +78,10 @@ export function registerStringer(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.returnString(req.args[0], callParams);
+            resp.result = await service.returnString(req.args[0], callParams);
         }
 
-        next();
+        await next();
     });
 }
 

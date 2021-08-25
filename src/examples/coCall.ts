@@ -6,13 +6,13 @@ export async function coCall(peer: FluencePeer): Promise<string[]> {
     const relayPeerId = peer.connectionInfo.connectedRelays[0];
 
     registerCoService(peer, {
-        call: () => {
+        call: async () => {
             return 'hello';
         },
     });
 
     return new Promise<string[]>((resolve, reject) => {
-        parFunc(peer, relayPeerId, (c) => {
+        parFunc(peer, relayPeerId, async (c) => {
             resolve(c.external_addresses);
         });
     });

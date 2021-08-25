@@ -17,25 +17,25 @@ import {
 // Services
 
 export function registerNodeIdGetter(service: {
-    get: (callParams: CallParams<null>) => { name: string; peerId: string };
+    get: (callParams: CallParams<null>) => Promise<{ name: string; peerId: string }>;
 }): void;
 export function registerNodeIdGetter(
     serviceId: string,
     service: {
-        get: (callParams: CallParams<null>) => { name: string; peerId: string };
+        get: (callParams: CallParams<null>) => Promise<{ name: string; peerId: string }>;
     },
 ): void;
 export function registerNodeIdGetter(
     peer: FluencePeer,
     service: {
-        get: (callParams: CallParams<null>) => { name: string; peerId: string };
+        get: (callParams: CallParams<null>) => Promise<{ name: string; peerId: string }>;
     },
 ): void;
 export function registerNodeIdGetter(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        get: (callParams: CallParams<null>) => { name: string; peerId: string };
+        get: (callParams: CallParams<null>) => Promise<{ name: string; peerId: string }>;
     },
 ): void;
 export function registerNodeIdGetter(...args) {
@@ -64,9 +64,9 @@ export function registerNodeIdGetter(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -76,10 +76,10 @@ export function registerNodeIdGetter(...args) {
                 tetraplets: {},
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.get(callParams);
+            resp.result = await service.get(callParams);
         }
 
-        next();
+        await next();
     });
 }
 

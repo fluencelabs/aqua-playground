@@ -16,24 +16,26 @@ import {
 
 // Services
 
-export function registerGetStr(service: { retStr: (arg0: string, callParams: CallParams<'arg0'>) => string }): void;
+export function registerGetStr(service: {
+    retStr: (arg0: string, callParams: CallParams<'arg0'>) => Promise<string>;
+}): void;
 export function registerGetStr(
     serviceId: string,
     service: {
-        retStr: (arg0: string, callParams: CallParams<'arg0'>) => string;
+        retStr: (arg0: string, callParams: CallParams<'arg0'>) => Promise<string>;
     },
 ): void;
 export function registerGetStr(
     peer: FluencePeer,
     service: {
-        retStr: (arg0: string, callParams: CallParams<'arg0'>) => string;
+        retStr: (arg0: string, callParams: CallParams<'arg0'>) => Promise<string>;
     },
 ): void;
 export function registerGetStr(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        retStr: (arg0: string, callParams: CallParams<'arg0'>) => string;
+        retStr: (arg0: string, callParams: CallParams<'arg0'>) => Promise<string>;
     },
 ): void;
 export function registerGetStr(...args) {
@@ -62,9 +64,9 @@ export function registerGetStr(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -76,31 +78,31 @@ export function registerGetStr(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.retStr(req.args[0], callParams);
+            resp.result = await service.retStr(req.args[0], callParams);
         }
 
-        next();
+        await next();
     });
 }
 
-export function registerGetNum(service: { retNum: (callParams: CallParams<null>) => number }): void;
+export function registerGetNum(service: { retNum: (callParams: CallParams<null>) => Promise<number> }): void;
 export function registerGetNum(
     serviceId: string,
     service: {
-        retNum: (callParams: CallParams<null>) => number;
+        retNum: (callParams: CallParams<null>) => Promise<number>;
     },
 ): void;
 export function registerGetNum(
     peer: FluencePeer,
     service: {
-        retNum: (callParams: CallParams<null>) => number;
+        retNum: (callParams: CallParams<null>) => Promise<number>;
     },
 ): void;
 export function registerGetNum(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        retNum: (callParams: CallParams<null>) => number;
+        retNum: (callParams: CallParams<null>) => Promise<number>;
     },
 ): void;
 export function registerGetNum(...args) {
@@ -129,9 +131,9 @@ export function registerGetNum(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -141,10 +143,10 @@ export function registerGetNum(...args) {
                 tetraplets: {},
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.retNum(callParams);
+            resp.result = await service.retNum(callParams);
         }
 
-        next();
+        await next();
     });
 }
 

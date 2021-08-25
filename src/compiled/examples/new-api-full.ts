@@ -17,25 +17,25 @@ import {
 // Services
 
 export function registerServiceWithDefaultId(service: {
-    hello: (s: string, callParams: CallParams<'s'>) => void;
+    hello: (s: string, callParams: CallParams<'s'>) => Promise<void>;
 }): void;
 export function registerServiceWithDefaultId(
     serviceId: string,
     service: {
-        hello: (s: string, callParams: CallParams<'s'>) => void;
+        hello: (s: string, callParams: CallParams<'s'>) => Promise<void>;
     },
 ): void;
 export function registerServiceWithDefaultId(
     peer: FluencePeer,
     service: {
-        hello: (s: string, callParams: CallParams<'s'>) => void;
+        hello: (s: string, callParams: CallParams<'s'>) => Promise<void>;
     },
 ): void;
 export function registerServiceWithDefaultId(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        hello: (s: string, callParams: CallParams<'s'>) => void;
+        hello: (s: string, callParams: CallParams<'s'>) => Promise<void>;
     },
 ): void;
 export function registerServiceWithDefaultId(...args) {
@@ -64,9 +64,9 @@ export function registerServiceWithDefaultId(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -78,25 +78,25 @@ export function registerServiceWithDefaultId(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            service.hello(req.args[0], callParams);
+            await service.hello(req.args[0], callParams);
             resp.result = {};
         }
 
-        next();
+        await next();
     });
 }
 
 export function registerServiceWithOUTDefaultId(
     serviceId: string,
     service: {
-        hello: (s: string, callParams: CallParams<'s'>) => void;
+        hello: (s: string, callParams: CallParams<'s'>) => Promise<void>;
     },
 ): void;
 export function registerServiceWithOUTDefaultId(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        hello: (s: string, callParams: CallParams<'s'>) => void;
+        hello: (s: string, callParams: CallParams<'s'>) => Promise<void>;
     },
 ): void;
 export function registerServiceWithOUTDefaultId(...args) {
@@ -123,9 +123,9 @@ export function registerServiceWithOUTDefaultId(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -137,33 +137,33 @@ export function registerServiceWithOUTDefaultId(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            service.hello(req.args[0], callParams);
+            await service.hello(req.args[0], callParams);
             resp.result = {};
         }
 
-        next();
+        await next();
     });
 }
 
 export function registerMoreMembers(
     serviceId: string,
     service: {
-        member1: (callParams: CallParams<null>) => void;
-        member2: (s1: string, callParams: CallParams<'s1'>) => void;
-        member3: (s1: string, s2: string, callParams: CallParams<'s1' | 's2'>) => void;
-        member4: (s1: string, s2: string, i: number, callParams: CallParams<'s1' | 's2' | 'i'>) => number;
-        member5: (s1: string, s2: string, i: number, callParams: CallParams<'s1' | 's2' | 'i'>) => number;
+        member1: (callParams: CallParams<null>) => Promise<void>;
+        member2: (s1: string, callParams: CallParams<'s1'>) => Promise<void>;
+        member3: (s1: string, s2: string, callParams: CallParams<'s1' | 's2'>) => Promise<void>;
+        member4: (s1: string, s2: string, i: number, callParams: CallParams<'s1' | 's2' | 'i'>) => Promise<number>;
+        member5: (s1: string, s2: string, i: number, callParams: CallParams<'s1' | 's2' | 'i'>) => Promise<number>;
     },
 ): void;
 export function registerMoreMembers(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        member1: (callParams: CallParams<null>) => void;
-        member2: (s1: string, callParams: CallParams<'s1'>) => void;
-        member3: (s1: string, s2: string, callParams: CallParams<'s1' | 's2'>) => void;
-        member4: (s1: string, s2: string, i: number, callParams: CallParams<'s1' | 's2' | 'i'>) => number;
-        member5: (s1: string, s2: string, i: number, callParams: CallParams<'s1' | 's2' | 'i'>) => number;
+        member1: (callParams: CallParams<null>) => Promise<void>;
+        member2: (s1: string, callParams: CallParams<'s1'>) => Promise<void>;
+        member3: (s1: string, s2: string, callParams: CallParams<'s1' | 's2'>) => Promise<void>;
+        member4: (s1: string, s2: string, i: number, callParams: CallParams<'s1' | 's2' | 'i'>) => Promise<number>;
+        member5: (s1: string, s2: string, i: number, callParams: CallParams<'s1' | 's2' | 'i'>) => Promise<number>;
     },
 ): void;
 export function registerMoreMembers(...args) {
@@ -190,9 +190,9 @@ export function registerMoreMembers(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -202,7 +202,7 @@ export function registerMoreMembers(...args) {
                 tetraplets: {},
             };
             resp.retCode = ResultCodes.success;
-            service.member1(callParams);
+            await service.member1(callParams);
             resp.result = {};
         }
 
@@ -214,7 +214,7 @@ export function registerMoreMembers(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            service.member2(req.args[0], callParams);
+            await service.member2(req.args[0], callParams);
             resp.result = {};
         }
 
@@ -227,7 +227,7 @@ export function registerMoreMembers(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            service.member3(req.args[0], req.args[1], callParams);
+            await service.member3(req.args[0], req.args[1], callParams);
             resp.result = {};
         }
 
@@ -241,7 +241,7 @@ export function registerMoreMembers(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.member4(req.args[0], req.args[1], req.args[2], callParams);
+            resp.result = await service.member4(req.args[0], req.args[1], req.args[2], callParams);
         }
 
         if (req.fnName === 'member5') {
@@ -254,22 +254,22 @@ export function registerMoreMembers(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.member5(req.args[0], req.args[1], req.args[2], callParams);
+            resp.result = await service.member5(req.args[0], req.args[1], req.args[2], callParams);
         }
 
-        next();
+        await next();
     });
 }
 
 // Functions
 
 export async function f1(
-    callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void,
+    callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => Promise<void>,
     config?: { ttl?: number },
 ): Promise<void>;
 export async function f1(
     peer: FluencePeer,
-    callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void,
+    callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => Promise<void>,
     config?: { ttl?: number },
 ): Promise<void>;
 export async function f1(...args) {
@@ -310,7 +310,7 @@ export async function f1(...args) {
                     return peer.connectionInfo.connectedRelays[0];
                 });
 
-                h.use((req, resp, next) => {
+                h.use(async (req, resp, next) => {
                     if (req.serviceId === 'callbackSrv' && req.fnName === 'callback') {
                         const callParams = {
                             ...req.particleContext,
@@ -320,10 +320,10 @@ export async function f1(...args) {
                             },
                         };
                         resp.retCode = ResultCodes.success;
-                        callback(req.args[0], req.args[1], callParams);
+                        await callback(req.args[0], req.args[1], callParams);
                         resp.result = {};
                     }
-                    next();
+                    await next();
                 });
 
                 h.onEvent('callbackSrv', 'response', (args) => {});
@@ -348,13 +348,13 @@ export async function f1(...args) {
 
 export async function f2(
     num: number,
-    callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void,
+    callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => Promise<void>,
     config?: { ttl?: number },
 ): Promise<void>;
 export async function f2(
     peer: FluencePeer,
     num: number,
-    callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void,
+    callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => Promise<void>,
     config?: { ttl?: number },
 ): Promise<void>;
 export async function f2(...args) {
@@ -404,7 +404,7 @@ export async function f2(...args) {
                     return num;
                 });
 
-                h.use((req, resp, next) => {
+                h.use(async (req, resp, next) => {
                     if (req.serviceId === 'callbackSrv' && req.fnName === 'callback') {
                         const callParams = {
                             ...req.particleContext,
@@ -414,10 +414,10 @@ export async function f2(...args) {
                             },
                         };
                         resp.retCode = ResultCodes.success;
-                        callback(req.args[0], req.args[1], callParams);
+                        await callback(req.args[0], req.args[1], callParams);
                         resp.result = {};
                     }
-                    next();
+                    await next();
                 });
 
                 h.onEvent('callbackSrv', 'response', (args) => {});
@@ -442,13 +442,13 @@ export async function f2(...args) {
 
 export async function f3(
     num: number,
-    callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void,
+    callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => Promise<void>,
     config?: { ttl?: number },
 ): Promise<string>;
 export async function f3(
     peer: FluencePeer,
     num: number,
-    callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void,
+    callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => Promise<void>,
     config?: { ttl?: number },
 ): Promise<string>;
 export async function f3(...args) {
@@ -504,7 +504,7 @@ export async function f3(...args) {
                     return num;
                 });
 
-                h.use((req, resp, next) => {
+                h.use(async (req, resp, next) => {
                     if (req.serviceId === 'callbackSrv' && req.fnName === 'callback') {
                         const callParams = {
                             ...req.particleContext,
@@ -514,10 +514,10 @@ export async function f3(...args) {
                             },
                         };
                         resp.retCode = ResultCodes.success;
-                        callback(req.args[0], req.args[1], callParams);
+                        await callback(req.args[0], req.args[1], callParams);
                         resp.result = {};
                     }
-                    next();
+                    await next();
                 });
 
                 h.onEvent('callbackSrv', 'response', (args) => {
@@ -544,12 +544,12 @@ export async function f3(...args) {
 }
 
 export async function callBackZeroArgs(
-    callback: (callParams: CallParams<null>) => void,
+    callback: (callParams: CallParams<null>) => Promise<void>,
     config?: { ttl?: number },
 ): Promise<void>;
 export async function callBackZeroArgs(
     peer: FluencePeer,
-    callback: (callParams: CallParams<null>) => void,
+    callback: (callParams: CallParams<null>) => Promise<void>,
     config?: { ttl?: number },
 ): Promise<void>;
 export async function callBackZeroArgs(...args) {
@@ -590,17 +590,17 @@ export async function callBackZeroArgs(...args) {
                     return peer.connectionInfo.connectedRelays[0];
                 });
 
-                h.use((req, resp, next) => {
+                h.use(async (req, resp, next) => {
                     if (req.serviceId === 'callbackSrv' && req.fnName === 'callback') {
                         const callParams = {
                             ...req.particleContext,
                             tetraplets: {},
                         };
                         resp.retCode = ResultCodes.success;
-                        callback(callParams);
+                        await callback(callParams);
                         resp.result = {};
                     }
-                    next();
+                    await next();
                 });
 
                 h.onEvent('callbackSrv', 'response', (args) => {});

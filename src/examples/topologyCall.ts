@@ -9,16 +9,15 @@ export async function topologyCall(peer: FluencePeer, peer2: FluencePeer): Promi
     const selfPeerId2 = peer2.connectionInfo.selfPeerId;
 
     registerTesto(peer2, {
-        getString: (args0) => {
+        getString: async (args0) => {
             console.log('hello from client2: ' + args0);
             return 'hello from client2: ' + args0;
         },
     });
 
     registerLocalPrint(peer, {
-        print: (args0) => {
+        print: async (args0) => {
             console.log('print on client1: ' + args0);
-            return {};
         },
     });
 

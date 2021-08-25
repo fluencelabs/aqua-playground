@@ -17,25 +17,25 @@ import {
 // Services
 
 export function registerDTGetter(service: {
-    get_dt: (s: string, callParams: CallParams<'s'>) => { field: string };
+    get_dt: (s: string, callParams: CallParams<'s'>) => Promise<{ field: string }>;
 }): void;
 export function registerDTGetter(
     serviceId: string,
     service: {
-        get_dt: (s: string, callParams: CallParams<'s'>) => { field: string };
+        get_dt: (s: string, callParams: CallParams<'s'>) => Promise<{ field: string }>;
     },
 ): void;
 export function registerDTGetter(
     peer: FluencePeer,
     service: {
-        get_dt: (s: string, callParams: CallParams<'s'>) => { field: string };
+        get_dt: (s: string, callParams: CallParams<'s'>) => Promise<{ field: string }>;
     },
 ): void;
 export function registerDTGetter(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        get_dt: (s: string, callParams: CallParams<'s'>) => { field: string };
+        get_dt: (s: string, callParams: CallParams<'s'>) => Promise<{ field: string }>;
     },
 ): void;
 export function registerDTGetter(...args) {
@@ -64,9 +64,9 @@ export function registerDTGetter(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -78,10 +78,10 @@ export function registerDTGetter(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.get_dt(req.args[0], callParams);
+            resp.result = await service.get_dt(req.args[0], callParams);
         }
 
-        next();
+        await next();
     });
 }
 

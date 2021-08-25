@@ -16,24 +16,24 @@ import {
 
 // Services
 
-export function registerTestSrv(service: { str: (callParams: CallParams<null>) => string }): void;
+export function registerTestSrv(service: { str: (callParams: CallParams<null>) => Promise<string> }): void;
 export function registerTestSrv(
     serviceId: string,
     service: {
-        str: (callParams: CallParams<null>) => string;
+        str: (callParams: CallParams<null>) => Promise<string>;
     },
 ): void;
 export function registerTestSrv(
     peer: FluencePeer,
     service: {
-        str: (callParams: CallParams<null>) => string;
+        str: (callParams: CallParams<null>) => Promise<string>;
     },
 ): void;
 export function registerTestSrv(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        str: (callParams: CallParams<null>) => string;
+        str: (callParams: CallParams<null>) => Promise<string>;
     },
 ): void;
 export function registerTestSrv(...args) {
@@ -62,9 +62,9 @@ export function registerTestSrv(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -74,10 +74,10 @@ export function registerTestSrv(...args) {
                 tetraplets: {},
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.str(callParams);
+            resp.result = await service.str(callParams);
         }
 
-        next();
+        await next();
     });
 }
 

@@ -16,24 +16,24 @@ import {
 
 // Services
 
-export function registerMyExportSrv(service: { another_str: (callParams: CallParams<null>) => string }): void;
+export function registerMyExportSrv(service: { another_str: (callParams: CallParams<null>) => Promise<string> }): void;
 export function registerMyExportSrv(
     serviceId: string,
     service: {
-        another_str: (callParams: CallParams<null>) => string;
+        another_str: (callParams: CallParams<null>) => Promise<string>;
     },
 ): void;
 export function registerMyExportSrv(
     peer: FluencePeer,
     service: {
-        another_str: (callParams: CallParams<null>) => string;
+        another_str: (callParams: CallParams<null>) => Promise<string>;
     },
 ): void;
 export function registerMyExportSrv(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        another_str: (callParams: CallParams<null>) => string;
+        another_str: (callParams: CallParams<null>) => Promise<string>;
     },
 ): void;
 export function registerMyExportSrv(...args) {
@@ -62,9 +62,9 @@ export function registerMyExportSrv(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -74,10 +74,10 @@ export function registerMyExportSrv(...args) {
                 tetraplets: {},
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.another_str(callParams);
+            resp.result = await service.another_str(callParams);
         }
 
-        next();
+        await next();
     });
 }
 

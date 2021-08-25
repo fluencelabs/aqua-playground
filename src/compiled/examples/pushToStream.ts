@@ -16,24 +16,24 @@ import {
 
 // Services
 
-export function registerOpA(service: { get_str: (callParams: CallParams<null>) => string }): void;
+export function registerOpA(service: { get_str: (callParams: CallParams<null>) => Promise<string> }): void;
 export function registerOpA(
     serviceId: string,
     service: {
-        get_str: (callParams: CallParams<null>) => string;
+        get_str: (callParams: CallParams<null>) => Promise<string>;
     },
 ): void;
 export function registerOpA(
     peer: FluencePeer,
     service: {
-        get_str: (callParams: CallParams<null>) => string;
+        get_str: (callParams: CallParams<null>) => Promise<string>;
     },
 ): void;
 export function registerOpA(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        get_str: (callParams: CallParams<null>) => string;
+        get_str: (callParams: CallParams<null>) => Promise<string>;
     },
 ): void;
 export function registerOpA(...args) {
@@ -62,9 +62,9 @@ export function registerOpA(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -74,10 +74,10 @@ export function registerOpA(...args) {
                 tetraplets: {},
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.get_str(callParams);
+            resp.result = await service.get_str(callParams);
         }
 
-        next();
+        await next();
     });
 }
 

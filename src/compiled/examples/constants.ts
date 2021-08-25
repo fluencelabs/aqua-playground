@@ -17,69 +17,69 @@ import {
 // Services
 
 export function registerSrv(service: {
-    add_alias: (alias: string, service_id: string, callParams: CallParams<'alias' | 'service_id'>) => void;
-    create: (blueprint_id: string, callParams: CallParams<'blueprint_id'>) => string;
+    add_alias: (alias: string, service_id: string, callParams: CallParams<'alias' | 'service_id'>) => Promise<void>;
+    create: (blueprint_id: string, callParams: CallParams<'blueprint_id'>) => Promise<string>;
     get_interface: (
         service_id: string,
         callParams: CallParams<'service_id'>,
-    ) => {
+    ) => Promise<{
         function_signatures: { arguments: string[][]; name: string; output_types: string[] }[];
         record_types: { fields: string[][]; id: number; name: string }[];
-    };
-    list: (callParams: CallParams<null>) => { blueprint_id: string; id: string; owner_id: string }[];
-    remove: (service_id: string, callParams: CallParams<'service_id'>) => void;
-    resolve_alias: (alias: string, callParams: CallParams<'alias'>) => string;
+    }>;
+    list: (callParams: CallParams<null>) => Promise<{ blueprint_id: string; id: string; owner_id: string }[]>;
+    remove: (service_id: string, callParams: CallParams<'service_id'>) => Promise<void>;
+    resolve_alias: (alias: string, callParams: CallParams<'alias'>) => Promise<string>;
 }): void;
 export function registerSrv(
     serviceId: string,
     service: {
-        add_alias: (alias: string, service_id: string, callParams: CallParams<'alias' | 'service_id'>) => void;
-        create: (blueprint_id: string, callParams: CallParams<'blueprint_id'>) => string;
+        add_alias: (alias: string, service_id: string, callParams: CallParams<'alias' | 'service_id'>) => Promise<void>;
+        create: (blueprint_id: string, callParams: CallParams<'blueprint_id'>) => Promise<string>;
         get_interface: (
             service_id: string,
             callParams: CallParams<'service_id'>,
-        ) => {
+        ) => Promise<{
             function_signatures: { arguments: string[][]; name: string; output_types: string[] }[];
             record_types: { fields: string[][]; id: number; name: string }[];
-        };
-        list: (callParams: CallParams<null>) => { blueprint_id: string; id: string; owner_id: string }[];
-        remove: (service_id: string, callParams: CallParams<'service_id'>) => void;
-        resolve_alias: (alias: string, callParams: CallParams<'alias'>) => string;
+        }>;
+        list: (callParams: CallParams<null>) => Promise<{ blueprint_id: string; id: string; owner_id: string }[]>;
+        remove: (service_id: string, callParams: CallParams<'service_id'>) => Promise<void>;
+        resolve_alias: (alias: string, callParams: CallParams<'alias'>) => Promise<string>;
     },
 ): void;
 export function registerSrv(
     peer: FluencePeer,
     service: {
-        add_alias: (alias: string, service_id: string, callParams: CallParams<'alias' | 'service_id'>) => void;
-        create: (blueprint_id: string, callParams: CallParams<'blueprint_id'>) => string;
+        add_alias: (alias: string, service_id: string, callParams: CallParams<'alias' | 'service_id'>) => Promise<void>;
+        create: (blueprint_id: string, callParams: CallParams<'blueprint_id'>) => Promise<string>;
         get_interface: (
             service_id: string,
             callParams: CallParams<'service_id'>,
-        ) => {
+        ) => Promise<{
             function_signatures: { arguments: string[][]; name: string; output_types: string[] }[];
             record_types: { fields: string[][]; id: number; name: string }[];
-        };
-        list: (callParams: CallParams<null>) => { blueprint_id: string; id: string; owner_id: string }[];
-        remove: (service_id: string, callParams: CallParams<'service_id'>) => void;
-        resolve_alias: (alias: string, callParams: CallParams<'alias'>) => string;
+        }>;
+        list: (callParams: CallParams<null>) => Promise<{ blueprint_id: string; id: string; owner_id: string }[]>;
+        remove: (service_id: string, callParams: CallParams<'service_id'>) => Promise<void>;
+        resolve_alias: (alias: string, callParams: CallParams<'alias'>) => Promise<string>;
     },
 ): void;
 export function registerSrv(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        add_alias: (alias: string, service_id: string, callParams: CallParams<'alias' | 'service_id'>) => void;
-        create: (blueprint_id: string, callParams: CallParams<'blueprint_id'>) => string;
+        add_alias: (alias: string, service_id: string, callParams: CallParams<'alias' | 'service_id'>) => Promise<void>;
+        create: (blueprint_id: string, callParams: CallParams<'blueprint_id'>) => Promise<string>;
         get_interface: (
             service_id: string,
             callParams: CallParams<'service_id'>,
-        ) => {
+        ) => Promise<{
             function_signatures: { arguments: string[][]; name: string; output_types: string[] }[];
             record_types: { fields: string[][]; id: number; name: string }[];
-        };
-        list: (callParams: CallParams<null>) => { blueprint_id: string; id: string; owner_id: string }[];
-        remove: (service_id: string, callParams: CallParams<'service_id'>) => void;
-        resolve_alias: (alias: string, callParams: CallParams<'alias'>) => string;
+        }>;
+        list: (callParams: CallParams<null>) => Promise<{ blueprint_id: string; id: string; owner_id: string }[]>;
+        remove: (service_id: string, callParams: CallParams<'service_id'>) => Promise<void>;
+        resolve_alias: (alias: string, callParams: CallParams<'alias'>) => Promise<string>;
     },
 ): void;
 export function registerSrv(...args) {
@@ -108,9 +108,9 @@ export function registerSrv(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -123,7 +123,7 @@ export function registerSrv(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            service.add_alias(req.args[0], req.args[1], callParams);
+            await service.add_alias(req.args[0], req.args[1], callParams);
             resp.result = {};
         }
 
@@ -135,7 +135,7 @@ export function registerSrv(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.create(req.args[0], callParams);
+            resp.result = await service.create(req.args[0], callParams);
         }
 
         if (req.fnName === 'get_interface') {
@@ -146,7 +146,7 @@ export function registerSrv(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.get_interface(req.args[0], callParams);
+            resp.result = await service.get_interface(req.args[0], callParams);
         }
 
         if (req.fnName === 'list') {
@@ -155,7 +155,7 @@ export function registerSrv(...args) {
                 tetraplets: {},
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.list(callParams);
+            resp.result = await service.list(callParams);
         }
 
         if (req.fnName === 'remove') {
@@ -166,7 +166,7 @@ export function registerSrv(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            service.remove(req.args[0], callParams);
+            await service.remove(req.args[0], callParams);
             resp.result = {};
         }
 
@@ -178,53 +178,74 @@ export function registerSrv(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.resolve_alias(req.args[0], callParams);
+            resp.result = await service.resolve_alias(req.args[0], callParams);
         }
 
-        next();
+        await next();
     });
 }
 
 export function registerPeer(service: {
-    connect: (id: string, multiaddrs: string[] | null, callParams: CallParams<'id' | 'multiaddrs'>) => boolean;
-    get_contact: (peer: string, callParams: CallParams<'peer'>) => { addresses: string[]; peer_id: string };
-    identify: (callParams: CallParams<null>) => { external_addresses: string[] };
-    is_connected: (peer: string, callParams: CallParams<'peer'>) => boolean;
-    timestamp_ms: (callParams: CallParams<null>) => number;
-    timestamp_sec: (callParams: CallParams<null>) => number;
+    connect: (id: string, multiaddrs: string[] | null, callParams: CallParams<'id' | 'multiaddrs'>) => Promise<boolean>;
+    get_contact: (peer: string, callParams: CallParams<'peer'>) => Promise<{ addresses: string[]; peer_id: string }>;
+    identify: (callParams: CallParams<null>) => Promise<{ external_addresses: string[] }>;
+    is_connected: (peer: string, callParams: CallParams<'peer'>) => Promise<boolean>;
+    timestamp_ms: (callParams: CallParams<null>) => Promise<number>;
+    timestamp_sec: (callParams: CallParams<null>) => Promise<number>;
 }): void;
 export function registerPeer(
     serviceId: string,
     service: {
-        connect: (id: string, multiaddrs: string[] | null, callParams: CallParams<'id' | 'multiaddrs'>) => boolean;
-        get_contact: (peer: string, callParams: CallParams<'peer'>) => { addresses: string[]; peer_id: string };
-        identify: (callParams: CallParams<null>) => { external_addresses: string[] };
-        is_connected: (peer: string, callParams: CallParams<'peer'>) => boolean;
-        timestamp_ms: (callParams: CallParams<null>) => number;
-        timestamp_sec: (callParams: CallParams<null>) => number;
+        connect: (
+            id: string,
+            multiaddrs: string[] | null,
+            callParams: CallParams<'id' | 'multiaddrs'>,
+        ) => Promise<boolean>;
+        get_contact: (
+            peer: string,
+            callParams: CallParams<'peer'>,
+        ) => Promise<{ addresses: string[]; peer_id: string }>;
+        identify: (callParams: CallParams<null>) => Promise<{ external_addresses: string[] }>;
+        is_connected: (peer: string, callParams: CallParams<'peer'>) => Promise<boolean>;
+        timestamp_ms: (callParams: CallParams<null>) => Promise<number>;
+        timestamp_sec: (callParams: CallParams<null>) => Promise<number>;
     },
 ): void;
 export function registerPeer(
     peer: FluencePeer,
     service: {
-        connect: (id: string, multiaddrs: string[] | null, callParams: CallParams<'id' | 'multiaddrs'>) => boolean;
-        get_contact: (peer: string, callParams: CallParams<'peer'>) => { addresses: string[]; peer_id: string };
-        identify: (callParams: CallParams<null>) => { external_addresses: string[] };
-        is_connected: (peer: string, callParams: CallParams<'peer'>) => boolean;
-        timestamp_ms: (callParams: CallParams<null>) => number;
-        timestamp_sec: (callParams: CallParams<null>) => number;
+        connect: (
+            id: string,
+            multiaddrs: string[] | null,
+            callParams: CallParams<'id' | 'multiaddrs'>,
+        ) => Promise<boolean>;
+        get_contact: (
+            peer: string,
+            callParams: CallParams<'peer'>,
+        ) => Promise<{ addresses: string[]; peer_id: string }>;
+        identify: (callParams: CallParams<null>) => Promise<{ external_addresses: string[] }>;
+        is_connected: (peer: string, callParams: CallParams<'peer'>) => Promise<boolean>;
+        timestamp_ms: (callParams: CallParams<null>) => Promise<number>;
+        timestamp_sec: (callParams: CallParams<null>) => Promise<number>;
     },
 ): void;
 export function registerPeer(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        connect: (id: string, multiaddrs: string[] | null, callParams: CallParams<'id' | 'multiaddrs'>) => boolean;
-        get_contact: (peer: string, callParams: CallParams<'peer'>) => { addresses: string[]; peer_id: string };
-        identify: (callParams: CallParams<null>) => { external_addresses: string[] };
-        is_connected: (peer: string, callParams: CallParams<'peer'>) => boolean;
-        timestamp_ms: (callParams: CallParams<null>) => number;
-        timestamp_sec: (callParams: CallParams<null>) => number;
+        connect: (
+            id: string,
+            multiaddrs: string[] | null,
+            callParams: CallParams<'id' | 'multiaddrs'>,
+        ) => Promise<boolean>;
+        get_contact: (
+            peer: string,
+            callParams: CallParams<'peer'>,
+        ) => Promise<{ addresses: string[]; peer_id: string }>;
+        identify: (callParams: CallParams<null>) => Promise<{ external_addresses: string[] }>;
+        is_connected: (peer: string, callParams: CallParams<'peer'>) => Promise<boolean>;
+        timestamp_ms: (callParams: CallParams<null>) => Promise<number>;
+        timestamp_sec: (callParams: CallParams<null>) => Promise<number>;
     },
 ): void;
 export function registerPeer(...args) {
@@ -253,9 +274,9 @@ export function registerPeer(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -268,7 +289,7 @@ export function registerPeer(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.connect(req.args[0], req.args[1], callParams);
+            resp.result = await service.connect(req.args[0], req.args[1], callParams);
         }
 
         if (req.fnName === 'get_contact') {
@@ -279,7 +300,7 @@ export function registerPeer(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.get_contact(req.args[0], callParams);
+            resp.result = await service.get_contact(req.args[0], callParams);
         }
 
         if (req.fnName === 'identify') {
@@ -288,7 +309,7 @@ export function registerPeer(...args) {
                 tetraplets: {},
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.identify(callParams);
+            resp.result = await service.identify(callParams);
         }
 
         if (req.fnName === 'is_connected') {
@@ -299,7 +320,7 @@ export function registerPeer(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.is_connected(req.args[0], callParams);
+            resp.result = await service.is_connected(req.args[0], callParams);
         }
 
         if (req.fnName === 'timestamp_ms') {
@@ -308,7 +329,7 @@ export function registerPeer(...args) {
                 tetraplets: {},
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.timestamp_ms(callParams);
+            resp.result = await service.timestamp_ms(callParams);
         }
 
         if (req.fnName === 'timestamp_sec') {
@@ -317,31 +338,33 @@ export function registerPeer(...args) {
                 tetraplets: {},
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.timestamp_sec(callParams);
+            resp.result = await service.timestamp_sec(callParams);
         }
 
-        next();
+        await next();
     });
 }
 
-export function registerOpO(service: { identity: (arg0: string, callParams: CallParams<'arg0'>) => string }): void;
+export function registerOpO(service: {
+    identity: (arg0: string, callParams: CallParams<'arg0'>) => Promise<string>;
+}): void;
 export function registerOpO(
     serviceId: string,
     service: {
-        identity: (arg0: string, callParams: CallParams<'arg0'>) => string;
+        identity: (arg0: string, callParams: CallParams<'arg0'>) => Promise<string>;
     },
 ): void;
 export function registerOpO(
     peer: FluencePeer,
     service: {
-        identity: (arg0: string, callParams: CallParams<'arg0'>) => string;
+        identity: (arg0: string, callParams: CallParams<'arg0'>) => Promise<string>;
     },
 ): void;
 export function registerOpO(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        identity: (arg0: string, callParams: CallParams<'arg0'>) => string;
+        identity: (arg0: string, callParams: CallParams<'arg0'>) => Promise<string>;
     },
 ): void;
 export function registerOpO(...args) {
@@ -370,9 +393,9 @@ export function registerOpO(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -384,10 +407,10 @@ export function registerOpO(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.identity(req.args[0], callParams);
+            resp.result = await service.identity(req.args[0], callParams);
         }
 
-        next();
+        await next();
     });
 }
 
@@ -398,23 +421,23 @@ export function registerOp(service: {
         c: string | null,
         d: string | null,
         callParams: CallParams<'a' | 'b' | 'c' | 'd'>,
-    ) => string[];
-    array_length: (array: string[], callParams: CallParams<'array'>) => number;
-    bytes_from_b58: (b: string, callParams: CallParams<'b'>) => number[];
-    bytes_to_b58: (bs: number[], callParams: CallParams<'bs'>) => string;
+    ) => Promise<string[]>;
+    array_length: (array: string[], callParams: CallParams<'array'>) => Promise<number>;
+    bytes_from_b58: (b: string, callParams: CallParams<'b'>) => Promise<number[]>;
+    bytes_to_b58: (bs: number[], callParams: CallParams<'bs'>) => Promise<string>;
     concat: (
         a: string[],
         b: string[] | null,
         c: string[] | null,
         d: string[] | null,
         callParams: CallParams<'a' | 'b' | 'c' | 'd'>,
-    ) => string[];
-    concat_strings: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => string;
-    identity: (s: string | null, callParams: CallParams<'s'>) => string | null;
-    noop: (callParams: CallParams<null>) => void;
-    sha256_string: (s: string, callParams: CallParams<'s'>) => string;
-    string_from_b58: (b: string, callParams: CallParams<'b'>) => string;
-    string_to_b58: (s: string, callParams: CallParams<'s'>) => string;
+    ) => Promise<string[]>;
+    concat_strings: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => Promise<string>;
+    identity: (s: string | null, callParams: CallParams<'s'>) => Promise<string | null>;
+    noop: (callParams: CallParams<null>) => Promise<void>;
+    sha256_string: (s: string, callParams: CallParams<'s'>) => Promise<string>;
+    string_from_b58: (b: string, callParams: CallParams<'b'>) => Promise<string>;
+    string_to_b58: (s: string, callParams: CallParams<'s'>) => Promise<string>;
 }): void;
 export function registerOp(
     serviceId: string,
@@ -425,23 +448,23 @@ export function registerOp(
             c: string | null,
             d: string | null,
             callParams: CallParams<'a' | 'b' | 'c' | 'd'>,
-        ) => string[];
-        array_length: (array: string[], callParams: CallParams<'array'>) => number;
-        bytes_from_b58: (b: string, callParams: CallParams<'b'>) => number[];
-        bytes_to_b58: (bs: number[], callParams: CallParams<'bs'>) => string;
+        ) => Promise<string[]>;
+        array_length: (array: string[], callParams: CallParams<'array'>) => Promise<number>;
+        bytes_from_b58: (b: string, callParams: CallParams<'b'>) => Promise<number[]>;
+        bytes_to_b58: (bs: number[], callParams: CallParams<'bs'>) => Promise<string>;
         concat: (
             a: string[],
             b: string[] | null,
             c: string[] | null,
             d: string[] | null,
             callParams: CallParams<'a' | 'b' | 'c' | 'd'>,
-        ) => string[];
-        concat_strings: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => string;
-        identity: (s: string | null, callParams: CallParams<'s'>) => string | null;
-        noop: (callParams: CallParams<null>) => void;
-        sha256_string: (s: string, callParams: CallParams<'s'>) => string;
-        string_from_b58: (b: string, callParams: CallParams<'b'>) => string;
-        string_to_b58: (s: string, callParams: CallParams<'s'>) => string;
+        ) => Promise<string[]>;
+        concat_strings: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => Promise<string>;
+        identity: (s: string | null, callParams: CallParams<'s'>) => Promise<string | null>;
+        noop: (callParams: CallParams<null>) => Promise<void>;
+        sha256_string: (s: string, callParams: CallParams<'s'>) => Promise<string>;
+        string_from_b58: (b: string, callParams: CallParams<'b'>) => Promise<string>;
+        string_to_b58: (s: string, callParams: CallParams<'s'>) => Promise<string>;
     },
 ): void;
 export function registerOp(
@@ -453,23 +476,23 @@ export function registerOp(
             c: string | null,
             d: string | null,
             callParams: CallParams<'a' | 'b' | 'c' | 'd'>,
-        ) => string[];
-        array_length: (array: string[], callParams: CallParams<'array'>) => number;
-        bytes_from_b58: (b: string, callParams: CallParams<'b'>) => number[];
-        bytes_to_b58: (bs: number[], callParams: CallParams<'bs'>) => string;
+        ) => Promise<string[]>;
+        array_length: (array: string[], callParams: CallParams<'array'>) => Promise<number>;
+        bytes_from_b58: (b: string, callParams: CallParams<'b'>) => Promise<number[]>;
+        bytes_to_b58: (bs: number[], callParams: CallParams<'bs'>) => Promise<string>;
         concat: (
             a: string[],
             b: string[] | null,
             c: string[] | null,
             d: string[] | null,
             callParams: CallParams<'a' | 'b' | 'c' | 'd'>,
-        ) => string[];
-        concat_strings: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => string;
-        identity: (s: string | null, callParams: CallParams<'s'>) => string | null;
-        noop: (callParams: CallParams<null>) => void;
-        sha256_string: (s: string, callParams: CallParams<'s'>) => string;
-        string_from_b58: (b: string, callParams: CallParams<'b'>) => string;
-        string_to_b58: (s: string, callParams: CallParams<'s'>) => string;
+        ) => Promise<string[]>;
+        concat_strings: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => Promise<string>;
+        identity: (s: string | null, callParams: CallParams<'s'>) => Promise<string | null>;
+        noop: (callParams: CallParams<null>) => Promise<void>;
+        sha256_string: (s: string, callParams: CallParams<'s'>) => Promise<string>;
+        string_from_b58: (b: string, callParams: CallParams<'b'>) => Promise<string>;
+        string_to_b58: (s: string, callParams: CallParams<'s'>) => Promise<string>;
     },
 ): void;
 export function registerOp(
@@ -482,23 +505,23 @@ export function registerOp(
             c: string | null,
             d: string | null,
             callParams: CallParams<'a' | 'b' | 'c' | 'd'>,
-        ) => string[];
-        array_length: (array: string[], callParams: CallParams<'array'>) => number;
-        bytes_from_b58: (b: string, callParams: CallParams<'b'>) => number[];
-        bytes_to_b58: (bs: number[], callParams: CallParams<'bs'>) => string;
+        ) => Promise<string[]>;
+        array_length: (array: string[], callParams: CallParams<'array'>) => Promise<number>;
+        bytes_from_b58: (b: string, callParams: CallParams<'b'>) => Promise<number[]>;
+        bytes_to_b58: (bs: number[], callParams: CallParams<'bs'>) => Promise<string>;
         concat: (
             a: string[],
             b: string[] | null,
             c: string[] | null,
             d: string[] | null,
             callParams: CallParams<'a' | 'b' | 'c' | 'd'>,
-        ) => string[];
-        concat_strings: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => string;
-        identity: (s: string | null, callParams: CallParams<'s'>) => string | null;
-        noop: (callParams: CallParams<null>) => void;
-        sha256_string: (s: string, callParams: CallParams<'s'>) => string;
-        string_from_b58: (b: string, callParams: CallParams<'b'>) => string;
-        string_to_b58: (s: string, callParams: CallParams<'s'>) => string;
+        ) => Promise<string[]>;
+        concat_strings: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => Promise<string>;
+        identity: (s: string | null, callParams: CallParams<'s'>) => Promise<string | null>;
+        noop: (callParams: CallParams<null>) => Promise<void>;
+        sha256_string: (s: string, callParams: CallParams<'s'>) => Promise<string>;
+        string_from_b58: (b: string, callParams: CallParams<'b'>) => Promise<string>;
+        string_to_b58: (s: string, callParams: CallParams<'s'>) => Promise<string>;
     },
 ): void;
 export function registerOp(...args) {
@@ -527,9 +550,9 @@ export function registerOp(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -544,7 +567,7 @@ export function registerOp(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.array(req.args[0], req.args[1], req.args[2], req.args[3], callParams);
+            resp.result = await service.array(req.args[0], req.args[1], req.args[2], req.args[3], callParams);
         }
 
         if (req.fnName === 'array_length') {
@@ -555,7 +578,7 @@ export function registerOp(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.array_length(req.args[0], callParams);
+            resp.result = await service.array_length(req.args[0], callParams);
         }
 
         if (req.fnName === 'bytes_from_b58') {
@@ -566,7 +589,7 @@ export function registerOp(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.bytes_from_b58(req.args[0], callParams);
+            resp.result = await service.bytes_from_b58(req.args[0], callParams);
         }
 
         if (req.fnName === 'bytes_to_b58') {
@@ -577,7 +600,7 @@ export function registerOp(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.bytes_to_b58(req.args[0], callParams);
+            resp.result = await service.bytes_to_b58(req.args[0], callParams);
         }
 
         if (req.fnName === 'concat') {
@@ -591,7 +614,7 @@ export function registerOp(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.concat(req.args[0], req.args[1], req.args[2], req.args[3], callParams);
+            resp.result = await service.concat(req.args[0], req.args[1], req.args[2], req.args[3], callParams);
         }
 
         if (req.fnName === 'concat_strings') {
@@ -603,7 +626,7 @@ export function registerOp(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.concat_strings(req.args[0], req.args[1], callParams);
+            resp.result = await service.concat_strings(req.args[0], req.args[1], callParams);
         }
 
         if (req.fnName === 'identity') {
@@ -614,7 +637,7 @@ export function registerOp(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.identity(req.args[0], callParams);
+            resp.result = await service.identity(req.args[0], callParams);
         }
 
         if (req.fnName === 'noop') {
@@ -623,7 +646,7 @@ export function registerOp(...args) {
                 tetraplets: {},
             };
             resp.retCode = ResultCodes.success;
-            service.noop(callParams);
+            await service.noop(callParams);
             resp.result = {};
         }
 
@@ -635,7 +658,7 @@ export function registerOp(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.sha256_string(req.args[0], callParams);
+            resp.result = await service.sha256_string(req.args[0], callParams);
         }
 
         if (req.fnName === 'string_from_b58') {
@@ -646,7 +669,7 @@ export function registerOp(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.string_from_b58(req.args[0], callParams);
+            resp.result = await service.string_from_b58(req.args[0], callParams);
         }
 
         if (req.fnName === 'string_to_b58') {
@@ -657,10 +680,10 @@ export function registerOp(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.string_to_b58(req.args[0], callParams);
+            resp.result = await service.string_to_b58(req.args[0], callParams);
         }
 
-        next();
+        await next();
     });
 }
 
@@ -671,13 +694,13 @@ export function registerKademlia(service: {
         right: string[],
         count: number | null,
         callParams: CallParams<'target' | 'left' | 'right' | 'count'>,
-    ) => string[];
+    ) => Promise<string[]>;
     neighborhood: (
         key: string,
         already_hashed: boolean | null,
         count: number | null,
         callParams: CallParams<'key' | 'already_hashed' | 'count'>,
-    ) => string[];
+    ) => Promise<string[]>;
 }): void;
 export function registerKademlia(
     serviceId: string,
@@ -688,13 +711,13 @@ export function registerKademlia(
             right: string[],
             count: number | null,
             callParams: CallParams<'target' | 'left' | 'right' | 'count'>,
-        ) => string[];
+        ) => Promise<string[]>;
         neighborhood: (
             key: string,
             already_hashed: boolean | null,
             count: number | null,
             callParams: CallParams<'key' | 'already_hashed' | 'count'>,
-        ) => string[];
+        ) => Promise<string[]>;
     },
 ): void;
 export function registerKademlia(
@@ -706,13 +729,13 @@ export function registerKademlia(
             right: string[],
             count: number | null,
             callParams: CallParams<'target' | 'left' | 'right' | 'count'>,
-        ) => string[];
+        ) => Promise<string[]>;
         neighborhood: (
             key: string,
             already_hashed: boolean | null,
             count: number | null,
             callParams: CallParams<'key' | 'already_hashed' | 'count'>,
-        ) => string[];
+        ) => Promise<string[]>;
     },
 ): void;
 export function registerKademlia(
@@ -725,13 +748,13 @@ export function registerKademlia(
             right: string[],
             count: number | null,
             callParams: CallParams<'target' | 'left' | 'right' | 'count'>,
-        ) => string[];
+        ) => Promise<string[]>;
         neighborhood: (
             key: string,
             already_hashed: boolean | null,
             count: number | null,
             callParams: CallParams<'key' | 'already_hashed' | 'count'>,
-        ) => string[];
+        ) => Promise<string[]>;
     },
 ): void;
 export function registerKademlia(...args) {
@@ -760,9 +783,9 @@ export function registerKademlia(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -777,7 +800,7 @@ export function registerKademlia(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.merge(req.args[0], req.args[1], req.args[2], req.args[3], callParams);
+            resp.result = await service.merge(req.args[0], req.args[1], req.args[2], req.args[3], callParams);
         }
 
         if (req.fnName === 'neighborhood') {
@@ -790,40 +813,43 @@ export function registerKademlia(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.neighborhood(req.args[0], req.args[1], req.args[2], callParams);
+            resp.result = await service.neighborhood(req.args[0], req.args[1], req.args[2], callParams);
         }
 
-        next();
+        await next();
     });
 }
 
 export function registerDist(service: {
-    add_blueprint: (blueprint: { dependencies: string[]; name: string }, callParams: CallParams<'blueprint'>) => string;
+    add_blueprint: (
+        blueprint: { dependencies: string[]; name: string },
+        callParams: CallParams<'blueprint'>,
+    ) => Promise<string>;
     add_module: (
         wasm_b56_content: number[],
         conf: { name: string },
         callParams: CallParams<'wasm_b56_content' | 'conf'>,
-    ) => string;
+    ) => Promise<string>;
     add_module_from_vault: (
         path: string,
         config: { name: string },
         callParams: CallParams<'path' | 'config'>,
-    ) => string;
-    default_module_config: (module_name: string, callParams: CallParams<'module_name'>) => { name: string };
+    ) => Promise<string>;
+    default_module_config: (module_name: string, callParams: CallParams<'module_name'>) => Promise<{ name: string }>;
     get_interface: (
         module_id: string,
         callParams: CallParams<'module_id'>,
-    ) => {
+    ) => Promise<{
         function_signatures: { arguments: string[][]; name: string; output_types: string[] }[];
         record_types: { fields: string[][]; id: number; name: string }[];
-    };
-    list_blueprints: (callParams: CallParams<null>) => { dependencies: string[]; id: string; name: string }[];
-    list_modules: (callParams: CallParams<null>) => { config: { name: string }; hash: string; name: string }[];
+    }>;
+    list_blueprints: (callParams: CallParams<null>) => Promise<{ dependencies: string[]; id: string; name: string }[]>;
+    list_modules: (callParams: CallParams<null>) => Promise<{ config: { name: string }; hash: string; name: string }[]>;
     make_blueprint: (
         name: string,
         dependencies: string[],
         callParams: CallParams<'name' | 'dependencies'>,
-    ) => { dependencies: string[]; name: string };
+    ) => Promise<{ dependencies: string[]; name: string }>;
     make_module_config: (
         name: string,
         mem_pages_count: number | null,
@@ -843,7 +869,7 @@ export function registerDist(service: {
             | 'mounted_binaries'
             | 'logging_mask'
         >,
-    ) => { name: string };
+    ) => Promise<{ name: string }>;
 }): void;
 export function registerDist(
     serviceId: string,
@@ -851,32 +877,39 @@ export function registerDist(
         add_blueprint: (
             blueprint: { dependencies: string[]; name: string },
             callParams: CallParams<'blueprint'>,
-        ) => string;
+        ) => Promise<string>;
         add_module: (
             wasm_b56_content: number[],
             conf: { name: string },
             callParams: CallParams<'wasm_b56_content' | 'conf'>,
-        ) => string;
+        ) => Promise<string>;
         add_module_from_vault: (
             path: string,
             config: { name: string },
             callParams: CallParams<'path' | 'config'>,
-        ) => string;
-        default_module_config: (module_name: string, callParams: CallParams<'module_name'>) => { name: string };
+        ) => Promise<string>;
+        default_module_config: (
+            module_name: string,
+            callParams: CallParams<'module_name'>,
+        ) => Promise<{ name: string }>;
         get_interface: (
             module_id: string,
             callParams: CallParams<'module_id'>,
-        ) => {
+        ) => Promise<{
             function_signatures: { arguments: string[][]; name: string; output_types: string[] }[];
             record_types: { fields: string[][]; id: number; name: string }[];
-        };
-        list_blueprints: (callParams: CallParams<null>) => { dependencies: string[]; id: string; name: string }[];
-        list_modules: (callParams: CallParams<null>) => { config: { name: string }; hash: string; name: string }[];
+        }>;
+        list_blueprints: (
+            callParams: CallParams<null>,
+        ) => Promise<{ dependencies: string[]; id: string; name: string }[]>;
+        list_modules: (
+            callParams: CallParams<null>,
+        ) => Promise<{ config: { name: string }; hash: string; name: string }[]>;
         make_blueprint: (
             name: string,
             dependencies: string[],
             callParams: CallParams<'name' | 'dependencies'>,
-        ) => { dependencies: string[]; name: string };
+        ) => Promise<{ dependencies: string[]; name: string }>;
         make_module_config: (
             name: string,
             mem_pages_count: number | null,
@@ -896,7 +929,7 @@ export function registerDist(
                 | 'mounted_binaries'
                 | 'logging_mask'
             >,
-        ) => { name: string };
+        ) => Promise<{ name: string }>;
     },
 ): void;
 export function registerDist(
@@ -905,32 +938,39 @@ export function registerDist(
         add_blueprint: (
             blueprint: { dependencies: string[]; name: string },
             callParams: CallParams<'blueprint'>,
-        ) => string;
+        ) => Promise<string>;
         add_module: (
             wasm_b56_content: number[],
             conf: { name: string },
             callParams: CallParams<'wasm_b56_content' | 'conf'>,
-        ) => string;
+        ) => Promise<string>;
         add_module_from_vault: (
             path: string,
             config: { name: string },
             callParams: CallParams<'path' | 'config'>,
-        ) => string;
-        default_module_config: (module_name: string, callParams: CallParams<'module_name'>) => { name: string };
+        ) => Promise<string>;
+        default_module_config: (
+            module_name: string,
+            callParams: CallParams<'module_name'>,
+        ) => Promise<{ name: string }>;
         get_interface: (
             module_id: string,
             callParams: CallParams<'module_id'>,
-        ) => {
+        ) => Promise<{
             function_signatures: { arguments: string[][]; name: string; output_types: string[] }[];
             record_types: { fields: string[][]; id: number; name: string }[];
-        };
-        list_blueprints: (callParams: CallParams<null>) => { dependencies: string[]; id: string; name: string }[];
-        list_modules: (callParams: CallParams<null>) => { config: { name: string }; hash: string; name: string }[];
+        }>;
+        list_blueprints: (
+            callParams: CallParams<null>,
+        ) => Promise<{ dependencies: string[]; id: string; name: string }[]>;
+        list_modules: (
+            callParams: CallParams<null>,
+        ) => Promise<{ config: { name: string }; hash: string; name: string }[]>;
         make_blueprint: (
             name: string,
             dependencies: string[],
             callParams: CallParams<'name' | 'dependencies'>,
-        ) => { dependencies: string[]; name: string };
+        ) => Promise<{ dependencies: string[]; name: string }>;
         make_module_config: (
             name: string,
             mem_pages_count: number | null,
@@ -950,7 +990,7 @@ export function registerDist(
                 | 'mounted_binaries'
                 | 'logging_mask'
             >,
-        ) => { name: string };
+        ) => Promise<{ name: string }>;
     },
 ): void;
 export function registerDist(
@@ -960,32 +1000,39 @@ export function registerDist(
         add_blueprint: (
             blueprint: { dependencies: string[]; name: string },
             callParams: CallParams<'blueprint'>,
-        ) => string;
+        ) => Promise<string>;
         add_module: (
             wasm_b56_content: number[],
             conf: { name: string },
             callParams: CallParams<'wasm_b56_content' | 'conf'>,
-        ) => string;
+        ) => Promise<string>;
         add_module_from_vault: (
             path: string,
             config: { name: string },
             callParams: CallParams<'path' | 'config'>,
-        ) => string;
-        default_module_config: (module_name: string, callParams: CallParams<'module_name'>) => { name: string };
+        ) => Promise<string>;
+        default_module_config: (
+            module_name: string,
+            callParams: CallParams<'module_name'>,
+        ) => Promise<{ name: string }>;
         get_interface: (
             module_id: string,
             callParams: CallParams<'module_id'>,
-        ) => {
+        ) => Promise<{
             function_signatures: { arguments: string[][]; name: string; output_types: string[] }[];
             record_types: { fields: string[][]; id: number; name: string }[];
-        };
-        list_blueprints: (callParams: CallParams<null>) => { dependencies: string[]; id: string; name: string }[];
-        list_modules: (callParams: CallParams<null>) => { config: { name: string }; hash: string; name: string }[];
+        }>;
+        list_blueprints: (
+            callParams: CallParams<null>,
+        ) => Promise<{ dependencies: string[]; id: string; name: string }[]>;
+        list_modules: (
+            callParams: CallParams<null>,
+        ) => Promise<{ config: { name: string }; hash: string; name: string }[]>;
         make_blueprint: (
             name: string,
             dependencies: string[],
             callParams: CallParams<'name' | 'dependencies'>,
-        ) => { dependencies: string[]; name: string };
+        ) => Promise<{ dependencies: string[]; name: string }>;
         make_module_config: (
             name: string,
             mem_pages_count: number | null,
@@ -1005,7 +1052,7 @@ export function registerDist(
                 | 'mounted_binaries'
                 | 'logging_mask'
             >,
-        ) => { name: string };
+        ) => Promise<{ name: string }>;
     },
 ): void;
 export function registerDist(...args) {
@@ -1034,9 +1081,9 @@ export function registerDist(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -1048,7 +1095,7 @@ export function registerDist(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.add_blueprint(req.args[0], callParams);
+            resp.result = await service.add_blueprint(req.args[0], callParams);
         }
 
         if (req.fnName === 'add_module') {
@@ -1060,7 +1107,7 @@ export function registerDist(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.add_module(req.args[0], req.args[1], callParams);
+            resp.result = await service.add_module(req.args[0], req.args[1], callParams);
         }
 
         if (req.fnName === 'add_module_from_vault') {
@@ -1072,7 +1119,7 @@ export function registerDist(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.add_module_from_vault(req.args[0], req.args[1], callParams);
+            resp.result = await service.add_module_from_vault(req.args[0], req.args[1], callParams);
         }
 
         if (req.fnName === 'default_module_config') {
@@ -1083,7 +1130,7 @@ export function registerDist(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.default_module_config(req.args[0], callParams);
+            resp.result = await service.default_module_config(req.args[0], callParams);
         }
 
         if (req.fnName === 'get_interface') {
@@ -1094,7 +1141,7 @@ export function registerDist(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.get_interface(req.args[0], callParams);
+            resp.result = await service.get_interface(req.args[0], callParams);
         }
 
         if (req.fnName === 'list_blueprints') {
@@ -1103,7 +1150,7 @@ export function registerDist(...args) {
                 tetraplets: {},
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.list_blueprints(callParams);
+            resp.result = await service.list_blueprints(callParams);
         }
 
         if (req.fnName === 'list_modules') {
@@ -1112,7 +1159,7 @@ export function registerDist(...args) {
                 tetraplets: {},
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.list_modules(callParams);
+            resp.result = await service.list_modules(callParams);
         }
 
         if (req.fnName === 'make_blueprint') {
@@ -1124,7 +1171,7 @@ export function registerDist(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.make_blueprint(req.args[0], req.args[1], callParams);
+            resp.result = await service.make_blueprint(req.args[0], req.args[1], callParams);
         }
 
         if (req.fnName === 'make_module_config') {
@@ -1142,7 +1189,7 @@ export function registerDist(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.make_module_config(
+            resp.result = await service.make_module_config(
                 req.args[0],
                 req.args[1],
                 req.args[2],
@@ -1155,28 +1202,30 @@ export function registerDist(...args) {
             );
         }
 
-        next();
+        await next();
     });
 }
 
-export function registerGetter(service: { createStr: (arg0: number, callParams: CallParams<'arg0'>) => string }): void;
+export function registerGetter(service: {
+    createStr: (arg0: number, callParams: CallParams<'arg0'>) => Promise<string>;
+}): void;
 export function registerGetter(
     serviceId: string,
     service: {
-        createStr: (arg0: number, callParams: CallParams<'arg0'>) => string;
+        createStr: (arg0: number, callParams: CallParams<'arg0'>) => Promise<string>;
     },
 ): void;
 export function registerGetter(
     peer: FluencePeer,
     service: {
-        createStr: (arg0: number, callParams: CallParams<'arg0'>) => string;
+        createStr: (arg0: number, callParams: CallParams<'arg0'>) => Promise<string>;
     },
 ): void;
 export function registerGetter(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        createStr: (arg0: number, callParams: CallParams<'arg0'>) => string;
+        createStr: (arg0: number, callParams: CallParams<'arg0'>) => Promise<string>;
     },
 ): void;
 export function registerGetter(...args) {
@@ -1205,9 +1254,9 @@ export function registerGetter(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -1219,65 +1268,65 @@ export function registerGetter(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.createStr(req.args[0], callParams);
+            resp.result = await service.createStr(req.args[0], callParams);
         }
 
-        next();
+        await next();
     });
 }
 
 export function registerScript(service: {
-    add: (air_script: string, interval: string | null, callParams: CallParams<'air_script' | 'interval'>) => string;
-    list: (callParams: CallParams<null>) => {
-        failures: number;
-        id: string;
-        interval: string;
-        owner: string;
-        src: string;
-    };
-    remove: (script_id: string, callParams: CallParams<'script_id'>) => boolean;
+    add: (
+        air_script: string,
+        interval: string | null,
+        callParams: CallParams<'air_script' | 'interval'>,
+    ) => Promise<string>;
+    list: (
+        callParams: CallParams<null>,
+    ) => Promise<{ failures: number; id: string; interval: string; owner: string; src: string }>;
+    remove: (script_id: string, callParams: CallParams<'script_id'>) => Promise<boolean>;
 }): void;
 export function registerScript(
     serviceId: string,
     service: {
-        add: (air_script: string, interval: string | null, callParams: CallParams<'air_script' | 'interval'>) => string;
-        list: (callParams: CallParams<null>) => {
-            failures: number;
-            id: string;
-            interval: string;
-            owner: string;
-            src: string;
-        };
-        remove: (script_id: string, callParams: CallParams<'script_id'>) => boolean;
+        add: (
+            air_script: string,
+            interval: string | null,
+            callParams: CallParams<'air_script' | 'interval'>,
+        ) => Promise<string>;
+        list: (
+            callParams: CallParams<null>,
+        ) => Promise<{ failures: number; id: string; interval: string; owner: string; src: string }>;
+        remove: (script_id: string, callParams: CallParams<'script_id'>) => Promise<boolean>;
     },
 ): void;
 export function registerScript(
     peer: FluencePeer,
     service: {
-        add: (air_script: string, interval: string | null, callParams: CallParams<'air_script' | 'interval'>) => string;
-        list: (callParams: CallParams<null>) => {
-            failures: number;
-            id: string;
-            interval: string;
-            owner: string;
-            src: string;
-        };
-        remove: (script_id: string, callParams: CallParams<'script_id'>) => boolean;
+        add: (
+            air_script: string,
+            interval: string | null,
+            callParams: CallParams<'air_script' | 'interval'>,
+        ) => Promise<string>;
+        list: (
+            callParams: CallParams<null>,
+        ) => Promise<{ failures: number; id: string; interval: string; owner: string; src: string }>;
+        remove: (script_id: string, callParams: CallParams<'script_id'>) => Promise<boolean>;
     },
 ): void;
 export function registerScript(
     peer: FluencePeer,
     serviceId: string,
     service: {
-        add: (air_script: string, interval: string | null, callParams: CallParams<'air_script' | 'interval'>) => string;
-        list: (callParams: CallParams<null>) => {
-            failures: number;
-            id: string;
-            interval: string;
-            owner: string;
-            src: string;
-        };
-        remove: (script_id: string, callParams: CallParams<'script_id'>) => boolean;
+        add: (
+            air_script: string,
+            interval: string | null,
+            callParams: CallParams<'air_script' | 'interval'>,
+        ) => Promise<string>;
+        list: (
+            callParams: CallParams<null>,
+        ) => Promise<{ failures: number; id: string; interval: string; owner: string; src: string }>;
+        remove: (script_id: string, callParams: CallParams<'script_id'>) => Promise<boolean>;
     },
 ): void;
 export function registerScript(...args) {
@@ -1306,9 +1355,9 @@ export function registerScript(...args) {
         service = args[2];
     }
 
-    peer.callServiceHandler.use((req, resp, next) => {
+    peer.callServiceHandler.use(async (req, resp, next) => {
         if (req.serviceId !== serviceId) {
-            next();
+            await next();
             return;
         }
 
@@ -1321,7 +1370,7 @@ export function registerScript(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.add(req.args[0], req.args[1], callParams);
+            resp.result = await service.add(req.args[0], req.args[1], callParams);
         }
 
         if (req.fnName === 'list') {
@@ -1330,7 +1379,7 @@ export function registerScript(...args) {
                 tetraplets: {},
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.list(callParams);
+            resp.result = await service.list(callParams);
         }
 
         if (req.fnName === 'remove') {
@@ -1341,10 +1390,10 @@ export function registerScript(...args) {
                 },
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.remove(req.args[0], callParams);
+            resp.result = await service.remove(req.args[0], callParams);
         }
 
-        next();
+        await next();
     });
 }
 

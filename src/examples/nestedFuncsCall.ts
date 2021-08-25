@@ -3,7 +3,7 @@ import { d, registerOpH } from '../compiled/examples/nestedFuncs';
 
 export async function nestedFuncsCall(peer: FluencePeer): Promise<string> {
     registerOpH(peer, {
-        identity: (args0) => {
+        identity: async (args0) => {
             return args0;
         },
     });

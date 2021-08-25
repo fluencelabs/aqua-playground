@@ -4,7 +4,7 @@ import { FluencePeer } from '@fluencelabs/fluence';
 
 export async function funcCall(peer: FluencePeer) {
     registerTestSrv(peer, {
-        str: () => {
+        str: async () => {
             return `some str`;
         },
     });

@@ -3,7 +3,7 @@ import { create_client_util, registerAquaDHT } from '../compiled/examples/passAr
 
 export async function passArgsCall(peer: FluencePeer) {
     registerAquaDHT(peer, {
-        put_host_value: (args0, args1) => {
+        put_host_value: async (args0, args1) => {
             return args0 + args1;
         },
     });
