@@ -74,113 +74,45 @@ const main = async () => {
     // these calls return void, so they could be executed at any time,
     // because promise waits only a fact that particle was sent
 
+    let success = true;
+    let cb: () => void = () => {
+        success = false;
+    };
+
     // callArrow.aqua
     let callArrowResult = await callArrowCall();
+    checkCall('callArrow', callArrowResult, 'Hello, callArrow call!', cb);
 
     // fold.aqua
     let foldCallResult = await foldCall();
+    checkCall('foldCall', foldCallResult, ['/ip4/164.90.171.139/tcp/7770', '/ip4/164.90.171.139/tcp/9990/ws'], cb);
 
     //if.aqua
     await ifCall();
 
     // par.aqua
     let parCallResult = await parCall();
+    checkCall('parArrow', parCallResult, 'hello', cb);
 
     // these calls waiting for a result, so it will be called sequentially
     // helloWorld.aqua
     let helloWorldResult = await helloWorldCall();
+    checkCall('helloWorldCall', helloWorldResult, 'Hello, NAME!', cb);
 
     // func.aqua
     let funcCallResult = await funcCall();
+    checkCall('funcCall', funcCallResult, 'some str', cb);
 
     // on.aqua
     let onCallResult = await onCall();
+    checkCall('onCall', onCallResult, ['/ip4/164.90.171.139/tcp/7770', '/ip4/164.90.171.139/tcp/9990/ws'], cb);
 
     // dataAlias.aqua
     let dataAliasResult = await dataAliasCall();
+    checkCall('dataAliasCall', dataAliasResult, 'peer id str', cb);
 
     // complex.aqua
     let complexCallResult = await complexCall();
-
-    // constants.aqua
-    let constantCallResult = await constantsCall();
-
-    // stream.aqua
-    let streamResult = await streamCall();
-
-    // topology.aqua
-    let topologyResult = await topologyCall(peer2);
-
-    // foldJoin.aqua
-    let foldJoinResult = await foldJoinCall();
-
-    // option.aqua
-    registerHandlers();
-    let optionResult = await useOptionalCall();
-    let optionalResult = await returnOptionalCall();
-    let noneResult = await returnNull();
-
-    // via.aqua
-    let viaResult = await viaCall();
-
-    // nestedFuncs.aqua
-    let nestedFuncsResult = await nestedFuncsCall();
-
-    // assignment.aqua
-    let assignmentResult = await assignmentCall();
-
-    // tryOtherwise.aqua
-    let tryOtherwiseResult = await tryOtherwiseCall();
-
-    // tryCatch.aqua
-    let tryCatchResult = await tryCatchCall();
-
-    // coCall.aqua
-    let coCallResult = await coCall();
-
-    // passArgsCall.aqua
-    let passArgsResult = await passArgsCall();
-
-    // streamArgs.aqua
-    let streamArgsResult = await streamArgsCall();
-
-    // streamResults.aqua
-    let streamResultsResult = await streamResultsCall();
-
-    // pushToStream.aqua
-    let pushToStreamResult = await pushToStreamCall();
-
-    // literalCall.aqua
-    let literalCallResult = await literalCall();
-
-    // multiReturn.aqua
-    let multiReturnResult = await multiReturnCall();
-
-    // declare.aqua
-    let declareResult = await declareCall();
-
-    await FluencePeer.default.uninit();
-    await peer2.uninit();
-
-    let success = true;
-    let cb: () => void = () => {
-        success = false;
-    };
-
-    checkCall('callArrow', callArrowResult, 'Hello, callArrow call!', cb);
-
-    checkCall('foldCall', foldCallResult, ['/ip4/164.90.171.139/tcp/7770', '/ip4/164.90.171.139/tcp/9990/ws'], cb);
-
-    checkCall('onCall', onCallResult, ['/ip4/164.90.171.139/tcp/7770', '/ip4/164.90.171.139/tcp/9990/ws'], cb);
-
-    checkCall('parArrow', parCallResult, 'hello', cb);
-
-    checkCall('helloWorldCall', helloWorldResult, 'Hello, NAME!', cb);
-
-    checkCall('funcCall', funcCallResult, 'some str', cb);
-
-    checkCall('dataAliasCall', dataAliasResult, 'peer id str', cb);
-
     checkCall(
         'complexCall',
         complexCallResult,
@@ -188,47 +120,49 @@ const main = async () => {
         cb,
     );
 
+    // constants.aqua
+    let constantCallResult = await constantsCall();
     checkCall('constantCall', constantCallResult, ['1', 'ab'], cb);
 
+    // stream.aqua
+    let streamResult = await streamCall();
     checkCall('streamCall', streamResult, ['first updated', 'second updated', 'third updated', 'fourth updated'], cb);
 
+    // topology.aqua
+    let topologyResult = await topologyCall(peer2);
     checkCall('topologyCall', topologyResult, 'finish', cb);
 
+    // foldJoin.aqua
+    let foldJoinResult = await foldJoinCall();
     checkCallBy('foldJoinCall', foldJoinResult, (res) => res.length == 3, cb);
 
+    // option.aqua
+    registerHandlers();
+    let optionResult = await useOptionalCall();
+    let optionalResult = await returnOptionalCall();
+    let noneResult = await returnNull();
     checkCall('useOptional', optionResult, 'hello', cb);
     checkCall('returnOptional', optionalResult, 'optional', cb);
     checkCall('returnNone', noneResult, null, cb);
 
+    // via.aqua
+    let viaResult = await viaCall();
     checkCallBy('via', viaResult, (res) => res.every((val, i, arr) => deepEqual(val, arr[0])), cb);
 
+    // nestedFuncs.aqua
+    let nestedFuncsResult = await nestedFuncsCall();
     checkCall('nestedFuncsCall', nestedFuncsResult, 'some-str', cb);
 
+    // assignment.aqua
+    let assignmentResult = await assignmentCall();
     checkCall('assignmentCall', assignmentResult, ['abc', 'hello'], cb);
 
+    // tryOtherwise.aqua
+    let tryOtherwiseResult = await tryOtherwiseCall();
     checkCall('tryOtherwiseCall', tryOtherwiseResult, 'error', cb);
 
-    checkCall('coCall', coCallResult, ['/ip4/164.90.171.139/tcp/7770', '/ip4/164.90.171.139/tcp/9990/ws'], cb);
-
-    checkCall('passArgsCall', passArgsResult, 'client-utilsid', cb);
-
-    checkCall('streamArgsCall', streamArgsResult, [['peer_id', 'peer_id']], cb);
-
-    checkCall('streamResultsCall', streamResultsResult, ['new_name', 'new_name', 'new_name'], cb);
-
-    checkCall('pushToStreamCall', pushToStreamResult, ['hello', 'get_string'], cb);
-
-    checkCall('literalCall', literalCallResult, 'some literal', cb);
-
-    checkCall(
-        'multiReturnResult',
-        multiReturnResult,
-        [['some-str', 'random-str', 'some-str'], 5, 'some-str', [1, 2], null, 10],
-        cb,
-    );
-
-    checkCall('declareResult', declareResult, 'declare all foodeclare all barsmall_foo', cb);
-
+    // tryCatch.aqua
+    let tryCatchResult = await tryCatchCall();
     checkCallBy(
         'tryCatchCall',
         tryCatchResult,
@@ -240,6 +174,46 @@ const main = async () => {
         },
         cb,
     );
+
+    // coCall.aqua
+    let coCallResult = await coCall();
+    checkCall('coCall', coCallResult, ['/ip4/164.90.171.139/tcp/7770', '/ip4/164.90.171.139/tcp/9990/ws'], cb);
+
+    // passArgsCall.aqua
+    let passArgsResult = await passArgsCall();
+    checkCall('passArgsCall', passArgsResult, 'client-utilsid', cb);
+
+    // streamArgs.aqua
+    let streamArgsResult = await streamArgsCall();
+    checkCall('streamArgsCall', streamArgsResult, [['peer_id', 'peer_id']], cb);
+
+    // streamResults.aqua
+    let streamResultsResult = await streamResultsCall();
+    checkCall('streamResultsCall', streamResultsResult, ['new_name', 'new_name', 'new_name'], cb);
+
+    // pushToStream.aqua
+    let pushToStreamResult = await pushToStreamCall();
+    checkCall('pushToStreamCall', pushToStreamResult, ['hello', 'get_string'], cb);
+
+    // literalCall.aqua
+    let literalCallResult = await literalCall();
+    checkCall('literalCall', literalCallResult, 'some literal', cb);
+
+    // multiReturn.aqua
+    let multiReturnResult = await multiReturnCall();
+    checkCall(
+        'multiReturnResult',
+        multiReturnResult,
+        [['some-str', 'random-str', 'some-str'], 5, 'some-str', [1, 2], null, 10],
+        cb,
+    );
+
+    // declare.aqua
+    let declareResult = await declareCall();
+    checkCall('declareResult', declareResult, 'declare all foodeclare all barsmall_foo', cb);
+
+    await FluencePeer.default.uninit();
+    await peer2.uninit();
 
     if (success) {
         process.exit(0);
