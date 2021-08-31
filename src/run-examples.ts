@@ -30,6 +30,7 @@ import {literalCall} from "./examples/returnLiteralCall";
 import {multiReturnCall} from "./examples/multiReturnCall";
 import {declareCall} from "./examples/declareCall";
 import {subImportCall} from "./examples/subImportUsageCall";
+import {import2Call} from "./examples/import2Call";
 let deepEqual = require('deep-equal')
 
 function checkCall(name: string, actual: any, expected: any, callBackOnError: () => void) {
@@ -154,6 +155,9 @@ const main = async () => {
   // subImport.aqua and subImportUsage.aqua
   let subImportResult = await subImportCall(client)
 
+  // import2.aqua, export2.aqua, OneMore.aqua
+  let import2Result = await import2Call(client)
+
   await client.disconnect();
 
   let success = true;
@@ -214,6 +218,8 @@ const main = async () => {
   checkCall("declareResult", declareResult, 'declare all foodeclare all barsmall_foo', cb)
 
   checkCall("subImportResult", subImportResult, { one: "random_string", two: 42 }, cb)
+
+  checkCall("import2Result", import2Result, { first: 'I am MyFooBar foo', second: [ 'I am MyFooBar foo', ' I am MyFooBar bar' ] }, cb)
 
   checkCallBy("tryCatchCall", tryCatchResult, (res) => {
     return (res[0] as string).includes("Error: Service with id 'unex' not found") && res[1] === '/ip4/134.209.186.43/tcp/7001'
