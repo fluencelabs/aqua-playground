@@ -44,9 +44,9 @@ export async function callConstant(client: FluenceClient, config?: {ttl?: number
   (seq
    (seq
     (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-    (call %init_peer_id% ("test" "createStr") [5] $res)
+    (call %init_peer_id% ("test" "createStr") [1] $res)
    )
-   (call %init_peer_id% ("op" "identity") ["default-str"] $res)
+   (call %init_peer_id% ("op" "identity") ["ab"] $res)
   )
   (xor
    (call %init_peer_id% ("callbackSrv" "response") [$res])
