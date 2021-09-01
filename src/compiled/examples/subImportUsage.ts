@@ -13,19 +13,19 @@ import { RequestFlow } from '@fluencelabs/fluence/dist/internal/RequestFlow';
 
 // Services
 
-//Stringer
-//defaultId = "stringer-id"
+//ConcatSubs
+//defaultId = "concat_subs"
 
-//returnString: (arg0: string) => string
-//END Stringer
+//get_some: (s: string, sr: {one:string;two:number}) => {one:string;two:number}
+//END ConcatSubs
 
 
 
 // Functions
 
-export async function checkStreams(client: FluenceClient, ch: string[], config?: {ttl?: number}): Promise<string[]> {
+export async function subImportUsage(client: FluenceClient, s: string, config?: {ttl?: number}): Promise<{one:string;two:number}> {
     let request: RequestFlow;
-    const promise = new Promise<string[]>((resolve, reject) => {
+    const promise = new Promise<{one:string;two:number}>((resolve, reject) => {
         const r = new RequestFlowBuilder()
             .disableInjections()
             .withRawScript(
@@ -37,21 +37,16 @@ export async function checkStreams(client: FluenceClient, ch: string[], config?:
     (seq
      (seq
       (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-      (call %init_peer_id% ("getDataSrv" "ch") [] ch)
+      (call %init_peer_id% ("getDataSrv" "s") [] s)
      )
-     (call %init_peer_id% ("stringer-id" "returnString") ["first"] $stream)
+     (call %init_peer_id% ("sub_service" "sub") [s] sr1)
     )
-    (call %init_peer_id% ("stringer-id" "returnString") ["second"] $stream)
+    (call %init_peer_id% ("sub_service" "sub") ["some thing"] res)
    )
-   (fold ch b
-    (seq
-     (call %init_peer_id% ("stringer-id" "returnString") [b] $stream)
-     (next b)
-    )
-   )
+   (call %init_peer_id% ("concat_subs" "get_some") [sr1.$.one! res] result)
   )
   (xor
-   (call %init_peer_id% ("callbackSrv" "response") [$stream])
+   (call %init_peer_id% ("callbackSrv" "response") [result])
    (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
   )
  )
@@ -64,7 +59,7 @@ export async function checkStreams(client: FluenceClient, ch: string[], config?:
                 h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
                 });
-                h.on('getDataSrv', 'ch', () => {return ch;});
+                h.on('getDataSrv', 's', () => {return s;});
                 h.onEvent('callbackSrv', 'response', (args) => {
     const [res] = args;
   resolve(res);
@@ -78,7 +73,7 @@ export async function checkStreams(client: FluenceClient, ch: string[], config?:
             })
             .handleScriptError(reject)
             .handleTimeout(() => {
-                reject('Request timed out for checkStreams');
+                reject('Request timed out for subImportUsage');
             })
         if(config && config.ttl) {
             r.withTTL(config.ttl)

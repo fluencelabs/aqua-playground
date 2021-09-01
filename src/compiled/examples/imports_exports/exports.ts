@@ -13,45 +13,28 @@ import { RequestFlow } from '@fluencelabs/fluence/dist/internal/RequestFlow';
 
 // Services
 
-//Stringer
-//defaultId = "stringer-id"
+//MyExportSrv
+//defaultId = "my_export_srv"
 
-//returnString: (arg0: string) => string
-//END Stringer
+//another_str: () => string
+//END MyExportSrv
 
 
 
 // Functions
 
-export async function checkStreams(client: FluenceClient, ch: string[], config?: {ttl?: number}): Promise<string[]> {
+export async function string_from_lib(client: FluenceClient, config?: {ttl?: number}): Promise<string> {
     let request: RequestFlow;
-    const promise = new Promise<string[]>((resolve, reject) => {
+    const promise = new Promise<string>((resolve, reject) => {
         const r = new RequestFlowBuilder()
             .disableInjections()
             .withRawScript(
                 `
 (xor
  (seq
-  (seq
-   (seq
-    (seq
-     (seq
-      (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-      (call %init_peer_id% ("getDataSrv" "ch") [] ch)
-     )
-     (call %init_peer_id% ("stringer-id" "returnString") ["first"] $stream)
-    )
-    (call %init_peer_id% ("stringer-id" "returnString") ["second"] $stream)
-   )
-   (fold ch b
-    (seq
-     (call %init_peer_id% ("stringer-id" "returnString") [b] $stream)
-     (next b)
-    )
-   )
-  )
+  (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
   (xor
-   (call %init_peer_id% ("callbackSrv" "response") [$stream])
+   (call %init_peer_id% ("callbackSrv" "response") ["some_string_func"])
    (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
   )
  )
@@ -64,7 +47,7 @@ export async function checkStreams(client: FluenceClient, ch: string[], config?:
                 h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
                 });
-                h.on('getDataSrv', 'ch', () => {return ch;});
+                
                 h.onEvent('callbackSrv', 'response', (args) => {
     const [res] = args;
   resolve(res);
@@ -78,7 +61,7 @@ export async function checkStreams(client: FluenceClient, ch: string[], config?:
             })
             .handleScriptError(reject)
             .handleTimeout(() => {
-                reject('Request timed out for checkStreams');
+                reject('Request timed out for string_from_lib');
             })
         if(config && config.ttl) {
             r.withTTL(config.ttl)

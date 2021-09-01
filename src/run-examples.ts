@@ -215,7 +215,7 @@ const main = async () => {
 
   checkCall("multiReturnResult", multiReturnResult, [ [ 'some-str', 'random-str', 'some-str' ], 5, 'some-str', [ 1, 2 ], null, 10], cb)
 
-  checkCall("declareResult", declareResult, 'declare all foodeclare all barsmall_foo', cb)
+  checkCall("declareResult", declareResult, 'declare all foodeclare all barsmall_fooexport_const', cb)
 
   checkCall("subImportResult", subImportResult, { one: "random_string", two: 42 }, cb)
 

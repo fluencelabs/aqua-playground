@@ -13,17 +13,10 @@ import { RequestFlow } from '@fluencelabs/fluence/dist/internal/RequestFlow';
 
 // Services
 
-//OpH
-//defaultId = "opa"
-
-//identity: (s: string) => string
-//END OpH
-
-
 
 // Functions
 
-export async function a(client: FluenceClient, b: string, config?: {ttl?: number}): Promise<string> {
+export async function wrap(client: FluenceClient, config?: {ttl?: number}): Promise<string> {
     let request: RequestFlow;
     const promise = new Promise<string>((resolve, reject) => {
         const r = new RequestFlowBuilder()
@@ -35,12 +28,12 @@ export async function a(client: FluenceClient, b: string, config?: {ttl?: number
   (seq
    (seq
     (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-    (call %init_peer_id% ("getDataSrv" "b") [] b)
+    (call %init_peer_id% ("hello" "more_call") [])
    )
-   (call %init_peer_id% ("opa" "identity") [b] c)
+   (call %init_peer_id% ("ohmygod" "more_call") [])
   )
   (xor
-   (call %init_peer_id% ("callbackSrv" "response") [c])
+   (call %init_peer_id% ("callbackSrv" "response") ["I am MyFooBar foo"])
    (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
   )
  )
@@ -53,7 +46,7 @@ export async function a(client: FluenceClient, b: string, config?: {ttl?: number
                 h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
                 });
-                h.on('getDataSrv', 'b', () => {return b;});
+                
                 h.onEvent('callbackSrv', 'response', (args) => {
     const [res] = args;
   resolve(res);
@@ -67,7 +60,7 @@ export async function a(client: FluenceClient, b: string, config?: {ttl?: number
             })
             .handleScriptError(reject)
             .handleTimeout(() => {
-                reject('Request timed out for a');
+                reject('Request timed out for wrap');
             })
         if(config && config.ttl) {
             r.withTTL(config.ttl)
@@ -80,9 +73,9 @@ export async function a(client: FluenceClient, b: string, config?: {ttl?: number
       
 
 
-export async function d(client: FluenceClient, e: string, config?: {ttl?: number}): Promise<string> {
+export async function barfoo(client: FluenceClient, config?: {ttl?: number}): Promise<string[]> {
     let request: RequestFlow;
-    const promise = new Promise<string>((resolve, reject) => {
+    const promise = new Promise<string[]>((resolve, reject) => {
         const r = new RequestFlowBuilder()
             .disableInjections()
             .withRawScript(
@@ -92,12 +85,12 @@ export async function d(client: FluenceClient, e: string, config?: {ttl?: number
   (seq
    (seq
     (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-    (call %init_peer_id% ("getDataSrv" "e") [] e)
+    (ap "I am MyFooBar foo" $res)
    )
-   (call %init_peer_id% ("opa" "identity") [e] c)
+   (ap " I am MyFooBar bar" $res)
   )
   (xor
-   (call %init_peer_id% ("callbackSrv" "response") [c])
+   (call %init_peer_id% ("callbackSrv" "response") [$res])
    (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
   )
  )
@@ -110,7 +103,7 @@ export async function d(client: FluenceClient, e: string, config?: {ttl?: number
                 h.on('getDataSrv', '-relay-', () => {
                     return client.relayPeerId!;
                 });
-                h.on('getDataSrv', 'e', () => {return e;});
+                
                 h.onEvent('callbackSrv', 'response', (args) => {
     const [res] = args;
   resolve(res);
@@ -124,7 +117,7 @@ export async function d(client: FluenceClient, e: string, config?: {ttl?: number
             })
             .handleScriptError(reject)
             .handleTimeout(() => {
-                reject('Request timed out for d');
+                reject('Request timed out for barfoo');
             })
         if(config && config.ttl) {
             r.withTTL(config.ttl)
