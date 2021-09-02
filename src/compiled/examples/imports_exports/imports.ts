@@ -36,17 +36,23 @@ export async function concat_foobars(client: FluenceClient, config?: {ttl?: numb
    (seq
     (seq
      (seq
-      (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-      (call %init_peer_id% ("string_service" "concat") ["declare all foo" "declare all bar"] res3)
+      (seq
+       (seq
+        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+        (call %init_peer_id% ("string_service" "concat") ["declare all foo" "declare all bar"] res3)
+       )
+       (call %init_peer_id% ("super_foo" "small_foo") [] res4)
+      )
+      (call %init_peer_id% ("string_service" "concat") [res3 res4] res5)
      )
-     (call %init_peer_id% ("super_foo" "small_foo") [] res4)
+     (call %init_peer_id% ("string_service" "concat") [res5 "export_const"] res6)
     )
-    (call %init_peer_id% ("string_service" "concat") [res3 res4] res5)
+    (call %init_peer_id% ("string_service" "concat") [res6 Declare_DECLARE_CONST] res7)
    )
-   (call %init_peer_id% ("string_service" "concat") [res5 "export_const"] res6)
+   (call %init_peer_id% ("string_service" "concat") [res7 Declare_DC2] res8)
   )
   (xor
-   (call %init_peer_id% ("callbackSrv" "response") [res6])
+   (call %init_peer_id% ("callbackSrv" "response") [res8])
    (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
   )
  )

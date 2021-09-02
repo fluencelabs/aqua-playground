@@ -1,5 +1,5 @@
 import decl_foo, decl_bar from "declare.aqua"
-use SuperFoo from "declare.aqua" as Declare
+use DECLARE_CONST, SuperFoo, DECLARE_CONST2 as DC2 from "declare.aqua" as Declare
 import Op as Noop from "@fluencelabs/aqua-lib/builtin.aqua"
 import some_string, MyExportSrv, EXPORT_CONST from "exports.aqua"
 
@@ -13,4 +13,6 @@ func concat_foobars() -> string:
     res4 <- Declare.SuperFoo.small_foo()
     res5 <- StringService.concat(res3, res4)
     res6 <- StringService.concat(res5, EXPORT_CONST)
-    <- res6
+    res7 <- StringService.concat(res6, Declare.DECLARE_CONST)
+    res8 <- StringService.concat(res7, Declare.DC2)
+    <- res8
