@@ -1,4 +1,4 @@
-module Exports declares *
+module Exports declares some_string, MyExportSrv, EXPORT_CONST
 
 -- TODO: check it in TS after it will be implemented
 export some_string as string_from_lib
