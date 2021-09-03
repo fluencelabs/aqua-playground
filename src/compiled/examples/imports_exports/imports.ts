@@ -50,9 +50,9 @@ export async function concat_foobars(client: FluenceClient, config?: {ttl?: numb
      )
      (call %init_peer_id% ("string_service" "concat") [res5 "export_const"] res6)
     )
-    (call %init_peer_id% ("string_service" "concat") [res6 Declare_DECLARE_CONST] res7)
+    (call %init_peer_id% ("string_service" "concat") [res6 "declare_const"] res7)
    )
-   (call %init_peer_id% ("string_service" "concat") [res7 Declare_DC2] res8)
+   (call %init_peer_id% ("string_service" "concat") [res7 "declare_const2"] res8)
   )
   (xor
    (call %init_peer_id% ("callbackSrv" "response") [res8])
