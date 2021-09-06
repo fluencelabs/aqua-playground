@@ -1,9 +1,6 @@
 import { FluencePeer } from '@fluencelabs/fluence';
-import {
-    concat_foobars,
-    registerMyExportSrv,
-    registerStringService,
-} from '../compiled/examples/imports_exports/imports';
+import { concat_foobars, registerStringService } from '../compiled/examples/imports_exports/imports';
+import { registerMyExportSrv } from '../compiled/examples/imports_exports/exports';
 import { registerSuperFoo } from '../compiled/examples/imports_exports/declare';
 
 export async function declareCall() {

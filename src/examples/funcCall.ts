@@ -1,6 +1,4 @@
-import { testFunc } from '../compiled/examples/func';
-import { registerTestSrv } from '../compiled/examples/complex';
-import { FluencePeer } from '@fluencelabs/fluence';
+import { testFunc, registerTestSrv } from '../compiled/examples/func';
 
 export async function funcCall() {
     registerTestSrv({
