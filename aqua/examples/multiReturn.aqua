@@ -4,17 +4,17 @@ service GetStr("multiret-test"):
 service GetNum("multiret-num"):
     retNum: -> u8
 
-const someNum = 5
-const someStr = "some-str"
+const SOME_NUM = 5
+const SOME_STR = "some-str"
 
 func tupleFunc() -> string, u8:
-    str <- GetStr.retStr(someStr)
+    str <- GetStr.retStr(SOME_STR)
     n <- GetNum.retNum()
     <- str, n
 
 func multiReturnFunc(somethingToReturn: []u8, smthOption: ?string) -> []string, u8, string, []u8, ?string, u8 :
     res: *string
-    res <- GetStr.retStr(someStr)
+    res <- GetStr.retStr(SOME_STR)
     res <- GetStr.retStr("random-str")
     res, tNum <- tupleFunc()
-    <- res, 5, someStr, somethingToReturn, smthOption, tNum
+    <- res, SOME_NUM, SOME_STR, somethingToReturn, smthOption, tNum

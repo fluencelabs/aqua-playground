@@ -7,11 +7,11 @@ service OpO("op"):
     identity: string -> string
 
 -- a question mark means that this constant could be rewritten before this definition
-const anotherConst ?= "default-str"
-const uniqueConst ?= 5
+const ANOTHER_CONST ?= "default-str"
+const UNIQUE_CONST ?= 5
 
 func callConstant() -> []string:
     res: *string
-    res <- Getter.createStr(uniqueConst)
-    res <- OpO.identity(anotherConst)
+    res <- Getter.createStr(UNIQUE_CONST)
+    res <- OpO.identity(ANOTHER_CONST)
     <- res
