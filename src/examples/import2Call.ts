@@ -1,13 +1,18 @@
+import { registerOneMore } from '../compiled/examples/imports_exports/gen/OneMore';
 import { barfoo, wrap } from '../compiled/examples/imports_exports/import2';
 
 export async function import2Call() {
-    // registerServiceFunction(client, 'hello', 'more_call', (args: any[], _) => {
-    //     return {};
-    // });
+    registerOneMore('hello', {
+        more_call: () => {
+            return {};
+        },
+    });
 
-    // registerServiceFunction(client, 'ohmygod', 'more_call', (args: any[], _) => {
-    //     return {};
-    // });
+    registerOneMore('ohmygod', {
+        more_call: () => {
+            return {};
+        },
+    });
 
     let first = await wrap();
     let second = await barfoo();
