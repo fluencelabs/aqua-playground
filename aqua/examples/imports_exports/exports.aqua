@@ -11,3 +11,6 @@ service MyExportSrv("my_export_srv"):
 
 func some_string() -> string:
   <- "some_string_func"
+
+func some_random_func() -> string:
+  <- "wow, so random"
