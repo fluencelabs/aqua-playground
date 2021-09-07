@@ -3,13 +3,13 @@ import { returnNone, returnOptional, useOptional, registerSomeS } from '../compi
 
 export function registerHandlers(): void {
     registerSomeS({
-        getStr: async (arg0) => {
+        getStr: (arg0) => {
             return arg0;
         },
-        getStr1: async () => {
+        getStr1: () => {
             return 'optional';
         },
-        getStr2: async (arg0) => {
+        getStr2: (arg0) => {
             return arg0;
         },
     });

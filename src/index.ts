@@ -14,7 +14,7 @@ const main = async () => {
     //     addNameToHello: string -> string
     // see more in helloWorld.aqua
     registerStringExtra({
-        addNameToHello: async (arg0) => {
+        addNameToHello: (arg0) => {
             return `Hello, ${arg0}!`;
         },
     });

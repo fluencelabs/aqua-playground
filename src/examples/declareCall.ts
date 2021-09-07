@@ -1,22 +1,21 @@
-import { FluencePeer } from '@fluencelabs/fluence';
 import { concat_foobars, registerStringService } from '../compiled/examples/imports_exports/imports';
 import { registerMyExportSrv } from '../compiled/examples/imports_exports/exports';
 import { registerSuperFoo } from '../compiled/examples/imports_exports/declare';
 
 export async function declareCall() {
     registerSuperFoo({
-        small_foo: async () => {
+        small_foo: () => {
             return 'small_foo';
         },
     });
 
     registerStringService({
-        concat: async (a, b) => {
+        concat: (a, b) => {
             return a + b;
         },
     });
     registerMyExportSrv({
-        another_str: async () => {
+        another_str: () => {
             return 'str_from_my_export_srv';
         },
     });

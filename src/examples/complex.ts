@@ -2,14 +2,14 @@ import { FluencePeer } from '@fluencelabs/fluence';
 import { doStuff, registerTestS } from '../compiled/examples/complex';
 
 export async function complexCall() {
-    const relayPeerId = FluencePeer.default.connectionInfo.connectedRelays[0];
+    const relayPeerId = FluencePeer.default.connectionInfo.connectedRelay;
     const selfPeerId = FluencePeer.default.connectionInfo.selfPeerId;
 
     registerTestS({
-        t: async (arg0) => {
+        t: (arg0) => {
             return arg0;
         },
-        multiline: async (a, b, c) => {
+        multiline: (a, b, c) => {
             return b;
         },
     });

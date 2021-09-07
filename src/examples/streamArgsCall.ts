@@ -3,7 +3,7 @@ import { retrieve_records, registerTestService } from '../compiled/examples/stre
 
 export async function streamArgsCall() {
     registerTestService({
-        get_records: async (key) => {
+        get_records: (key) => {
             return [key, key];
         },
     });

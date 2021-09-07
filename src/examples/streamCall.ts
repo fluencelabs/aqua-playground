@@ -3,7 +3,7 @@ import { checkStreams, registerStringer } from '../compiled/examples/stream';
 
 export async function streamCall() {
     registerStringer({
-        returnString: async (args0) => {
+        returnString: (args0) => {
             return args0 + ' updated';
         },
     });

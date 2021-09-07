@@ -3,13 +3,13 @@ import { multiReturnFunc, registerGetStr, registerGetNum } from '../compiled/exa
 
 export async function multiReturnCall(): Promise<[string[], number, string, number[], string | null, number]> {
     registerGetStr({
-        retStr: async (args0) => {
+        retStr: (args0) => {
             return args0;
         },
     });
 
     registerGetNum({
-        retNum: async () => {
+        retNum: () => {
             return 10;
         },
     });

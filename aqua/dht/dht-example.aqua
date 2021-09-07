@@ -2,6 +2,8 @@ import "@fluencelabs/aqua-dht/pubsub.aqua"
 import "@fluencelabs/aqua-dht/dht.aqua"
 import "@fluencelabs/aqua-lib/builtin.aqua"
 
+export getNeighbours, initTopicAndSubscribe, findSubscribers
+
 func put_value(initial_peer: string, value: string) -> string:
     initTopicAndSubscribe(initial_peer, "some-const3", value, nil, nil)
     <- "OK"

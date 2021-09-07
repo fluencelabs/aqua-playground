@@ -3,7 +3,7 @@ import { d, registerOpH } from '../compiled/examples/nestedFuncs';
 
 export async function nestedFuncsCall(): Promise<string> {
     registerOpH({
-        identity: async (args0) => {
+        identity: (args0) => {
             return args0;
         },
     });

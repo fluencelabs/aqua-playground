@@ -4,7 +4,7 @@ import { helloWorld, registerStringExtra } from '../compiled/examples/helloWorld
 export async function helloWorldCall() {
     // helloWorld.aqua
     registerStringExtra({
-        addNameToHello: async (args0) => {
+        addNameToHello: (args0) => {
             return `Hello, ${args0}!`;
         },
     });

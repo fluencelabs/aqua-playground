@@ -3,7 +3,7 @@ import { callConstant, registerGetter } from '../compiled/examples/constants';
 
 export async function constantsCall(): Promise<string[]> {
     registerGetter({
-        createStr: async (arg0) => {
+        createStr: (arg0) => {
             return '' + arg0;
         },
     });

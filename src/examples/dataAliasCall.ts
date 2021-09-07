@@ -3,7 +3,7 @@ import { getAliasedData, registerNodeIdGetter } from '../compiled/examples/dataA
 
 export async function dataAliasCall() {
     registerNodeIdGetter({
-        get: async () => {
+        get: () => {
             return {
                 peerId: 'peer id str',
                 name: 'name str',

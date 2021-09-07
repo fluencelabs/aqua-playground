@@ -3,10 +3,10 @@ import { krasnodar } from '@fluencelabs/fluence-network-environment';
 import { viaArr, viaOpt, viaStream, registerCustomId } from '../compiled/examples/via';
 
 export async function viaCall(): Promise<string[][]> {
-    const relayPeerId = FluencePeer.default.connectionInfo.connectedRelays[0];
+    const relayPeerId = FluencePeer.default.connectionInfo.connectedRelay;
 
     registerCustomId({
-        id: async (args0) => {
+        id: (args0) => {
             return args0;
         },
     });

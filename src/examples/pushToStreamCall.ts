@@ -3,7 +3,7 @@ import { get_results, registerOpA } from '../compiled/examples/pushToStream';
 
 export async function pushToStreamCall() {
     registerOpA({
-        get_str: async () => {
+        get_str: () => {
             return 'get_string';
         },
     });
