@@ -6,9 +6,13 @@
  * Aqua version: 0.3.0-SNAPSHOT
  *
  */
-import { FluenceClient, PeerIdB58 } from '@fluencelabs/fluence';
-import { RequestFlowBuilder } from '@fluencelabs/fluence/dist/api.unstable';
-import { RequestFlow } from '@fluencelabs/fluence/dist/internal/RequestFlow';
+import { FluencePeer } from '@fluencelabs/fluence';
+import {
+    ResultCodes,
+    RequestFlow,
+    RequestFlowBuilder,
+    CallParams,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v1';
 
 
 // Services
@@ -16,14 +20,27 @@ import { RequestFlow } from '@fluencelabs/fluence/dist/internal/RequestFlow';
 
 // Functions
 
-export async function wrap(client: FluenceClient, config?: {ttl?: number}): Promise<string> {
-    let request: RequestFlow;
-    const promise = new Promise<string>((resolve, reject) => {
-        const r = new RequestFlowBuilder()
-            .disableInjections()
-            .withRawScript(
-                `
-(xor
+ export async function wrap(config?: {ttl?: number}) : Promise<string>;
+ export async function wrap(peer: FluencePeer, config?: {ttl?: number}) : Promise<string>;
+ export async function wrap(...args) {
+     let peer: FluencePeer;
+     
+     let config;
+     if (args[0] instanceof FluencePeer) {
+         peer = args[0];
+         config = args[1];
+     } else {
+         peer = FluencePeer.default;
+         config = args[0];
+     }
+    
+     let request: RequestFlow;
+     const promise = new Promise<string>((resolve, reject) => {
+         const r = new RequestFlowBuilder()
+                 .disableInjections()
+                 .withRawScript(
+                     `
+     (xor
  (seq
   (seq
    (seq
@@ -40,20 +57,19 @@ export async function wrap(client: FluenceClient, config?: {ttl?: number}): Prom
  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
 )
 
-            `,
-            )
-            .configHandler((h) => {
-                h.on('getDataSrv', '-relay-', () => {
-                    return client.relayPeerId!;
+                 `,
+                 )
+                 .configHandler((h) => {
+                     h.on('getDataSrv', '-relay-', async () => {
+                    return peer.connectionInfo.connectedRelays[0] || null;
                 });
                 
-                h.onEvent('callbackSrv', 'response', (args) => {
+                h.onEvent('callbackSrv', 'response', async (args) => {
     const [res] = args;
   resolve(res);
 });
 
-                h.onEvent('errorHandlingSrv', 'error', (args) => {
-                    // assuming error is the single argument
+                h.onEvent('errorHandlingSrv', 'error', async (args) => {
                     const [err] = args;
                     reject(err);
                 });
@@ -67,20 +83,33 @@ export async function wrap(client: FluenceClient, config?: {ttl?: number}): Prom
         }
         request = r.build();
     });
-    await client.initiateFlow(request!);
+    await peer.internals.initiateFlow(request!);
     return promise;
 }
       
 
 
-export async function barfoo(client: FluenceClient, config?: {ttl?: number}): Promise<string[]> {
-    let request: RequestFlow;
-    const promise = new Promise<string[]>((resolve, reject) => {
-        const r = new RequestFlowBuilder()
-            .disableInjections()
-            .withRawScript(
-                `
-(xor
+ export async function barfoo(config?: {ttl?: number}) : Promise<string[]>;
+ export async function barfoo(peer: FluencePeer, config?: {ttl?: number}) : Promise<string[]>;
+ export async function barfoo(...args) {
+     let peer: FluencePeer;
+     
+     let config;
+     if (args[0] instanceof FluencePeer) {
+         peer = args[0];
+         config = args[1];
+     } else {
+         peer = FluencePeer.default;
+         config = args[0];
+     }
+    
+     let request: RequestFlow;
+     const promise = new Promise<string[]>((resolve, reject) => {
+         const r = new RequestFlowBuilder()
+                 .disableInjections()
+                 .withRawScript(
+                     `
+     (xor
  (seq
   (seq
    (seq
@@ -97,20 +126,19 @@ export async function barfoo(client: FluenceClient, config?: {ttl?: number}): Pr
  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
 )
 
-            `,
-            )
-            .configHandler((h) => {
-                h.on('getDataSrv', '-relay-', () => {
-                    return client.relayPeerId!;
+                 `,
+                 )
+                 .configHandler((h) => {
+                     h.on('getDataSrv', '-relay-', async () => {
+                    return peer.connectionInfo.connectedRelays[0] || null;
                 });
                 
-                h.onEvent('callbackSrv', 'response', (args) => {
+                h.onEvent('callbackSrv', 'response', async (args) => {
     const [res] = args;
   resolve(res);
 });
 
-                h.onEvent('errorHandlingSrv', 'error', (args) => {
-                    // assuming error is the single argument
+                h.onEvent('errorHandlingSrv', 'error', async (args) => {
                     const [err] = args;
                     reject(err);
                 });
@@ -124,7 +152,7 @@ export async function barfoo(client: FluenceClient, config?: {ttl?: number}): Pr
         }
         request = r.build();
     });
-    await client.initiateFlow(request!);
+    await peer.internals.initiateFlow(request!);
     return promise;
 }
       

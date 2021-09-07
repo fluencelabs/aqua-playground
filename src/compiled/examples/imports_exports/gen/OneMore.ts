@@ -6,20 +6,72 @@
  * Aqua version: 0.3.0-SNAPSHOT
  *
  */
-import { FluenceClient, PeerIdB58 } from '@fluencelabs/fluence';
-import { RequestFlowBuilder } from '@fluencelabs/fluence/dist/api.unstable';
-import { RequestFlow } from '@fluencelabs/fluence/dist/internal/RequestFlow';
+import { FluencePeer } from '@fluencelabs/fluence';
+import {
+    ResultCodes,
+    RequestFlow,
+    RequestFlowBuilder,
+    CallParams,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v1';
 
 
 // Services
 
-//OneMore
-//defaultId = undefined
+ export interface OneMoreDef {
+     more_call: (callParams: CallParams<null>) => Promise<void> | void;
+ }
 
-//more_call: () => void
-//END OneMore
+ export function registerOneMore(serviceId: string, service: OneMoreDef): void;
+export function registerOneMore(peer: FluencePeer, serviceId: string, service: OneMoreDef): void;
+ export function registerOneMore(...args) {
+    let peer: FluencePeer;
+    let serviceId;
+    let service;
+    if (args[0] instanceof FluencePeer) {
+        peer = args[0];
+    } else {
+        peer = FluencePeer.default;
+    }
 
+    if (typeof args[0] === 'string') {
+        serviceId = args[0];
+    } else if (typeof args[1] === 'string') {
+        serviceId = args[1];
+    } 
 
+    if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {
+        service = args[0];
+    } else if (typeof args[1] === 'object') {
+        service = args[1];
+    } else {
+        service = args[2];
+    }
+
+      peer.internals.callServiceHandler.use(async (req, resp, next) => {
+          if (req.serviceId !== serviceId) {
+              await next();
+              return;
+          }
+  
+          
+ if (req.fnName === 'more_call') {
+     
+ const callParams = {
+     ...req.particleContext,
+     tetraplets: {
+         
+     },
+ };
+ resp.retCode = ResultCodes.success;
+ await service.more_call(callParams); resp.result = {}
+
+ }
+    
+  
+          await next();
+      });
+ }
+      
 
 // Functions
 

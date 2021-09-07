@@ -6,31 +6,103 @@
  * Aqua version: 0.3.0-SNAPSHOT
  *
  */
-import { FluenceClient, PeerIdB58 } from '@fluencelabs/fluence';
-import { RequestFlowBuilder } from '@fluencelabs/fluence/dist/api.unstable';
-import { RequestFlow } from '@fluencelabs/fluence/dist/internal/RequestFlow';
+import { FluencePeer } from '@fluencelabs/fluence';
+import {
+    ResultCodes,
+    RequestFlow,
+    RequestFlowBuilder,
+    CallParams,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v1';
 
 
 // Services
 
-//ConcatSubs
-//defaultId = "concat_subs"
+ export interface ConcatSubsDef {
+     get_some: (s: string, sr: {one:string;two:number}, callParams: CallParams<'s' | 'sr'>) => Promise<{one:string;two:number}> | {one:string;two:number};
+ }
 
-//get_some: (s: string, sr: {one:string;two:number}) => {one:string;two:number}
-//END ConcatSubs
+ export function registerConcatSubs(service: ConcatSubsDef): void;
+export function registerConcatSubs(serviceId: string, service: ConcatSubsDef): void;
+export function registerConcatSubs(peer: FluencePeer, service: ConcatSubsDef): void;
+export function registerConcatSubs(peer: FluencePeer, serviceId: string, service: ConcatSubsDef): void;
+ export function registerConcatSubs(...args) {
+    let peer: FluencePeer;
+    let serviceId;
+    let service;
+    if (args[0] instanceof FluencePeer) {
+        peer = args[0];
+    } else {
+        peer = FluencePeer.default;
+    }
 
+    if (typeof args[0] === 'string') {
+        serviceId = args[0];
+    } else if (typeof args[1] === 'string') {
+        serviceId = args[1];
+    }  
+ else {
+     serviceId = "concat_subs"
+}
 
+    if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {
+        service = args[0];
+    } else if (typeof args[1] === 'object') {
+        service = args[1];
+    } else {
+        service = args[2];
+    }
+
+      peer.internals.callServiceHandler.use(async (req, resp, next) => {
+          if (req.serviceId !== serviceId) {
+              await next();
+              return;
+          }
+  
+          
+ if (req.fnName === 'get_some') {
+     
+ const callParams = {
+     ...req.particleContext,
+     tetraplets: {
+         s: req.tetraplets[0],sr: req.tetraplets[1]
+     },
+ };
+ resp.retCode = ResultCodes.success;
+ resp.result = await service.get_some(req.args[0], req.args[1], callParams)
+
+ }
+    
+  
+          await next();
+      });
+ }
+      
 
 // Functions
 
-export async function subImportUsage(client: FluenceClient, s: string, config?: {ttl?: number}): Promise<{one:string;two:number}> {
-    let request: RequestFlow;
-    const promise = new Promise<{one:string;two:number}>((resolve, reject) => {
-        const r = new RequestFlowBuilder()
-            .disableInjections()
-            .withRawScript(
-                `
-(xor
+ export async function subImportUsage(s: string, config?: {ttl?: number}) : Promise<{one:string;two:number}>;
+ export async function subImportUsage(peer: FluencePeer, s: string, config?: {ttl?: number}) : Promise<{one:string;two:number}>;
+ export async function subImportUsage(...args) {
+     let peer: FluencePeer;
+     let s;
+     let config;
+     if (args[0] instanceof FluencePeer) {
+         peer = args[0];
+         s = args[1];
+config = args[2];
+     } else {
+         peer = FluencePeer.default;
+         s = args[0];
+config = args[1];
+     }
+    
+     let request: RequestFlow;
+     const promise = new Promise<{one:string;two:number}>((resolve, reject) => {
+         const r = new RequestFlowBuilder()
+                 .disableInjections()
+                 .withRawScript(
+                     `
+     (xor
  (seq
   (seq
    (seq
@@ -53,20 +125,19 @@ export async function subImportUsage(client: FluenceClient, s: string, config?: 
  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
 )
 
-            `,
-            )
-            .configHandler((h) => {
-                h.on('getDataSrv', '-relay-', () => {
-                    return client.relayPeerId!;
+                 `,
+                 )
+                 .configHandler((h) => {
+                     h.on('getDataSrv', '-relay-', async () => {
+                    return peer.connectionInfo.connectedRelays[0] || null;
                 });
-                h.on('getDataSrv', 's', () => {return s;});
-                h.onEvent('callbackSrv', 'response', (args) => {
+                h.on('getDataSrv', 's', async () => {return s;});
+                h.onEvent('callbackSrv', 'response', async (args) => {
     const [res] = args;
   resolve(res);
 });
 
-                h.onEvent('errorHandlingSrv', 'error', (args) => {
-                    // assuming error is the single argument
+                h.onEvent('errorHandlingSrv', 'error', async (args) => {
                     const [err] = args;
                     reject(err);
                 });
@@ -80,7 +151,7 @@ export async function subImportUsage(client: FluenceClient, s: string, config?: 
         }
         request = r.build();
     });
-    await client.initiateFlow(request!);
+    await peer.internals.initiateFlow(request!);
     return promise;
 }
       
