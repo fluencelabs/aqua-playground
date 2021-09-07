@@ -210,7 +210,12 @@ const main = async () => {
 
     // declare.aqua
     let declareResult = await declareCall();
-    checkCall('declareResult', declareResult, 'declare all foodeclare all barsmall_foo', cb);
+    checkCall(
+        'declareResult',
+        declareResult,
+        'small_foodeclare all barsmall_fooexport_constdeclare_constdeclare_const2',
+        cb,
+    );
 
     await FluencePeer.default.uninit();
     await peer2.uninit();
