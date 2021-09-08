@@ -1,12 +1,14 @@
-import {FluenceClient, registerServiceFunction} from "@fluencelabs/fluence";
-import {use_name2} from "../compiled/examples/streamResults";
+import { FluencePeer } from '@fluencelabs/fluence';
+import { use_name2, registerDTGetter } from '../compiled/examples/streamResults';
 
-export async function streamResultsCall(client: FluenceClient) {
-    registerServiceFunction(client, "get-dt", "get_dt", (args: any[], _) => {
-        return {
-            field: args[0]
-        }
-    })
+export async function streamResultsCall() {
+    registerDTGetter({
+        get_dt: (args0) => {
+            return {
+                field: args0,
+            };
+        },
+    });
 
-    return await use_name2(client, "new_name")
+    return await use_name2('new_name');
 }

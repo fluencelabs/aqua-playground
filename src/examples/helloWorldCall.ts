@@ -1,11 +1,13 @@
-import {FluenceClient, registerServiceFunction} from "@fluencelabs/fluence";
-import {helloWorld} from "../compiled/examples/helloWorld";
+import { FluencePeer } from '@fluencelabs/fluence';
+import { helloWorld, registerStringExtra } from '../compiled/examples/helloWorld';
 
-export async function helloWorldCall(client: FluenceClient) {
+export async function helloWorldCall() {
     // helloWorld.aqua
-    registerServiceFunction(client, "service-id", "addNameToHello", (args: any[], _) => {
-        return `Hello, ${args[0]}!`
-    })
+    registerStringExtra({
+        addNameToHello: (args0) => {
+            return `Hello, ${args0}!`;
+        },
+    });
 
-    return await helloWorld(client, "NAME");
+    return await helloWorld('NAME');
 }

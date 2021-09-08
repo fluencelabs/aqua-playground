@@ -1,21 +1,24 @@
-import {FluenceClient, registerServiceFunction} from "@fluencelabs/fluence";
-import {subImportUsage} from "../compiled/examples/subImportUsage";
+import { registerSubService } from '../compiled/examples/imports_exports/subImport';
+import { registerConcatSubs, subImportUsage } from '../compiled/examples/subImportUsage';
 
-export async function subImportCall(client: FluenceClient) {
+export async function subImportCall() {
     // helloWorld.aqua
-    registerServiceFunction(client, "sub_service", "sub", (args: any[], _) => {
-        return {
-            one: args[0],
-            two: 42
-        }
-    })
+    registerSubService({
+        sub: (s) => {
+            return {
+                one: s,
+                two: 42,
+            };
+        },
+    });
+    registerConcatSubs({
+        get_some: (s, sr) => {
+            return {
+                one: s,
+                two: sr.two,
+            };
+        },
+    });
 
-    registerServiceFunction(client, "concat_subs", "get_some", (args: any[], _) => {
-        return {
-            one: args[0],
-            two: args[1].two
-        }
-    })
-
-    return await subImportUsage(client, "random_string");
+    return await subImportUsage('random_string');
 }

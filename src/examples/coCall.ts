@@ -1,15 +1,19 @@
-import {FluenceClient, registerServiceFunction} from "@fluencelabs/fluence";
-import {parFunc} from "../compiled/examples/par";
+import { FluencePeer } from '@fluencelabs/fluence';
+import { parFunc } from '../compiled/examples/par';
+import { registerCoService } from '../compiled/examples/co';
 
-export async function coCall(client: FluenceClient): Promise<string[]> {
+export async function coCall(): Promise<string[]> {
+    const relayPeerId = FluencePeer.default.connectionInfo.connectedRelay;
 
-    registerServiceFunction(client, "coservice-id", "call", (args: any[], _) => {
-        return "hello"
-    })
+    registerCoService({
+        call: () => {
+            return 'hello';
+        },
+    });
 
     return new Promise<string[]>((resolve, reject) => {
-        parFunc(client, client.relayPeerId!, (c) => {
-            resolve(c.external_addresses)
-        })
-    })
+        parFunc(relayPeerId, (c) => {
+            resolve(c.external_addresses);
+        });
+    });
 }

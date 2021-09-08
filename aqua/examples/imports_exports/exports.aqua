@@ -1,6 +1,5 @@
 module Exports declares some_string, MyExportSrv, EXPORT_CONST, some_random_func
 
--- TODO: check it in TS after it will be implemented
 export some_string as string_from_lib
 export MyExportSrv
 

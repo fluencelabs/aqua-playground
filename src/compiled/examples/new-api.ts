@@ -16,15 +16,16 @@ import {
 
 // Services
 
-export interface NodeIdGetterDef {
-    get: (callParams: CallParams<null>) => { name: string; peerId: string };
+export interface HelloWorldDef {
+    getNumber: (callParams: CallParams<null>) => number;
+    sayHello: (s: string, callParams: CallParams<'s'>) => void;
 }
 
-export function registerNodeIdGetter(service: NodeIdGetterDef): void;
-export function registerNodeIdGetter(serviceId: string, service: NodeIdGetterDef): void;
-export function registerNodeIdGetter(peer: FluencePeer, service: NodeIdGetterDef): void;
-export function registerNodeIdGetter(peer: FluencePeer, serviceId: string, service: NodeIdGetterDef): void;
-export function registerNodeIdGetter(...args) {
+export function registerHelloWorld(service: HelloWorldDef): void;
+export function registerHelloWorld(serviceId: string, service: HelloWorldDef): void;
+export function registerHelloWorld(peer: FluencePeer, service: HelloWorldDef): void;
+export function registerHelloWorld(peer: FluencePeer, serviceId: string, service: HelloWorldDef): void;
+export function registerHelloWorld(...args) {
     let peer: FluencePeer;
     let serviceId;
     let service;
@@ -39,7 +40,7 @@ export function registerNodeIdGetter(...args) {
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
     } else {
-        serviceId = 'somesrv';
+        serviceId = 'default';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {
@@ -56,13 +57,25 @@ export function registerNodeIdGetter(...args) {
             return;
         }
 
-        if (req.fnName === 'get') {
+        if (req.fnName === 'getNumber') {
             const callParams = {
                 ...req.particleContext,
                 tetraplets: {},
             };
             resp.retCode = ResultCodes.success;
-            resp.result = service.get(callParams);
+            resp.result = service.getNumber(callParams);
+        }
+
+        if (req.fnName === 'sayHello') {
+            const callParams = {
+                ...req.particleContext,
+                tetraplets: {
+                    s: req.tetraplets[0],
+                },
+            };
+            resp.retCode = ResultCodes.success;
+            service.sayHello(req.args[0], callParams);
+            resp.result = {};
         }
 
         next();
@@ -71,34 +84,40 @@ export function registerNodeIdGetter(...args) {
 
 // Functions
 
-export function getAliasedData(config?: { ttl?: number }): Promise<string>;
-export function getAliasedData(peer: FluencePeer, config?: { ttl?: number }): Promise<string>;
-export function getAliasedData(...args) {
+export function callMeBack(
+    callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void,
+    config?: { ttl?: number },
+): Promise<void>;
+export function callMeBack(
+    peer: FluencePeer,
+    callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void,
+    config?: { ttl?: number },
+): Promise<void>;
+export function callMeBack(...args) {
     let peer: FluencePeer;
-
+    let callback;
     let config;
     if (args[0] instanceof FluencePeer) {
         peer = args[0];
-        config = args[1];
+        callback = args[1];
+        config = args[2];
     } else {
         peer = FluencePeer.default;
-        config = args[0];
+        callback = args[0];
+        config = args[1];
     }
 
     let request: RequestFlow;
-    const promise = new Promise<string>((resolve, reject) => {
+    const promise = new Promise<void>((resolve, reject) => {
         const r = new RequestFlowBuilder()
             .disableInjections()
             .withRawScript(
                 `
      (xor
  (seq
-  (seq
-   (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-   (call %init_peer_id% ("somesrv" "get") [] res)
-  )
+  (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
   (xor
-   (call %init_peer_id% ("callbackSrv" "response") [res.$.peerId!])
+   (call %init_peer_id% ("callbackSrv" "callback") ["hello, world" 42])
    (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
   )
  )
@@ -112,10 +131,23 @@ export function getAliasedData(...args) {
                     return peer.connectionInfo.connectedRelay;
                 });
 
-                h.onEvent('callbackSrv', 'response', (args) => {
-                    const [res] = args;
-                    resolve(res);
+                h.use((req, resp, next) => {
+                    if (req.serviceId === 'callbackSrv' && req.fnName === 'callback') {
+                        const callParams = {
+                            ...req.particleContext,
+                            tetraplets: {
+                                arg0: req.tetraplets[0],
+                                arg1: req.tetraplets[1],
+                            },
+                        };
+                        resp.retCode = ResultCodes.success;
+                        callback(req.args[0], req.args[1], callParams);
+                        resp.result = {};
+                    }
+                    next();
                 });
+
+                h.onEvent('callbackSrv', 'response', (args) => {});
 
                 h.onEvent('errorHandlingSrv', 'error', (args) => {
                     const [err] = args;
@@ -124,7 +156,7 @@ export function getAliasedData(...args) {
             })
             .handleScriptError(reject)
             .handleTimeout(() => {
-                reject('Request timed out for getAliasedData');
+                reject('Request timed out for callMeBack');
             });
         if (config && config.ttl) {
             r.withTTL(config.ttl);
@@ -132,5 +164,5 @@ export function getAliasedData(...args) {
         request = r.build();
     });
     peer.internals.initiateFlow(request!);
-    return promise;
+    return Promise.race([promise, Promise.resolve()]);
 }

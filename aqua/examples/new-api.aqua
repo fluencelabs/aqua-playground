@@ -1,0 +1,6 @@
+service HelloWorld("default"):
+    sayHello(s: string)
+    getNumber() -> i32
+
+func callMeBack(callback: string, i32 -> ()):
+    callback("hello, world", 42)

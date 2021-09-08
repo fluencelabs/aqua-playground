@@ -1,11 +1,12 @@
-import {FluenceClient, registerServiceFunction} from "@fluencelabs/fluence";
-import {callConstant} from "../compiled/examples/constants";
+import { FluencePeer } from '@fluencelabs/fluence';
+import { callConstant, registerGetter } from '../compiled/examples/constants';
 
-export async function constantsCall(client: FluenceClient): Promise<string[]> {
-    registerServiceFunction(client, "test", "createStr", (args: any[], _) => {
-        return "" + args[0]
-    })
+export async function constantsCall(): Promise<string[]> {
+    registerGetter({
+        createStr: (arg0) => {
+            return '' + arg0;
+        },
+    });
 
-
-    return await callConstant(client);
+    return await callConstant();
 }

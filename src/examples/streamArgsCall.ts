@@ -1,10 +1,12 @@
-import {FluenceClient, registerServiceFunction} from "@fluencelabs/fluence";
-import {retrieve_records} from "../compiled/examples/streamArgs";
+import { FluencePeer } from '@fluencelabs/fluence';
+import { retrieve_records, registerTestService } from '../compiled/examples/streamArgs';
 
-export async function streamArgsCall(client: FluenceClient) {
-    registerServiceFunction(client, "test-service", "get_records", (args: any[], _) => {
-        return [args[0], args[0]]
-    })
+export async function streamArgsCall() {
+    registerTestService({
+        get_records: (key) => {
+            return [key, key];
+        },
+    });
 
-    return await retrieve_records(client, "peer_id")
+    return await retrieve_records('peer_id');
 }

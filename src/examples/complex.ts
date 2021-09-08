@@ -1,16 +1,18 @@
-import {FluenceClient, registerServiceFunction} from "@fluencelabs/fluence";
-import {doStuff} from "../compiled/examples/complex";
-import {testNet} from "@fluencelabs/fluence-network-environment";
+import { FluencePeer } from '@fluencelabs/fluence';
+import { doStuff, registerTestS } from '../compiled/examples/complex';
 
-export async function complexCall(client: FluenceClient) {
+export async function complexCall() {
+    const relayPeerId = FluencePeer.default.connectionInfo.connectedRelay;
+    const selfPeerId = FluencePeer.default.connectionInfo.selfPeerId;
 
-    registerServiceFunction(client, "some-id", "t", (args: any[], _) => {
-        return args[0]
-    })
+    registerTestS({
+        t: (arg0) => {
+            return arg0;
+        },
+        multiline: (a, b, c) => {
+            return b;
+        },
+    });
 
-    registerServiceFunction(client, "some-id", "multiline", (args: any[], _) => {
-        return args[1]
-    })
-
-    return await doStuff(client, client.relayPeerId!, client.selfPeerId, true, true, ["1", "2"], ["3", "4"], "some str")
+    return await doStuff(relayPeerId, selfPeerId, true, true, ['1', '2'], ['3', '4'], 'some str');
 }

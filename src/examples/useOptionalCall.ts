@@ -1,27 +1,28 @@
-import {FluenceClient, registerServiceFunction} from "@fluencelabs/fluence";
-import {returnNone, returnOptional, useOptional} from "../compiled/examples/option";
+import { FluencePeer } from '@fluencelabs/fluence';
+import { returnNone, returnOptional, useOptional, registerSomeS } from '../compiled/examples/option';
 
-export async function useOptionalCall(client: FluenceClient): Promise<string> {
-    registerServiceFunction(client, "test2", "getStr", (args: any[], _) => {
-        return args[0]
-    })
-
-    registerServiceFunction(client, "test2", "getStr2", (args: any[], _) => {
-        return args[0]
-    })
-
-    return await useOptional(client, "hello")
+export function registerHandlers(): void {
+    registerSomeS({
+        getStr: (arg0) => {
+            return arg0;
+        },
+        getStr1: () => {
+            return 'optional';
+        },
+        getStr2: (arg0) => {
+            return arg0;
+        },
+    });
 }
 
-export async function returnOptionalCall(client: FluenceClient): Promise<string | null> {
-    registerServiceFunction(client, "test2", "getStr1", (args: any[], _) => {
-        return ["optional"]
-    })
-
-    return await returnOptional(client)
+export async function useOptionalCall(): Promise<string> {
+    return await useOptional('hello');
 }
 
-export async function returnNull(client: FluenceClient): Promise<string | null> {
+export async function returnOptionalCall(): Promise<string | null> {
+    return await returnOptional();
+}
 
-    return await returnNone(client)
+export async function returnNull(): Promise<string | null> {
+    return await returnNone();
 }

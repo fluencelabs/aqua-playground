@@ -1,8 +1,7 @@
-import {FluenceClient, registerServiceFunction} from "@fluencelabs/fluence";
-import {topologyTest} from "../compiled/examples/topology";
-import {tryCatchTest} from "../compiled/examples/tryCatch";
+import { FluencePeer } from '@fluencelabs/fluence';
+import { tryCatchTest } from '../compiled/examples/tryCatch';
 
-export async function tryCatchCall(client: FluenceClient): Promise<string[]> {
-
-    return await tryCatchTest(client, client.relayPeerId!)
+export async function tryCatchCall(): Promise<string[]> {
+    const relayPeerId = FluencePeer.default.connectionInfo.connectedRelay;
+    return await tryCatchTest(relayPeerId);
 }

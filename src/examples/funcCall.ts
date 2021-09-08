@@ -1,10 +1,11 @@
-import {testFunc} from "../compiled/examples/func";
-import {FluenceClient, registerServiceFunction} from "@fluencelabs/fluence";
+import { testFunc, registerTestSrv } from '../compiled/examples/func';
 
-export async function funcCall(client: FluenceClient) {
-    registerServiceFunction(client, "test-service-id", "str", (args: any[], _) => {
-        return `some str`
-    })
+export async function funcCall() {
+    registerTestSrv({
+        str: () => {
+            return `some str`;
+        },
+    });
 
-    return await testFunc(client);
+    return await testFunc();
 }

@@ -1,18 +1,21 @@
-import {FluenceClient, registerServiceFunction} from "@fluencelabs/fluence";
-import {barfoo, wrap} from "../compiled/examples/imports_exports/import2";
+import { registerOneMore } from '../compiled/examples/imports_exports/gen/OneMore';
+import { barfoo, wrap } from '../compiled/examples/imports_exports/import2';
 
-export async function import2Call(client: FluenceClient) {
+export async function import2Call() {
+    registerOneMore('hello', {
+        more_call: () => {
+            return {};
+        },
+    });
 
-    registerServiceFunction(client, "hello", "more_call", (args: any[], _) => {
-        return {}
-    })
+    registerOneMore('ohmygod', {
+        more_call: () => {
+            return {};
+        },
+    });
 
-    registerServiceFunction(client, "ohmygod", "more_call", (args: any[], _) => {
-        return {}
-    })
+    let first = await wrap();
+    let second = await barfoo();
 
-    let first = await wrap(client)
-    let second = await barfoo(client)
-
-    return { first, second }
+    return { first, second };
 }

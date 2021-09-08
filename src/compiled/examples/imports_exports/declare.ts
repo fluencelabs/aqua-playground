@@ -16,13 +16,15 @@ import {
 
 // Services
 
-export interface OneMoreDef {
-    more_call: (callParams: CallParams<null>) => void;
+export interface SuperFooDef {
+    small_foo: (callParams: CallParams<null>) => string;
 }
 
-export function registerOneMore(serviceId: string, service: OneMoreDef): void;
-export function registerOneMore(peer: FluencePeer, serviceId: string, service: OneMoreDef): void;
-export function registerOneMore(...args) {
+export function registerSuperFoo(service: SuperFooDef): void;
+export function registerSuperFoo(serviceId: string, service: SuperFooDef): void;
+export function registerSuperFoo(peer: FluencePeer, service: SuperFooDef): void;
+export function registerSuperFoo(peer: FluencePeer, serviceId: string, service: SuperFooDef): void;
+export function registerSuperFoo(...args) {
     let peer: FluencePeer;
     let serviceId;
     let service;
@@ -36,6 +38,8 @@ export function registerOneMore(...args) {
         serviceId = args[0];
     } else if (typeof args[1] === 'string') {
         serviceId = args[1];
+    } else {
+        serviceId = 'super_foo';
     }
 
     if (!(args[0] instanceof FluencePeer) && typeof args[0] === 'object') {
@@ -52,14 +56,13 @@ export function registerOneMore(...args) {
             return;
         }
 
-        if (req.fnName === 'more_call') {
+        if (req.fnName === 'small_foo') {
             const callParams = {
                 ...req.particleContext,
                 tetraplets: {},
             };
             resp.retCode = ResultCodes.success;
-            service.more_call(callParams);
-            resp.result = {};
+            resp.result = service.small_foo(callParams);
         }
 
         next();

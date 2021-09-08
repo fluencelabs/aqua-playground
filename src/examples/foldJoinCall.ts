@@ -1,6 +1,7 @@
-import {FluenceClient} from "@fluencelabs/fluence";
-import {getTwoResults} from "../compiled/examples/foldJoin";
+import { FluencePeer } from '@fluencelabs/fluence';
+import { getTwoResults } from '../compiled/examples/foldJoin';
 
-export async function foldJoinCall(client: FluenceClient): Promise<number[]> {
-    return await getTwoResults(client, client.relayPeerId!, {ttl: 10000})
+export async function foldJoinCall(): Promise<number[]> {
+    const relayPeerId = FluencePeer.default.connectionInfo.connectedRelay;
+    return await getTwoResults(relayPeerId);
 }
