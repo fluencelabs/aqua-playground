@@ -21,12 +21,12 @@
         "pubsub": "node -r ts-node/register src/pubsub.ts",
         "exec": "npm run compile-aqua && node -r ts-node/register src/index.ts",
         "run": "node -r ts-node/register src/index.ts",
-        "compile-aqua": "aqua-cli -i ./aqua/ -o ./src/compiled",
-        "compile-aqua:air": "aqua-cli -i ./aqua/ -o ./compiled-air -a",
+        "compile-aqua": "aqua -i ./aqua/ -o ./src/compiled",
+        "compile-aqua:air": "aqua -i ./aqua/ -o ./compiled-air -a",
         "prettify-compiled": "prettier --write src/compiled"
     },
     "devDependencies": {
-        "@fluencelabs/aqua-cli": "0.2.0-208",
+        "@fluencelabs/aqua": "^0.3.0-222",
         "@fluencelabs/aqua-dht": "0.1.36",
         "@fluencelabs/aqua-lib": "0.1.14",
         "ts-node": "^9.1.1",
