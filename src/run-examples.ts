@@ -147,7 +147,7 @@ const main = async () => {
 
     // via.aqua
     let viaResult = await viaCall();
-    checkCallBy('via', viaResult, (res) => res.every((val, i, arr) => deepEqual(val, arr[0])), cb);
+    checkCallBy('via', viaResult, (res) => res.every((val: any, i: any, arr: any) => deepEqual(val, arr[0])), cb);
 
     // nestedFuncs.aqua
     let nestedFuncsResult = await nestedFuncsCall();

@@ -23,7 +23,8 @@
         "run": "node -r ts-node/register src/index.ts",
         "compile-aqua": "aqua -i ./aqua/ -o ./src/compiled",
         "compile-aqua:air": "aqua -i ./aqua/ -o ./compiled-air -a",
-        "prettify-compiled": "prettier --write src/compiled"
+        "prettify-compiled": "prettier --write src/compiled",
+        "tmp": "java -jar ../aqua/cli/.jvm/target/scala-3.0.2/aqua-0.3.0-SNAPSHOT.jar --import . -m node_modules -i ./aqua/ -o ./src/compiled && npm run prettify-compiled"
     },
     "devDependencies": {
         "@fluencelabs/aqua": "^0.3.0-222",
