@@ -1,0 +1,10 @@
+-- imports3.aqua
+module Import3 declares *
+
+export foo_wrapper
+
+use "export3.aqua"
+
+func foo_wrapper() -> string:
+    z <- Export3.foo()
+    <- z

@@ -1,0 +1,5 @@
+-- exports3.aqua
+module Export3 declares *
+
+func foo() -> string:
+    <- "I am MyFooBar foo"
