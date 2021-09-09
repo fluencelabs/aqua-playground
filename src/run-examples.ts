@@ -30,6 +30,7 @@ import { pushToStreamCall } from './examples/pushToStreamCall';
 import { literalCall } from './examples/returnLiteralCall';
 import { multiReturnCall } from './examples/multiReturnCall';
 import { declareCall } from './examples/declareCall';
+import {genOptions} from "./examples/optionsCall";
 let deepEqual = require('deep-equal');
 
 function checkCall(name: string, actual: any, expected: any, callBackOnError: () => void) {
@@ -216,6 +217,10 @@ const main = async () => {
         'small_foodeclare all barsmall_fooexport_constdeclare_constdeclare_const2',
         cb,
     );
+
+    // option_gen.aqua
+    let optionGenResult = await genOptions();
+    checkCall('optionGenResult', optionGenResult, ['none', 'some'], cb);
 
     await FluencePeer.default.uninit();
     await peer2.uninit();
