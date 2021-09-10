@@ -1,9 +1,9 @@
-import { FluencePeer } from '@fluencelabs/fluence';
+import Fluence from '@fluencelabs/fluence';
 import { doStuff, registerTestS } from '../compiled/examples/complex';
 
 export async function complexCall() {
-    const relayPeerId = FluencePeer.default.connectionInfo.connectedRelay;
-    const selfPeerId = FluencePeer.default.connectionInfo.selfPeerId;
+    const relayPeerId = Fluence.getPeer().getStatus().relayPeerId;
+    const selfPeerId = Fluence.getPeer().getStatus().peerId;
 
     registerTestS({
         t: (arg0) => {

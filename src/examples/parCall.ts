@@ -1,8 +1,8 @@
-import { FluencePeer } from '@fluencelabs/fluence';
+import Fluence from '@fluencelabs/fluence';
 import { parFunc, registerParService } from '../compiled/examples/par';
 
 export async function parCall() {
-    const relayPeerId = FluencePeer.default.connectionInfo.connectedRelay;
+    const relayPeerId = Fluence.getPeer().getStatus().relayPeerId;
 
     let promise = new Promise<string>((resolve, reject) => {
         registerParService({

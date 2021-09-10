@@ -18,9 +18,9 @@ import {
 
 // Functions
 
-export function returnLiteral(config?: { ttl?: number }): Promise<string>;
-export function returnLiteral(peer: FluencePeer, config?: { ttl?: number }): Promise<string>;
-export function returnLiteral(...args: any) {
+export function foo_wrapper(config?: { ttl?: number }): Promise<string>;
+export function foo_wrapper(peer: FluencePeer, config?: { ttl?: number }): Promise<string>;
+export function foo_wrapper(...args: any) {
     let peer: FluencePeer;
 
     let config: any;
@@ -42,7 +42,7 @@ export function returnLiteral(...args: any) {
  (seq
   (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
   (xor
-   (call %init_peer_id% ("callbackSrv" "response") ["some literal"])
+   (call %init_peer_id% ("callbackSrv" "response") ["I am MyFooBar foo"])
    (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
   )
  )
@@ -68,7 +68,7 @@ export function returnLiteral(...args: any) {
             })
             .handleScriptError(reject)
             .handleTimeout(() => {
-                reject('Request timed out for returnLiteral');
+                reject('Request timed out for foo_wrapper');
             });
         if (config && config.ttl) {
             r.withTTL(config.ttl);

@@ -1,7 +1,7 @@
-import { FluencePeer } from '@fluencelabs/fluence';
+import Fluence from '@fluencelabs/fluence';
 import { tryCatchTest } from '../compiled/examples/tryCatch';
 
 export async function tryCatchCall(): Promise<string[]> {
-    const relayPeerId = FluencePeer.default.connectionInfo.connectedRelay;
+    const relayPeerId = Fluence.getPeer().getStatus().relayPeerId;
     return await tryCatchTest(relayPeerId);
 }
