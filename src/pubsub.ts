@@ -1,4 +1,4 @@
-import Fluence from '@fluencelabs/fluence';
+import { Fluence } from '@fluencelabs/fluence';
 import { krasnodar } from '@fluencelabs/fluence-network-environment';
 import { getNeighbours, initTopicAndSubscribe, findSubscribers } from './compiled/dht/dht-example';
 

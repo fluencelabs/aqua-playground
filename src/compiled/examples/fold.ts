@@ -6,7 +6,7 @@
  * Aqua version: 0.3.0-SNAPSHOT
  *
  */
-import Fluence, { FluencePeer } from '@fluencelabs/fluence';
+import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
     ResultCodes,
     RequestFlow,

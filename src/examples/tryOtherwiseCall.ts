@@ -1,4 +1,4 @@
-import Fluence from '@fluencelabs/fluence';
+import { Fluence } from '@fluencelabs/fluence';
 import { tryOtherwiseTest } from '../compiled/examples/tryOtherwise';
 
 export async function tryOtherwiseCall(): Promise<string> {

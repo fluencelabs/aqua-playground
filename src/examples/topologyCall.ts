@@ -1,4 +1,4 @@
-import Fluence, { FluencePeer } from '@fluencelabs/fluence';
+import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import { topologyTest, registerTesto, registerLocalPrint } from '../compiled/examples/topology';
 
 export async function topologyCall(peer2: FluencePeer): Promise<string> {

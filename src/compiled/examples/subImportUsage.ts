@@ -6,7 +6,7 @@
  * Aqua version: 0.3.0-SNAPSHOT
  *
  */
-import Fluence, { FluencePeer } from '@fluencelabs/fluence';
+import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
     ResultCodes,
     RequestFlow,
@@ -46,6 +46,11 @@ export function registerConcatSubs(...args: any) {
         serviceId = 'concat_subs';
     }
 
+    // Figuring out which overload is the service.
+    // If the first argument is not Fluence Peer and it is an object, then it can only be the service def
+    // If the first argument is peer, we are checking further. The second argument might either be
+    // an object, that it must be the service object
+    // or a string, which is the service id. In that case the service is the third argument
     if (!FluencePeer.isInstance(args[0]) && typeof args[0] === 'object') {
         service = args[0];
     } else if (typeof args[1] === 'object') {

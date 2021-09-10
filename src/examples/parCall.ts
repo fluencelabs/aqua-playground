@@ -1,4 +1,4 @@
-import Fluence from '@fluencelabs/fluence';
+import { Fluence } from '@fluencelabs/fluence';
 import { parFunc, registerParService } from '../compiled/examples/par';
 
 export async function parCall() {

@@ -1,4 +1,4 @@
-import Fluence from '@fluencelabs/fluence';
+import { Fluence } from '@fluencelabs/fluence';
 import { parFunc } from '../compiled/examples/par';
 import { registerCoService } from '../compiled/examples/co';
 

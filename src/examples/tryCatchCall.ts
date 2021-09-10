@@ -1,4 +1,4 @@
-import Fluence from '@fluencelabs/fluence';
+import { Fluence } from '@fluencelabs/fluence';
 import { tryCatchTest } from '../compiled/examples/tryCatch';
 
 export async function tryCatchCall(): Promise<string[]> {

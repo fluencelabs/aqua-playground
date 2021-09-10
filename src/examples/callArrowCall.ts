@@ -1,4 +1,4 @@
-import Fluence from '@fluencelabs/fluence';
+import { Fluence } from '@fluencelabs/fluence';
 import { passFunctionAsArg } from '../compiled/examples/callArrow';
 
 export async function callArrowCall(): Promise<string> {

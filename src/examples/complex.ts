@@ -1,4 +1,4 @@
-import Fluence from '@fluencelabs/fluence';
+import { Fluence } from '@fluencelabs/fluence';
 import { doStuff, registerTestS } from '../compiled/examples/complex';
 
 export async function complexCall() {

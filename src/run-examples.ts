@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import Fluence, { FluencePeer } from '@fluencelabs/fluence';
+import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import { krasnodar, testNet } from '@fluencelabs/fluence-network-environment';
 import { registerPrintln } from './compiled/examples/println';
 import { callArrowCall } from './examples/callArrowCall';

@@ -1,4 +1,4 @@
-import Fluence from '@fluencelabs/fluence';
+import { Fluence } from '@fluencelabs/fluence';
 import { getTwoResults } from '../compiled/examples/foldJoin';
 
 export async function foldJoinCall(): Promise<number[]> {

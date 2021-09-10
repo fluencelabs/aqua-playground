@@ -1,4 +1,4 @@
-import Fluence from '@fluencelabs/fluence';
+import { Fluence } from '@fluencelabs/fluence';
 import { iterateAndPrint, iterateAndPrintParallel } from '../compiled/examples/fold';
 
 export async function foldCall() {

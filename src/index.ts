@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import Fluence, { FluencePeer } from '@fluencelabs/fluence';
+import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import { krasnodar } from '@fluencelabs/fluence-network-environment';
 import { helloWorld, registerStringExtra } from './compiled/examples/helloWorld';
 
