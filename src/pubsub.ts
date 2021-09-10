@@ -1,9 +1,9 @@
-import { FluencePeer } from '@fluencelabs/fluence';
+import { Fluence } from '@fluencelabs/fluence';
 import { krasnodar } from '@fluencelabs/fluence-network-environment';
 import { getNeighbours, initTopicAndSubscribe, findSubscribers } from './compiled/dht/dht-example';
 
 const main = async () => {
-    await FluencePeer.default.init({ connectTo: krasnodar[0] });
+    await Fluence.start({ connectTo: krasnodar[0] });
     const relayPeerId = krasnodar[0].peerId;
 
     const nodes = await getNeighbours(relayPeerId, 'random');

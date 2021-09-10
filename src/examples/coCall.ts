@@ -1,9 +1,9 @@
-import { FluencePeer } from '@fluencelabs/fluence';
+import { Fluence } from '@fluencelabs/fluence';
 import { parFunc } from '../compiled/examples/par';
 import { registerCoService } from '../compiled/examples/co';
 
 export async function coCall(): Promise<string[]> {
-    const relayPeerId = FluencePeer.default.connectionInfo.connectedRelay;
+    const relayPeerId = Fluence.getPeer().getStatus().relayPeerId;
 
     registerCoService({
         call: () => {

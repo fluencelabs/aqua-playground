@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { FluencePeer } from '@fluencelabs/fluence';
+import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import { krasnodar, testNet } from '@fluencelabs/fluence-network-environment';
 import { registerPrintln } from './compiled/examples/println';
 import { callArrowCall } from './examples/callArrowCall';
@@ -13,7 +13,7 @@ import { ifCall } from './examples/if';
 import { parCall } from './examples/parCall';
 import { complexCall } from './examples/complex';
 import { constantsCall } from './examples/constantsCall';
-import {returnNilCall, returnNoneCall, streamCall} from './examples/streamCall';
+import { returnNilCall, returnNoneCall, streamCall } from './examples/streamCall';
 import { topologyCall } from './examples/topologyCall';
 import { foldJoinCall } from './examples/foldJoinCall';
 import { registerHandlers, returnNull, returnOptionalCall, useOptionalCall } from './examples/useOptionalCall';
@@ -30,7 +30,7 @@ import { pushToStreamCall } from './examples/pushToStreamCall';
 import { literalCall } from './examples/returnLiteralCall';
 import { multiReturnCall } from './examples/multiReturnCall';
 import { declareCall } from './examples/declareCall';
-import {genOptions} from "./examples/optionsCall";
+import { genOptions } from './examples/optionsCall';
 let deepEqual = require('deep-equal');
 
 function checkCall(name: string, actual: any, expected: any, callBackOnError: () => void) {
@@ -57,11 +57,11 @@ function checkCallBy(name: string, actual: any, by: (res: any) => boolean, callB
 const main = async () => {
     // setLogLevel("trace")
 
-    await FluencePeer.default.init({ connectTo: krasnodar[0] });
-    const selfPeerId = FluencePeer.default.connectionInfo.selfPeerId;
+    await Fluence.start({ connectTo: krasnodar[0] });
+    const selfPeerId = Fluence.getStatus().peerId;
 
     const peer2 = new FluencePeer();
-    await peer2.init({ connectTo: krasnodar[1] });
+    await peer2.start({ connectTo: krasnodar[1] });
 
     // this could be called from `println.aqua`
     registerPrintln({
@@ -226,8 +226,8 @@ const main = async () => {
     let optionGenResult = await genOptions();
     checkCall('optionGenResult', optionGenResult, ['none', 'some'], cb);
 
-    await FluencePeer.default.uninit();
-    await peer2.uninit();
+    await Fluence.stop();
+    await peer2.stop();
 
     if (success) {
         process.exit(0);

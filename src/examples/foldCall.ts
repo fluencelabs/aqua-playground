@@ -1,8 +1,8 @@
-import { FluencePeer } from '@fluencelabs/fluence';
+import { Fluence } from '@fluencelabs/fluence';
 import { iterateAndPrint, iterateAndPrintParallel } from '../compiled/examples/fold';
 
 export async function foldCall() {
-    const relayPeerId = FluencePeer.default.connectionInfo.connectedRelay;
+    const relayPeerId = Fluence.getPeer().getStatus().relayPeerId;
 
     await iterateAndPrint([relayPeerId]);
 

@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
-import { FluencePeer } from '@fluencelabs/fluence';
+import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import { krasnodar } from '@fluencelabs/fluence-network-environment';
 import { helloWorld, registerStringExtra } from './compiled/examples/helloWorld';
 
 const main = async () => {
     // each compiled aqua function require a connected client
-    await FluencePeer.default.init({ connectTo: krasnodar[0] });
+    await Fluence.start({ connectTo: krasnodar[0] });
 
     // example to how register a local service
     // it could be used in aqua code as follows
