@@ -9,3 +9,18 @@ func checkStreams(ch: []string) -> []string:
         stream <- Stringer.returnString(b)
     <- stream
 
+func stringNil() -> *string:
+   valueNil: *string
+   <- valueNil
+
+func returnNil() -> *string:
+  relayNil <- stringNil()
+  <- relayNil
+
+func stringNone() -> ?string:
+   valueNone: ?string
+   <- valueNone
+
+func returnNone() -> ?string:
+  relayNone <- stringNone()
+  <- relayNone

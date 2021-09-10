@@ -13,7 +13,7 @@ import { ifCall } from './examples/if';
 import { parCall } from './examples/parCall';
 import { complexCall } from './examples/complex';
 import { constantsCall } from './examples/constantsCall';
-import { streamCall } from './examples/streamCall';
+import {returnNilCall, returnNoneCall, streamCall} from './examples/streamCall';
 import { topologyCall } from './examples/topologyCall';
 import { foldJoinCall } from './examples/foldJoinCall';
 import { registerHandlers, returnNull, returnOptionalCall, useOptionalCall } from './examples/useOptionalCall';
@@ -128,6 +128,10 @@ const main = async () => {
     // stream.aqua
     let streamResult = await streamCall();
     checkCall('streamCall', streamResult, ['first updated', 'second updated', 'third updated', 'fourth updated'], cb);
+    let returnNilResult = await returnNilCall();
+    checkCall('returnNilCall', returnNilResult, [], cb);
+    let returnNoneResult = await returnNoneCall();
+    checkCall('returnNoneCall', returnNoneResult, null, cb);
 
     // topology.aqua
     let topologyResult = await topologyCall(peer2);

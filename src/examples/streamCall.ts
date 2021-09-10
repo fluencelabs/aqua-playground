@@ -1,5 +1,5 @@
 import { FluencePeer } from '@fluencelabs/fluence';
-import { checkStreams, registerStringer } from '../compiled/examples/stream';
+import {checkStreams, registerStringer, stringNil, stringNone} from '../compiled/examples/stream';
 
 export async function streamCall() {
     registerStringer({
@@ -9,4 +9,12 @@ export async function streamCall() {
     });
 
     return checkStreams(['third', 'fourth']);
+}
+
+export async function returnNilCall() {
+    return stringNil()
+}
+
+export async function returnNoneCall() {
+    return stringNone()
 }
