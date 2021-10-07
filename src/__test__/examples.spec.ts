@@ -152,8 +152,10 @@ describe('Testing examples', () => {
     });
 
     it('via.aqua', async () => {
-        let viaResult = await viaCall();
-        expect(viaResult).toBe('not_correct');
+        let [res1, res2, res3, res4] = await viaCall();
+        expect(res1).toStrictEqual(res2);
+        expect(res2).toStrictEqual(res3);
+        expect(res3).toStrictEqual(res4);
     });
 
     it('nestedFuncs.aqua', async () => {
