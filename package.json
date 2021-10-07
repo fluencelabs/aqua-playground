@@ -18,9 +18,9 @@
     "scripts": {
         "build": "tsc",
         "test": "jest",
-        "examples": "node -r ts-node/register src/run-examples.ts",
+        "examples": "jest",
         "pubsub": "node -r ts-node/register src/pubsub.ts",
-        "exec": "npm run compile-aqua && node -r ts-node/register src/index.ts",
+        "exec": "npm run compile-aqua && npm run prettify-compiled && node -r ts-node/register src/index.ts",
         "run": "node -r ts-node/register src/index.ts",
         "compile-aqua": "aqua -i ./aqua/ -o ./src/compiled",
         "compile-aqua:air": "aqua -i ./aqua/ -o ./compiled-air -a",
