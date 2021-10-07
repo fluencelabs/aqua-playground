@@ -17,7 +17,7 @@
     ],
     "scripts": {
         "build": "tsc",
-        "test:all": "jest",
+        "test": "jest",
         "examples": "node -r ts-node/register src/run-examples.ts",
         "pubsub": "node -r ts-node/register src/pubsub.ts",
         "exec": "npm run compile-aqua && node -r ts-node/register src/index.ts",
