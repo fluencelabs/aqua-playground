@@ -1,7 +1,6 @@
 import { Fluence } from '@fluencelabs/fluence';
-import { krasnodar } from '@fluencelabs/fluence-network-environment';
 import { viaArr, viaOpt, viaStream, registerCustomId } from '../compiled/examples/via';
-import {relays} from "../run-examples";
+import { relays } from '../config';
 
 export async function viaCall(): Promise<string[][]> {
     const relayPeerId = Fluence.getPeer().getStatus().relayPeerId;
