@@ -56,8 +56,6 @@ function checkCallBy(name: string, actual: any, by: (res: any) => boolean, callB
     }
 }
 
-export const relays = testNet;
-
 const main = async () => {
     // setLogLevel("trace")
 
