@@ -31,6 +31,8 @@ import { literalCall } from './examples/returnLiteralCall';
 import { multiReturnCall } from './examples/multiReturnCall';
 import { declareCall } from './examples/declareCall';
 import { genOptions } from './examples/optionsCall';
+import { relays } from './config';
+
 let deepEqual = require('deep-equal');
 
 function checkCall(name: string, actual: any, expected: any, callBackOnError: () => void) {
@@ -54,7 +56,7 @@ function checkCallBy(name: string, actual: any, by: (res: any) => boolean, callB
     }
 }
 
-export const relays = testNet
+export const relays = testNet;
 
 const main = async () => {
     // setLogLevel("trace")

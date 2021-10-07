@@ -29,19 +29,20 @@ import { literalCall } from '../examples/returnLiteralCall';
 import { multiReturnCall } from '../examples/multiReturnCall';
 import { declareCall } from '../examples/declareCall';
 import { genOptions } from '../examples/optionsCall';
+import { relays } from '../config';
 
 var selfPeerId;
 var peer2;
 
-setLogLevel('trace');
+// setLogLevel('trace');
 
 describe('Testing examples', () => {
     beforeAll(async () => {
-        await Fluence.start({ connectTo: krasnodar[0] });
+        await Fluence.start({ connectTo: relays[0] });
         selfPeerId = Fluence.getStatus().peerId;
 
         peer2 = new FluencePeer();
-        await peer2.start({ connectTo: krasnodar[1] });
+        await peer2.start({ connectTo: relays[1] });
 
         // this could be called from `println.aqua`
         registerPrintln({
