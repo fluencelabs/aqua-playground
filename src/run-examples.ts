@@ -54,14 +54,16 @@ function checkCallBy(name: string, actual: any, by: (res: any) => boolean, callB
     }
 }
 
+export const relays = krasnodar
+
 const main = async () => {
     // setLogLevel("trace")
 
-    await Fluence.start({ connectTo: krasnodar[0] });
+    await Fluence.start({ connectTo: relays[0] });
     const selfPeerId = Fluence.getStatus().peerId;
 
     const peer2 = new FluencePeer();
-    await peer2.start({ connectTo: krasnodar[1] });
+    await peer2.start({ connectTo: relays[1] });
 
     // this could be called from `println.aqua`
     registerPrintln({
