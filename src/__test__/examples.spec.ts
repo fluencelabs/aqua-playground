@@ -1,4 +1,4 @@
-import { Fluence, FluencePeer } from '@fluencelabs/fluence';
+import { Fluence, FluencePeer, setLogLevel } from '@fluencelabs/fluence';
 import { krasnodar, testNet } from '@fluencelabs/fluence-network-environment';
 import { registerPrintln } from '../compiled/examples/println';
 import { callArrowCall } from '../examples/callArrowCall';
@@ -33,6 +33,8 @@ import { genOptions } from '../examples/optionsCall';
 var selfPeerId;
 var peer2;
 
+setLogLevel('trace');
+
 describe('Testing examples', () => {
     beforeAll(async () => {
         await Fluence.start({ connectTo: krasnodar[0] });
@@ -64,7 +66,7 @@ describe('Testing examples', () => {
 
     it('fold.aqua', async () => {
         let foldCallResult = await foldCall();
-        expect(foldCallResult).toBe(['/ip4/164.90.171.139/tcp/7770', '/ip4/164.90.171.139/tcp/9990/ws']);
+        expect(foldCallResult).toStrictEqual(['/ip4/164.90.171.139/tcp/7770', '/ip4/164.90.171.139/tcp/9990/ws']);
     });
 
     it('if.aqua', async () => {
@@ -88,7 +90,7 @@ describe('Testing examples', () => {
 
     it('on.aqua', async () => {
         let onCallResult = await onCall();
-        expect(onCallResult).toBe(['/ip4/164.90.171.139/tcp/7770', '/ip4/164.90.171.139/tcp/9990/ws']);
+        expect(onCallResult).toStrictEqual(['/ip4/164.90.171.139/tcp/7770', '/ip4/164.90.171.139/tcp/9990/ws']);
     });
 
     it('dataAlias.aqua', async () => {
@@ -98,19 +100,32 @@ describe('Testing examples', () => {
 
     it('complex.aqua', async () => {
         let complexCallResult = await complexCall();
-        expect(complexCallResult).toBe(['some str', '3', '1', '4', '1', '1', '3', '2', '4', '2', '2', selfPeerId]);
+        expect(complexCallResult).toStrictEqual([
+            'some str',
+            '3',
+            '1',
+            '4',
+            '1',
+            '1',
+            '3',
+            '2',
+            '4',
+            '2',
+            '2',
+            selfPeerId,
+        ]);
     });
 
     it('constants.aqua', async () => {
         let constantCallResult = await constantsCall();
-        expect(constantCallResult).toBe(['1', 'ab']);
+        expect(constantCallResult).toStrictEqual(['1', 'ab']);
     });
 
     it('stream.aqua', async () => {
         let streamResult = await streamCall();
-        expect(streamResult).toBe(['first updated', 'second updated', 'third updated', 'fourth updated']);
+        expect(streamResult).toStrictEqual(['first updated', 'second updated', 'third updated', 'fourth updated']);
         let returnNilResult = await returnNilCall();
-        expect(returnNilResult).toBe([]);
+        expect(returnNilResult).toStrictEqual([]);
         let returnNoneResult = await returnNoneCall();
         expect(returnNoneResult).toBe(null);
     });
@@ -147,7 +162,7 @@ describe('Testing examples', () => {
 
     it('assignment.aqua', async () => {
         let assignmentResult = await assignmentCall();
-        expect(assignmentResult).toBe(['abc', 'hello']);
+        expect(assignmentResult).toStrictEqual(['abc', 'hello']);
     });
 
     it('tryOtherwise.aqua', async () => {
@@ -157,12 +172,14 @@ describe('Testing examples', () => {
 
     it('tryCatch.aqua', async () => {
         let tryCatchResult = await tryCatchCall();
-        expect(tryCatchResult).toBe(["Error: Service with id 'unex' not found", '/ip4/164.90.171.139/tcp/7770']);
+        expect(tryCatchResult).toHaveLength(2);
+        expect(tryCatchResult[0]).toMatch("Error: Service with id 'unex' not found");
+        expect(tryCatchResult[1]).toBe('/ip4/164.90.171.139/tcp/7770');
     });
 
     it('coCall.aqua', async () => {
         let coCallResult = await coCall();
-        expect(coCallResult).toBe(['/ip4/164.90.171.139/tcp/7770', '/ip4/164.90.171.139/tcp/9990/ws']);
+        expect(coCallResult).toStrictEqual(['/ip4/164.90.171.139/tcp/7770', '/ip4/164.90.171.139/tcp/9990/ws']);
     });
 
     it('passArgsCall.aqua', async () => {
@@ -172,17 +189,17 @@ describe('Testing examples', () => {
 
     it('streamArgs.aqua', async () => {
         let streamArgsResult = await streamArgsCall();
-        expect(streamArgsResult).toBe([['peer_id', 'peer_id']]);
+        expect(streamArgsResult).toStrictEqual([['peer_id', 'peer_id']]);
     });
 
     it('streamResults.aqua', async () => {
         let streamResultsResult = await streamResultsCall();
-        expect(streamResultsResult).toBe(['new_name', 'new_name', 'new_name']);
+        expect(streamResultsResult).toStrictEqual(['new_name', 'new_name', 'new_name']);
     });
 
     it('pushToStream.aqua', async () => {
         let pushToStreamResult = await pushToStreamCall();
-        expect(pushToStreamResult).toBe(['hello', 'get_string']);
+        expect(pushToStreamResult).toStrictEqual(['hello', 'get_string']);
     });
 
     it('literalCall.aqua', async () => {
@@ -192,7 +209,14 @@ describe('Testing examples', () => {
 
     it('multiReturn.aqua', async () => {
         let multiReturnResult = await multiReturnCall();
-        expect(multiReturnResult).toBe([['some-str', 'random-str', 'some-str'], 5, 'some-str', [1, 2], null, 10]);
+        expect(multiReturnResult).toStrictEqual([
+            ['some-str', 'random-str', 'some-str'],
+            5,
+            'some-str',
+            [1, 2],
+            null,
+            10,
+        ]);
     });
 
     it('declare.aqua', async () => {
@@ -202,6 +226,6 @@ describe('Testing examples', () => {
 
     it('option_gen.aqua', async () => {
         let optionGenResult = await genOptions();
-        expect(optionGenResult).toBe(['none', 'some']);
+        expect(optionGenResult).toStrictEqual(['none', 'some']);
     });
 });
