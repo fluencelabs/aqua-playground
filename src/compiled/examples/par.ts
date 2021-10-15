@@ -24,25 +24,20 @@ export function registerParService(peer: FluencePeer, service: ParServiceDef): v
 export function registerParService(peer: FluencePeer, serviceId: string, service: ParServiceDef): void;
 
 export function registerParService(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'parservice-id',
         functions: [
             {
                 functionName: 'call',
-                argDefs: [
-                    {
-                        name: 'arg0',
-                        isOptional: false,
-                        callbackDef: null,
-                    },
-                ],
+                argDefs: [],
                 returnType: {
-                    isVoid: true,
+                    isVoid: false,
                     isOptional: false,
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 // Functions
@@ -110,9 +105,15 @@ export function parFunc(...args: any) {
                     name: 'c',
                     isOptional: false,
                     callbackDef: {
-                        argDefs: [],
+                        argDefs: [
+                            {
+                                name: 'arg0',
+                                isOptional: false,
+                                callbackDef: null,
+                            },
+                        ],
                         returnType: {
-                            isVoid: false,
+                            isVoid: true,
                             isOptional: false,
                         },
                     },

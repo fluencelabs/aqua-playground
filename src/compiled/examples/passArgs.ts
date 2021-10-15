@@ -29,14 +29,24 @@ export function registerAquaDHT(peer: FluencePeer, service: AquaDHTDef): void;
 export function registerAquaDHT(peer: FluencePeer, serviceId: string, service: AquaDHTDef): void;
 
 export function registerAquaDHT(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'test-dht',
         functions: [
             {
                 functionName: 'put_host_value',
                 argDefs: [
                     {
-                        name: 'arg0',
+                        name: 'key',
+                        isOptional: false,
+                        callbackDef: null,
+                    },
+                    {
+                        name: 'value',
+                        isOptional: false,
+                        callbackDef: null,
+                    },
+                    {
+                        name: 'service_id',
                         isOptional: false,
                         callbackDef: null,
                     },
@@ -47,7 +57,8 @@ export function registerAquaDHT(...args: any) {
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 // Functions

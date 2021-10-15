@@ -26,7 +26,7 @@ export function registerSomeS(peer: FluencePeer, service: SomeSDef): void;
 export function registerSomeS(peer: FluencePeer, serviceId: string, service: SomeSDef): void;
 
 export function registerSomeS(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'test2',
         functions: [
             {
@@ -45,16 +45,10 @@ export function registerSomeS(...args: any) {
             },
             {
                 functionName: 'getStr1',
-                argDefs: [
-                    {
-                        name: 'arg0',
-                        isOptional: true,
-                        callbackDef: null,
-                    },
-                ],
+                argDefs: [],
                 returnType: {
-                    isVoid: true,
-                    isOptional: false,
+                    isVoid: false,
+                    isOptional: true,
                 },
             },
             {
@@ -72,7 +66,8 @@ export function registerSomeS(...args: any) {
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 // Functions

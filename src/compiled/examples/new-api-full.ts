@@ -28,19 +28,26 @@ export function registerServiceWithDefaultId(
 ): void;
 
 export function registerServiceWithDefaultId(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'defaultId',
         functions: [
             {
                 functionName: 'hello',
-                argDefs: [],
+                argDefs: [
+                    {
+                        name: 's',
+                        isOptional: false,
+                        callbackDef: null,
+                    },
+                ],
                 returnType: {
-                    isVoid: false,
+                    isVoid: true,
                     isOptional: false,
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 export interface ServiceWithOUTDefaultIdDef {
@@ -54,19 +61,26 @@ export function registerServiceWithOUTDefaultId(
 ): void;
 
 export function registerServiceWithOUTDefaultId(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: null,
         functions: [
             {
                 functionName: 'hello',
-                argDefs: [],
+                argDefs: [
+                    {
+                        name: 's',
+                        isOptional: false,
+                        callbackDef: null,
+                    },
+                ],
                 returnType: {
-                    isVoid: false,
+                    isVoid: true,
                     isOptional: false,
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 export interface MoreMembersDef {
@@ -80,7 +94,7 @@ export function registerMoreMembers(serviceId: string, service: MoreMembersDef):
 export function registerMoreMembers(peer: FluencePeer, serviceId: string, service: MoreMembersDef): void;
 
 export function registerMoreMembers(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: null,
         functions: [
             {
@@ -93,17 +107,34 @@ export function registerMoreMembers(...args: any) {
             },
             {
                 functionName: 'member2',
-                argDefs: [],
+                argDefs: [
+                    {
+                        name: 's1',
+                        isOptional: false,
+                        callbackDef: null,
+                    },
+                ],
                 returnType: {
-                    isVoid: false,
+                    isVoid: true,
                     isOptional: false,
                 },
             },
             {
                 functionName: 'member3',
-                argDefs: [],
+                argDefs: [
+                    {
+                        name: 's1',
+                        isOptional: false,
+                        callbackDef: null,
+                    },
+                    {
+                        name: 's2',
+                        isOptional: false,
+                        callbackDef: null,
+                    },
+                ],
                 returnType: {
-                    isVoid: false,
+                    isVoid: true,
                     isOptional: false,
                 },
             },
@@ -111,7 +142,17 @@ export function registerMoreMembers(...args: any) {
                 functionName: 'member4',
                 argDefs: [
                     {
-                        name: 'arg0',
+                        name: 's1',
+                        isOptional: false,
+                        callbackDef: null,
+                    },
+                    {
+                        name: 's2',
+                        isOptional: false,
+                        callbackDef: null,
+                    },
+                    {
+                        name: 'i',
                         isOptional: false,
                         callbackDef: null,
                     },
@@ -125,7 +166,17 @@ export function registerMoreMembers(...args: any) {
                 functionName: 'member5',
                 argDefs: [
                     {
-                        name: 'arg0',
+                        name: 's1',
+                        isOptional: false,
+                        callbackDef: null,
+                    },
+                    {
+                        name: 's2',
+                        isOptional: false,
+                        callbackDef: null,
+                    },
+                    {
+                        name: 'i',
                         isOptional: false,
                         callbackDef: null,
                     },
@@ -136,7 +187,8 @@ export function registerMoreMembers(...args: any) {
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 // Functions
@@ -176,9 +228,20 @@ export function f1(...args: any) {
                     name: 'callback',
                     isOptional: false,
                     callbackDef: {
-                        argDefs: [],
+                        argDefs: [
+                            {
+                                name: 'arg0',
+                                isOptional: false,
+                                callbackDef: null,
+                            },
+                            {
+                                name: 'arg1',
+                                isOptional: false,
+                                callbackDef: null,
+                            },
+                        ],
                         returnType: {
-                            isVoid: false,
+                            isVoid: true,
                             isOptional: false,
                         },
                     },
@@ -243,9 +306,20 @@ export function f2(...args: any) {
                     name: 'callback',
                     isOptional: false,
                     callbackDef: {
-                        argDefs: [],
+                        argDefs: [
+                            {
+                                name: 'arg0',
+                                isOptional: false,
+                                callbackDef: null,
+                            },
+                            {
+                                name: 'arg1',
+                                isOptional: false,
+                                callbackDef: null,
+                            },
+                        ],
                         returnType: {
-                            isVoid: false,
+                            isVoid: true,
                             isOptional: false,
                         },
                     },
@@ -316,9 +390,20 @@ export function f3(...args: any) {
                     name: 'callback',
                     isOptional: false,
                     callbackDef: {
-                        argDefs: [],
+                        argDefs: [
+                            {
+                                name: 'arg0',
+                                isOptional: false,
+                                callbackDef: null,
+                            },
+                            {
+                                name: 'arg1',
+                                isOptional: false,
+                                callbackDef: null,
+                            },
+                        ],
                         returnType: {
-                            isVoid: false,
+                            isVoid: true,
                             isOptional: false,
                         },
                     },

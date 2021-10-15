@@ -24,7 +24,7 @@ export function registerPeer(peer: FluencePeer, service: PeerDef): void;
 export function registerPeer(peer: FluencePeer, serviceId: string, service: PeerDef): void;
 
 export function registerPeer(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'peer',
         functions: [
             {
@@ -42,7 +42,8 @@ export function registerPeer(...args: any) {
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 export interface OpDef {
@@ -54,7 +55,7 @@ export function registerOp(peer: FluencePeer, service: OpDef): void;
 export function registerOp(peer: FluencePeer, serviceId: string, service: OpDef): void;
 
 export function registerOp(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'op',
         functions: [
             {
@@ -66,7 +67,8 @@ export function registerOp(...args: any) {
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 export interface TestDef {
@@ -79,39 +81,28 @@ export function registerTest(peer: FluencePeer, service: TestDef): void;
 export function registerTest(peer: FluencePeer, serviceId: string, service: TestDef): void;
 
 export function registerTest(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'test',
         functions: [
             {
                 functionName: 'doSomething',
-                argDefs: [
-                    {
-                        name: 'arg0',
-                        isOptional: false,
-                        callbackDef: null,
-                    },
-                ],
+                argDefs: [],
                 returnType: {
-                    isVoid: true,
+                    isVoid: false,
                     isOptional: false,
                 },
             },
             {
                 functionName: 'getUserList',
-                argDefs: [
-                    {
-                        name: 'arg0',
-                        isOptional: false,
-                        callbackDef: null,
-                    },
-                ],
+                argDefs: [],
                 returnType: {
-                    isVoid: true,
+                    isVoid: false,
                     isOptional: false,
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 // Functions

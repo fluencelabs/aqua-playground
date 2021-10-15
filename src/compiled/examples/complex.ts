@@ -25,14 +25,24 @@ export function registerTestS(peer: FluencePeer, service: TestSDef): void;
 export function registerTestS(peer: FluencePeer, serviceId: string, service: TestSDef): void;
 
 export function registerTestS(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'some-id',
         functions: [
             {
                 functionName: 'multiline',
                 argDefs: [
                     {
-                        name: 'arg0',
+                        name: 'a',
+                        isOptional: false,
+                        callbackDef: null,
+                    },
+                    {
+                        name: 'b',
+                        isOptional: false,
+                        callbackDef: null,
+                    },
+                    {
+                        name: 'c',
                         isOptional: false,
                         callbackDef: null,
                     },
@@ -57,7 +67,8 @@ export function registerTestS(...args: any) {
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 // Functions

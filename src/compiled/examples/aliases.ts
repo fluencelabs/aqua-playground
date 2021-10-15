@@ -29,14 +29,19 @@ export function registerComplexService(peer: FluencePeer, service: ComplexServic
 export function registerComplexService(peer: FluencePeer, serviceId: string, service: ComplexServiceDef): void;
 
 export function registerComplexService(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'op-ha',
         functions: [
             {
                 functionName: 'call',
                 argDefs: [
                     {
-                        name: 'arg0',
+                        name: 'd',
+                        isOptional: false,
+                        callbackDef: null,
+                    },
+                    {
+                        name: 'sd',
                         isOptional: false,
                         callbackDef: null,
                     },
@@ -48,20 +53,15 @@ export function registerComplexService(...args: any) {
             },
             {
                 functionName: 'identity',
-                argDefs: [
-                    {
-                        name: 'arg0',
-                        isOptional: false,
-                        callbackDef: null,
-                    },
-                ],
+                argDefs: [],
                 returnType: {
-                    isVoid: true,
+                    isVoid: false,
                     isOptional: false,
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 // Functions
@@ -154,6 +154,11 @@ export function doSmth(...args: any) {
                         argDefs: [
                             {
                                 name: 'arg0',
+                                isOptional: false,
+                                callbackDef: null,
+                            },
+                            {
+                                name: 'arg1',
                                 isOptional: false,
                                 callbackDef: null,
                             },

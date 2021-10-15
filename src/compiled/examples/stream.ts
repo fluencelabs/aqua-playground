@@ -24,7 +24,7 @@ export function registerStringer(peer: FluencePeer, service: StringerDef): void;
 export function registerStringer(peer: FluencePeer, serviceId: string, service: StringerDef): void;
 
 export function registerStringer(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'stringer-id',
         functions: [
             {
@@ -42,7 +42,8 @@ export function registerStringer(...args: any) {
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 // Functions

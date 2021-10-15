@@ -24,25 +24,20 @@ export function registerOpA(peer: FluencePeer, service: OpADef): void;
 export function registerOpA(peer: FluencePeer, serviceId: string, service: OpADef): void;
 
 export function registerOpA(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'pop',
         functions: [
             {
                 functionName: 'get_str',
-                argDefs: [
-                    {
-                        name: 'arg0',
-                        isOptional: false,
-                        callbackDef: null,
-                    },
-                ],
+                argDefs: [],
                 returnType: {
-                    isVoid: true,
+                    isVoid: false,
                     isOptional: false,
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 // Functions

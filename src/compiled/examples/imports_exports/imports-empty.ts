@@ -46,15 +46,30 @@ export function registerNoop(peer: FluencePeer, service: NoopDef): void;
 export function registerNoop(peer: FluencePeer, serviceId: string, service: NoopDef): void;
 
 export function registerNoop(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'op',
         functions: [
             {
                 functionName: 'array',
                 argDefs: [
                     {
-                        name: 'arg0',
+                        name: 'a',
                         isOptional: false,
+                        callbackDef: null,
+                    },
+                    {
+                        name: 'b',
+                        isOptional: true,
+                        callbackDef: null,
+                    },
+                    {
+                        name: 'c',
+                        isOptional: true,
+                        callbackDef: null,
+                    },
+                    {
+                        name: 'd',
+                        isOptional: true,
                         callbackDef: null,
                     },
                 ],
@@ -67,7 +82,7 @@ export function registerNoop(...args: any) {
                 functionName: 'array_length',
                 argDefs: [
                     {
-                        name: 'arg0',
+                        name: 'array',
                         isOptional: false,
                         callbackDef: null,
                     },
@@ -81,7 +96,7 @@ export function registerNoop(...args: any) {
                 functionName: 'bytes_from_b58',
                 argDefs: [
                     {
-                        name: 'arg0',
+                        name: 'b',
                         isOptional: false,
                         callbackDef: null,
                     },
@@ -95,7 +110,7 @@ export function registerNoop(...args: any) {
                 functionName: 'bytes_to_b58',
                 argDefs: [
                     {
-                        name: 'arg0',
+                        name: 'bs',
                         isOptional: false,
                         callbackDef: null,
                     },
@@ -109,8 +124,23 @@ export function registerNoop(...args: any) {
                 functionName: 'concat',
                 argDefs: [
                     {
-                        name: 'arg0',
+                        name: 'a',
                         isOptional: false,
+                        callbackDef: null,
+                    },
+                    {
+                        name: 'b',
+                        isOptional: true,
+                        callbackDef: null,
+                    },
+                    {
+                        name: 'c',
+                        isOptional: true,
+                        callbackDef: null,
+                    },
+                    {
+                        name: 'd',
+                        isOptional: true,
                         callbackDef: null,
                     },
                 ],
@@ -123,7 +153,12 @@ export function registerNoop(...args: any) {
                 functionName: 'concat_strings',
                 argDefs: [
                     {
-                        name: 'arg0',
+                        name: 'a',
+                        isOptional: false,
+                        callbackDef: null,
+                    },
+                    {
+                        name: 'b',
                         isOptional: false,
                         callbackDef: null,
                     },
@@ -137,7 +172,7 @@ export function registerNoop(...args: any) {
                 functionName: 'identity',
                 argDefs: [
                     {
-                        name: 'arg0',
+                        name: 's',
                         isOptional: true,
                         callbackDef: null,
                     },
@@ -159,7 +194,7 @@ export function registerNoop(...args: any) {
                 functionName: 'sha256_string',
                 argDefs: [
                     {
-                        name: 'arg0',
+                        name: 's',
                         isOptional: false,
                         callbackDef: null,
                     },
@@ -173,7 +208,7 @@ export function registerNoop(...args: any) {
                 functionName: 'string_from_b58',
                 argDefs: [
                     {
-                        name: 'arg0',
+                        name: 'b',
                         isOptional: false,
                         callbackDef: null,
                     },
@@ -187,7 +222,7 @@ export function registerNoop(...args: any) {
                 functionName: 'string_to_b58',
                 argDefs: [
                     {
-                        name: 'arg0',
+                        name: 's',
                         isOptional: false,
                         callbackDef: null,
                     },
@@ -198,7 +233,8 @@ export function registerNoop(...args: any) {
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 export interface MyExportSrvDef {
@@ -210,25 +246,20 @@ export function registerMyExportSrv(peer: FluencePeer, service: MyExportSrvDef):
 export function registerMyExportSrv(peer: FluencePeer, serviceId: string, service: MyExportSrvDef): void;
 
 export function registerMyExportSrv(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'my_export_srv',
         functions: [
             {
                 functionName: 'another_str',
-                argDefs: [
-                    {
-                        name: 'arg0',
-                        isOptional: false,
-                        callbackDef: null,
-                    },
-                ],
+                argDefs: [],
                 returnType: {
-                    isVoid: true,
+                    isVoid: false,
                     isOptional: false,
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 // Functions

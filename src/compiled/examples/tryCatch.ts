@@ -24,25 +24,20 @@ export function registerUnexisted(peer: FluencePeer, service: UnexistedDef): voi
 export function registerUnexisted(peer: FluencePeer, serviceId: string, service: UnexistedDef): void;
 
 export function registerUnexisted(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'unex',
         functions: [
             {
                 functionName: 'getStr',
-                argDefs: [
-                    {
-                        name: 'arg0',
-                        isOptional: false,
-                        callbackDef: null,
-                    },
-                ],
+                argDefs: [],
                 returnType: {
-                    isVoid: true,
+                    isVoid: false,
                     isOptional: false,
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 export interface OpADef {
@@ -54,14 +49,14 @@ export function registerOpA(peer: FluencePeer, service: OpADef): void;
 export function registerOpA(peer: FluencePeer, serviceId: string, service: OpADef): void;
 
 export function registerOpA(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'op',
         functions: [
             {
                 functionName: 'identity',
                 argDefs: [
                     {
-                        name: 'arg0',
+                        name: 's',
                         isOptional: false,
                         callbackDef: null,
                     },
@@ -72,7 +67,8 @@ export function registerOpA(...args: any) {
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 // Functions

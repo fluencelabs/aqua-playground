@@ -22,7 +22,7 @@ export function registerOneMore(serviceId: string, service: OneMoreDef): void;
 export function registerOneMore(peer: FluencePeer, serviceId: string, service: OneMoreDef): void;
 
 export function registerOneMore(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: null,
         functions: [
             {
@@ -34,7 +34,8 @@ export function registerOneMore(...args: any) {
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 // Functions

@@ -24,19 +24,26 @@ export function registerOp2(peer: FluencePeer, service: Op2Def): void;
 export function registerOp2(peer: FluencePeer, serviceId: string, service: Op2Def): void;
 
 export function registerOp2(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'op',
         functions: [
             {
                 functionName: 'identity',
-                argDefs: [],
+                argDefs: [
+                    {
+                        name: 's',
+                        isOptional: false,
+                        callbackDef: null,
+                    },
+                ],
                 returnType: {
-                    isVoid: false,
+                    isVoid: true,
                     isOptional: false,
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 // Functions

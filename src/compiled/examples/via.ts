@@ -24,14 +24,14 @@ export function registerCustomId(peer: FluencePeer, service: CustomIdDef): void;
 export function registerCustomId(peer: FluencePeer, serviceId: string, service: CustomIdDef): void;
 
 export function registerCustomId(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'cid',
         functions: [
             {
                 functionName: 'id',
                 argDefs: [
                     {
-                        name: 'arg0',
+                        name: 's',
                         isOptional: false,
                         callbackDef: null,
                     },
@@ -42,7 +42,8 @@ export function registerCustomId(...args: any) {
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 // Functions

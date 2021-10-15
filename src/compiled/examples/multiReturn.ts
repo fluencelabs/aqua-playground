@@ -24,7 +24,7 @@ export function registerGetStr(peer: FluencePeer, service: GetStrDef): void;
 export function registerGetStr(peer: FluencePeer, serviceId: string, service: GetStrDef): void;
 
 export function registerGetStr(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'multiret-test',
         functions: [
             {
@@ -42,7 +42,8 @@ export function registerGetStr(...args: any) {
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 export interface GetNumDef {
@@ -54,25 +55,20 @@ export function registerGetNum(peer: FluencePeer, service: GetNumDef): void;
 export function registerGetNum(peer: FluencePeer, serviceId: string, service: GetNumDef): void;
 
 export function registerGetNum(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'multiret-num',
         functions: [
             {
                 functionName: 'retNum',
-                argDefs: [
-                    {
-                        name: 'arg0',
-                        isOptional: false,
-                        callbackDef: null,
-                    },
-                ],
+                argDefs: [],
                 returnType: {
-                    isVoid: true,
+                    isVoid: false,
                     isOptional: false,
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 // Functions

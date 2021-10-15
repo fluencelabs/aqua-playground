@@ -24,14 +24,14 @@ export function registerDTGetter(peer: FluencePeer, service: DTGetterDef): void;
 export function registerDTGetter(peer: FluencePeer, serviceId: string, service: DTGetterDef): void;
 
 export function registerDTGetter(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'get-dt',
         functions: [
             {
                 functionName: 'get_dt',
                 argDefs: [
                     {
-                        name: 'arg0',
+                        name: 's',
                         isOptional: false,
                         callbackDef: null,
                     },
@@ -42,7 +42,8 @@ export function registerDTGetter(...args: any) {
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 // Functions

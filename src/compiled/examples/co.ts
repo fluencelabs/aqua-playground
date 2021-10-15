@@ -24,25 +24,20 @@ export function registerCoService(peer: FluencePeer, service: CoServiceDef): voi
 export function registerCoService(peer: FluencePeer, serviceId: string, service: CoServiceDef): void;
 
 export function registerCoService(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'coservice-id',
         functions: [
             {
                 functionName: 'call',
-                argDefs: [
-                    {
-                        name: 'arg0',
-                        isOptional: false,
-                        callbackDef: null,
-                    },
-                ],
+                argDefs: [],
                 returnType: {
-                    isVoid: true,
+                    isVoid: false,
                     isOptional: false,
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 // Functions
@@ -113,9 +108,15 @@ export function coFunc(...args: any) {
                     name: 'c',
                     isOptional: false,
                     callbackDef: {
-                        argDefs: [],
+                        argDefs: [
+                            {
+                                name: 'arg0',
+                                isOptional: false,
+                                callbackDef: null,
+                            },
+                        ],
                         returnType: {
-                            isVoid: false,
+                            isVoid: true,
                             isOptional: false,
                         },
                     },

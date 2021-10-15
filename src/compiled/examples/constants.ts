@@ -24,7 +24,7 @@ export function registerGetter(peer: FluencePeer, service: GetterDef): void;
 export function registerGetter(peer: FluencePeer, serviceId: string, service: GetterDef): void;
 
 export function registerGetter(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'test',
         functions: [
             {
@@ -42,7 +42,8 @@ export function registerGetter(...args: any) {
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 export interface OpODef {
@@ -54,7 +55,7 @@ export function registerOpO(peer: FluencePeer, service: OpODef): void;
 export function registerOpO(peer: FluencePeer, serviceId: string, service: OpODef): void;
 
 export function registerOpO(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'op',
         functions: [
             {
@@ -72,7 +73,8 @@ export function registerOpO(...args: any) {
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 // Functions

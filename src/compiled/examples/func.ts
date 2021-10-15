@@ -24,25 +24,20 @@ export function registerTestSrv(peer: FluencePeer, service: TestSrvDef): void;
 export function registerTestSrv(peer: FluencePeer, serviceId: string, service: TestSrvDef): void;
 
 export function registerTestSrv(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'test-service-id',
         functions: [
             {
                 functionName: 'str',
-                argDefs: [
-                    {
-                        name: 'arg0',
-                        isOptional: false,
-                        callbackDef: null,
-                    },
-                ],
+                argDefs: [],
                 returnType: {
-                    isVoid: true,
+                    isVoid: false,
                     isOptional: false,
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 // Functions

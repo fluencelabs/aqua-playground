@@ -24,7 +24,7 @@ export function registerTesto(peer: FluencePeer, service: TestoDef): void;
 export function registerTesto(peer: FluencePeer, serviceId: string, service: TestoDef): void;
 
 export function registerTesto(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'testo',
         functions: [
             {
@@ -42,7 +42,8 @@ export function registerTesto(...args: any) {
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 export interface LocalPrintDef {
@@ -54,19 +55,26 @@ export function registerLocalPrint(peer: FluencePeer, service: LocalPrintDef): v
 export function registerLocalPrint(peer: FluencePeer, serviceId: string, service: LocalPrintDef): void;
 
 export function registerLocalPrint(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'lp',
         functions: [
             {
                 functionName: 'print',
-                argDefs: [],
+                argDefs: [
+                    {
+                        name: 'arg0',
+                        isOptional: false,
+                        callbackDef: null,
+                    },
+                ],
                 returnType: {
-                    isVoid: false,
+                    isVoid: true,
                     isOptional: false,
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 // Functions

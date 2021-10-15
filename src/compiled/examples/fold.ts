@@ -128,9 +128,15 @@ export function iterateAndPrintParallel(...args: any) {
                     name: 'c',
                     isOptional: false,
                     callbackDef: {
-                        argDefs: [],
+                        argDefs: [
+                            {
+                                name: 'arg0',
+                                isOptional: false,
+                                callbackDef: null,
+                            },
+                        ],
                         returnType: {
-                            isVoid: false,
+                            isVoid: true,
                             isOptional: false,
                         },
                     },

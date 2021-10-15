@@ -25,14 +25,19 @@ export function registerOpHa(peer: FluencePeer, service: OpHaDef): void;
 export function registerOpHa(peer: FluencePeer, serviceId: string, service: OpHaDef): void;
 
 export function registerOpHa(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'op',
         functions: [
             {
                 functionName: 'array',
                 argDefs: [
                     {
-                        name: 'arg0',
+                        name: 'a',
+                        isOptional: false,
+                        callbackDef: null,
+                    },
+                    {
+                        name: 'b',
                         isOptional: false,
                         callbackDef: null,
                     },
@@ -46,7 +51,7 @@ export function registerOpHa(...args: any) {
                 functionName: 'identity',
                 argDefs: [
                     {
-                        name: 'arg0',
+                        name: 'a',
                         isOptional: false,
                         callbackDef: null,
                     },
@@ -57,7 +62,8 @@ export function registerOpHa(...args: any) {
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 // Functions

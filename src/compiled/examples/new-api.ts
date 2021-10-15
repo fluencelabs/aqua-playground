@@ -25,14 +25,22 @@ export function registerHelloWorld(peer: FluencePeer, service: HelloWorldDef): v
 export function registerHelloWorld(peer: FluencePeer, serviceId: string, service: HelloWorldDef): void;
 
 export function registerHelloWorld(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'default',
         functions: [
             {
                 functionName: 'getNumber',
+                argDefs: [],
+                returnType: {
+                    isVoid: false,
+                    isOptional: false,
+                },
+            },
+            {
+                functionName: 'sayHello',
                 argDefs: [
                     {
-                        name: 'arg0',
+                        name: 's',
                         isOptional: false,
                         callbackDef: null,
                     },
@@ -42,16 +50,9 @@ export function registerHelloWorld(...args: any) {
                     isOptional: false,
                 },
             },
-            {
-                functionName: 'sayHello',
-                argDefs: [],
-                returnType: {
-                    isVoid: false,
-                    isOptional: false,
-                },
-            },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 // Functions
@@ -91,9 +92,20 @@ export function callMeBack(...args: any) {
                     name: 'callback',
                     isOptional: false,
                     callbackDef: {
-                        argDefs: [],
+                        argDefs: [
+                            {
+                                name: 'arg0',
+                                isOptional: false,
+                                callbackDef: null,
+                            },
+                            {
+                                name: 'arg1',
+                                isOptional: false,
+                                callbackDef: null,
+                            },
+                        ],
                         returnType: {
-                            isVoid: false,
+                            isVoid: true,
                             isOptional: false,
                         },
                     },

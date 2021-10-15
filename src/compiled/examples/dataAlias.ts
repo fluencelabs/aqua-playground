@@ -24,25 +24,20 @@ export function registerNodeIdGetter(peer: FluencePeer, service: NodeIdGetterDef
 export function registerNodeIdGetter(peer: FluencePeer, serviceId: string, service: NodeIdGetterDef): void;
 
 export function registerNodeIdGetter(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'somesrv',
         functions: [
             {
                 functionName: 'get',
-                argDefs: [
-                    {
-                        name: 'arg0',
-                        isOptional: false,
-                        callbackDef: null,
-                    },
-                ],
+                argDefs: [],
                 returnType: {
-                    isVoid: true,
+                    isVoid: false,
                     isOptional: false,
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 // Functions

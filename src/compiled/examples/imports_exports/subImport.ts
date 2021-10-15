@@ -24,14 +24,14 @@ export function registerSubService(peer: FluencePeer, service: SubServiceDef): v
 export function registerSubService(peer: FluencePeer, serviceId: string, service: SubServiceDef): void;
 
 export function registerSubService(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'sub_service',
         functions: [
             {
                 functionName: 'sub',
                 argDefs: [
                     {
-                        name: 'arg0',
+                        name: 's',
                         isOptional: false,
                         callbackDef: null,
                     },
@@ -42,7 +42,8 @@ export function registerSubService(...args: any) {
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 // Functions

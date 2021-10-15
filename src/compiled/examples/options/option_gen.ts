@@ -24,25 +24,26 @@ export function registerOptionString(peer: FluencePeer, service: OptionStringDef
 export function registerOptionString(peer: FluencePeer, serviceId: string, service: OptionStringDef): void;
 
 export function registerOptionString(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'opt_str',
         functions: [
             {
                 functionName: 'checkOption',
                 argDefs: [
                     {
-                        name: 'arg0',
-                        isOptional: false,
+                        name: 'str',
+                        isOptional: true,
                         callbackDef: null,
                     },
                 ],
                 returnType: {
                     isVoid: false,
-                    isOptional: true,
+                    isOptional: false,
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 // Functions

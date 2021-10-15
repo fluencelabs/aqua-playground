@@ -24,14 +24,14 @@ export function registerTestService(peer: FluencePeer, service: TestServiceDef):
 export function registerTestService(peer: FluencePeer, serviceId: string, service: TestServiceDef): void;
 
 export function registerTestService(...args: any) {
-    registerService(args, {
+    let serviceDefinition = {
         defaultServiceId: 'test-service',
         functions: [
             {
                 functionName: 'get_records',
                 argDefs: [
                     {
-                        name: 'arg0',
+                        name: 'key',
                         isOptional: false,
                         callbackDef: null,
                     },
@@ -42,7 +42,8 @@ export function registerTestService(...args: any) {
                 },
             },
         ],
-    });
+    };
+    registerService(args, serviceDefinition);
 }
 
 // Functions
