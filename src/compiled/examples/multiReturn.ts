@@ -168,6 +168,26 @@ export function multiReturnFunc(...args: any) {
         args,
         {
             functionName: 'multiReturnFunc',
+            multiReturn: [
+                {
+                    isOptional: false,
+                },
+                {
+                    isOptional: false,
+                },
+                {
+                    isOptional: false,
+                },
+                {
+                    isOptional: false,
+                },
+                {
+                    isOptional: true,
+                },
+                {
+                    isOptional: false,
+                },
+            ],
             returnType: {
                 isVoid: false,
                 isOptional: false,
