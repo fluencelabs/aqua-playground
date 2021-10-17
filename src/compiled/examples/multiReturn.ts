@@ -154,6 +154,82 @@ export function registerGetNum(...args: any) {
     });
 }
 
+export interface GetMultiDef {
+    ret: (callParams: CallParams<null>) => [string, number];
+    retOpt: (callParams: CallParams<null>) => [string, number | null, number | null];
+}
+
+export function registerGetMulti(service: GetMultiDef): void;
+export function registerGetMulti(serviceId: string, service: GetMultiDef): void;
+export function registerGetMulti(peer: FluencePeer, service: GetMultiDef): void;
+export function registerGetMulti(peer: FluencePeer, serviceId: string, service: GetMultiDef): void;
+export function registerGetMulti(...args: any) {
+    let peer: FluencePeer;
+    let serviceId: any;
+    let service: any;
+    if (FluencePeer.isInstance(args[0])) {
+        peer = args[0];
+    } else {
+        peer = Fluence.getPeer();
+    }
+
+    if (typeof args[0] === 'string') {
+        serviceId = args[0];
+    } else if (typeof args[1] === 'string') {
+        serviceId = args[1];
+    } else {
+        serviceId = 'multiret-multiret';
+    }
+
+    // Figuring out which overload is the service.
+    // If the first argument is not Fluence Peer and it is an object, then it can only be the service def
+    // If the first argument is peer, we are checking further. The second argument might either be
+    // an object, that it must be the service object
+    // or a string, which is the service id. In that case the service is the third argument
+    if (!FluencePeer.isInstance(args[0]) && typeof args[0] === 'object') {
+        service = args[0];
+    } else if (typeof args[1] === 'object') {
+        service = args[1];
+    } else {
+        service = args[2];
+    }
+
+    const incorrectServiceDefinitions = missingFields(service, ['ret', 'retOpt']);
+    if (!!incorrectServiceDefinitions.length) {
+        throw new Error(
+            'Error registering service GetMulti: missing functions: ' +
+                incorrectServiceDefinitions.map((d) => "'" + d + "'").join(', '),
+        );
+    }
+
+    peer.internals.callServiceHandler.use((req, resp, next) => {
+        if (req.serviceId !== serviceId) {
+            next();
+            return;
+        }
+
+        if (req.fnName === 'ret') {
+            const callParams = {
+                ...req.particleContext,
+                tetraplets: {},
+            };
+            resp.retCode = ResultCodes.success;
+            resp.result = service.ret(callParams);
+        }
+
+        if (req.fnName === 'retOpt') {
+            const callParams = {
+                ...req.particleContext,
+                tetraplets: {},
+            };
+            resp.retCode = ResultCodes.success;
+            resp.result = service.retOpt(callParams);
+        }
+
+        next();
+    });
+}
+
 // Functions
 
 export function tupleFunc(config?: { ttl?: number }): Promise<[string, number]>;
@@ -228,13 +304,17 @@ export function multiReturnFunc(
     somethingToReturn: number[],
     smthOption: string | null,
     config?: { ttl?: number },
-): Promise<[string[], number, string, number[], string | null, number]>;
+): Promise<
+    [string[], number, string, number[], string | null, number, string, number, string, number | null, number | null]
+>;
 export function multiReturnFunc(
     peer: FluencePeer,
     somethingToReturn: number[],
     smthOption: string | null,
     config?: { ttl?: number },
-): Promise<[string[], number, string, number[], string | null, number]>;
+): Promise<
+    [string[], number, string, number[], string | null, number, string, number, string, number | null, number | null]
+>;
 export function multiReturnFunc(...args: any) {
     let peer: FluencePeer;
     let somethingToReturn: any;
@@ -253,7 +333,21 @@ export function multiReturnFunc(...args: any) {
     }
 
     let request: RequestFlow;
-    const promise = new Promise<[string[], number, string, number[], string | null, number]>((resolve, reject) => {
+    const promise = new Promise<
+        [
+            string[],
+            number,
+            string,
+            number[],
+            string | null,
+            number,
+            string,
+            number,
+            string,
+            number | null,
+            number | null,
+        ]
+    >((resolve, reject) => {
         const r = new RequestFlowBuilder()
             .disableInjections()
             .withRawScript(
@@ -267,14 +361,20 @@ export function multiReturnFunc(...args: any) {
                           (seq
                            (seq
                             (seq
-                             (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-                             (call %init_peer_id% ("getDataSrv" "somethingToReturn") [] somethingToReturn)
+                             (seq
+                              (seq
+                               (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+                               (call %init_peer_id% ("getDataSrv" "somethingToReturn") [] somethingToReturn)
+                              )
+                              (call %init_peer_id% ("getDataSrv" "smthOption") [] smthOption)
+                             )
+                             (call %init_peer_id% ("multiret-test" "retStr") ["some-str"] $res)
                             )
-                            (call %init_peer_id% ("getDataSrv" "smthOption") [] smthOption)
+                            (call %init_peer_id% ("multiret-test" "retStr") ["random-str"] $res)
                            )
-                           (call %init_peer_id% ("multiret-test" "retStr") ["some-str"] $res)
+                           (call %init_peer_id% ("multiret-multiret" "ret") [] m1)
                           )
-                          (call %init_peer_id% ("multiret-test" "retStr") ["random-str"] $res)
+                          (call %init_peer_id% ("multiret-multiret" "retOpt") [] mo1)
                          )
                          (call %init_peer_id% ("multiret-test" "retStr") ["some-str"] str)
                         )
@@ -283,7 +383,7 @@ export function multiReturnFunc(...args: any) {
                        (ap str $res)
                       )
                       (xor
-                       (call %init_peer_id% ("callbackSrv" "response") [$res 5 "some-str" somethingToReturn smthOption n])
+                       (call %init_peer_id% ("callbackSrv" "response") [$res 5 "some-str" somethingToReturn smthOption n m1 m2 mo1 mo2 mo3])
                        (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
                       )
                      )
@@ -308,6 +408,20 @@ export function multiReturnFunc(...args: any) {
                             opt[4] = null;
                         } else {
                             opt[4] = opt[4][0];
+                        }
+                    }
+                    if (Array.isArray(opt[9])) {
+                        if (opt[9].length === 0) {
+                            opt[9] = null;
+                        } else {
+                            opt[9] = opt[9][0];
+                        }
+                    }
+                    if (Array.isArray(opt[10])) {
+                        if (opt[10].length === 0) {
+                            opt[10] = null;
+                        } else {
+                            opt[10] = opt[10][0];
                         }
                     }
                     return resolve(opt);

@@ -219,6 +219,11 @@ describe('Testing examples', () => {
             [1, 2],
             null,
             10,
+            'non-opt',
+            1,
+            'opt',
+            1,
+            null,
         ]);
     });
 
