@@ -24,7 +24,7 @@ export function registerPeer(peer: FluencePeer, service: PeerDef): void;
 export function registerPeer(peer: FluencePeer, serviceId: string, service: PeerDef): void;
 
 export function registerPeer(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'peer',
         functions: [
             {
@@ -32,18 +32,17 @@ export function registerPeer(...args: any) {
                 argDefs: [
                     {
                         name: 'arg0',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 export interface OpDef {
@@ -55,20 +54,18 @@ export function registerOp(peer: FluencePeer, service: OpDef): void;
 export function registerOp(peer: FluencePeer, serviceId: string, service: OpDef): void;
 
 export function registerOp(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'op',
         functions: [
             {
                 functionName: 'identity',
                 argDefs: [],
                 returnType: {
-                    isVoid: true,
-                    isOptional: false,
+                    tag: 'void',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 export interface TestDef {
@@ -81,28 +78,25 @@ export function registerTest(peer: FluencePeer, service: TestDef): void;
 export function registerTest(peer: FluencePeer, serviceId: string, service: TestDef): void;
 
 export function registerTest(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'test',
         functions: [
             {
                 functionName: 'doSomething',
                 argDefs: [],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
             {
                 functionName: 'getUserList',
                 argDefs: [],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions
@@ -150,14 +144,14 @@ export function betterMessage(...args: any) {
         {
             functionName: 'betterMessage',
             returnType: {
-                isVoid: true,
-                isOptional: false,
+                tag: 'void',
             },
             argDefs: [
                 {
                     name: 'relay',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
             ],
             names: {

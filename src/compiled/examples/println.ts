@@ -24,7 +24,7 @@ export function registerPrintln(peer: FluencePeer, service: PrintlnDef): void;
 export function registerPrintln(peer: FluencePeer, serviceId: string, service: PrintlnDef): void;
 
 export function registerPrintln(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'println-service-id',
         functions: [
             {
@@ -32,18 +32,17 @@ export function registerPrintln(...args: any) {
                 argDefs: [
                     {
                         name: 'arg0',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: true,
-                    isOptional: false,
+                    tag: 'void',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions
@@ -68,14 +67,14 @@ export function print(...args: any) {
         {
             functionName: 'print',
             returnType: {
-                isVoid: true,
-                isOptional: false,
+                tag: 'void',
             },
             argDefs: [
                 {
                     name: 'str',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
             ],
             names: {

@@ -24,7 +24,7 @@ export function registerSubService(peer: FluencePeer, service: SubServiceDef): v
 export function registerSubService(peer: FluencePeer, serviceId: string, service: SubServiceDef): void;
 
 export function registerSubService(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'sub_service',
         functions: [
             {
@@ -32,18 +32,17 @@ export function registerSubService(...args: any) {
                 argDefs: [
                     {
                         name: 's',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions
@@ -72,8 +71,7 @@ export function subImport(...args: any) {
         {
             functionName: 'subImport',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [],
             names: {

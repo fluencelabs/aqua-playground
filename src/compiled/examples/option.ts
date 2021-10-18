@@ -26,7 +26,7 @@ export function registerSomeS(peer: FluencePeer, service: SomeSDef): void;
 export function registerSomeS(peer: FluencePeer, serviceId: string, service: SomeSDef): void;
 
 export function registerSomeS(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'test2',
         functions: [
             {
@@ -34,21 +34,20 @@ export function registerSomeS(...args: any) {
                 argDefs: [
                     {
                         name: 'arg0',
-                        isOptional: true,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'optional',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: true,
+                    tag: 'optional',
                 },
             },
             {
                 functionName: 'getStr1',
                 argDefs: [],
                 returnType: {
-                    isVoid: false,
-                    isOptional: true,
+                    tag: 'optional',
                 },
             },
             {
@@ -56,18 +55,17 @@ export function registerSomeS(...args: any) {
                 argDefs: [
                     {
                         name: 'arg0',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions
@@ -106,14 +104,14 @@ export function useOptional(...args: any) {
         {
             functionName: 'useOptional',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [
                 {
                     name: 'opt',
-                    isOptional: true,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'optional',
+                    },
                 },
             ],
             names: {
@@ -153,8 +151,7 @@ export function returnOptional(...args: any) {
         {
             functionName: 'returnOptional',
             returnType: {
-                isVoid: false,
-                isOptional: true,
+                tag: 'optional',
             },
             argDefs: [],
             names: {
@@ -194,8 +191,7 @@ export function returnNone(...args: any) {
         {
             functionName: 'returnNone',
             returnType: {
-                isVoid: false,
-                isOptional: true,
+                tag: 'optional',
             },
             argDefs: [],
             names: {

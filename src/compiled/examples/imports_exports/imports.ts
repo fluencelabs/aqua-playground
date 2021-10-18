@@ -24,7 +24,7 @@ export function registerStringService(peer: FluencePeer, service: StringServiceD
 export function registerStringService(peer: FluencePeer, serviceId: string, service: StringServiceDef): void;
 
 export function registerStringService(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'string_service',
         functions: [
             {
@@ -32,23 +32,23 @@ export function registerStringService(...args: any) {
                 argDefs: [
                     {
                         name: 'a',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                     {
                         name: 'b',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions
@@ -94,8 +94,7 @@ export function concat_foobars(...args: any) {
         {
             functionName: 'concat_foobars',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [],
             names: {

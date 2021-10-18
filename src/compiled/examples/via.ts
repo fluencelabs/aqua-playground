@@ -24,7 +24,7 @@ export function registerCustomId(peer: FluencePeer, service: CustomIdDef): void;
 export function registerCustomId(peer: FluencePeer, serviceId: string, service: CustomIdDef): void;
 
 export function registerCustomId(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'cid',
         functions: [
             {
@@ -32,18 +32,17 @@ export function registerCustomId(...args: any) {
                 argDefs: [
                     {
                         name: 's',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions
@@ -122,19 +121,20 @@ export function viaArr(...args: any) {
         {
             functionName: 'viaArr',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [
                 {
                     name: 'node_id',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
                 {
                     name: 'viaAr',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
             ],
             names: {
@@ -233,19 +233,20 @@ export function viaStream(...args: any) {
         {
             functionName: 'viaStream',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [
                 {
                     name: 'node_id',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
                 {
                     name: 'viaStr',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
             ],
             names: {
@@ -345,24 +346,26 @@ export function viaOpt(...args: any) {
         {
             functionName: 'viaOpt',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [
                 {
                     name: 'relay',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
                 {
                     name: 'node_id',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
                 {
                     name: 'viaOpt',
-                    isOptional: true,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'optional',
+                    },
                 },
             ],
             names: {

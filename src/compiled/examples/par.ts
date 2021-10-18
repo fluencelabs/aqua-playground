@@ -24,20 +24,18 @@ export function registerParService(peer: FluencePeer, service: ParServiceDef): v
 export function registerParService(peer: FluencePeer, serviceId: string, service: ParServiceDef): void;
 
 export function registerParService(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'parservice-id',
         functions: [
             {
                 functionName: 'call',
                 argDefs: [],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions
@@ -92,29 +90,31 @@ export function parFunc(...args: any) {
         {
             functionName: 'parFunc',
             returnType: {
-                isVoid: true,
-                isOptional: false,
+                tag: 'void',
             },
             argDefs: [
                 {
                     name: 'node',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
                 {
                     name: 'c',
-                    isOptional: false,
-                    callbackDef: {
-                        argDefs: [
-                            {
-                                name: 'arg0',
-                                isOptional: false,
-                                callbackDef: null,
+                    argType: {
+                        tag: 'callback',
+                        callback: {
+                            argDefs: [
+                                {
+                                    name: 'arg0',
+                                    argType: {
+                                        tag: 'primitive',
+                                    },
+                                },
+                            ],
+                            returnType: {
+                                tag: 'void',
                             },
-                        ],
-                        returnType: {
-                            isVoid: true,
-                            isOptional: false,
                         },
                     },
                 },

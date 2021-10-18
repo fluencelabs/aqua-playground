@@ -24,7 +24,7 @@ export function registerGetter(peer: FluencePeer, service: GetterDef): void;
 export function registerGetter(peer: FluencePeer, serviceId: string, service: GetterDef): void;
 
 export function registerGetter(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'test',
         functions: [
             {
@@ -32,18 +32,17 @@ export function registerGetter(...args: any) {
                 argDefs: [
                     {
                         name: 'arg0',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 export interface OpODef {
@@ -55,7 +54,7 @@ export function registerOpO(peer: FluencePeer, service: OpODef): void;
 export function registerOpO(peer: FluencePeer, serviceId: string, service: OpODef): void;
 
 export function registerOpO(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'op',
         functions: [
             {
@@ -63,18 +62,17 @@ export function registerOpO(...args: any) {
                 argDefs: [
                     {
                         name: 'arg0',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions
@@ -105,8 +103,7 @@ export function callConstant(...args: any) {
         {
             functionName: 'callConstant',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [],
             names: {

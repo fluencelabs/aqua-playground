@@ -24,7 +24,7 @@ export function registerTesto(peer: FluencePeer, service: TestoDef): void;
 export function registerTesto(peer: FluencePeer, serviceId: string, service: TestoDef): void;
 
 export function registerTesto(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'testo',
         functions: [
             {
@@ -32,18 +32,17 @@ export function registerTesto(...args: any) {
                 argDefs: [
                     {
                         name: 'arg0',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 export interface LocalPrintDef {
@@ -55,7 +54,7 @@ export function registerLocalPrint(peer: FluencePeer, service: LocalPrintDef): v
 export function registerLocalPrint(peer: FluencePeer, serviceId: string, service: LocalPrintDef): void;
 
 export function registerLocalPrint(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'lp',
         functions: [
             {
@@ -63,18 +62,17 @@ export function registerLocalPrint(...args: any) {
                 argDefs: [
                     {
                         name: 'arg0',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: true,
-                    isOptional: false,
+                    tag: 'void',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions
@@ -157,29 +155,32 @@ export function topologyTest(...args: any) {
         {
             functionName: 'topologyTest',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [
                 {
                     name: 'me',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
                 {
                     name: 'myRelay',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
                 {
                     name: 'friend',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
                 {
                     name: 'friendRelay',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
             ],
             names: {

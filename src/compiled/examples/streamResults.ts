@@ -24,7 +24,7 @@ export function registerDTGetter(peer: FluencePeer, service: DTGetterDef): void;
 export function registerDTGetter(peer: FluencePeer, serviceId: string, service: DTGetterDef): void;
 
 export function registerDTGetter(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'get-dt',
         functions: [
             {
@@ -32,18 +32,17 @@ export function registerDTGetter(...args: any) {
                 argDefs: [
                     {
                         name: 's',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions
@@ -74,14 +73,14 @@ export function use_name1(...args: any) {
         {
             functionName: 'use_name1',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [
                 {
                     name: 'name',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
             ],
             names: {
@@ -139,14 +138,14 @@ export function use_name2(...args: any) {
         {
             functionName: 'use_name2',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [
                 {
                     name: 'name',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
             ],
             names: {

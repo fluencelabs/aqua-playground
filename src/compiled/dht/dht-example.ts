@@ -86,19 +86,20 @@ export function put_value(...args: any) {
         {
             functionName: 'put_value',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [
                 {
                     name: 'initial_peer',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
                 {
                     name: 'value',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
             ],
             names: {
@@ -200,34 +201,38 @@ export function registerKeyPutValue(...args: any) {
         {
             functionName: 'registerKeyPutValue',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [
                 {
                     name: 'node_id',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
                 {
                     name: 'key',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
                 {
                     name: 'value',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
                 {
                     name: 'relay_id',
-                    isOptional: true,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'optional',
+                    },
                 },
                 {
                     name: 'service_id',
-                    isOptional: true,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'optional',
+                    },
                 },
             ],
             names: {
@@ -293,19 +298,20 @@ export function getNeighbours(...args: any) {
         {
             functionName: 'getNeighbours',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [
                 {
                     name: 'node_id',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
                 {
                     name: 'topic',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
             ],
             names: {
@@ -430,19 +436,20 @@ export function findSubscribers(...args: any) {
         {
             functionName: 'findSubscribers',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [
                 {
                     name: 'node_id',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
                 {
                     name: 'topic',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
             ],
             names: {
@@ -541,34 +548,38 @@ export function initTopicAndSubscribe(...args: any) {
         {
             functionName: 'initTopicAndSubscribe',
             returnType: {
-                isVoid: true,
-                isOptional: false,
+                tag: 'void',
             },
             argDefs: [
                 {
                     name: 'node_id',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
                 {
                     name: 'topic',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
                 {
                     name: 'value',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
                 {
                     name: 'relay_id',
-                    isOptional: true,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'optional',
+                    },
                 },
                 {
                     name: 'service_id',
-                    isOptional: true,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'optional',
+                    },
                 },
             ],
             names: {

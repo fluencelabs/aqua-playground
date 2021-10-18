@@ -24,7 +24,7 @@ export function registerOp2(peer: FluencePeer, service: Op2Def): void;
 export function registerOp2(peer: FluencePeer, serviceId: string, service: Op2Def): void;
 
 export function registerOp2(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'op',
         functions: [
             {
@@ -32,18 +32,17 @@ export function registerOp2(...args: any) {
                 argDefs: [
                     {
                         name: 's',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: true,
-                    isOptional: false,
+                    tag: 'void',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions
@@ -112,14 +111,14 @@ export function getTwoResults(...args: any) {
         {
             functionName: 'getTwoResults',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [
                 {
                     name: 'relay',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
             ],
             names: {

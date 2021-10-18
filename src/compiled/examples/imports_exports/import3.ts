@@ -37,8 +37,7 @@ export function foo_wrapper(...args: any) {
         {
             functionName: 'foo_wrapper',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [],
             names: {

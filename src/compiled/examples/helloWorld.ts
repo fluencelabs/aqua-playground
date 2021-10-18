@@ -24,7 +24,7 @@ export function registerStringExtra(peer: FluencePeer, service: StringExtraDef):
 export function registerStringExtra(peer: FluencePeer, serviceId: string, service: StringExtraDef): void;
 
 export function registerStringExtra(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'service-id',
         functions: [
             {
@@ -32,18 +32,17 @@ export function registerStringExtra(...args: any) {
                 argDefs: [
                     {
                         name: 'arg0',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions
@@ -74,14 +73,14 @@ export function helloWorld(...args: any) {
         {
             functionName: 'helloWorld',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [
                 {
                     name: 'name',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
             ],
             names: {

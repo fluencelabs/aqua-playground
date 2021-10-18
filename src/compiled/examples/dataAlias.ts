@@ -24,20 +24,18 @@ export function registerNodeIdGetter(peer: FluencePeer, service: NodeIdGetterDef
 export function registerNodeIdGetter(peer: FluencePeer, serviceId: string, service: NodeIdGetterDef): void;
 
 export function registerNodeIdGetter(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'somesrv',
         functions: [
             {
                 functionName: 'get',
                 argDefs: [],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions
@@ -65,8 +63,7 @@ export function getAliasedData(...args: any) {
         {
             functionName: 'getAliasedData',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [],
             names: {

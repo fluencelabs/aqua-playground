@@ -24,7 +24,7 @@ export function registerReturn(peer: FluencePeer, service: ReturnDef): void;
 export function registerReturn(peer: FluencePeer, serviceId: string, service: ReturnDef): void;
 
 export function registerReturn(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'returnService',
         functions: [
             {
@@ -32,18 +32,17 @@ export function registerReturn(...args: any) {
                 argDefs: [
                     {
                         name: 'arg0',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: true,
-                    isOptional: false,
+                    tag: 'void',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions
@@ -83,14 +82,14 @@ export function test(...args: any) {
         {
             functionName: 'test',
             returnType: {
-                isVoid: true,
-                isOptional: false,
+                tag: 'void',
             },
             argDefs: [
                 {
                     name: 'node',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
             ],
             names: {

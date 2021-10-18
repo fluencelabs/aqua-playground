@@ -42,14 +42,14 @@ export function iterateAndPrint(...args: any) {
         {
             functionName: 'iterateAndPrint',
             returnType: {
-                isVoid: true,
-                isOptional: false,
+                tag: 'void',
             },
             argDefs: [
                 {
                     name: 'strings',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
             ],
             names: {
@@ -115,29 +115,31 @@ export function iterateAndPrintParallel(...args: any) {
         {
             functionName: 'iterateAndPrintParallel',
             returnType: {
-                isVoid: true,
-                isOptional: false,
+                tag: 'void',
             },
             argDefs: [
                 {
                     name: 'nodes',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
                 {
                     name: 'c',
-                    isOptional: false,
-                    callbackDef: {
-                        argDefs: [
-                            {
-                                name: 'arg0',
-                                isOptional: false,
-                                callbackDef: null,
+                    argType: {
+                        tag: 'callback',
+                        callback: {
+                            argDefs: [
+                                {
+                                    name: 'arg0',
+                                    argType: {
+                                        tag: 'primitive',
+                                    },
+                                },
+                            ],
+                            returnType: {
+                                tag: 'void',
                             },
-                        ],
-                        returnType: {
-                            isVoid: true,
-                            isOptional: false,
                         },
                     },
                 },

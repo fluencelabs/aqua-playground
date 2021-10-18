@@ -29,7 +29,7 @@ export function registerAquaDHT(peer: FluencePeer, service: AquaDHTDef): void;
 export function registerAquaDHT(peer: FluencePeer, serviceId: string, service: AquaDHTDef): void;
 
 export function registerAquaDHT(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'test-dht',
         functions: [
             {
@@ -37,28 +37,29 @@ export function registerAquaDHT(...args: any) {
                 argDefs: [
                     {
                         name: 'key',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                     {
                         name: 'value',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                     {
                         name: 'service_id',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions
@@ -106,24 +107,26 @@ export function putHostValue(...args: any) {
         {
             functionName: 'putHostValue',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [
                 {
                     name: 'key',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
                 {
                     name: 'value',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
                 {
                     name: 'service_id',
-                    isOptional: true,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'optional',
+                    },
                 },
             ],
             names: {
@@ -166,14 +169,14 @@ export function create_client_util(...args: any) {
         {
             functionName: 'create_client_util',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [
                 {
                     name: 'service_id',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
             ],
             names: {

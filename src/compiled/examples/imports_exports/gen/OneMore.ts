@@ -22,20 +22,18 @@ export function registerOneMore(serviceId: string, service: OneMoreDef): void;
 export function registerOneMore(peer: FluencePeer, serviceId: string, service: OneMoreDef): void;
 
 export function registerOneMore(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: null,
         functions: [
             {
                 functionName: 'more_call',
                 argDefs: [],
                 returnType: {
-                    isVoid: true,
-                    isOptional: false,
+                    tag: 'void',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions

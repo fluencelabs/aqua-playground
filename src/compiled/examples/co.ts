@@ -24,20 +24,18 @@ export function registerCoService(peer: FluencePeer, service: CoServiceDef): voi
 export function registerCoService(peer: FluencePeer, serviceId: string, service: CoServiceDef): void;
 
 export function registerCoService(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'coservice-id',
         functions: [
             {
                 functionName: 'call',
                 argDefs: [],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions
@@ -95,29 +93,31 @@ export function coFunc(...args: any) {
         {
             functionName: 'coFunc',
             returnType: {
-                isVoid: true,
-                isOptional: false,
+                tag: 'void',
             },
             argDefs: [
                 {
                     name: 'node',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
                 {
                     name: 'c',
-                    isOptional: false,
-                    callbackDef: {
-                        argDefs: [
-                            {
-                                name: 'arg0',
-                                isOptional: false,
-                                callbackDef: null,
+                    argType: {
+                        tag: 'callback',
+                        callback: {
+                            argDefs: [
+                                {
+                                    name: 'arg0',
+                                    argType: {
+                                        tag: 'primitive',
+                                    },
+                                },
+                            ],
+                            returnType: {
+                                tag: 'void',
                             },
-                        ],
-                        returnType: {
-                            isVoid: true,
-                            isOptional: false,
                         },
                     },
                 },

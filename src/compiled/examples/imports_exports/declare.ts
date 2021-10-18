@@ -24,20 +24,18 @@ export function registerSuperFoo(peer: FluencePeer, service: SuperFooDef): void;
 export function registerSuperFoo(peer: FluencePeer, serviceId: string, service: SuperFooDef): void;
 
 export function registerSuperFoo(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'super_foo',
         functions: [
             {
                 functionName: 'small_foo',
                 argDefs: [],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions

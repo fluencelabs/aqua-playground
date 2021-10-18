@@ -25,15 +25,14 @@ export function registerHelloWorld(peer: FluencePeer, service: HelloWorldDef): v
 export function registerHelloWorld(peer: FluencePeer, serviceId: string, service: HelloWorldDef): void;
 
 export function registerHelloWorld(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'default',
         functions: [
             {
                 functionName: 'getNumber',
                 argDefs: [],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
             {
@@ -41,18 +40,17 @@ export function registerHelloWorld(...args: any) {
                 argDefs: [
                     {
                         name: 's',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: true,
-                    isOptional: false,
+                    tag: 'void',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions
@@ -84,29 +82,31 @@ export function callMeBack(...args: any) {
         {
             functionName: 'callMeBack',
             returnType: {
-                isVoid: true,
-                isOptional: false,
+                tag: 'void',
             },
             argDefs: [
                 {
                     name: 'callback',
-                    isOptional: false,
-                    callbackDef: {
-                        argDefs: [
-                            {
-                                name: 'arg0',
-                                isOptional: false,
-                                callbackDef: null,
+                    argType: {
+                        tag: 'callback',
+                        callback: {
+                            argDefs: [
+                                {
+                                    name: 'arg0',
+                                    argType: {
+                                        tag: 'primitive',
+                                    },
+                                },
+                                {
+                                    name: 'arg1',
+                                    argType: {
+                                        tag: 'primitive',
+                                    },
+                                },
+                            ],
+                            returnType: {
+                                tag: 'void',
                             },
-                            {
-                                name: 'arg1',
-                                isOptional: false,
-                                callbackDef: null,
-                            },
-                        ],
-                        returnType: {
-                            isVoid: true,
-                            isOptional: false,
                         },
                     },
                 },

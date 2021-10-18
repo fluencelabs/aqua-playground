@@ -29,7 +29,7 @@ export function registerComplexService(peer: FluencePeer, service: ComplexServic
 export function registerComplexService(peer: FluencePeer, serviceId: string, service: ComplexServiceDef): void;
 
 export function registerComplexService(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'op-ha',
         functions: [
             {
@@ -37,31 +37,30 @@ export function registerComplexService(...args: any) {
                 argDefs: [
                     {
                         name: 'd',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                     {
                         name: 'sd',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
             {
                 functionName: 'identity',
                 argDefs: [],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions
@@ -128,44 +127,49 @@ export function doSmth(...args: any) {
         {
             functionName: 'doSmth',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [
                 {
                     name: 'd',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
                 {
                     name: 'd2',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
                 {
                     name: 'sd',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
                 {
                     name: 'c',
-                    isOptional: false,
-                    callbackDef: {
-                        argDefs: [
-                            {
-                                name: 'arg0',
-                                isOptional: false,
-                                callbackDef: null,
+                    argType: {
+                        tag: 'callback',
+                        callback: {
+                            argDefs: [
+                                {
+                                    name: 'arg0',
+                                    argType: {
+                                        tag: 'primitive',
+                                    },
+                                },
+                                {
+                                    name: 'arg1',
+                                    argType: {
+                                        tag: 'primitive',
+                                    },
+                                },
+                            ],
+                            returnType: {
+                                tag: 'primitive',
                             },
-                            {
-                                name: 'arg1',
-                                isOptional: false,
-                                callbackDef: null,
-                            },
-                        ],
-                        returnType: {
-                            isVoid: false,
-                            isOptional: false,
                         },
                     },
                 },

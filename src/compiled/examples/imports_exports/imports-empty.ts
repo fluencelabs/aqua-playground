@@ -46,7 +46,7 @@ export function registerNoop(peer: FluencePeer, service: NoopDef): void;
 export function registerNoop(peer: FluencePeer, serviceId: string, service: NoopDef): void;
 
 export function registerNoop(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'op',
         functions: [
             {
@@ -54,28 +54,31 @@ export function registerNoop(...args: any) {
                 argDefs: [
                     {
                         name: 'a',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                     {
                         name: 'b',
-                        isOptional: true,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'optional',
+                        },
                     },
                     {
                         name: 'c',
-                        isOptional: true,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'optional',
+                        },
                     },
                     {
                         name: 'd',
-                        isOptional: true,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'optional',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
             {
@@ -83,13 +86,13 @@ export function registerNoop(...args: any) {
                 argDefs: [
                     {
                         name: 'array',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
             {
@@ -97,13 +100,13 @@ export function registerNoop(...args: any) {
                 argDefs: [
                     {
                         name: 'b',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
             {
@@ -111,13 +114,13 @@ export function registerNoop(...args: any) {
                 argDefs: [
                     {
                         name: 'bs',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
             {
@@ -125,28 +128,31 @@ export function registerNoop(...args: any) {
                 argDefs: [
                     {
                         name: 'a',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                     {
                         name: 'b',
-                        isOptional: true,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'optional',
+                        },
                     },
                     {
                         name: 'c',
-                        isOptional: true,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'optional',
+                        },
                     },
                     {
                         name: 'd',
-                        isOptional: true,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'optional',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
             {
@@ -154,18 +160,19 @@ export function registerNoop(...args: any) {
                 argDefs: [
                     {
                         name: 'a',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                     {
                         name: 'b',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
             {
@@ -173,21 +180,20 @@ export function registerNoop(...args: any) {
                 argDefs: [
                     {
                         name: 's',
-                        isOptional: true,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'optional',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: true,
+                    tag: 'optional',
                 },
             },
             {
                 functionName: 'noop',
                 argDefs: [],
                 returnType: {
-                    isVoid: true,
-                    isOptional: false,
+                    tag: 'void',
                 },
             },
             {
@@ -195,13 +201,13 @@ export function registerNoop(...args: any) {
                 argDefs: [
                     {
                         name: 's',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
             {
@@ -209,13 +215,13 @@ export function registerNoop(...args: any) {
                 argDefs: [
                     {
                         name: 'b',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
             {
@@ -223,18 +229,17 @@ export function registerNoop(...args: any) {
                 argDefs: [
                     {
                         name: 's',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 export interface MyExportSrvDef {
@@ -246,20 +251,18 @@ export function registerMyExportSrv(peer: FluencePeer, service: MyExportSrvDef):
 export function registerMyExportSrv(peer: FluencePeer, serviceId: string, service: MyExportSrvDef): void;
 
 export function registerMyExportSrv(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'my_export_srv',
         functions: [
             {
                 functionName: 'another_str',
                 argDefs: [],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions
@@ -284,8 +287,7 @@ export function some_str(...args: any) {
         {
             functionName: 'some_str',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [],
             names: {
@@ -322,8 +324,7 @@ export function some_string(...args: any) {
         {
             functionName: 'some_string',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [],
             names: {
@@ -363,8 +364,7 @@ export function decl_foo(...args: any) {
         {
             functionName: 'decl_foo',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [],
             names: {
@@ -401,8 +401,7 @@ export function decl_bar(...args: any) {
         {
             functionName: 'decl_bar',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [],
             names: {
@@ -439,8 +438,7 @@ export function some_random_func(...args: any) {
         {
             functionName: 'some_random_func',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [],
             names: {

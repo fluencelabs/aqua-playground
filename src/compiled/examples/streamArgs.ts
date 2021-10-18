@@ -24,7 +24,7 @@ export function registerTestService(peer: FluencePeer, service: TestServiceDef):
 export function registerTestService(peer: FluencePeer, serviceId: string, service: TestServiceDef): void;
 
 export function registerTestService(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'test-service',
         functions: [
             {
@@ -32,18 +32,17 @@ export function registerTestService(...args: any) {
                 argDefs: [
                     {
                         name: 'key',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions
@@ -84,19 +83,20 @@ export function append_records(...args: any) {
         {
             functionName: 'append_records',
             returnType: {
-                isVoid: true,
-                isOptional: false,
+                tag: 'void',
             },
             argDefs: [
                 {
                     name: 'peer',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
                 {
                     name: 'srum',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
             ],
             names: {
@@ -139,14 +139,14 @@ export function retrieve_records(...args: any) {
         {
             functionName: 'retrieve_records',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [
                 {
                     name: 'peer',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
             ],
             names: {

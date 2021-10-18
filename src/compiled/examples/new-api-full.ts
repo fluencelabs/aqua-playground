@@ -28,7 +28,7 @@ export function registerServiceWithDefaultId(
 ): void;
 
 export function registerServiceWithDefaultId(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'defaultId',
         functions: [
             {
@@ -36,18 +36,17 @@ export function registerServiceWithDefaultId(...args: any) {
                 argDefs: [
                     {
                         name: 's',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: true,
-                    isOptional: false,
+                    tag: 'void',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 export interface ServiceWithOUTDefaultIdDef {
@@ -61,7 +60,7 @@ export function registerServiceWithOUTDefaultId(
 ): void;
 
 export function registerServiceWithOUTDefaultId(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: null,
         functions: [
             {
@@ -69,18 +68,17 @@ export function registerServiceWithOUTDefaultId(...args: any) {
                 argDefs: [
                     {
                         name: 's',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: true,
-                    isOptional: false,
+                    tag: 'void',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 export interface MoreMembersDef {
@@ -94,15 +92,14 @@ export function registerMoreMembers(serviceId: string, service: MoreMembersDef):
 export function registerMoreMembers(peer: FluencePeer, serviceId: string, service: MoreMembersDef): void;
 
 export function registerMoreMembers(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: null,
         functions: [
             {
                 functionName: 'member1',
                 argDefs: [],
                 returnType: {
-                    isVoid: true,
-                    isOptional: false,
+                    tag: 'void',
                 },
             },
             {
@@ -110,13 +107,13 @@ export function registerMoreMembers(...args: any) {
                 argDefs: [
                     {
                         name: 's1',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: true,
-                    isOptional: false,
+                    tag: 'void',
                 },
             },
             {
@@ -124,18 +121,19 @@ export function registerMoreMembers(...args: any) {
                 argDefs: [
                     {
                         name: 's1',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                     {
                         name: 's2',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: true,
-                    isOptional: false,
+                    tag: 'void',
                 },
             },
             {
@@ -143,23 +141,25 @@ export function registerMoreMembers(...args: any) {
                 argDefs: [
                     {
                         name: 's1',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                     {
                         name: 's2',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                     {
                         name: 'i',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
             {
@@ -167,28 +167,29 @@ export function registerMoreMembers(...args: any) {
                 argDefs: [
                     {
                         name: 's1',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                     {
                         name: 's2',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                     {
                         name: 'i',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions
@@ -220,29 +221,31 @@ export function f1(...args: any) {
         {
             functionName: 'f1',
             returnType: {
-                isVoid: true,
-                isOptional: false,
+                tag: 'void',
             },
             argDefs: [
                 {
                     name: 'callback',
-                    isOptional: false,
-                    callbackDef: {
-                        argDefs: [
-                            {
-                                name: 'arg0',
-                                isOptional: false,
-                                callbackDef: null,
+                    argType: {
+                        tag: 'callback',
+                        callback: {
+                            argDefs: [
+                                {
+                                    name: 'arg0',
+                                    argType: {
+                                        tag: 'primitive',
+                                    },
+                                },
+                                {
+                                    name: 'arg1',
+                                    argType: {
+                                        tag: 'primitive',
+                                    },
+                                },
+                            ],
+                            returnType: {
+                                tag: 'void',
                             },
-                            {
-                                name: 'arg1',
-                                isOptional: false,
-                                callbackDef: null,
-                            },
-                        ],
-                        returnType: {
-                            isVoid: true,
-                            isOptional: false,
                         },
                     },
                 },
@@ -293,34 +296,37 @@ export function f2(...args: any) {
         {
             functionName: 'f2',
             returnType: {
-                isVoid: true,
-                isOptional: false,
+                tag: 'void',
             },
             argDefs: [
                 {
                     name: 'num',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
                 {
                     name: 'callback',
-                    isOptional: false,
-                    callbackDef: {
-                        argDefs: [
-                            {
-                                name: 'arg0',
-                                isOptional: false,
-                                callbackDef: null,
+                    argType: {
+                        tag: 'callback',
+                        callback: {
+                            argDefs: [
+                                {
+                                    name: 'arg0',
+                                    argType: {
+                                        tag: 'primitive',
+                                    },
+                                },
+                                {
+                                    name: 'arg1',
+                                    argType: {
+                                        tag: 'primitive',
+                                    },
+                                },
+                            ],
+                            returnType: {
+                                tag: 'void',
                             },
-                            {
-                                name: 'arg1',
-                                isOptional: false,
-                                callbackDef: null,
-                            },
-                        ],
-                        returnType: {
-                            isVoid: true,
-                            isOptional: false,
                         },
                     },
                 },
@@ -377,34 +383,37 @@ export function f3(...args: any) {
         {
             functionName: 'f3',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [
                 {
                     name: 'num',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
                 {
                     name: 'callback',
-                    isOptional: false,
-                    callbackDef: {
-                        argDefs: [
-                            {
-                                name: 'arg0',
-                                isOptional: false,
-                                callbackDef: null,
+                    argType: {
+                        tag: 'callback',
+                        callback: {
+                            argDefs: [
+                                {
+                                    name: 'arg0',
+                                    argType: {
+                                        tag: 'primitive',
+                                    },
+                                },
+                                {
+                                    name: 'arg1',
+                                    argType: {
+                                        tag: 'primitive',
+                                    },
+                                },
+                            ],
+                            returnType: {
+                                tag: 'void',
                             },
-                            {
-                                name: 'arg1',
-                                isOptional: false,
-                                callbackDef: null,
-                            },
-                        ],
-                        returnType: {
-                            isVoid: true,
-                            isOptional: false,
                         },
                     },
                 },
@@ -450,18 +459,18 @@ export function callBackZeroArgs(...args: any) {
         {
             functionName: 'callBackZeroArgs',
             returnType: {
-                isVoid: true,
-                isOptional: false,
+                tag: 'void',
             },
             argDefs: [
                 {
                     name: 'callback',
-                    isOptional: false,
-                    callbackDef: {
-                        argDefs: [],
-                        returnType: {
-                            isVoid: true,
-                            isOptional: false,
+                    argType: {
+                        tag: 'callback',
+                        callback: {
+                            argDefs: [],
+                            returnType: {
+                                tag: 'void',
+                            },
                         },
                     },
                 },

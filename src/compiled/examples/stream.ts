@@ -24,7 +24,7 @@ export function registerStringer(peer: FluencePeer, service: StringerDef): void;
 export function registerStringer(peer: FluencePeer, serviceId: string, service: StringerDef): void;
 
 export function registerStringer(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'stringer-id',
         functions: [
             {
@@ -32,18 +32,17 @@ export function registerStringer(...args: any) {
                 argDefs: [
                     {
                         name: 'arg0',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions
@@ -68,8 +67,7 @@ export function returnNone(...args: any) {
         {
             functionName: 'returnNone',
             returnType: {
-                isVoid: false,
-                isOptional: true,
+                tag: 'optional',
             },
             argDefs: [],
             names: {
@@ -106,8 +104,7 @@ export function stringNone(...args: any) {
         {
             functionName: 'stringNone',
             returnType: {
-                isVoid: false,
-                isOptional: true,
+                tag: 'optional',
             },
             argDefs: [],
             names: {
@@ -144,8 +141,7 @@ export function returnNil(...args: any) {
         {
             functionName: 'returnNil',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [],
             names: {
@@ -182,8 +178,7 @@ export function stringNil(...args: any) {
         {
             functionName: 'stringNil',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [],
             names: {
@@ -237,14 +232,14 @@ export function checkStreams(...args: any) {
         {
             functionName: 'checkStreams',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [
                 {
                     name: 'ch',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
             ],
             names: {

@@ -43,8 +43,7 @@ export function wrap(...args: any) {
         {
             functionName: 'wrap',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [],
             names: {
@@ -87,8 +86,7 @@ export function barfoo(...args: any) {
         {
             functionName: 'barfoo',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [],
             names: {

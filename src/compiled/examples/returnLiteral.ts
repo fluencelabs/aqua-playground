@@ -37,8 +37,7 @@ export function returnLiteral(...args: any) {
         {
             functionName: 'returnLiteral',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [],
             names: {

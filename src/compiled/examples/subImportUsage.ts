@@ -28,7 +28,7 @@ export function registerConcatSubs(peer: FluencePeer, service: ConcatSubsDef): v
 export function registerConcatSubs(peer: FluencePeer, serviceId: string, service: ConcatSubsDef): void;
 
 export function registerConcatSubs(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'concat_subs',
         functions: [
             {
@@ -36,23 +36,23 @@ export function registerConcatSubs(...args: any) {
                 argDefs: [
                     {
                         name: 's',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                     {
                         name: 'sr',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions
@@ -90,14 +90,14 @@ export function subImportUsage(...args: any) {
         {
             functionName: 'subImportUsage',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [
                 {
                     name: 's',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
             ],
             names: {

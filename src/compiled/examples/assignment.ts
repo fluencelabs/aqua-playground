@@ -25,7 +25,7 @@ export function registerOpHa(peer: FluencePeer, service: OpHaDef): void;
 export function registerOpHa(peer: FluencePeer, serviceId: string, service: OpHaDef): void;
 
 export function registerOpHa(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'op',
         functions: [
             {
@@ -33,18 +33,19 @@ export function registerOpHa(...args: any) {
                 argDefs: [
                     {
                         name: 'a',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                     {
                         name: 'b',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
             {
@@ -52,18 +53,17 @@ export function registerOpHa(...args: any) {
                 argDefs: [
                     {
                         name: 'a',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions
@@ -98,14 +98,14 @@ export function doSmth(...args: any) {
         {
             functionName: 'doSmth',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [
                 {
                     name: 'arg',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
             ],
             names: {

@@ -24,7 +24,7 @@ export function registerOptionString(peer: FluencePeer, service: OptionStringDef
 export function registerOptionString(peer: FluencePeer, serviceId: string, service: OptionStringDef): void;
 
 export function registerOptionString(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'opt_str',
         functions: [
             {
@@ -32,18 +32,17 @@ export function registerOptionString(...args: any) {
                 argDefs: [
                     {
                         name: 'str',
-                        isOptional: true,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'optional',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions
@@ -68,8 +67,7 @@ export function emptyString(...args: any) {
         {
             functionName: 'emptyString',
             returnType: {
-                isVoid: false,
-                isOptional: true,
+                tag: 'optional',
             },
             argDefs: [],
             names: {
@@ -109,8 +107,7 @@ export function checkEmpty(...args: any) {
         {
             functionName: 'checkEmpty',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [],
             names: {
@@ -153,14 +150,14 @@ export function stringAsOption(...args: any) {
         {
             functionName: 'stringAsOption',
             returnType: {
-                isVoid: false,
-                isOptional: true,
+                tag: 'optional',
             },
             argDefs: [
                 {
                     name: 'str',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
             ],
             names: {
@@ -206,14 +203,14 @@ export function checkNoneEmpty(...args: any) {
         {
             functionName: 'checkNoneEmpty',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [
                 {
                     name: 'str',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
             ],
             names: {

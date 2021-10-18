@@ -24,7 +24,7 @@ export function registerOpH(peer: FluencePeer, service: OpHDef): void;
 export function registerOpH(peer: FluencePeer, serviceId: string, service: OpHDef): void;
 
 export function registerOpH(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'opa',
         functions: [
             {
@@ -32,18 +32,17 @@ export function registerOpH(...args: any) {
                 argDefs: [
                     {
                         name: 's',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions
@@ -74,14 +73,14 @@ export function a(...args: any) {
         {
             functionName: 'a',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [
                 {
                     name: 'b',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
             ],
             names: {
@@ -124,14 +123,14 @@ export function d(...args: any) {
         {
             functionName: 'd',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [
                 {
                     name: 'e',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
             ],
             names: {

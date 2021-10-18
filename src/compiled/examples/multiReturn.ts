@@ -24,7 +24,7 @@ export function registerGetStr(peer: FluencePeer, service: GetStrDef): void;
 export function registerGetStr(peer: FluencePeer, serviceId: string, service: GetStrDef): void;
 
 export function registerGetStr(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'multiret-test',
         functions: [
             {
@@ -32,18 +32,17 @@ export function registerGetStr(...args: any) {
                 argDefs: [
                     {
                         name: 'arg0',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 export interface GetNumDef {
@@ -55,20 +54,18 @@ export function registerGetNum(peer: FluencePeer, service: GetNumDef): void;
 export function registerGetNum(peer: FluencePeer, serviceId: string, service: GetNumDef): void;
 
 export function registerGetNum(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'multiret-num',
         functions: [
             {
                 functionName: 'retNum',
                 argDefs: [],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions
@@ -100,8 +97,15 @@ export function tupleFunc(...args: any) {
         {
             functionName: 'tupleFunc',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'multiReturn',
+                returnItems: [
+                    {
+                        tag: 'primitive',
+                    },
+                    {
+                        tag: 'primitive',
+                    },
+                ],
             },
             argDefs: [],
             names: {
@@ -168,40 +172,41 @@ export function multiReturnFunc(...args: any) {
         args,
         {
             functionName: 'multiReturnFunc',
-            multiReturn: [
-                {
-                    isOptional: false,
-                },
-                {
-                    isOptional: false,
-                },
-                {
-                    isOptional: false,
-                },
-                {
-                    isOptional: false,
-                },
-                {
-                    isOptional: true,
-                },
-                {
-                    isOptional: false,
-                },
-            ],
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'multiReturn',
+                returnItems: [
+                    {
+                        tag: 'primitive',
+                    },
+                    {
+                        tag: 'primitive',
+                    },
+                    {
+                        tag: 'primitive',
+                    },
+                    {
+                        tag: 'primitive',
+                    },
+                    {
+                        tag: 'optional',
+                    },
+                    {
+                        tag: 'primitive',
+                    },
+                ],
             },
             argDefs: [
                 {
                     name: 'somethingToReturn',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
                 {
                     name: 'smthOption',
-                    isOptional: true,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'optional',
+                    },
                 },
             ],
             names: {

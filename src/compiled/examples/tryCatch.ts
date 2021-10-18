@@ -24,20 +24,18 @@ export function registerUnexisted(peer: FluencePeer, service: UnexistedDef): voi
 export function registerUnexisted(peer: FluencePeer, serviceId: string, service: UnexistedDef): void;
 
 export function registerUnexisted(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'unex',
         functions: [
             {
                 functionName: 'getStr',
                 argDefs: [],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 export interface OpADef {
@@ -49,7 +47,7 @@ export function registerOpA(peer: FluencePeer, service: OpADef): void;
 export function registerOpA(peer: FluencePeer, serviceId: string, service: OpADef): void;
 
 export function registerOpA(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'op',
         functions: [
             {
@@ -57,18 +55,17 @@ export function registerOpA(...args: any) {
                 argDefs: [
                     {
                         name: 's',
-                        isOptional: false,
-                        callbackDef: null,
+                        argType: {
+                            tag: 'primitive',
+                        },
                     },
                 ],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions
@@ -120,14 +117,14 @@ export function tryCatchTest(...args: any) {
         {
             functionName: 'tryCatchTest',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [
                 {
                     name: 'node_id',
-                    isOptional: false,
-                    callbackDef: null,
+                    argType: {
+                        tag: 'primitive',
+                    },
                 },
             ],
             names: {

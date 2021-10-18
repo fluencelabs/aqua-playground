@@ -24,20 +24,18 @@ export function registerMyExportSrv(peer: FluencePeer, service: MyExportSrvDef):
 export function registerMyExportSrv(peer: FluencePeer, serviceId: string, service: MyExportSrvDef): void;
 
 export function registerMyExportSrv(...args: any) {
-    let serviceDefinition = {
+    registerService(args, {
         defaultServiceId: 'my_export_srv',
         functions: [
             {
                 functionName: 'another_str',
                 argDefs: [],
                 returnType: {
-                    isVoid: false,
-                    isOptional: false,
+                    tag: 'primitive',
                 },
             },
         ],
-    };
-    registerService(args, serviceDefinition);
+    });
 }
 
 // Functions
@@ -62,8 +60,7 @@ export function string_from_lib(...args: any) {
         {
             functionName: 'string_from_lib',
             returnType: {
-                isVoid: false,
-                isOptional: false,
+                tag: 'primitive',
             },
             argDefs: [],
             names: {
