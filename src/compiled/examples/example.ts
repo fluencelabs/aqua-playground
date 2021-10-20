@@ -8,11 +8,10 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    ResultCodes,
-    RequestFlow,
-    RequestFlowBuilder,
-    CallParams
-} from '@fluencelabs/fluence/dist/internal/compilerSupport/v1';
+    CallParams,
+    callFunction,
+    registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
 function missingFields(obj: any, fields: string[]): string[] {
@@ -31,60 +30,28 @@ export function registerPeer(peer: FluencePeer, serviceId: string, service: Peer
        
 
 export function registerPeer(...args: any) {
-    let peer: FluencePeer;
-    let serviceId: any;
-    let service: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-    } else {
-        peer = Fluence.getPeer();
-    }
-
-    if (typeof args[0] === 'string') {
-        serviceId = args[0];
-    } else if (typeof args[1] === 'string') {
-        serviceId = args[1];
-    } else {
-        serviceId = "peer"
-    }
-
-    // Figuring out which overload is the service.
-    // If the first argument is not Fluence Peer and it is an object, then it can only be the service def
-    // If the first argument is peer, we are checking further. The second argument might either be
-    // an object, that it must be the service object
-    // or a string, which is the service id. In that case the service is the third argument
-    if (!(FluencePeer.isInstance(args[0])) && typeof args[0] === 'object') {
-        service = args[0];
-    } else if (typeof args[1] === 'object') {
-        service = args[1];
-    } else {
-        service = args[2];
-    }
-
-    const incorrectServiceDefinitions = missingFields(service, ['is_connected']);
-    if (!!incorrectServiceDefinitions.length) {
-        throw new Error("Error registering service Peer: missing functions: " + incorrectServiceDefinitions.map((d) => "'" + d + "'").join(", "))
-    }
-
-    peer.internals.callServiceHandler.use((req, resp, next) => {
-        if (req.serviceId !== serviceId) {
-            next();
-            return;
+    registerService(
+        args,
+        {
+    "defaultServiceId" : "peer",
+    "functions" : [
+        {
+            "functionName" : "is_connected",
+            "argDefs" : [
+                {
+                    "name" : "arg0",
+                    "argType" : {
+                        "tag" : "primitive"
+                    }
+                }
+            ],
+            "returnType" : {
+                "tag" : "primitive"
+            }
         }
-
-        if (req.fnName === 'is_connected') {
-            const callParams = {
-                ...req.particleContext,
-                tetraplets: {
-                    arg0: req.tetraplets[0]
-                },
-            };
-            resp.retCode = ResultCodes.success;
-            resp.result = service.is_connected(req.args[0], callParams)
-        }
-
-        next();
-    });
+    ]
+}
+    );
 }
       
 
@@ -99,60 +66,22 @@ export function registerOp(peer: FluencePeer, serviceId: string, service: OpDef)
        
 
 export function registerOp(...args: any) {
-    let peer: FluencePeer;
-    let serviceId: any;
-    let service: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-    } else {
-        peer = Fluence.getPeer();
-    }
-
-    if (typeof args[0] === 'string') {
-        serviceId = args[0];
-    } else if (typeof args[1] === 'string') {
-        serviceId = args[1];
-    } else {
-        serviceId = "op"
-    }
-
-    // Figuring out which overload is the service.
-    // If the first argument is not Fluence Peer and it is an object, then it can only be the service def
-    // If the first argument is peer, we are checking further. The second argument might either be
-    // an object, that it must be the service object
-    // or a string, which is the service id. In that case the service is the third argument
-    if (!(FluencePeer.isInstance(args[0])) && typeof args[0] === 'object') {
-        service = args[0];
-    } else if (typeof args[1] === 'object') {
-        service = args[1];
-    } else {
-        service = args[2];
-    }
-
-    const incorrectServiceDefinitions = missingFields(service, ['identity']);
-    if (!!incorrectServiceDefinitions.length) {
-        throw new Error("Error registering service Op: missing functions: " + incorrectServiceDefinitions.map((d) => "'" + d + "'").join(", "))
-    }
-
-    peer.internals.callServiceHandler.use((req, resp, next) => {
-        if (req.serviceId !== serviceId) {
-            next();
-            return;
+    registerService(
+        args,
+        {
+    "defaultServiceId" : "op",
+    "functions" : [
+        {
+            "functionName" : "identity",
+            "argDefs" : [
+            ],
+            "returnType" : {
+                "tag" : "void"
+            }
         }
-
-        if (req.fnName === 'identity') {
-            const callParams = {
-                ...req.particleContext,
-                tetraplets: {
-                    
-                },
-            };
-            resp.retCode = ResultCodes.success;
-            service.identity(callParams); resp.result = {}
-        }
-
-        next();
-    });
+    ]
+}
+    );
 }
       
 
@@ -168,71 +97,30 @@ export function registerTest(peer: FluencePeer, serviceId: string, service: Test
        
 
 export function registerTest(...args: any) {
-    let peer: FluencePeer;
-    let serviceId: any;
-    let service: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-    } else {
-        peer = Fluence.getPeer();
-    }
-
-    if (typeof args[0] === 'string') {
-        serviceId = args[0];
-    } else if (typeof args[1] === 'string') {
-        serviceId = args[1];
-    } else {
-        serviceId = "test"
-    }
-
-    // Figuring out which overload is the service.
-    // If the first argument is not Fluence Peer and it is an object, then it can only be the service def
-    // If the first argument is peer, we are checking further. The second argument might either be
-    // an object, that it must be the service object
-    // or a string, which is the service id. In that case the service is the third argument
-    if (!(FluencePeer.isInstance(args[0])) && typeof args[0] === 'object') {
-        service = args[0];
-    } else if (typeof args[1] === 'object') {
-        service = args[1];
-    } else {
-        service = args[2];
-    }
-
-    const incorrectServiceDefinitions = missingFields(service, ['doSomething', 'getUserList']);
-    if (!!incorrectServiceDefinitions.length) {
-        throw new Error("Error registering service Test: missing functions: " + incorrectServiceDefinitions.map((d) => "'" + d + "'").join(", "))
-    }
-
-    peer.internals.callServiceHandler.use((req, resp, next) => {
-        if (req.serviceId !== serviceId) {
-            next();
-            return;
+    registerService(
+        args,
+        {
+    "defaultServiceId" : "test",
+    "functions" : [
+        {
+            "functionName" : "doSomething",
+            "argDefs" : [
+            ],
+            "returnType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "functionName" : "getUserList",
+            "argDefs" : [
+            ],
+            "returnType" : {
+                "tag" : "primitive"
+            }
         }
-
-        if (req.fnName === 'doSomething') {
-            const callParams = {
-                ...req.particleContext,
-                tetraplets: {
-                    
-                },
-            };
-            resp.retCode = ResultCodes.success;
-            resp.result = service.doSomething(callParams)
-        }
-
-if (req.fnName === 'getUserList') {
-            const callParams = {
-                ...req.particleContext,
-                tetraplets: {
-                    
-                },
-            };
-            resp.retCode = ResultCodes.success;
-            resp.result = service.getUserList(callParams)
-        }
-
-        next();
-    });
+    ]
+}
+    );
 }
       
 // Functions
@@ -241,25 +129,9 @@ if (req.fnName === 'getUserList') {
 export function betterMessage(relay: string, config?: {ttl?: number}): Promise<void>;
 export function betterMessage(peer: FluencePeer, relay: string, config?: {ttl?: number}): Promise<void>;
 export function betterMessage(...args: any) {
-    let peer: FluencePeer;
-    let relay: any;
-    let config: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-        relay = args[1];
-        config = args[2];
-    } else {
-        peer = Fluence.getPeer();
-        relay = args[0];
-        config = args[1];
-    }
 
-    let request: RequestFlow;
-    const promise = new Promise<void>((resolve, reject) => {
-        const r = new RequestFlowBuilder()
-                .disableInjections()
-                .withRawScript(`
-                    (xor
+    let script = `
+                        (xor
                      (seq
                       (seq
                        (seq
@@ -292,32 +164,32 @@ export function betterMessage(...args: any) {
                      )
                      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
                     )
-                `,
-                )
-                .configHandler((h) => {
-                    h.on('getDataSrv', '-relay-', () => {
-                        return peer.getStatus().relayPeerId;
-                    });
-                    h.on('getDataSrv', 'relay', () => {return relay;});
-                    h.onEvent('callbackSrv', 'response', (args) => {
-
-                    });
-                    h.onEvent('errorHandlingSrv', 'error', (args) => {
-                        const [err] = args;
-                        reject(err);
-                    });
-                })
-                .handleScriptError(reject)
-                .handleTimeout(() => {
-                    reject('Request timed out for betterMessage');
-                })
-
-                if (config && config.ttl) {
-                    r.withTTL(config.ttl)
-                }
-
-                request = r.build();
-    });
-    peer.internals.initiateFlow(request!);
-    return Promise.race([promise, Promise.resolve()]);
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "betterMessage",
+    "returnType" : {
+        "tag" : "void"
+    },
+    "argDefs" : [
+        {
+            "name" : "relay",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        }
+    ],
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
 }

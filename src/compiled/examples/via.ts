@@ -8,11 +8,10 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    ResultCodes,
-    RequestFlow,
-    RequestFlowBuilder,
-    CallParams
-} from '@fluencelabs/fluence/dist/internal/compilerSupport/v1';
+    CallParams,
+    callFunction,
+    registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
 function missingFields(obj: any, fields: string[]): string[] {
@@ -31,60 +30,28 @@ export function registerCustomId(peer: FluencePeer, serviceId: string, service: 
        
 
 export function registerCustomId(...args: any) {
-    let peer: FluencePeer;
-    let serviceId: any;
-    let service: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-    } else {
-        peer = Fluence.getPeer();
-    }
-
-    if (typeof args[0] === 'string') {
-        serviceId = args[0];
-    } else if (typeof args[1] === 'string') {
-        serviceId = args[1];
-    } else {
-        serviceId = "cid"
-    }
-
-    // Figuring out which overload is the service.
-    // If the first argument is not Fluence Peer and it is an object, then it can only be the service def
-    // If the first argument is peer, we are checking further. The second argument might either be
-    // an object, that it must be the service object
-    // or a string, which is the service id. In that case the service is the third argument
-    if (!(FluencePeer.isInstance(args[0])) && typeof args[0] === 'object') {
-        service = args[0];
-    } else if (typeof args[1] === 'object') {
-        service = args[1];
-    } else {
-        service = args[2];
-    }
-
-    const incorrectServiceDefinitions = missingFields(service, ['id']);
-    if (!!incorrectServiceDefinitions.length) {
-        throw new Error("Error registering service CustomId: missing functions: " + incorrectServiceDefinitions.map((d) => "'" + d + "'").join(", "))
-    }
-
-    peer.internals.callServiceHandler.use((req, resp, next) => {
-        if (req.serviceId !== serviceId) {
-            next();
-            return;
+    registerService(
+        args,
+        {
+    "defaultServiceId" : "cid",
+    "functions" : [
+        {
+            "functionName" : "id",
+            "argDefs" : [
+                {
+                    "name" : "s",
+                    "argType" : {
+                        "tag" : "primitive"
+                    }
+                }
+            ],
+            "returnType" : {
+                "tag" : "primitive"
+            }
         }
-
-        if (req.fnName === 'id') {
-            const callParams = {
-                ...req.particleContext,
-                tetraplets: {
-                    s: req.tetraplets[0]
-                },
-            };
-            resp.retCode = ResultCodes.success;
-            resp.result = service.id(req.args[0], callParams)
-        }
-
-        next();
-    });
+    ]
+}
+    );
 }
       
 // Functions
@@ -93,28 +60,9 @@ export type ViaArrResult = { external_addresses: string[]; }
 export function viaArr(node_id: string, viaAr: string[], config?: {ttl?: number}): Promise<ViaArrResult>;
 export function viaArr(peer: FluencePeer, node_id: string, viaAr: string[], config?: {ttl?: number}): Promise<ViaArrResult>;
 export function viaArr(...args: any) {
-    let peer: FluencePeer;
-    let node_id: any;
-    let viaAr: any;
-    let config: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-        node_id = args[1];
-        viaAr = args[2];
-        config = args[3];
-    } else {
-        peer = Fluence.getPeer();
-        node_id = args[0];
-        viaAr = args[1];
-        config = args[2];
-    }
 
-    let request: RequestFlow;
-    const promise = new Promise<ViaArrResult>((resolve, reject) => {
-        const r = new RequestFlowBuilder()
-                .disableInjections()
-                .withRawScript(`
-                    (xor
+    let script = `
+                        (xor
                      (seq
                       (seq
                        (seq
@@ -172,36 +120,40 @@ export function viaArr(...args: any) {
                      )
                      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
                     )
-                `,
-                )
-                .configHandler((h) => {
-                    h.on('getDataSrv', '-relay-', () => {
-                        return peer.getStatus().relayPeerId;
-                    });
-                    h.on('getDataSrv', 'node_id', () => {return node_id;});
-                    h.on('getDataSrv', 'viaAr', () => {return viaAr;});
-                    h.onEvent('callbackSrv', 'response', (args) => {
-                        const [res] = args;
-                        resolve(res);
-                    });
-                    h.onEvent('errorHandlingSrv', 'error', (args) => {
-                        const [err] = args;
-                        reject(err);
-                    });
-                })
-                .handleScriptError(reject)
-                .handleTimeout(() => {
-                    reject('Request timed out for viaArr');
-                })
-
-                if (config && config.ttl) {
-                    r.withTTL(config.ttl)
-                }
-
-                request = r.build();
-    });
-    peer.internals.initiateFlow(request!);
-    return promise;
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "viaArr",
+    "returnType" : {
+        "tag" : "primitive"
+    },
+    "argDefs" : [
+        {
+            "name" : "node_id",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "viaAr",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        }
+    ],
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
 }
 
  
@@ -209,28 +161,9 @@ export type ViaStreamResult = { external_addresses: string[]; }
 export function viaStream(node_id: string, viaStr: string[], config?: {ttl?: number}): Promise<ViaStreamResult>;
 export function viaStream(peer: FluencePeer, node_id: string, viaStr: string[], config?: {ttl?: number}): Promise<ViaStreamResult>;
 export function viaStream(...args: any) {
-    let peer: FluencePeer;
-    let node_id: any;
-    let viaStr: any;
-    let config: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-        node_id = args[1];
-        viaStr = args[2];
-        config = args[3];
-    } else {
-        peer = Fluence.getPeer();
-        node_id = args[0];
-        viaStr = args[1];
-        config = args[2];
-    }
 
-    let request: RequestFlow;
-    const promise = new Promise<ViaStreamResult>((resolve, reject) => {
-        const r = new RequestFlowBuilder()
-                .disableInjections()
-                .withRawScript(`
-                    (xor
+    let script = `
+                        (xor
                      (seq
                       (seq
                        (seq
@@ -296,36 +229,40 @@ export function viaStream(...args: any) {
                      )
                      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
                     )
-                `,
-                )
-                .configHandler((h) => {
-                    h.on('getDataSrv', '-relay-', () => {
-                        return peer.getStatus().relayPeerId;
-                    });
-                    h.on('getDataSrv', 'node_id', () => {return node_id;});
-                    h.on('getDataSrv', 'viaStr', () => {return viaStr;});
-                    h.onEvent('callbackSrv', 'response', (args) => {
-                        const [res] = args;
-                        resolve(res);
-                    });
-                    h.onEvent('errorHandlingSrv', 'error', (args) => {
-                        const [err] = args;
-                        reject(err);
-                    });
-                })
-                .handleScriptError(reject)
-                .handleTimeout(() => {
-                    reject('Request timed out for viaStream');
-                })
-
-                if (config && config.ttl) {
-                    r.withTTL(config.ttl)
-                }
-
-                request = r.build();
-    });
-    peer.internals.initiateFlow(request!);
-    return promise;
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "viaStream",
+    "returnType" : {
+        "tag" : "primitive"
+    },
+    "argDefs" : [
+        {
+            "name" : "node_id",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "viaStr",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        }
+    ],
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
 }
 
  
@@ -333,31 +270,9 @@ export type ViaOptResult = { external_addresses: string[]; }
 export function viaOpt(relay: string, node_id: string, viaOpt: string | null, config?: {ttl?: number}): Promise<ViaOptResult>;
 export function viaOpt(peer: FluencePeer, relay: string, node_id: string, viaOpt: string | null, config?: {ttl?: number}): Promise<ViaOptResult>;
 export function viaOpt(...args: any) {
-    let peer: FluencePeer;
-    let relay: any;
-    let node_id: any;
-    let viaOpt: any;
-    let config: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-        relay = args[1];
-        node_id = args[2];
-        viaOpt = args[3];
-        config = args[4];
-    } else {
-        peer = Fluence.getPeer();
-        relay = args[0];
-        node_id = args[1];
-        viaOpt = args[2];
-        config = args[3];
-    }
 
-    let request: RequestFlow;
-    const promise = new Promise<ViaOptResult>((resolve, reject) => {
-        const r = new RequestFlowBuilder()
-                .disableInjections()
-                .withRawScript(`
-                    (xor
+    let script = `
+                        (xor
                      (seq
                       (seq
                        (seq
@@ -418,35 +333,44 @@ export function viaOpt(...args: any) {
                      )
                      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
                     )
-                `,
-                )
-                .configHandler((h) => {
-                    h.on('getDataSrv', '-relay-', () => {
-                        return peer.getStatus().relayPeerId;
-                    });
-                    h.on('getDataSrv', 'relay', () => {return relay;});
-                    h.on('getDataSrv', 'node_id', () => {return node_id;});
-                    h.on('getDataSrv', 'viaOpt', () => {return viaOpt === null ? [] : [viaOpt];});
-                    h.onEvent('callbackSrv', 'response', (args) => {
-                        const [res] = args;
-                        resolve(res);
-                    });
-                    h.onEvent('errorHandlingSrv', 'error', (args) => {
-                        const [err] = args;
-                        reject(err);
-                    });
-                })
-                .handleScriptError(reject)
-                .handleTimeout(() => {
-                    reject('Request timed out for viaOpt');
-                })
-
-                if (config && config.ttl) {
-                    r.withTTL(config.ttl)
-                }
-
-                request = r.build();
-    });
-    peer.internals.initiateFlow(request!);
-    return promise;
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "viaOpt",
+    "returnType" : {
+        "tag" : "primitive"
+    },
+    "argDefs" : [
+        {
+            "name" : "relay",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "node_id",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "viaOpt",
+            "argType" : {
+                "tag" : "optional"
+            }
+        }
+    ],
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
 }

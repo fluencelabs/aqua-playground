@@ -8,11 +8,10 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    ResultCodes,
-    RequestFlow,
-    RequestFlowBuilder,
-    CallParams
-} from '@fluencelabs/fluence/dist/internal/compilerSupport/v1';
+    CallParams,
+    callFunction,
+    registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
 function missingFields(obj: any, fields: string[]): string[] {
@@ -27,25 +26,9 @@ function missingFields(obj: any, fields: string[]): string[] {
 export function ifElseCall(condition: boolean, config?: {ttl?: number}): Promise<void>;
 export function ifElseCall(peer: FluencePeer, condition: boolean, config?: {ttl?: number}): Promise<void>;
 export function ifElseCall(...args: any) {
-    let peer: FluencePeer;
-    let condition: any;
-    let config: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-        condition = args[1];
-        config = args[2];
-    } else {
-        peer = Fluence.getPeer();
-        condition = args[0];
-        config = args[1];
-    }
 
-    let request: RequestFlow;
-    const promise = new Promise<void>((resolve, reject) => {
-        const r = new RequestFlowBuilder()
-                .disableInjections()
-                .withRawScript(`
-                    (xor
+    let script = `
+                        (xor
                      (seq
                       (seq
                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
@@ -63,34 +46,34 @@ export function ifElseCall(...args: any) {
                      )
                      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
                     )
-                `,
-                )
-                .configHandler((h) => {
-                    h.on('getDataSrv', '-relay-', () => {
-                        return peer.getStatus().relayPeerId;
-                    });
-                    h.on('getDataSrv', 'condition', () => {return condition;});
-                    h.onEvent('callbackSrv', 'response', (args) => {
-
-                    });
-                    h.onEvent('errorHandlingSrv', 'error', (args) => {
-                        const [err] = args;
-                        reject(err);
-                    });
-                })
-                .handleScriptError(reject)
-                .handleTimeout(() => {
-                    reject('Request timed out for ifElseCall');
-                })
-
-                if (config && config.ttl) {
-                    r.withTTL(config.ttl)
-                }
-
-                request = r.build();
-    });
-    peer.internals.initiateFlow(request!);
-    return Promise.race([promise, Promise.resolve()]);
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "ifElseCall",
+    "returnType" : {
+        "tag" : "void"
+    },
+    "argDefs" : [
+        {
+            "name" : "condition",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        }
+    ],
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
 }
 
  
@@ -98,25 +81,9 @@ export function ifElseCall(...args: any) {
 export function ifElseNumCall(condition: number, config?: {ttl?: number}): Promise<void>;
 export function ifElseNumCall(peer: FluencePeer, condition: number, config?: {ttl?: number}): Promise<void>;
 export function ifElseNumCall(...args: any) {
-    let peer: FluencePeer;
-    let condition: any;
-    let config: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-        condition = args[1];
-        config = args[2];
-    } else {
-        peer = Fluence.getPeer();
-        condition = args[0];
-        config = args[1];
-    }
 
-    let request: RequestFlow;
-    const promise = new Promise<void>((resolve, reject) => {
-        const r = new RequestFlowBuilder()
-                .disableInjections()
-                .withRawScript(`
-                    (xor
+    let script = `
+                        (xor
                      (seq
                       (seq
                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
@@ -134,32 +101,32 @@ export function ifElseNumCall(...args: any) {
                      )
                      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
                     )
-                `,
-                )
-                .configHandler((h) => {
-                    h.on('getDataSrv', '-relay-', () => {
-                        return peer.getStatus().relayPeerId;
-                    });
-                    h.on('getDataSrv', 'condition', () => {return condition;});
-                    h.onEvent('callbackSrv', 'response', (args) => {
-
-                    });
-                    h.onEvent('errorHandlingSrv', 'error', (args) => {
-                        const [err] = args;
-                        reject(err);
-                    });
-                })
-                .handleScriptError(reject)
-                .handleTimeout(() => {
-                    reject('Request timed out for ifElseNumCall');
-                })
-
-                if (config && config.ttl) {
-                    r.withTTL(config.ttl)
-                }
-
-                request = r.build();
-    });
-    peer.internals.initiateFlow(request!);
-    return Promise.race([promise, Promise.resolve()]);
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "ifElseNumCall",
+    "returnType" : {
+        "tag" : "void"
+    },
+    "argDefs" : [
+        {
+            "name" : "condition",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        }
+    ],
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
 }

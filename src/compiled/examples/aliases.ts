@@ -8,11 +8,10 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    ResultCodes,
-    RequestFlow,
-    RequestFlowBuilder,
-    CallParams
-} from '@fluencelabs/fluence/dist/internal/compilerSupport/v1';
+    CallParams,
+    callFunction,
+    registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
 function missingFields(obj: any, fields: string[]): string[] {
@@ -32,71 +31,42 @@ export function registerComplexService(peer: FluencePeer, serviceId: string, ser
        
 
 export function registerComplexService(...args: any) {
-    let peer: FluencePeer;
-    let serviceId: any;
-    let service: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-    } else {
-        peer = Fluence.getPeer();
-    }
-
-    if (typeof args[0] === 'string') {
-        serviceId = args[0];
-    } else if (typeof args[1] === 'string') {
-        serviceId = args[1];
-    } else {
-        serviceId = "op-ha"
-    }
-
-    // Figuring out which overload is the service.
-    // If the first argument is not Fluence Peer and it is an object, then it can only be the service def
-    // If the first argument is peer, we are checking further. The second argument might either be
-    // an object, that it must be the service object
-    // or a string, which is the service id. In that case the service is the third argument
-    if (!(FluencePeer.isInstance(args[0])) && typeof args[0] === 'object') {
-        service = args[0];
-    } else if (typeof args[1] === 'object') {
-        service = args[1];
-    } else {
-        service = args[2];
-    }
-
-    const incorrectServiceDefinitions = missingFields(service, ['call', 'identity']);
-    if (!!incorrectServiceDefinitions.length) {
-        throw new Error("Error registering service ComplexService: missing functions: " + incorrectServiceDefinitions.map((d) => "'" + d + "'").join(", "))
-    }
-
-    peer.internals.callServiceHandler.use((req, resp, next) => {
-        if (req.serviceId !== serviceId) {
-            next();
-            return;
-        }
-
-        if (req.fnName === 'call') {
-            const callParams = {
-                ...req.particleContext,
-                tetraplets: {
-                    d: req.tetraplets[0],sd: req.tetraplets[1]
+    registerService(
+        args,
+        {
+    "defaultServiceId" : "op-ha",
+    "functions" : [
+        {
+            "functionName" : "call",
+            "argDefs" : [
+                {
+                    "name" : "d",
+                    "argType" : {
+                        "tag" : "primitive"
+                    }
                 },
-            };
-            resp.retCode = ResultCodes.success;
-            resp.result = service.call(req.args[0], req.args[1], callParams)
+                {
+                    "name" : "sd",
+                    "argType" : {
+                        "tag" : "primitive"
+                    }
+                }
+            ],
+            "returnType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "functionName" : "identity",
+            "argDefs" : [
+            ],
+            "returnType" : {
+                "tag" : "primitive"
+            }
         }
-
-if (req.fnName === 'identity') {
-            const callParams = {
-                ...req.particleContext,
-                tetraplets: {
-                    
-                },
-            };
-            resp.retCode = ResultCodes.success;
-            resp.result = service.identity(callParams)
-        }
-
-        next();
-    });
+    ]
+}
+    );
 }
       
 // Functions
@@ -107,34 +77,9 @@ export type DoSmthResult = { complex: { otherValue: number; value: string; }; va
 export function doSmth(d: DoSmthArgD, d2: DoSmthArgD2, sd: DoSmthArgSd, c: (arg0: { someNum: number; someStr: string; }, arg1: { complex: { someNum: number; someStr: string; }; value: string; }, callParams: CallParams<'arg0' | 'arg1'>) => { complex: { otherValue: number; value: string; }; value: string; }, config?: {ttl?: number}): Promise<DoSmthResult>;
 export function doSmth(peer: FluencePeer, d: DoSmthArgD, d2: DoSmthArgD2, sd: DoSmthArgSd, c: (arg0: { someNum: number; someStr: string; }, arg1: { complex: { someNum: number; someStr: string; }; value: string; }, callParams: CallParams<'arg0' | 'arg1'>) => { complex: { otherValue: number; value: string; }; value: string; }, config?: {ttl?: number}): Promise<DoSmthResult>;
 export function doSmth(...args: any) {
-    let peer: FluencePeer;
-    let d: any;
-    let d2: any;
-    let sd: any;
-    let c: any;
-    let config: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-        d = args[1];
-        d2 = args[2];
-        sd = args[3];
-        c = args[4];
-        config = args[5];
-    } else {
-        peer = Fluence.getPeer();
-        d = args[0];
-        d2 = args[1];
-        sd = args[2];
-        c = args[3];
-        config = args[4];
-    }
 
-    let request: RequestFlow;
-    const promise = new Promise<DoSmthResult>((resolve, reject) => {
-        const r = new RequestFlowBuilder()
-                .disableInjections()
-                .withRawScript(`
-                    (xor
+    let script = `
+                        (xor
                      (seq
                       (seq
                        (seq
@@ -162,49 +107,69 @@ export function doSmth(...args: any) {
                      )
                      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
                     )
-                `,
-                )
-                .configHandler((h) => {
-                    h.on('getDataSrv', '-relay-', () => {
-                        return peer.getStatus().relayPeerId;
-                    });
-                    h.on('getDataSrv', 'd', () => {return d;});
-                    h.on('getDataSrv', 'd2', () => {return d2;});
-                    h.on('getDataSrv', 'sd', () => {return sd;});
-                    h.use((req, resp, next) => {
-                        if(req.serviceId === 'callbackSrv' && req.fnName === 'c') {
-                            const callParams = {
-                                ...req.particleContext,
-                                tetraplets: {
-                                    arg0: req.tetraplets[0],arg1: req.tetraplets[1]
-                                },
-                            };
-                            resp.retCode = ResultCodes.success;
-                            resp.result = c(req.args[0], req.args[1], callParams)
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "doSmth",
+    "returnType" : {
+        "tag" : "primitive"
+    },
+    "argDefs" : [
+        {
+            "name" : "d",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "d2",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "sd",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "c",
+            "argType" : {
+                "tag" : "callback",
+                "callback" : {
+                    "argDefs" : [
+                        {
+                            "name" : "arg0",
+                            "argType" : {
+                                "tag" : "primitive"
+                            }
+                        },
+                        {
+                            "name" : "arg1",
+                            "argType" : {
+                                "tag" : "primitive"
+                            }
                         }
-                        next();
-                    });
-        
-                    h.onEvent('callbackSrv', 'response', (args) => {
-                        const [res] = args;
-                        resolve(res);
-                    });
-                    h.onEvent('errorHandlingSrv', 'error', (args) => {
-                        const [err] = args;
-                        reject(err);
-                    });
-                })
-                .handleScriptError(reject)
-                .handleTimeout(() => {
-                    reject('Request timed out for doSmth');
-                })
-
-                if (config && config.ttl) {
-                    r.withTTL(config.ttl)
+                    ],
+                    "returnType" : {
+                        "tag" : "primitive"
+                    }
                 }
-
-                request = r.build();
-    });
-    peer.internals.initiateFlow(request!);
-    return promise;
+            }
+        }
+    ],
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
 }

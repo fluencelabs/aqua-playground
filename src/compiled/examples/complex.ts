@@ -8,11 +8,10 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    ResultCodes,
-    RequestFlow,
-    RequestFlowBuilder,
-    CallParams
-} from '@fluencelabs/fluence/dist/internal/compilerSupport/v1';
+    CallParams,
+    callFunction,
+    registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
 function missingFields(obj: any, fields: string[]): string[] {
@@ -32,71 +31,54 @@ export function registerTestS(peer: FluencePeer, serviceId: string, service: Tes
        
 
 export function registerTestS(...args: any) {
-    let peer: FluencePeer;
-    let serviceId: any;
-    let service: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-    } else {
-        peer = Fluence.getPeer();
-    }
-
-    if (typeof args[0] === 'string') {
-        serviceId = args[0];
-    } else if (typeof args[1] === 'string') {
-        serviceId = args[1];
-    } else {
-        serviceId = "some-id"
-    }
-
-    // Figuring out which overload is the service.
-    // If the first argument is not Fluence Peer and it is an object, then it can only be the service def
-    // If the first argument is peer, we are checking further. The second argument might either be
-    // an object, that it must be the service object
-    // or a string, which is the service id. In that case the service is the third argument
-    if (!(FluencePeer.isInstance(args[0])) && typeof args[0] === 'object') {
-        service = args[0];
-    } else if (typeof args[1] === 'object') {
-        service = args[1];
-    } else {
-        service = args[2];
-    }
-
-    const incorrectServiceDefinitions = missingFields(service, ['multiline', 't']);
-    if (!!incorrectServiceDefinitions.length) {
-        throw new Error("Error registering service TestS: missing functions: " + incorrectServiceDefinitions.map((d) => "'" + d + "'").join(", "))
-    }
-
-    peer.internals.callServiceHandler.use((req, resp, next) => {
-        if (req.serviceId !== serviceId) {
-            next();
-            return;
-        }
-
-        if (req.fnName === 'multiline') {
-            const callParams = {
-                ...req.particleContext,
-                tetraplets: {
-                    a: req.tetraplets[0],b: req.tetraplets[1],c: req.tetraplets[2]
+    registerService(
+        args,
+        {
+    "defaultServiceId" : "some-id",
+    "functions" : [
+        {
+            "functionName" : "multiline",
+            "argDefs" : [
+                {
+                    "name" : "a",
+                    "argType" : {
+                        "tag" : "primitive"
+                    }
                 },
-            };
-            resp.retCode = ResultCodes.success;
-            resp.result = service.multiline(req.args[0], req.args[1], req.args[2], callParams)
-        }
-
-if (req.fnName === 't') {
-            const callParams = {
-                ...req.particleContext,
-                tetraplets: {
-                    arg0: req.tetraplets[0]
+                {
+                    "name" : "b",
+                    "argType" : {
+                        "tag" : "primitive"
+                    }
                 },
-            };
-            resp.retCode = ResultCodes.success;
-            resp.result = service.t(req.args[0], callParams)
+                {
+                    "name" : "c",
+                    "argType" : {
+                        "tag" : "primitive"
+                    }
+                }
+            ],
+            "returnType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "functionName" : "t",
+            "argDefs" : [
+                {
+                    "name" : "arg0",
+                    "argType" : {
+                        "tag" : "primitive"
+                    }
+                }
+            ],
+            "returnType" : {
+                "tag" : "primitive"
+            }
         }
-
-        next();
-    });
+    ]
+}
+    );
 }
       
 // Functions
@@ -105,43 +87,9 @@ if (req.fnName === 't') {
 export function doStuff(a: string, b: string, c: boolean, d: boolean, e: string[], g: string[], str: string, config?: {ttl?: number}): Promise<string[]>;
 export function doStuff(peer: FluencePeer, a: string, b: string, c: boolean, d: boolean, e: string[], g: string[], str: string, config?: {ttl?: number}): Promise<string[]>;
 export function doStuff(...args: any) {
-    let peer: FluencePeer;
-    let a: any;
-    let b: any;
-    let c: any;
-    let d: any;
-    let e: any;
-    let g: any;
-    let str: any;
-    let config: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-        a = args[1];
-        b = args[2];
-        c = args[3];
-        d = args[4];
-        e = args[5];
-        g = args[6];
-        str = args[7];
-        config = args[8];
-    } else {
-        peer = Fluence.getPeer();
-        a = args[0];
-        b = args[1];
-        c = args[2];
-        d = args[3];
-        e = args[4];
-        g = args[5];
-        str = args[6];
-        config = args[7];
-    }
 
-    let request: RequestFlow;
-    const promise = new Promise<string[]>((resolve, reject) => {
-        const r = new RequestFlowBuilder()
-                .disableInjections()
-                .withRawScript(`
-                    (xor
+    let script = `
+                        (xor
                      (seq
                       (seq
                        (seq
@@ -252,39 +200,68 @@ export function doStuff(...args: any) {
                      )
                      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 5])
                     )
-                `,
-                )
-                .configHandler((h) => {
-                    h.on('getDataSrv', '-relay-', () => {
-                        return peer.getStatus().relayPeerId;
-                    });
-                    h.on('getDataSrv', 'a', () => {return a;});
-                    h.on('getDataSrv', 'b', () => {return b;});
-                    h.on('getDataSrv', 'c', () => {return c;});
-                    h.on('getDataSrv', 'd', () => {return d;});
-                    h.on('getDataSrv', 'e', () => {return e;});
-                    h.on('getDataSrv', 'g', () => {return g;});
-                    h.on('getDataSrv', 'str', () => {return str;});
-                    h.onEvent('callbackSrv', 'response', (args) => {
-                        const [res] = args;
-                        resolve(res);
-                    });
-                    h.onEvent('errorHandlingSrv', 'error', (args) => {
-                        const [err] = args;
-                        reject(err);
-                    });
-                })
-                .handleScriptError(reject)
-                .handleTimeout(() => {
-                    reject('Request timed out for doStuff');
-                })
-
-                if (config && config.ttl) {
-                    r.withTTL(config.ttl)
-                }
-
-                request = r.build();
-    });
-    peer.internals.initiateFlow(request!);
-    return promise;
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "doStuff",
+    "returnType" : {
+        "tag" : "primitive"
+    },
+    "argDefs" : [
+        {
+            "name" : "a",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "b",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "c",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "d",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "e",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "g",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "str",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        }
+    ],
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
 }

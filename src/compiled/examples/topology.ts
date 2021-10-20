@@ -8,11 +8,10 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    ResultCodes,
-    RequestFlow,
-    RequestFlowBuilder,
-    CallParams
-} from '@fluencelabs/fluence/dist/internal/compilerSupport/v1';
+    CallParams,
+    callFunction,
+    registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
 function missingFields(obj: any, fields: string[]): string[] {
@@ -31,60 +30,28 @@ export function registerTesto(peer: FluencePeer, serviceId: string, service: Tes
        
 
 export function registerTesto(...args: any) {
-    let peer: FluencePeer;
-    let serviceId: any;
-    let service: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-    } else {
-        peer = Fluence.getPeer();
-    }
-
-    if (typeof args[0] === 'string') {
-        serviceId = args[0];
-    } else if (typeof args[1] === 'string') {
-        serviceId = args[1];
-    } else {
-        serviceId = "testo"
-    }
-
-    // Figuring out which overload is the service.
-    // If the first argument is not Fluence Peer and it is an object, then it can only be the service def
-    // If the first argument is peer, we are checking further. The second argument might either be
-    // an object, that it must be the service object
-    // or a string, which is the service id. In that case the service is the third argument
-    if (!(FluencePeer.isInstance(args[0])) && typeof args[0] === 'object') {
-        service = args[0];
-    } else if (typeof args[1] === 'object') {
-        service = args[1];
-    } else {
-        service = args[2];
-    }
-
-    const incorrectServiceDefinitions = missingFields(service, ['getString']);
-    if (!!incorrectServiceDefinitions.length) {
-        throw new Error("Error registering service Testo: missing functions: " + incorrectServiceDefinitions.map((d) => "'" + d + "'").join(", "))
-    }
-
-    peer.internals.callServiceHandler.use((req, resp, next) => {
-        if (req.serviceId !== serviceId) {
-            next();
-            return;
+    registerService(
+        args,
+        {
+    "defaultServiceId" : "testo",
+    "functions" : [
+        {
+            "functionName" : "getString",
+            "argDefs" : [
+                {
+                    "name" : "arg0",
+                    "argType" : {
+                        "tag" : "primitive"
+                    }
+                }
+            ],
+            "returnType" : {
+                "tag" : "primitive"
+            }
         }
-
-        if (req.fnName === 'getString') {
-            const callParams = {
-                ...req.particleContext,
-                tetraplets: {
-                    arg0: req.tetraplets[0]
-                },
-            };
-            resp.retCode = ResultCodes.success;
-            resp.result = service.getString(req.args[0], callParams)
-        }
-
-        next();
-    });
+    ]
+}
+    );
 }
       
 
@@ -99,60 +66,28 @@ export function registerLocalPrint(peer: FluencePeer, serviceId: string, service
        
 
 export function registerLocalPrint(...args: any) {
-    let peer: FluencePeer;
-    let serviceId: any;
-    let service: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-    } else {
-        peer = Fluence.getPeer();
-    }
-
-    if (typeof args[0] === 'string') {
-        serviceId = args[0];
-    } else if (typeof args[1] === 'string') {
-        serviceId = args[1];
-    } else {
-        serviceId = "lp"
-    }
-
-    // Figuring out which overload is the service.
-    // If the first argument is not Fluence Peer and it is an object, then it can only be the service def
-    // If the first argument is peer, we are checking further. The second argument might either be
-    // an object, that it must be the service object
-    // or a string, which is the service id. In that case the service is the third argument
-    if (!(FluencePeer.isInstance(args[0])) && typeof args[0] === 'object') {
-        service = args[0];
-    } else if (typeof args[1] === 'object') {
-        service = args[1];
-    } else {
-        service = args[2];
-    }
-
-    const incorrectServiceDefinitions = missingFields(service, ['print']);
-    if (!!incorrectServiceDefinitions.length) {
-        throw new Error("Error registering service LocalPrint: missing functions: " + incorrectServiceDefinitions.map((d) => "'" + d + "'").join(", "))
-    }
-
-    peer.internals.callServiceHandler.use((req, resp, next) => {
-        if (req.serviceId !== serviceId) {
-            next();
-            return;
+    registerService(
+        args,
+        {
+    "defaultServiceId" : "lp",
+    "functions" : [
+        {
+            "functionName" : "print",
+            "argDefs" : [
+                {
+                    "name" : "arg0",
+                    "argType" : {
+                        "tag" : "primitive"
+                    }
+                }
+            ],
+            "returnType" : {
+                "tag" : "void"
+            }
         }
-
-        if (req.fnName === 'print') {
-            const callParams = {
-                ...req.particleContext,
-                tetraplets: {
-                    arg0: req.tetraplets[0]
-                },
-            };
-            resp.retCode = ResultCodes.success;
-            service.print(req.args[0], callParams); resp.result = {}
-        }
-
-        next();
-    });
+    ]
+}
+    );
 }
       
 // Functions
@@ -161,34 +96,9 @@ export function registerLocalPrint(...args: any) {
 export function topologyTest(me: string, myRelay: string, friend: string, friendRelay: string, config?: {ttl?: number}): Promise<string>;
 export function topologyTest(peer: FluencePeer, me: string, myRelay: string, friend: string, friendRelay: string, config?: {ttl?: number}): Promise<string>;
 export function topologyTest(...args: any) {
-    let peer: FluencePeer;
-    let me: any;
-    let myRelay: any;
-    let friend: any;
-    let friendRelay: any;
-    let config: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-        me = args[1];
-        myRelay = args[2];
-        friend = args[3];
-        friendRelay = args[4];
-        config = args[5];
-    } else {
-        peer = Fluence.getPeer();
-        me = args[0];
-        myRelay = args[1];
-        friend = args[2];
-        friendRelay = args[3];
-        config = args[4];
-    }
 
-    let request: RequestFlow;
-    const promise = new Promise<string>((resolve, reject) => {
-        const r = new RequestFlowBuilder()
-                .disableInjections()
-                .withRawScript(`
-                    (xor
+    let script = `
+                        (xor
                      (seq
                       (seq
                        (seq
@@ -243,36 +153,50 @@ export function topologyTest(...args: any) {
                      )
                      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
                     )
-                `,
-                )
-                .configHandler((h) => {
-                    h.on('getDataSrv', '-relay-', () => {
-                        return peer.getStatus().relayPeerId;
-                    });
-                    h.on('getDataSrv', 'me', () => {return me;});
-                    h.on('getDataSrv', 'myRelay', () => {return myRelay;});
-                    h.on('getDataSrv', 'friend', () => {return friend;});
-                    h.on('getDataSrv', 'friendRelay', () => {return friendRelay;});
-                    h.onEvent('callbackSrv', 'response', (args) => {
-                        const [res] = args;
-                        resolve(res);
-                    });
-                    h.onEvent('errorHandlingSrv', 'error', (args) => {
-                        const [err] = args;
-                        reject(err);
-                    });
-                })
-                .handleScriptError(reject)
-                .handleTimeout(() => {
-                    reject('Request timed out for topologyTest');
-                })
-
-                if (config && config.ttl) {
-                    r.withTTL(config.ttl)
-                }
-
-                request = r.build();
-    });
-    peer.internals.initiateFlow(request!);
-    return promise;
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "topologyTest",
+    "returnType" : {
+        "tag" : "primitive"
+    },
+    "argDefs" : [
+        {
+            "name" : "me",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "myRelay",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "friend",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "friendRelay",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        }
+    ],
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
 }

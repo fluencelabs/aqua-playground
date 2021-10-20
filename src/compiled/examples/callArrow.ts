@@ -8,11 +8,10 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    ResultCodes,
-    RequestFlow,
-    RequestFlowBuilder,
-    CallParams
-} from '@fluencelabs/fluence/dist/internal/compilerSupport/v1';
+    CallParams,
+    callFunction,
+    registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
 function missingFields(obj: any, fields: string[]): string[] {
@@ -27,31 +26,9 @@ function missingFields(obj: any, fields: string[]): string[] {
 export function passFunctionAsArg(node: string, str: string, c: (arg0: string, callParams: CallParams<'arg0'>) => string, config?: {ttl?: number}): Promise<void>;
 export function passFunctionAsArg(peer: FluencePeer, node: string, str: string, c: (arg0: string, callParams: CallParams<'arg0'>) => string, config?: {ttl?: number}): Promise<void>;
 export function passFunctionAsArg(...args: any) {
-    let peer: FluencePeer;
-    let node: any;
-    let str: any;
-    let c: any;
-    let config: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-        node = args[1];
-        str = args[2];
-        c = args[3];
-        config = args[4];
-    } else {
-        peer = Fluence.getPeer();
-        node = args[0];
-        str = args[1];
-        c = args[2];
-        config = args[3];
-    }
 
-    let request: RequestFlow;
-    const promise = new Promise<void>((resolve, reject) => {
-        const r = new RequestFlowBuilder()
-                .disableInjections()
-                .withRawScript(`
-                    (xor
+    let script = `
+                        (xor
                      (seq
                       (seq
                        (seq
@@ -94,47 +71,57 @@ export function passFunctionAsArg(...args: any) {
                      )
                      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
                     )
-                `,
-                )
-                .configHandler((h) => {
-                    h.on('getDataSrv', '-relay-', () => {
-                        return peer.getStatus().relayPeerId;
-                    });
-                    h.on('getDataSrv', 'node', () => {return node;});
-                    h.on('getDataSrv', 'str', () => {return str;});
-                    h.use((req, resp, next) => {
-                        if(req.serviceId === 'callbackSrv' && req.fnName === 'c') {
-                            const callParams = {
-                                ...req.particleContext,
-                                tetraplets: {
-                                    arg0: req.tetraplets[0]
-                                },
-                            };
-                            resp.retCode = ResultCodes.success;
-                            resp.result = c(req.args[0], callParams)
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "passFunctionAsArg",
+    "returnType" : {
+        "tag" : "void"
+    },
+    "argDefs" : [
+        {
+            "name" : "node",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "str",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "c",
+            "argType" : {
+                "tag" : "callback",
+                "callback" : {
+                    "argDefs" : [
+                        {
+                            "name" : "arg0",
+                            "argType" : {
+                                "tag" : "primitive"
+                            }
                         }
-                        next();
-                    });
-        
-                    h.onEvent('callbackSrv', 'response', (args) => {
-
-                    });
-                    h.onEvent('errorHandlingSrv', 'error', (args) => {
-                        const [err] = args;
-                        reject(err);
-                    });
-                })
-                .handleScriptError(reject)
-                .handleTimeout(() => {
-                    reject('Request timed out for passFunctionAsArg');
-                })
-
-                if (config && config.ttl) {
-                    r.withTTL(config.ttl)
+                    ],
+                    "returnType" : {
+                        "tag" : "primitive"
+                    }
                 }
-
-                request = r.build();
-    });
-    peer.internals.initiateFlow(request!);
-    return Promise.race([promise, Promise.resolve()]);
+            }
+        }
+    ],
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
 }

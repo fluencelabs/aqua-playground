@@ -8,11 +8,10 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    ResultCodes,
-    RequestFlow,
-    RequestFlowBuilder,
-    CallParams
-} from '@fluencelabs/fluence/dist/internal/compilerSupport/v1';
+    CallParams,
+    callFunction,
+    registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
 function missingFields(obj: any, fields: string[]): string[] {
@@ -31,60 +30,34 @@ export function registerStringService(peer: FluencePeer, serviceId: string, serv
        
 
 export function registerStringService(...args: any) {
-    let peer: FluencePeer;
-    let serviceId: any;
-    let service: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-    } else {
-        peer = Fluence.getPeer();
-    }
-
-    if (typeof args[0] === 'string') {
-        serviceId = args[0];
-    } else if (typeof args[1] === 'string') {
-        serviceId = args[1];
-    } else {
-        serviceId = "string_service"
-    }
-
-    // Figuring out which overload is the service.
-    // If the first argument is not Fluence Peer and it is an object, then it can only be the service def
-    // If the first argument is peer, we are checking further. The second argument might either be
-    // an object, that it must be the service object
-    // or a string, which is the service id. In that case the service is the third argument
-    if (!(FluencePeer.isInstance(args[0])) && typeof args[0] === 'object') {
-        service = args[0];
-    } else if (typeof args[1] === 'object') {
-        service = args[1];
-    } else {
-        service = args[2];
-    }
-
-    const incorrectServiceDefinitions = missingFields(service, ['concat']);
-    if (!!incorrectServiceDefinitions.length) {
-        throw new Error("Error registering service StringService: missing functions: " + incorrectServiceDefinitions.map((d) => "'" + d + "'").join(", "))
-    }
-
-    peer.internals.callServiceHandler.use((req, resp, next) => {
-        if (req.serviceId !== serviceId) {
-            next();
-            return;
-        }
-
-        if (req.fnName === 'concat') {
-            const callParams = {
-                ...req.particleContext,
-                tetraplets: {
-                    a: req.tetraplets[0],b: req.tetraplets[1]
+    registerService(
+        args,
+        {
+    "defaultServiceId" : "string_service",
+    "functions" : [
+        {
+            "functionName" : "concat",
+            "argDefs" : [
+                {
+                    "name" : "a",
+                    "argType" : {
+                        "tag" : "primitive"
+                    }
                 },
-            };
-            resp.retCode = ResultCodes.success;
-            resp.result = service.concat(req.args[0], req.args[1], callParams)
+                {
+                    "name" : "b",
+                    "argType" : {
+                        "tag" : "primitive"
+                    }
+                }
+            ],
+            "returnType" : {
+                "tag" : "primitive"
+            }
         }
-
-        next();
-    });
+    ]
+}
+    );
 }
       
 // Functions
@@ -93,23 +66,9 @@ export function registerStringService(...args: any) {
 export function concat_foobars(config?: {ttl?: number}): Promise<string>;
 export function concat_foobars(peer: FluencePeer, config?: {ttl?: number}): Promise<string>;
 export function concat_foobars(...args: any) {
-    let peer: FluencePeer;
 
-    let config: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-        config = args[1];
-    } else {
-        peer = Fluence.getPeer();
-        config = args[0];
-    }
-
-    let request: RequestFlow;
-    const promise = new Promise<string>((resolve, reject) => {
-        const r = new RequestFlowBuilder()
-                .disableInjections()
-                .withRawScript(`
-                    (xor
+    let script = `
+                        (xor
                      (seq
                       (seq
                        (seq
@@ -140,33 +99,26 @@ export function concat_foobars(...args: any) {
                      )
                      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
                     )
-                `,
-                )
-                .configHandler((h) => {
-                    h.on('getDataSrv', '-relay-', () => {
-                        return peer.getStatus().relayPeerId;
-                    });
-
-                    h.onEvent('callbackSrv', 'response', (args) => {
-                        const [res] = args;
-                        resolve(res);
-                    });
-                    h.onEvent('errorHandlingSrv', 'error', (args) => {
-                        const [err] = args;
-                        reject(err);
-                    });
-                })
-                .handleScriptError(reject)
-                .handleTimeout(() => {
-                    reject('Request timed out for concat_foobars');
-                })
-
-                if (config && config.ttl) {
-                    r.withTTL(config.ttl)
-                }
-
-                request = r.build();
-    });
-    peer.internals.initiateFlow(request!);
-    return promise;
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "concat_foobars",
+    "returnType" : {
+        "tag" : "primitive"
+    },
+    "argDefs" : [
+    ],
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
 }

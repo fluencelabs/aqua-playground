@@ -8,11 +8,10 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    ResultCodes,
-    RequestFlow,
-    RequestFlowBuilder,
-    CallParams
-} from '@fluencelabs/fluence/dist/internal/compilerSupport/v1';
+    CallParams,
+    callFunction,
+    registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
 function missingFields(obj: any, fields: string[]): string[] {
@@ -27,25 +26,9 @@ function missingFields(obj: any, fields: string[]): string[] {
 export function iterateAndPrint(strings: string[], config?: {ttl?: number}): Promise<void>;
 export function iterateAndPrint(peer: FluencePeer, strings: string[], config?: {ttl?: number}): Promise<void>;
 export function iterateAndPrint(...args: any) {
-    let peer: FluencePeer;
-    let strings: any;
-    let config: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-        strings = args[1];
-        config = args[2];
-    } else {
-        peer = Fluence.getPeer();
-        strings = args[0];
-        config = args[1];
-    }
 
-    let request: RequestFlow;
-    const promise = new Promise<void>((resolve, reject) => {
-        const r = new RequestFlowBuilder()
-                .disableInjections()
-                .withRawScript(`
-                    (xor
+    let script = `
+                        (xor
                      (seq
                       (seq
                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
@@ -60,34 +43,34 @@ export function iterateAndPrint(...args: any) {
                      )
                      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
                     )
-                `,
-                )
-                .configHandler((h) => {
-                    h.on('getDataSrv', '-relay-', () => {
-                        return peer.getStatus().relayPeerId;
-                    });
-                    h.on('getDataSrv', 'strings', () => {return strings;});
-                    h.onEvent('callbackSrv', 'response', (args) => {
-
-                    });
-                    h.onEvent('errorHandlingSrv', 'error', (args) => {
-                        const [err] = args;
-                        reject(err);
-                    });
-                })
-                .handleScriptError(reject)
-                .handleTimeout(() => {
-                    reject('Request timed out for iterateAndPrint');
-                })
-
-                if (config && config.ttl) {
-                    r.withTTL(config.ttl)
-                }
-
-                request = r.build();
-    });
-    peer.internals.initiateFlow(request!);
-    return Promise.race([promise, Promise.resolve()]);
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "iterateAndPrint",
+    "returnType" : {
+        "tag" : "void"
+    },
+    "argDefs" : [
+        {
+            "name" : "strings",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        }
+    ],
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
 }
 
  
@@ -95,28 +78,9 @@ export function iterateAndPrint(...args: any) {
 export function iterateAndPrintParallel(nodes: string[], c: (arg0: { external_addresses: string[]; }, callParams: CallParams<'arg0'>) => void, config?: {ttl?: number}): Promise<void>;
 export function iterateAndPrintParallel(peer: FluencePeer, nodes: string[], c: (arg0: { external_addresses: string[]; }, callParams: CallParams<'arg0'>) => void, config?: {ttl?: number}): Promise<void>;
 export function iterateAndPrintParallel(...args: any) {
-    let peer: FluencePeer;
-    let nodes: any;
-    let c: any;
-    let config: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-        nodes = args[1];
-        c = args[2];
-        config = args[3];
-    } else {
-        peer = Fluence.getPeer();
-        nodes = args[0];
-        c = args[1];
-        config = args[2];
-    }
 
-    let request: RequestFlow;
-    const promise = new Promise<void>((resolve, reject) => {
-        const r = new RequestFlowBuilder()
-                .disableInjections()
-                .withRawScript(`
-                    (xor
+    let script = `
+                        (xor
                      (seq
                       (seq
                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
@@ -146,46 +110,51 @@ export function iterateAndPrintParallel(...args: any) {
                      )
                      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
                     )
-                `,
-                )
-                .configHandler((h) => {
-                    h.on('getDataSrv', '-relay-', () => {
-                        return peer.getStatus().relayPeerId;
-                    });
-                    h.on('getDataSrv', 'nodes', () => {return nodes;});
-                    h.use((req, resp, next) => {
-                        if(req.serviceId === 'callbackSrv' && req.fnName === 'c') {
-                            const callParams = {
-                                ...req.particleContext,
-                                tetraplets: {
-                                    arg0: req.tetraplets[0]
-                                },
-                            };
-                            resp.retCode = ResultCodes.success;
-                            c(req.args[0], callParams); resp.result = {}
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "iterateAndPrintParallel",
+    "returnType" : {
+        "tag" : "void"
+    },
+    "argDefs" : [
+        {
+            "name" : "nodes",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "c",
+            "argType" : {
+                "tag" : "callback",
+                "callback" : {
+                    "argDefs" : [
+                        {
+                            "name" : "arg0",
+                            "argType" : {
+                                "tag" : "primitive"
+                            }
                         }
-                        next();
-                    });
-        
-                    h.onEvent('callbackSrv', 'response', (args) => {
-
-                    });
-                    h.onEvent('errorHandlingSrv', 'error', (args) => {
-                        const [err] = args;
-                        reject(err);
-                    });
-                })
-                .handleScriptError(reject)
-                .handleTimeout(() => {
-                    reject('Request timed out for iterateAndPrintParallel');
-                })
-
-                if (config && config.ttl) {
-                    r.withTTL(config.ttl)
+                    ],
+                    "returnType" : {
+                        "tag" : "void"
+                    }
                 }
-
-                request = r.build();
-    });
-    peer.internals.initiateFlow(request!);
-    return Promise.race([promise, Promise.resolve()]);
+            }
+        }
+    ],
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
 }

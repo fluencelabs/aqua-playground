@@ -8,11 +8,10 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    ResultCodes,
-    RequestFlow,
-    RequestFlowBuilder,
-    CallParams
-} from '@fluencelabs/fluence/dist/internal/compilerSupport/v1';
+    CallParams,
+    callFunction,
+    registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
 function missingFields(obj: any, fields: string[]): string[] {
@@ -31,60 +30,22 @@ export function registerParService(peer: FluencePeer, serviceId: string, service
        
 
 export function registerParService(...args: any) {
-    let peer: FluencePeer;
-    let serviceId: any;
-    let service: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-    } else {
-        peer = Fluence.getPeer();
-    }
-
-    if (typeof args[0] === 'string') {
-        serviceId = args[0];
-    } else if (typeof args[1] === 'string') {
-        serviceId = args[1];
-    } else {
-        serviceId = "parservice-id"
-    }
-
-    // Figuring out which overload is the service.
-    // If the first argument is not Fluence Peer and it is an object, then it can only be the service def
-    // If the first argument is peer, we are checking further. The second argument might either be
-    // an object, that it must be the service object
-    // or a string, which is the service id. In that case the service is the third argument
-    if (!(FluencePeer.isInstance(args[0])) && typeof args[0] === 'object') {
-        service = args[0];
-    } else if (typeof args[1] === 'object') {
-        service = args[1];
-    } else {
-        service = args[2];
-    }
-
-    const incorrectServiceDefinitions = missingFields(service, ['call']);
-    if (!!incorrectServiceDefinitions.length) {
-        throw new Error("Error registering service ParService: missing functions: " + incorrectServiceDefinitions.map((d) => "'" + d + "'").join(", "))
-    }
-
-    peer.internals.callServiceHandler.use((req, resp, next) => {
-        if (req.serviceId !== serviceId) {
-            next();
-            return;
+    registerService(
+        args,
+        {
+    "defaultServiceId" : "parservice-id",
+    "functions" : [
+        {
+            "functionName" : "call",
+            "argDefs" : [
+            ],
+            "returnType" : {
+                "tag" : "primitive"
+            }
         }
-
-        if (req.fnName === 'call') {
-            const callParams = {
-                ...req.particleContext,
-                tetraplets: {
-                    
-                },
-            };
-            resp.retCode = ResultCodes.success;
-            resp.result = service.call(callParams)
-        }
-
-        next();
-    });
+    ]
+}
+    );
 }
       
 // Functions
@@ -93,28 +54,9 @@ export function registerParService(...args: any) {
 export function parFunc(node: string, c: (arg0: { external_addresses: string[]; }, callParams: CallParams<'arg0'>) => void, config?: {ttl?: number}): Promise<void>;
 export function parFunc(peer: FluencePeer, node: string, c: (arg0: { external_addresses: string[]; }, callParams: CallParams<'arg0'>) => void, config?: {ttl?: number}): Promise<void>;
 export function parFunc(...args: any) {
-    let peer: FluencePeer;
-    let node: any;
-    let c: any;
-    let config: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-        node = args[1];
-        c = args[2];
-        config = args[3];
-    } else {
-        peer = Fluence.getPeer();
-        node = args[0];
-        c = args[1];
-        config = args[2];
-    }
 
-    let request: RequestFlow;
-    const promise = new Promise<void>((resolve, reject) => {
-        const r = new RequestFlowBuilder()
-                .disableInjections()
-                .withRawScript(`
-                    (xor
+    let script = `
+                        (xor
                      (seq
                       (seq
                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
@@ -145,46 +87,51 @@ export function parFunc(...args: any) {
                      )
                      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
                     )
-                `,
-                )
-                .configHandler((h) => {
-                    h.on('getDataSrv', '-relay-', () => {
-                        return peer.getStatus().relayPeerId;
-                    });
-                    h.on('getDataSrv', 'node', () => {return node;});
-                    h.use((req, resp, next) => {
-                        if(req.serviceId === 'callbackSrv' && req.fnName === 'c') {
-                            const callParams = {
-                                ...req.particleContext,
-                                tetraplets: {
-                                    arg0: req.tetraplets[0]
-                                },
-                            };
-                            resp.retCode = ResultCodes.success;
-                            c(req.args[0], callParams); resp.result = {}
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "parFunc",
+    "returnType" : {
+        "tag" : "void"
+    },
+    "argDefs" : [
+        {
+            "name" : "node",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "c",
+            "argType" : {
+                "tag" : "callback",
+                "callback" : {
+                    "argDefs" : [
+                        {
+                            "name" : "arg0",
+                            "argType" : {
+                                "tag" : "primitive"
+                            }
                         }
-                        next();
-                    });
-        
-                    h.onEvent('callbackSrv', 'response', (args) => {
-
-                    });
-                    h.onEvent('errorHandlingSrv', 'error', (args) => {
-                        const [err] = args;
-                        reject(err);
-                    });
-                })
-                .handleScriptError(reject)
-                .handleTimeout(() => {
-                    reject('Request timed out for parFunc');
-                })
-
-                if (config && config.ttl) {
-                    r.withTTL(config.ttl)
+                    ],
+                    "returnType" : {
+                        "tag" : "void"
+                    }
                 }
-
-                request = r.build();
-    });
-    peer.internals.initiateFlow(request!);
-    return Promise.race([promise, Promise.resolve()]);
+            }
+        }
+    ],
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
 }

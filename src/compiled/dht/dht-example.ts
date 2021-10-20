@@ -8,11 +8,10 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    ResultCodes,
-    RequestFlow,
-    RequestFlowBuilder,
-    CallParams
-} from '@fluencelabs/fluence/dist/internal/compilerSupport/v1';
+    CallParams,
+    callFunction,
+    registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
 function missingFields(obj: any, fields: string[]): string[] {
@@ -27,28 +26,9 @@ function missingFields(obj: any, fields: string[]): string[] {
 export function put_value(initial_peer: string, value: string, config?: {ttl?: number}): Promise<string>;
 export function put_value(peer: FluencePeer, initial_peer: string, value: string, config?: {ttl?: number}): Promise<string>;
 export function put_value(...args: any) {
-    let peer: FluencePeer;
-    let initial_peer: any;
-    let value: any;
-    let config: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-        initial_peer = args[1];
-        value = args[2];
-        config = args[3];
-    } else {
-        peer = Fluence.getPeer();
-        initial_peer = args[0];
-        value = args[1];
-        config = args[2];
-    }
 
-    let request: RequestFlow;
-    const promise = new Promise<string>((resolve, reject) => {
-        const r = new RequestFlowBuilder()
-                .disableInjections()
-                .withRawScript(`
-                    (xor
+    let script = `
+                        (xor
                      (seq
                       (seq
                        (seq
@@ -102,36 +82,40 @@ export function put_value(...args: any) {
                      )
                      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
                     )
-                `,
-                )
-                .configHandler((h) => {
-                    h.on('getDataSrv', '-relay-', () => {
-                        return peer.getStatus().relayPeerId;
-                    });
-                    h.on('getDataSrv', 'initial_peer', () => {return initial_peer;});
-                    h.on('getDataSrv', 'value', () => {return value;});
-                    h.onEvent('callbackSrv', 'response', (args) => {
-                        const [res] = args;
-                        resolve(res);
-                    });
-                    h.onEvent('errorHandlingSrv', 'error', (args) => {
-                        const [err] = args;
-                        reject(err);
-                    });
-                })
-                .handleScriptError(reject)
-                .handleTimeout(() => {
-                    reject('Request timed out for put_value');
-                })
-
-                if (config && config.ttl) {
-                    r.withTTL(config.ttl)
-                }
-
-                request = r.build();
-    });
-    peer.internals.initiateFlow(request!);
-    return promise;
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "put_value",
+    "returnType" : {
+        "tag" : "primitive"
+    },
+    "argDefs" : [
+        {
+            "name" : "initial_peer",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "value",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        }
+    ],
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
 }
 
  
@@ -139,37 +123,9 @@ export function put_value(...args: any) {
 export function registerKeyPutValue(node_id: string, key: string, value: string, relay_id: string | null, service_id: string | null, config?: {ttl?: number}): Promise<string[]>;
 export function registerKeyPutValue(peer: FluencePeer, node_id: string, key: string, value: string, relay_id: string | null, service_id: string | null, config?: {ttl?: number}): Promise<string[]>;
 export function registerKeyPutValue(...args: any) {
-    let peer: FluencePeer;
-    let node_id: any;
-    let key: any;
-    let value: any;
-    let relay_id: any;
-    let service_id: any;
-    let config: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-        node_id = args[1];
-        key = args[2];
-        value = args[3];
-        relay_id = args[4];
-        service_id = args[5];
-        config = args[6];
-    } else {
-        peer = Fluence.getPeer();
-        node_id = args[0];
-        key = args[1];
-        value = args[2];
-        relay_id = args[3];
-        service_id = args[4];
-        config = args[5];
-    }
 
-    let request: RequestFlow;
-    const promise = new Promise<string[]>((resolve, reject) => {
-        const r = new RequestFlowBuilder()
-                .disableInjections()
-                .withRawScript(`
-                    (xor
+    let script = `
+                        (xor
                      (seq
                       (seq
                        (seq
@@ -229,39 +185,58 @@ export function registerKeyPutValue(...args: any) {
                      )
                      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 4])
                     )
-                `,
-                )
-                .configHandler((h) => {
-                    h.on('getDataSrv', '-relay-', () => {
-                        return peer.getStatus().relayPeerId;
-                    });
-                    h.on('getDataSrv', 'node_id', () => {return node_id;});
-                    h.on('getDataSrv', 'key', () => {return key;});
-                    h.on('getDataSrv', 'value', () => {return value;});
-                    h.on('getDataSrv', 'relay_id', () => {return relay_id === null ? [] : [relay_id];});
-                    h.on('getDataSrv', 'service_id', () => {return service_id === null ? [] : [service_id];});
-                    h.onEvent('callbackSrv', 'response', (args) => {
-                        const [res] = args;
-                        resolve(res);
-                    });
-                    h.onEvent('errorHandlingSrv', 'error', (args) => {
-                        const [err] = args;
-                        reject(err);
-                    });
-                })
-                .handleScriptError(reject)
-                .handleTimeout(() => {
-                    reject('Request timed out for registerKeyPutValue');
-                })
-
-                if (config && config.ttl) {
-                    r.withTTL(config.ttl)
-                }
-
-                request = r.build();
-    });
-    peer.internals.initiateFlow(request!);
-    return promise;
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "registerKeyPutValue",
+    "returnType" : {
+        "tag" : "primitive"
+    },
+    "argDefs" : [
+        {
+            "name" : "node_id",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "key",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "value",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "relay_id",
+            "argType" : {
+                "tag" : "optional"
+            }
+        },
+        {
+            "name" : "service_id",
+            "argType" : {
+                "tag" : "optional"
+            }
+        }
+    ],
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
 }
 
  
@@ -269,28 +244,9 @@ export function registerKeyPutValue(...args: any) {
 export function getNeighbours(node_id: string, topic: string, config?: {ttl?: number}): Promise<string[]>;
 export function getNeighbours(peer: FluencePeer, node_id: string, topic: string, config?: {ttl?: number}): Promise<string[]>;
 export function getNeighbours(...args: any) {
-    let peer: FluencePeer;
-    let node_id: any;
-    let topic: any;
-    let config: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-        node_id = args[1];
-        topic = args[2];
-        config = args[3];
-    } else {
-        peer = Fluence.getPeer();
-        node_id = args[0];
-        topic = args[1];
-        config = args[2];
-    }
 
-    let request: RequestFlow;
-    const promise = new Promise<string[]>((resolve, reject) => {
-        const r = new RequestFlowBuilder()
-                .disableInjections()
-                .withRawScript(`
-                    (xor
+    let script = `
+                        (xor
                      (seq
                       (seq
                        (seq
@@ -324,36 +280,40 @@ export function getNeighbours(...args: any) {
                      )
                      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
                     )
-                `,
-                )
-                .configHandler((h) => {
-                    h.on('getDataSrv', '-relay-', () => {
-                        return peer.getStatus().relayPeerId;
-                    });
-                    h.on('getDataSrv', 'node_id', () => {return node_id;});
-                    h.on('getDataSrv', 'topic', () => {return topic;});
-                    h.onEvent('callbackSrv', 'response', (args) => {
-                        const [res] = args;
-                        resolve(res);
-                    });
-                    h.onEvent('errorHandlingSrv', 'error', (args) => {
-                        const [err] = args;
-                        reject(err);
-                    });
-                })
-                .handleScriptError(reject)
-                .handleTimeout(() => {
-                    reject('Request timed out for getNeighbours');
-                })
-
-                if (config && config.ttl) {
-                    r.withTTL(config.ttl)
-                }
-
-                request = r.build();
-    });
-    peer.internals.initiateFlow(request!);
-    return promise;
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "getNeighbours",
+    "returnType" : {
+        "tag" : "primitive"
+    },
+    "argDefs" : [
+        {
+            "name" : "node_id",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "topic",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        }
+    ],
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
 }
 
  
@@ -361,28 +321,9 @@ export function getNeighbours(...args: any) {
 export function findSubscribers(node_id: string, topic: string, config?: {ttl?: number}): Promise<{ peer_id: string; relay_id: string[]; service_id: string[]; set_by: string; timestamp_created: number; value: string; weight: number; }[]>;
 export function findSubscribers(peer: FluencePeer, node_id: string, topic: string, config?: {ttl?: number}): Promise<{ peer_id: string; relay_id: string[]; service_id: string[]; set_by: string; timestamp_created: number; value: string; weight: number; }[]>;
 export function findSubscribers(...args: any) {
-    let peer: FluencePeer;
-    let node_id: any;
-    let topic: any;
-    let config: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-        node_id = args[1];
-        topic = args[2];
-        config = args[3];
-    } else {
-        peer = Fluence.getPeer();
-        node_id = args[0];
-        topic = args[1];
-        config = args[2];
-    }
 
-    let request: RequestFlow;
-    const promise = new Promise<{ peer_id: string; relay_id: string[]; service_id: string[]; set_by: string; timestamp_created: number; value: string; weight: number; }[]>((resolve, reject) => {
-        const r = new RequestFlowBuilder()
-                .disableInjections()
-                .withRawScript(`
-                    (xor
+    let script = `
+                        (xor
                      (seq
                       (seq
                        (seq
@@ -451,36 +392,40 @@ export function findSubscribers(...args: any) {
                      )
                      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 4])
                     )
-                `,
-                )
-                .configHandler((h) => {
-                    h.on('getDataSrv', '-relay-', () => {
-                        return peer.getStatus().relayPeerId;
-                    });
-                    h.on('getDataSrv', 'node_id', () => {return node_id;});
-                    h.on('getDataSrv', 'topic', () => {return topic;});
-                    h.onEvent('callbackSrv', 'response', (args) => {
-                        const [res] = args;
-                        resolve(res);
-                    });
-                    h.onEvent('errorHandlingSrv', 'error', (args) => {
-                        const [err] = args;
-                        reject(err);
-                    });
-                })
-                .handleScriptError(reject)
-                .handleTimeout(() => {
-                    reject('Request timed out for findSubscribers');
-                })
-
-                if (config && config.ttl) {
-                    r.withTTL(config.ttl)
-                }
-
-                request = r.build();
-    });
-    peer.internals.initiateFlow(request!);
-    return promise;
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "findSubscribers",
+    "returnType" : {
+        "tag" : "primitive"
+    },
+    "argDefs" : [
+        {
+            "name" : "node_id",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "topic",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        }
+    ],
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
 }
 
  
@@ -488,37 +433,9 @@ export function findSubscribers(...args: any) {
 export function initTopicAndSubscribe(node_id: string, topic: string, value: string, relay_id: string | null, service_id: string | null, config?: {ttl?: number}): Promise<void>;
 export function initTopicAndSubscribe(peer: FluencePeer, node_id: string, topic: string, value: string, relay_id: string | null, service_id: string | null, config?: {ttl?: number}): Promise<void>;
 export function initTopicAndSubscribe(...args: any) {
-    let peer: FluencePeer;
-    let node_id: any;
-    let topic: any;
-    let value: any;
-    let relay_id: any;
-    let service_id: any;
-    let config: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-        node_id = args[1];
-        topic = args[2];
-        value = args[3];
-        relay_id = args[4];
-        service_id = args[5];
-        config = args[6];
-    } else {
-        peer = Fluence.getPeer();
-        node_id = args[0];
-        topic = args[1];
-        value = args[2];
-        relay_id = args[3];
-        service_id = args[4];
-        config = args[5];
-    }
 
-    let request: RequestFlow;
-    const promise = new Promise<void>((resolve, reject) => {
-        const r = new RequestFlowBuilder()
-                .disableInjections()
-                .withRawScript(`
-                    (xor
+    let script = `
+                        (xor
                      (seq
                       (seq
                        (seq
@@ -575,36 +492,56 @@ export function initTopicAndSubscribe(...args: any) {
                      )
                      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
                     )
-                `,
-                )
-                .configHandler((h) => {
-                    h.on('getDataSrv', '-relay-', () => {
-                        return peer.getStatus().relayPeerId;
-                    });
-                    h.on('getDataSrv', 'node_id', () => {return node_id;});
-                    h.on('getDataSrv', 'topic', () => {return topic;});
-                    h.on('getDataSrv', 'value', () => {return value;});
-                    h.on('getDataSrv', 'relay_id', () => {return relay_id === null ? [] : [relay_id];});
-                    h.on('getDataSrv', 'service_id', () => {return service_id === null ? [] : [service_id];});
-                    h.onEvent('callbackSrv', 'response', (args) => {
-
-                    });
-                    h.onEvent('errorHandlingSrv', 'error', (args) => {
-                        const [err] = args;
-                        reject(err);
-                    });
-                })
-                .handleScriptError(reject)
-                .handleTimeout(() => {
-                    reject('Request timed out for initTopicAndSubscribe');
-                })
-
-                if (config && config.ttl) {
-                    r.withTTL(config.ttl)
-                }
-
-                request = r.build();
-    });
-    peer.internals.initiateFlow(request!);
-    return Promise.race([promise, Promise.resolve()]);
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "initTopicAndSubscribe",
+    "returnType" : {
+        "tag" : "void"
+    },
+    "argDefs" : [
+        {
+            "name" : "node_id",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "topic",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "value",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "relay_id",
+            "argType" : {
+                "tag" : "optional"
+            }
+        },
+        {
+            "name" : "service_id",
+            "argType" : {
+                "tag" : "optional"
+            }
+        }
+    ],
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
 }

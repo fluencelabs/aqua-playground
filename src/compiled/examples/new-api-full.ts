@@ -8,11 +8,10 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    ResultCodes,
-    RequestFlow,
-    RequestFlowBuilder,
-    CallParams
-} from '@fluencelabs/fluence/dist/internal/compilerSupport/v1';
+    CallParams,
+    callFunction,
+    registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
 function missingFields(obj: any, fields: string[]): string[] {
@@ -31,60 +30,28 @@ export function registerServiceWithDefaultId(peer: FluencePeer, serviceId: strin
        
 
 export function registerServiceWithDefaultId(...args: any) {
-    let peer: FluencePeer;
-    let serviceId: any;
-    let service: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-    } else {
-        peer = Fluence.getPeer();
-    }
-
-    if (typeof args[0] === 'string') {
-        serviceId = args[0];
-    } else if (typeof args[1] === 'string') {
-        serviceId = args[1];
-    } else {
-        serviceId = "defaultId"
-    }
-
-    // Figuring out which overload is the service.
-    // If the first argument is not Fluence Peer and it is an object, then it can only be the service def
-    // If the first argument is peer, we are checking further. The second argument might either be
-    // an object, that it must be the service object
-    // or a string, which is the service id. In that case the service is the third argument
-    if (!(FluencePeer.isInstance(args[0])) && typeof args[0] === 'object') {
-        service = args[0];
-    } else if (typeof args[1] === 'object') {
-        service = args[1];
-    } else {
-        service = args[2];
-    }
-
-    const incorrectServiceDefinitions = missingFields(service, ['hello']);
-    if (!!incorrectServiceDefinitions.length) {
-        throw new Error("Error registering service ServiceWithDefaultId: missing functions: " + incorrectServiceDefinitions.map((d) => "'" + d + "'").join(", "))
-    }
-
-    peer.internals.callServiceHandler.use((req, resp, next) => {
-        if (req.serviceId !== serviceId) {
-            next();
-            return;
+    registerService(
+        args,
+        {
+    "defaultServiceId" : "defaultId",
+    "functions" : [
+        {
+            "functionName" : "hello",
+            "argDefs" : [
+                {
+                    "name" : "s",
+                    "argType" : {
+                        "tag" : "primitive"
+                    }
+                }
+            ],
+            "returnType" : {
+                "tag" : "void"
+            }
         }
-
-        if (req.fnName === 'hello') {
-            const callParams = {
-                ...req.particleContext,
-                tetraplets: {
-                    s: req.tetraplets[0]
-                },
-            };
-            resp.retCode = ResultCodes.success;
-            service.hello(req.args[0], callParams); resp.result = {}
-        }
-
-        next();
-    });
+    ]
+}
+    );
 }
       
 
@@ -97,58 +64,28 @@ export function registerServiceWithOUTDefaultId(peer: FluencePeer, serviceId: st
        
 
 export function registerServiceWithOUTDefaultId(...args: any) {
-    let peer: FluencePeer;
-    let serviceId: any;
-    let service: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-    } else {
-        peer = Fluence.getPeer();
-    }
-
-    if (typeof args[0] === 'string') {
-        serviceId = args[0];
-    } else if (typeof args[1] === 'string') {
-        serviceId = args[1];
-    } 
-
-    // Figuring out which overload is the service.
-    // If the first argument is not Fluence Peer and it is an object, then it can only be the service def
-    // If the first argument is peer, we are checking further. The second argument might either be
-    // an object, that it must be the service object
-    // or a string, which is the service id. In that case the service is the third argument
-    if (!(FluencePeer.isInstance(args[0])) && typeof args[0] === 'object') {
-        service = args[0];
-    } else if (typeof args[1] === 'object') {
-        service = args[1];
-    } else {
-        service = args[2];
-    }
-
-    const incorrectServiceDefinitions = missingFields(service, ['hello']);
-    if (!!incorrectServiceDefinitions.length) {
-        throw new Error("Error registering service ServiceWithOUTDefaultId: missing functions: " + incorrectServiceDefinitions.map((d) => "'" + d + "'").join(", "))
-    }
-
-    peer.internals.callServiceHandler.use((req, resp, next) => {
-        if (req.serviceId !== serviceId) {
-            next();
-            return;
+    registerService(
+        args,
+        {
+    "defaultServiceId" : null,
+    "functions" : [
+        {
+            "functionName" : "hello",
+            "argDefs" : [
+                {
+                    "name" : "s",
+                    "argType" : {
+                        "tag" : "primitive"
+                    }
+                }
+            ],
+            "returnType" : {
+                "tag" : "void"
+            }
         }
-
-        if (req.fnName === 'hello') {
-            const callParams = {
-                ...req.particleContext,
-                tetraplets: {
-                    s: req.tetraplets[0]
-                },
-            };
-            resp.retCode = ResultCodes.success;
-            service.hello(req.args[0], callParams); resp.result = {}
-        }
-
-        next();
-    });
+    ]
+}
+    );
 }
       
 
@@ -165,102 +102,108 @@ export function registerMoreMembers(peer: FluencePeer, serviceId: string, servic
        
 
 export function registerMoreMembers(...args: any) {
-    let peer: FluencePeer;
-    let serviceId: any;
-    let service: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-    } else {
-        peer = Fluence.getPeer();
-    }
-
-    if (typeof args[0] === 'string') {
-        serviceId = args[0];
-    } else if (typeof args[1] === 'string') {
-        serviceId = args[1];
-    } 
-
-    // Figuring out which overload is the service.
-    // If the first argument is not Fluence Peer and it is an object, then it can only be the service def
-    // If the first argument is peer, we are checking further. The second argument might either be
-    // an object, that it must be the service object
-    // or a string, which is the service id. In that case the service is the third argument
-    if (!(FluencePeer.isInstance(args[0])) && typeof args[0] === 'object') {
-        service = args[0];
-    } else if (typeof args[1] === 'object') {
-        service = args[1];
-    } else {
-        service = args[2];
-    }
-
-    const incorrectServiceDefinitions = missingFields(service, ['member1', 'member2', 'member3', 'member4', 'member5']);
-    if (!!incorrectServiceDefinitions.length) {
-        throw new Error("Error registering service MoreMembers: missing functions: " + incorrectServiceDefinitions.map((d) => "'" + d + "'").join(", "))
-    }
-
-    peer.internals.callServiceHandler.use((req, resp, next) => {
-        if (req.serviceId !== serviceId) {
-            next();
-            return;
-        }
-
-        if (req.fnName === 'member1') {
-            const callParams = {
-                ...req.particleContext,
-                tetraplets: {
-                    
+    registerService(
+        args,
+        {
+    "defaultServiceId" : null,
+    "functions" : [
+        {
+            "functionName" : "member1",
+            "argDefs" : [
+            ],
+            "returnType" : {
+                "tag" : "void"
+            }
+        },
+        {
+            "functionName" : "member2",
+            "argDefs" : [
+                {
+                    "name" : "s1",
+                    "argType" : {
+                        "tag" : "primitive"
+                    }
+                }
+            ],
+            "returnType" : {
+                "tag" : "void"
+            }
+        },
+        {
+            "functionName" : "member3",
+            "argDefs" : [
+                {
+                    "name" : "s1",
+                    "argType" : {
+                        "tag" : "primitive"
+                    }
                 },
-            };
-            resp.retCode = ResultCodes.success;
-            service.member1(callParams); resp.result = {}
-        }
-
-if (req.fnName === 'member2') {
-            const callParams = {
-                ...req.particleContext,
-                tetraplets: {
-                    s1: req.tetraplets[0]
+                {
+                    "name" : "s2",
+                    "argType" : {
+                        "tag" : "primitive"
+                    }
+                }
+            ],
+            "returnType" : {
+                "tag" : "void"
+            }
+        },
+        {
+            "functionName" : "member4",
+            "argDefs" : [
+                {
+                    "name" : "s1",
+                    "argType" : {
+                        "tag" : "primitive"
+                    }
                 },
-            };
-            resp.retCode = ResultCodes.success;
-            service.member2(req.args[0], callParams); resp.result = {}
-        }
-
-if (req.fnName === 'member3') {
-            const callParams = {
-                ...req.particleContext,
-                tetraplets: {
-                    s1: req.tetraplets[0],s2: req.tetraplets[1]
+                {
+                    "name" : "s2",
+                    "argType" : {
+                        "tag" : "primitive"
+                    }
                 },
-            };
-            resp.retCode = ResultCodes.success;
-            service.member3(req.args[0], req.args[1], callParams); resp.result = {}
-        }
-
-if (req.fnName === 'member4') {
-            const callParams = {
-                ...req.particleContext,
-                tetraplets: {
-                    s1: req.tetraplets[0],s2: req.tetraplets[1],i: req.tetraplets[2]
+                {
+                    "name" : "i",
+                    "argType" : {
+                        "tag" : "primitive"
+                    }
+                }
+            ],
+            "returnType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "functionName" : "member5",
+            "argDefs" : [
+                {
+                    "name" : "s1",
+                    "argType" : {
+                        "tag" : "primitive"
+                    }
                 },
-            };
-            resp.retCode = ResultCodes.success;
-            resp.result = service.member4(req.args[0], req.args[1], req.args[2], callParams)
-        }
-
-if (req.fnName === 'member5') {
-            const callParams = {
-                ...req.particleContext,
-                tetraplets: {
-                    s1: req.tetraplets[0],s2: req.tetraplets[1],i: req.tetraplets[2]
+                {
+                    "name" : "s2",
+                    "argType" : {
+                        "tag" : "primitive"
+                    }
                 },
-            };
-            resp.retCode = ResultCodes.success;
-            resp.result = service.member5(req.args[0], req.args[1], req.args[2], callParams)
+                {
+                    "name" : "i",
+                    "argType" : {
+                        "tag" : "primitive"
+                    }
+                }
+            ],
+            "returnType" : {
+                "tag" : "primitive"
+            }
         }
-
-        next();
-    });
+    ]
+}
+    );
 }
       
 // Functions
@@ -269,25 +212,9 @@ if (req.fnName === 'member5') {
 export function f1(callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void, config?: {ttl?: number}): Promise<void>;
 export function f1(peer: FluencePeer, callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void, config?: {ttl?: number}): Promise<void>;
 export function f1(...args: any) {
-    let peer: FluencePeer;
-    let callback: any;
-    let config: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-        callback = args[1];
-        config = args[2];
-    } else {
-        peer = Fluence.getPeer();
-        callback = args[0];
-        config = args[1];
-    }
 
-    let request: RequestFlow;
-    const promise = new Promise<void>((resolve, reject) => {
-        const r = new RequestFlowBuilder()
-                .disableInjections()
-                .withRawScript(`
-                    (xor
+    let script = `
+                        (xor
                      (seq
                       (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
                       (xor
@@ -297,47 +224,53 @@ export function f1(...args: any) {
                      )
                      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
                     )
-                `,
-                )
-                .configHandler((h) => {
-                    h.on('getDataSrv', '-relay-', () => {
-                        return peer.getStatus().relayPeerId;
-                    });
-                    h.use((req, resp, next) => {
-                        if(req.serviceId === 'callbackSrv' && req.fnName === 'callback') {
-                            const callParams = {
-                                ...req.particleContext,
-                                tetraplets: {
-                                    arg0: req.tetraplets[0],arg1: req.tetraplets[1]
-                                },
-                            };
-                            resp.retCode = ResultCodes.success;
-                            callback(req.args[0], req.args[1], callParams); resp.result = {}
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "f1",
+    "returnType" : {
+        "tag" : "void"
+    },
+    "argDefs" : [
+        {
+            "name" : "callback",
+            "argType" : {
+                "tag" : "callback",
+                "callback" : {
+                    "argDefs" : [
+                        {
+                            "name" : "arg0",
+                            "argType" : {
+                                "tag" : "primitive"
+                            }
+                        },
+                        {
+                            "name" : "arg1",
+                            "argType" : {
+                                "tag" : "primitive"
+                            }
                         }
-                        next();
-                    });
-        
-                    h.onEvent('callbackSrv', 'response', (args) => {
-
-                    });
-                    h.onEvent('errorHandlingSrv', 'error', (args) => {
-                        const [err] = args;
-                        reject(err);
-                    });
-                })
-                .handleScriptError(reject)
-                .handleTimeout(() => {
-                    reject('Request timed out for f1');
-                })
-
-                if (config && config.ttl) {
-                    r.withTTL(config.ttl)
+                    ],
+                    "returnType" : {
+                        "tag" : "void"
+                    }
                 }
-
-                request = r.build();
-    });
-    peer.internals.initiateFlow(request!);
-    return Promise.race([promise, Promise.resolve()]);
+            }
+        }
+    ],
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
 }
 
  
@@ -345,28 +278,9 @@ export function f1(...args: any) {
 export function f2(num: number, callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void, config?: {ttl?: number}): Promise<void>;
 export function f2(peer: FluencePeer, num: number, callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void, config?: {ttl?: number}): Promise<void>;
 export function f2(...args: any) {
-    let peer: FluencePeer;
-    let num: any;
-    let callback: any;
-    let config: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-        num = args[1];
-        callback = args[2];
-        config = args[3];
-    } else {
-        peer = Fluence.getPeer();
-        num = args[0];
-        callback = args[1];
-        config = args[2];
-    }
 
-    let request: RequestFlow;
-    const promise = new Promise<void>((resolve, reject) => {
-        const r = new RequestFlowBuilder()
-                .disableInjections()
-                .withRawScript(`
-                    (xor
+    let script = `
+                        (xor
                      (seq
                       (seq
                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
@@ -379,48 +293,59 @@ export function f2(...args: any) {
                      )
                      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
                     )
-                `,
-                )
-                .configHandler((h) => {
-                    h.on('getDataSrv', '-relay-', () => {
-                        return peer.getStatus().relayPeerId;
-                    });
-                    h.on('getDataSrv', 'num', () => {return num;});
-                    h.use((req, resp, next) => {
-                        if(req.serviceId === 'callbackSrv' && req.fnName === 'callback') {
-                            const callParams = {
-                                ...req.particleContext,
-                                tetraplets: {
-                                    arg0: req.tetraplets[0],arg1: req.tetraplets[1]
-                                },
-                            };
-                            resp.retCode = ResultCodes.success;
-                            callback(req.args[0], req.args[1], callParams); resp.result = {}
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "f2",
+    "returnType" : {
+        "tag" : "void"
+    },
+    "argDefs" : [
+        {
+            "name" : "num",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "callback",
+            "argType" : {
+                "tag" : "callback",
+                "callback" : {
+                    "argDefs" : [
+                        {
+                            "name" : "arg0",
+                            "argType" : {
+                                "tag" : "primitive"
+                            }
+                        },
+                        {
+                            "name" : "arg1",
+                            "argType" : {
+                                "tag" : "primitive"
+                            }
                         }
-                        next();
-                    });
-        
-                    h.onEvent('callbackSrv', 'response', (args) => {
-
-                    });
-                    h.onEvent('errorHandlingSrv', 'error', (args) => {
-                        const [err] = args;
-                        reject(err);
-                    });
-                })
-                .handleScriptError(reject)
-                .handleTimeout(() => {
-                    reject('Request timed out for f2');
-                })
-
-                if (config && config.ttl) {
-                    r.withTTL(config.ttl)
+                    ],
+                    "returnType" : {
+                        "tag" : "void"
+                    }
                 }
-
-                request = r.build();
-    });
-    peer.internals.initiateFlow(request!);
-    return Promise.race([promise, Promise.resolve()]);
+            }
+        }
+    ],
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
 }
 
  
@@ -428,28 +353,9 @@ export function f2(...args: any) {
 export function f3(num: number, callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void, config?: {ttl?: number}): Promise<string>;
 export function f3(peer: FluencePeer, num: number, callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void, config?: {ttl?: number}): Promise<string>;
 export function f3(...args: any) {
-    let peer: FluencePeer;
-    let num: any;
-    let callback: any;
-    let config: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-        num = args[1];
-        callback = args[2];
-        config = args[3];
-    } else {
-        peer = Fluence.getPeer();
-        num = args[0];
-        callback = args[1];
-        config = args[2];
-    }
 
-    let request: RequestFlow;
-    const promise = new Promise<string>((resolve, reject) => {
-        const r = new RequestFlowBuilder()
-                .disableInjections()
-                .withRawScript(`
-                    (xor
+    let script = `
+                        (xor
                      (seq
                       (seq
                        (seq
@@ -468,49 +374,59 @@ export function f3(...args: any) {
                      )
                      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
                     )
-                `,
-                )
-                .configHandler((h) => {
-                    h.on('getDataSrv', '-relay-', () => {
-                        return peer.getStatus().relayPeerId;
-                    });
-                    h.on('getDataSrv', 'num', () => {return num;});
-                    h.use((req, resp, next) => {
-                        if(req.serviceId === 'callbackSrv' && req.fnName === 'callback') {
-                            const callParams = {
-                                ...req.particleContext,
-                                tetraplets: {
-                                    arg0: req.tetraplets[0],arg1: req.tetraplets[1]
-                                },
-                            };
-                            resp.retCode = ResultCodes.success;
-                            callback(req.args[0], req.args[1], callParams); resp.result = {}
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "f3",
+    "returnType" : {
+        "tag" : "primitive"
+    },
+    "argDefs" : [
+        {
+            "name" : "num",
+            "argType" : {
+                "tag" : "primitive"
+            }
+        },
+        {
+            "name" : "callback",
+            "argType" : {
+                "tag" : "callback",
+                "callback" : {
+                    "argDefs" : [
+                        {
+                            "name" : "arg0",
+                            "argType" : {
+                                "tag" : "primitive"
+                            }
+                        },
+                        {
+                            "name" : "arg1",
+                            "argType" : {
+                                "tag" : "primitive"
+                            }
                         }
-                        next();
-                    });
-        
-                    h.onEvent('callbackSrv', 'response', (args) => {
-                        const [res] = args;
-                        resolve(res);
-                    });
-                    h.onEvent('errorHandlingSrv', 'error', (args) => {
-                        const [err] = args;
-                        reject(err);
-                    });
-                })
-                .handleScriptError(reject)
-                .handleTimeout(() => {
-                    reject('Request timed out for f3');
-                })
-
-                if (config && config.ttl) {
-                    r.withTTL(config.ttl)
+                    ],
+                    "returnType" : {
+                        "tag" : "void"
+                    }
                 }
-
-                request = r.build();
-    });
-    peer.internals.initiateFlow(request!);
-    return promise;
+            }
+        }
+    ],
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
 }
 
  
@@ -518,25 +434,9 @@ export function f3(...args: any) {
 export function callBackZeroArgs(callback: (callParams: CallParams<null>) => void, config?: {ttl?: number}): Promise<void>;
 export function callBackZeroArgs(peer: FluencePeer, callback: (callParams: CallParams<null>) => void, config?: {ttl?: number}): Promise<void>;
 export function callBackZeroArgs(...args: any) {
-    let peer: FluencePeer;
-    let callback: any;
-    let config: any;
-    if (FluencePeer.isInstance(args[0])) {
-        peer = args[0];
-        callback = args[1];
-        config = args[2];
-    } else {
-        peer = Fluence.getPeer();
-        callback = args[0];
-        config = args[1];
-    }
 
-    let request: RequestFlow;
-    const promise = new Promise<void>((resolve, reject) => {
-        const r = new RequestFlowBuilder()
-                .disableInjections()
-                .withRawScript(`
-                    (xor
+    let script = `
+                        (xor
                      (seq
                       (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
                       (xor
@@ -546,45 +446,39 @@ export function callBackZeroArgs(...args: any) {
                      )
                      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
                     )
-                `,
-                )
-                .configHandler((h) => {
-                    h.on('getDataSrv', '-relay-', () => {
-                        return peer.getStatus().relayPeerId;
-                    });
-                    h.use((req, resp, next) => {
-                        if(req.serviceId === 'callbackSrv' && req.fnName === 'callback') {
-                            const callParams = {
-                                ...req.particleContext,
-                                tetraplets: {
-                                    
-                                },
-                            };
-                            resp.retCode = ResultCodes.success;
-                            callback(callParams); resp.result = {}
-                        }
-                        next();
-                    });
-        
-                    h.onEvent('callbackSrv', 'response', (args) => {
-
-                    });
-                    h.onEvent('errorHandlingSrv', 'error', (args) => {
-                        const [err] = args;
-                        reject(err);
-                    });
-                })
-                .handleScriptError(reject)
-                .handleTimeout(() => {
-                    reject('Request timed out for callBackZeroArgs');
-                })
-
-                if (config && config.ttl) {
-                    r.withTTL(config.ttl)
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "callBackZeroArgs",
+    "returnType" : {
+        "tag" : "void"
+    },
+    "argDefs" : [
+        {
+            "name" : "callback",
+            "argType" : {
+                "tag" : "callback",
+                "callback" : {
+                    "argDefs" : [
+                    ],
+                    "returnType" : {
+                        "tag" : "void"
+                    }
                 }
-
-                request = r.build();
-    });
-    peer.internals.initiateFlow(request!);
-    return Promise.race([promise, Promise.resolve()]);
+            }
+        }
+    ],
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
 }
