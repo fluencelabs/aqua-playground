@@ -8,6 +8,6 @@ export async function callArrowCall(): Promise<string> {
             let result = 'Hello, ' + a + '!';
             resolve(result);
             return result;
-        });
+        },  {ttl: 10000});
     });
 }
