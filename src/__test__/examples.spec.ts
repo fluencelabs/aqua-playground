@@ -12,7 +12,7 @@ import { parCall } from '../examples/parCall';
 import { complexCall } from '../examples/complex';
 import { constantsCall } from '../examples/constantsCall';
 import { returnNilCall, returnNoneCall, streamCall } from '../examples/streamCall';
-import { topologyCall } from '../examples/topologyCall';
+import {topologyBug205Call, topologyCall} from '../examples/topologyCall';
 import { foldJoinCall } from '../examples/foldJoinCall';
 import { registerHandlers, returnNull, returnOptionalCall, useOptionalCall } from '../examples/useOptionalCall';
 import { viaCall } from '../examples/viaCall';
@@ -30,9 +30,11 @@ import { multiReturnCall } from '../examples/multiReturnCall';
 import { declareCall } from '../examples/declareCall';
 import { genOptions } from '../examples/optionsCall';
 import { relays } from '../config';
+import {closuresCall} from "../examples/closures";
+import {topologyBug205} from "../compiled/examples/topology";
 
-var selfPeerId;
-var peer2;
+var selfPeerId: string;
+var peer2: FluencePeer;
 
 // setLogLevel('trace');
 
@@ -134,6 +136,13 @@ describe('Testing examples', () => {
     it('topology.aqua', async () => {
         let topologyResult = await topologyCall(peer2);
         expect(topologyResult).toBe('finish');
+    });
+
+    it('topology.aqua bug 205', async () => {
+        let topologyResult = await topologyBug205Call(peer2);
+        const peerId2 = peer2.getStatus().relayPeerId
+        const res: string[] = [peerId2]
+        expect(topologyResult).toStrictEqual(res);
     });
 
     it('foldJoin.aqua', async () => {

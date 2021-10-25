@@ -1,3 +1,5 @@
+import "@fluencelabs/aqua-lib/builtin.aqua"
+
 service Testo("testo"):
     getString: string -> string
 
@@ -11,3 +13,14 @@ func topologyTest(me: string, myRelay: string, friend: string, friendRelay: stri
     par LocalPrint.print("my string in par")
     LocalPrint.print(str2)
     <- "finish"
+
+func topologyBug205(node_id: string, n2: ?string) -> []string:
+  nodes: *PeerId
+  on node_id:
+    a <- Op.identity(n2)
+    nodes <<- a!
+  on node_id:
+      for n <- nodes par:
+        on n:
+          Peer.identify()
+  <- nodes
