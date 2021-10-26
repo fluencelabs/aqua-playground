@@ -142,9 +142,15 @@ export function returnNil(...args: any) {
     let script = `
                         (xor
                      (seq
-                      (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+                      (seq
+                       (seq
+                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+                        (call %init_peer_id% ("op" "identity") [$valueNil] valueNil-0)
+                       )
+                       (ap valueNil-0 $relayNil)
+                      )
                       (xor
-                       (call %init_peer_id% ("callbackSrv" "response") [$valueNil])
+                       (call %init_peer_id% ("callbackSrv" "response") [$relayNil])
                        (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
                       )
                      )

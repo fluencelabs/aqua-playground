@@ -136,7 +136,8 @@ describe('Testing examples', () => {
 
     it('streamCan.aqua', async () => {
         let streamCanResult = await streamCanCall();
-        expect(streamCanResult).toBe([["a"], ["b"], []]);
+        expect(streamCanResult).toBe([["b"], []]);
+        // expect(streamCanResult).toBe([["a"], ["b"], []]);
     });
 
     it('topology.aqua', async () => {
