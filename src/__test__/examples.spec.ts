@@ -32,6 +32,7 @@ import { genOptions } from '../examples/optionsCall';
 import { relays } from '../config';
 import {closuresCall} from "../examples/closures";
 import {topologyBug205} from "../compiled/examples/topology";
+import {streamCanCall} from "../examples/streamCan";
 
 var selfPeerId: string;
 var peer2: FluencePeer;
@@ -131,6 +132,11 @@ describe('Testing examples', () => {
         expect(returnNilResult).toStrictEqual([]);
         let returnNoneResult = await returnNoneCall();
         expect(returnNoneResult).toBe(null);
+    });
+
+    it('streamCan.aqua', async () => {
+        let streamCanResult = await streamCanCall();
+        expect(streamCanResult).toBe([["a"], ["b"], []]);
     });
 
     it('topology.aqua', async () => {

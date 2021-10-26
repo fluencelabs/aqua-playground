@@ -1,0 +1,23 @@
+func toOpt(s: string) -> ?string:
+  str: ?string
+  str <<- s
+  <- str
+
+-- func accumRes() -> *string:
+--   res_accum: *string
+--   a <- toOpt("a")
+--   res_accum <<- a
+--   res_accum <- toOpt("b")
+--   res_accum <<- nil
+--   <- res_accum
+
+func accumRes(a: string, b: string) -> []?string:
+  res_accum: *?string
+  str: ?string
+  str <<- a
+  str2: ?string
+  str2 <<- b
+  res_accum <<- str
+  res_accum <<- str2
+  res_accum <<- nil
+  <- res_accum
