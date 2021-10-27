@@ -5,9 +5,8 @@ func toOpt(s: string) -> ?string:
 
 func accumRes() -> *?string:
   res_accum: *?string
--- todo: add when 277 fixed
---  a <- toOpt("a")
---  res_accum <<- a
+  a <- toOpt("a")
+  res_accum <<- a
   res_accum <- toOpt("b")
   res_accum <<- nil
   <- res_accum
