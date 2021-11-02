@@ -12,6 +12,9 @@ export function registerHandlers(): void {
         getStr2: (arg0) => {
             return arg0;
         },
+        checkU32: (arg) => {
+
+        }
     });
 }
 
