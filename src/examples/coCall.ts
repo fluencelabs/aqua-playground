@@ -14,6 +14,6 @@ export async function coCall(): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
         parFunc(relayPeerId, (c) => {
             resolve(c.external_addresses);
-        }, {ttl: 10000});
+        }, {ttl: 15000});
     });
 }
