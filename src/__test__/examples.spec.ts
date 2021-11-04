@@ -186,8 +186,9 @@ describe('Testing examples', () => {
 
     it('closures.aqua', async () => {
         let closuresResult = await closuresCall();
-        let res = ["/ip4/164.90.164.229/tcp/7001", "/ip4/164.90.164.229/tcp/9001/ws"]
-        expect(closuresResult).toStrictEqual(["in", res]);
+        let res1 = ["/ip4/164.90.164.229/tcp/7001", "/ip4/164.90.164.229/tcp/9001/ws"]
+        let res2 = ["in", "/ip4/164.90.164.229/tcp/7001"]
+        expect(closuresResult).toStrictEqual(["in", res1, res2]);
     });
 
     it('assignment.aqua', async () => {
