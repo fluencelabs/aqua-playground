@@ -184,6 +184,12 @@ describe('Testing examples', () => {
         expect(nestedFuncsResult).toBe('some-str');
     });
 
+    it('closures.aqua', async () => {
+        let closuresResult = await closuresCall();
+        let res = ["/ip4/164.90.164.229/tcp/7001", "/ip4/164.90.164.229/tcp/9001/ws"]
+        expect(closuresResult).toStrictEqual(["in", res]);
+    });
+
     it('assignment.aqua', async () => {
         let assignmentResult = await assignmentCall();
         expect(assignmentResult).toStrictEqual(['abc', 'hello']);
