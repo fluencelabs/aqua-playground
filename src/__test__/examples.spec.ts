@@ -31,7 +31,6 @@ import { declareCall } from '../examples/declareCall';
 import { genOptions } from '../examples/optionsCall';
 import { relays } from '../config';
 import {closuresCall} from "../examples/closures";
-import {topologyBug205} from "../compiled/examples/topology";
 import {streamCanCall} from "../examples/streamCan";
 import {streamCallbackCall} from "../examples/streamCallback";
 
@@ -187,7 +186,7 @@ describe('Testing examples', () => {
     it('closures.aqua', async () => {
         let closuresResult = await closuresCall();
         let res1 = ["/ip4/164.90.164.229/tcp/7001", "/ip4/164.90.164.229/tcp/9001/ws"]
-        let res2 = ["in", "/ip4/164.90.164.229/tcp/7001"]
+        let res2 = ["/ip4/164.90.164.229/tcp/7001", "in"]
         expect(closuresResult).toStrictEqual(["in", res1, res2]);
     });
 
