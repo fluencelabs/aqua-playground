@@ -1,6 +1,8 @@
 import { Fluence } from '@fluencelabs/fluence';
 import { viaArr, viaOpt, viaStream, registerCustomId } from '../compiled/examples/via';
-import { relays } from '../config';
+import { config } from '../config';
+
+const relays = config.relays
 
 export async function viaCall(): Promise<string[][]> {
     const relayPeerId = Fluence.getPeer().getStatus().relayPeerId;

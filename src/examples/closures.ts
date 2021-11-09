@@ -1,6 +1,8 @@
 import { Fluence } from '@fluencelabs/fluence';
 import { closureIn, closureOut, closureBig, registerLocalSrv } from '../compiled/examples/closures';
-import { relays } from '../config'
+import { config } from '../config'
+
+const relays = config.relays
 
 export async function closuresCall(): Promise<[string, string[], [string, string]]> {
     const relayPeerId = Fluence.getPeer().getStatus().relayPeerId;

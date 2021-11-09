@@ -1,5 +1,4 @@
-import { Fluence, FluencePeer, setLogLevel } from '@fluencelabs/fluence';
-import { krasnodar, testNet } from '@fluencelabs/fluence-network-environment';
+import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import { registerPrintln } from '../compiled/examples/println';
 import { callArrowCall } from '../examples/callArrowCall';
 import { dataAliasCall } from '../examples/dataAliasCall';
@@ -29,13 +28,16 @@ import { literalCall } from '../examples/returnLiteralCall';
 import { multiReturnCall } from '../examples/multiReturnCall';
 import { declareCall } from '../examples/declareCall';
 import { genOptions } from '../examples/optionsCall';
-import { relays } from '../config';
+import { config } from '../config';
 import {closuresCall} from "../examples/closures";
 import {streamCanCall} from "../examples/streamCan";
 import {streamCallbackCall} from "../examples/streamCallback";
 
 var selfPeerId: string;
 var peer2: FluencePeer;
+
+
+const relays = config.relays
 
 // setLogLevel('trace');
 
@@ -70,7 +72,7 @@ describe('Testing examples', () => {
 
     it('fold.aqua', async () => {
         let foldCallResult = await foldCall();
-        expect(foldCallResult).toStrictEqual(['/ip4/164.90.171.139/tcp/7770', '/ip4/164.90.171.139/tcp/9990/ws']);
+        expect(foldCallResult).toStrictEqual(config.externalAddressesRelay1);
     });
 
     it('if.aqua', async () => {
@@ -94,7 +96,7 @@ describe('Testing examples', () => {
 
     it('on.aqua', async () => {
         let onCallResult = await onCall();
-        expect(onCallResult).toStrictEqual(['/ip4/164.90.171.139/tcp/7770', '/ip4/164.90.171.139/tcp/9990/ws']);
+        expect(onCallResult).toStrictEqual(config.externalAddressesRelay1);
     });
 
     it('dataAlias.aqua', async () => {
@@ -185,8 +187,8 @@ describe('Testing examples', () => {
 
     it('closures.aqua', async () => {
         let closuresResult = await closuresCall();
-        let res1 = ["/ip4/164.90.164.229/tcp/7001", "/ip4/164.90.164.229/tcp/9001/ws"]
-        let res2 = ["in", "/ip4/164.90.164.229/tcp/7001"]
+        let res1 = config.externalAddressesRelay2
+        let res2 = ["in", config.externalAddressesRelay2[0]]
         expect(closuresResult).toStrictEqual(["in", res1, res2]);
     });
 
@@ -203,13 +205,13 @@ describe('Testing examples', () => {
     it('tryCatch.aqua', async () => {
         let tryCatchResult = await tryCatchCall();
         expect(tryCatchResult).toHaveLength(2);
-        expect(tryCatchResult[0]).toMatch("Error: Service with id 'unex' not found");
-        expect(tryCatchResult[1]).toBe('/ip4/164.90.171.139/tcp/7770');
+        expect(tryCatchResult[0]).toMatch(config.tryCatchError);
+        expect(tryCatchResult[1]).toBe(config.externalAddressesRelay1[0]);
     });
 
     it('coCall.aqua', async () => {
         let coCallResult = await coCall();
-        expect(coCallResult).toStrictEqual(['/ip4/164.90.171.139/tcp/7770', '/ip4/164.90.171.139/tcp/9990/ws']);
+        expect(coCallResult).toStrictEqual(config.externalAddressesRelay1);
     });
 
     it('passArgsCall.aqua', async () => {
