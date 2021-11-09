@@ -5,8 +5,7 @@ service Op2("op"):
 
 func getTwoResults(relay: string) -> []u64:
   on relay:
-    k <- Op.string_to_b58(%init_peer_id%)
-    nodes <- Kademlia.neighborhood(k, nil, nil)
+    nodes <- Kademlia.neighborhood(%init_peer_id%, nil, nil)
     res: *u64
     for n <- nodes par:
       on n:

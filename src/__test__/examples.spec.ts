@@ -160,7 +160,7 @@ describe('Testing examples', () => {
 
     it('foldJoin.aqua', async () => {
         let foldJoinResult = await foldJoinCall();
-        expect(foldJoinResult).toHaveLength(3);
+        expect(foldJoinResult.length).toBeGreaterThanOrEqual(3)
     });
 
     it('option.aqua', async () => {

@@ -72,36 +72,27 @@ export function getTwoResults(...args: any) {
                         (xor
                          (seq
                           (seq
-                           (seq
+                           (call relay ("kad" "neighborhood") [%init_peer_id% [] []] nodes)
+                           (par
                             (seq
-                             (seq
-                              (call relay ("op" "string_to_b58") [%init_peer_id%] k)
-                              (call relay ("kad" "neighborhood") [k [] []] nodes)
-                             )
-                             (par
-                              (seq
-                               (fold nodes n
-                                (par
-                                 (seq
-                                  (xor
-                                   (call n ("peer" "timestamp_sec") [] $res)
-                                   (null)
-                                  )
-                                  (call relay ("op" "noop") [])
-                                 )
-                                 (next n)
+                             (fold nodes n
+                              (par
+                               (seq
+                                (xor
+                                 (call n ("peer" "timestamp_sec") [] $res)
+                                 (null)
                                 )
+                                (call relay ("op" "noop") [])
                                )
-                               (call relay ("op" "noop") [])
+                               (next n)
                               )
-                              (null)
                              )
+                             (call relay ("op" "noop") [])
                             )
-                            (call relay ("op" "identity") [$res.$.[0]!])
+                            (null)
                            )
-                           (call relay ("op" "identity") [$res.$.[1]!])
                           )
-                          (call relay ("op" "identity") [$res.$.[2]!])
+                          (call relay ("op" "identity") [$res.$.[0]!])
                          )
                          (seq
                           (call -relay- ("op" "noop") [])

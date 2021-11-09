@@ -18,8 +18,8 @@ export const stageConfig = {
 export const testNetConfig = {
     relays: testNet,
     externalAddressesRelay1: ["/ip4/165.227.164.206/tcp/7001", "/ip4/165.227.164.206/tcp/9001/ws"],
-    externalAddressesRelay2: ["/ip4/164.90.164.229/tcp/7001", "/ip4/164.90.164.229/tcp/9001/ws"],
+    externalAddressesRelay2: ["/ip4/142.93.169.49/tcp/7001", "/ip4/142.93.169.49/tcp/9001/ws"],
     tryCatchError: "Local service error, ret_code is 1, error message is '\"Service with id 'unex' not found (function getStr)\"'"
 }
 
-export const config = krasnodarConfig
+export const config = testNetConfig
