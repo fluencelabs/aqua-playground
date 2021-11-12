@@ -1,6 +1,6 @@
 import "@fluencelabs/aqua-lib/builtin.aqua"
 
-func call(a: ?string, node: string) -> ?string, ?string:
+func call(a: ?string, node: string) -> ?string:
   on node:
     res <- Op.identity(a)
   <- res
