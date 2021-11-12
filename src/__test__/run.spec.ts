@@ -9,7 +9,8 @@ describe('Testing run command', () => {
     const addr = krasnodar[2].multiaddr
     const nodeId = krasnodar[3].peerId
     const message = "hello"
-    const func = `\"call(\\\"${message}\\\", \\\"${nodeId}\\\")\"`
+    const message2 = "aaa"
+    const func = `\"call(\\\"${message}\\\", \\\"${message}\\\", \\\"${nodeId}\\\")\"`
     const call = `npm run aqua run -- --addr ${addr} -i cli-run-aqua/caller.aqua -m node_modules/ --func ${func}`
 
     it('run simple command', async () => {
@@ -25,7 +26,8 @@ describe('Testing run command', () => {
 
             // get element before last in output
             const result = stdout.split("\n").slice(-2)[0]
-            if (result === message) {
+            const toCheck = [message, message2].join(",")
+            if (toCheck === message) {
                 console.log("Test passed.")
                 process.exit(0)
             } else {
