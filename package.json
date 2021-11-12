@@ -24,7 +24,8 @@
         "run": "node -r ts-node/register src/index.ts",
         "compile-aqua": "aqua -i ./aqua/ -o ./src/compiled",
         "compile-aqua:air": "aqua -i ./aqua/ -o ./compiled-air -a",
-        "prettify-compiled": "prettier --write src/compiled"
+        "prettify-compiled": "prettier --write src/compiled",
+        "run-aqua": "aqua run --addr /dns4/kras-02.fluence.dev/tcp/19001/wss/p2p/12D3KooWHLxVhUQyAuZe6AHMB29P7wkvTNMn7eDMcsqimJYLKREf -i cli-run-aqua/caller.aqua -m node_modules/ --func \"call(\\\"hello\\\", \\\"12D3KooWKnEqMfYo9zvfHmqTLpLdiHXPe4SVqUWcWHDJdFGrSmcA\\\")\""
     },
     "devDependencies": {
         "@fluencelabs/aqua": "0.3.1-231",
