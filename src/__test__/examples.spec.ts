@@ -74,7 +74,7 @@ describe('Testing examples', () => {
     it('streamRestrictions.aqua', async () => {
         let streamResResult = await streamResCall();
 
-        expect(streamResResult).toBe([[], ["a", "b", "c"]]);
+        expect(streamResResult).toStrictEqual([[], ["a", "b", "c"]]);
     });
 
     it('fold.aqua', async () => {
