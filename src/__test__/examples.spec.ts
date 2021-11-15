@@ -32,6 +32,7 @@ import { config } from '../config';
 import {closuresCall} from "../examples/closures";
 import {streamCanCall} from "../examples/streamCan";
 import {streamCallbackCall} from "../examples/streamCallback";
+import {streamResCall} from "../examples/streamRestrictionsCall";
 
 var selfPeerId: string;
 var peer2: FluencePeer;
@@ -68,6 +69,12 @@ describe('Testing examples', () => {
         let callArrowResult = await callArrowCall();
 
         expect(callArrowResult).toBe('Hello, callArrow call!');
+    });
+
+    it('streamRestrictions.aqua', async () => {
+        let streamResResult = await streamResCall();
+
+        expect(streamResResult).toBe([[], ["a", "b", "c"]]);
     });
 
     it('fold.aqua', async () => {
