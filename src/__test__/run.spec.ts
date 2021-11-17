@@ -13,7 +13,7 @@ describe('Testing run command', () => {
     const func = `\"call(\\\"${message}\\\", \\\"${message}\\\", \\\"${nodeId}\\\")\"`
     const call = `npm run aqua run -- --addr ${addr} -i cli-run-aqua/caller.aqua -m node_modules/ --func ${func}`
 
-    it.skip('run simple command', async () => {
+    it('run simple command', async () => {
         exec(call, (error, stdout, stderr) => {
             if (error) {
                 console.error(`error: ${error.message}`);
