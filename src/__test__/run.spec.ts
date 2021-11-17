@@ -1,4 +1,3 @@
-import {callArrowCall} from "../examples/callArrowCall";
 import {krasnodar, stage, testNet} from '@fluencelabs/fluence-network-environment';
 
 import { exec } from "child_process";
@@ -27,11 +26,11 @@ describe('Testing run command', () => {
             // get element before last in output
             const result = stdout.split("\n").slice(-2)[0]
             const toCheck = [message, message2].join(",")
-            if (toCheck === message) {
+            if (toCheck === result) {
                 console.log("Test passed.")
                 process.exit(0)
             } else {
-                console.log(`Incorrect message returned. Returned: ${result}. Expected: ${message}`)
+                console.log(`Incorrect message returned. Returned: ${result}. Expected: ${toCheck}`)
                 process.exit(1)
             }
         });
