@@ -9,7 +9,7 @@ describe('Testing run command', () => {
     const nodeId = krasnodar[3].peerId
     const message = "hello"
     const message2 = "aaa"
-    const func = `\"call(\\\"${message}\\\", \\\"${message}\\\", \\\"${nodeId}\\\")\"`
+    const func = `\"call(\\\"${message}\\\", \\\"${message2}\\\", \\\"${nodeId}\\\")\"`
     const call = `npm run aqua run -- --addr ${addr} -i cli-run-aqua/caller.aqua -m node_modules/ --func ${func}`
 
     it('run simple command', async () => {
