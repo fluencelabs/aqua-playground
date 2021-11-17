@@ -39,7 +39,7 @@
     },
     "dependencies": {
         "@fluencelabs/aqua-dht-ts": "0.1.36",
-        "@fluencelabs/fluence": "0.14.5",
+        "@fluencelabs/fluence": "0.15.0",
         "@fluencelabs/fluence-network-environment": "^1.0.10",
         "deep-equal": "^2.0.5"
     },
