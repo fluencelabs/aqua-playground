@@ -53,12 +53,19 @@ export function registerOptionString(...args: any) {
 // Functions
  
 
-export function emptyString(config?: {ttl?: number}): Promise<string | null>;
-export function emptyString(peer: FluencePeer, config?: {ttl?: number}): Promise<string | null>;
+export function emptyString(
+    config?: {ttl?: number}
+): Promise<string | null>;
+
+export function emptyString(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<string | null>;
+
 export function emptyString(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
@@ -99,12 +106,19 @@ export function emptyString(...args: any) {
 
  
 
-export function checkEmpty(config?: {ttl?: number}): Promise<string>;
-export function checkEmpty(peer: FluencePeer, config?: {ttl?: number}): Promise<string>;
+export function checkEmpty(
+    config?: {ttl?: number}
+): Promise<string>;
+
+export function checkEmpty(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<string>;
+
 export function checkEmpty(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq
@@ -148,12 +162,21 @@ export function checkEmpty(...args: any) {
 
  
 
-export function stringAsOption(str: string, config?: {ttl?: number}): Promise<string | null>;
-export function stringAsOption(peer: FluencePeer, str: string, config?: {ttl?: number}): Promise<string | null>;
+export function stringAsOption(
+    str: string,
+    config?: {ttl?: number}
+): Promise<string | null>;
+
+export function stringAsOption(
+    peer: FluencePeer,
+    str: string,
+    config?: {ttl?: number}
+): Promise<string | null>;
+
 export function stringAsOption(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq
@@ -206,12 +229,21 @@ export function stringAsOption(...args: any) {
 
  
 
-export function checkNoneEmpty(str: string, config?: {ttl?: number}): Promise<string>;
-export function checkNoneEmpty(peer: FluencePeer, str: string, config?: {ttl?: number}): Promise<string>;
+export function checkNoneEmpty(
+    str: string,
+    config?: {ttl?: number}
+): Promise<string>;
+
+export function checkNoneEmpty(
+    peer: FluencePeer,
+    str: string,
+    config?: {ttl?: number}
+): Promise<string>;
+
 export function checkNoneEmpty(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq

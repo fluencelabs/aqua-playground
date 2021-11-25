@@ -19,12 +19,21 @@ import {
 // Functions
  
 
-export function iterateAndPrint(strings: string[], config?: {ttl?: number}): Promise<void>;
-export function iterateAndPrint(peer: FluencePeer, strings: string[], config?: {ttl?: number}): Promise<void>;
+export function iterateAndPrint(
+    strings: string[],
+    config?: {ttl?: number}
+): Promise<void>;
+
+export function iterateAndPrint(
+    peer: FluencePeer,
+    strings: string[],
+    config?: {ttl?: number}
+): Promise<void>;
+
 export function iterateAndPrint(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
@@ -71,12 +80,23 @@ export function iterateAndPrint(...args: any) {
 
  
 
-export function iterateAndPrintParallel(nodes: string[], c: (arg0: { external_addresses: string[]; }, callParams: CallParams<'arg0'>) => void | Promise<void>, config?: {ttl?: number}): Promise<void>;
-export function iterateAndPrintParallel(peer: FluencePeer, nodes: string[], c: (arg0: { external_addresses: string[]; }, callParams: CallParams<'arg0'>) => void | Promise<void>, config?: {ttl?: number}): Promise<void>;
+export function iterateAndPrintParallel(
+    nodes: string[],
+    c: (arg0: { external_addresses: string[]; }, callParams: CallParams<'arg0'>) => void | Promise<void>,
+    config?: {ttl?: number}
+): Promise<void>;
+
+export function iterateAndPrintParallel(
+    peer: FluencePeer,
+    nodes: string[],
+    c: (arg0: { external_addresses: string[]; }, callParams: CallParams<'arg0'>) => void | Promise<void>,
+    config?: {ttl?: number}
+): Promise<void>;
+
 export function iterateAndPrintParallel(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)

@@ -19,12 +19,21 @@ import {
 // Functions
  
 
-export function ifElseCall(condition: boolean, config?: {ttl?: number}): Promise<void>;
-export function ifElseCall(peer: FluencePeer, condition: boolean, config?: {ttl?: number}): Promise<void>;
+export function ifElseCall(
+    condition: boolean,
+    config?: {ttl?: number}
+): Promise<void>;
+
+export function ifElseCall(
+    peer: FluencePeer,
+    condition: boolean,
+    config?: {ttl?: number}
+): Promise<void>;
+
 export function ifElseCall(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
@@ -74,12 +83,21 @@ export function ifElseCall(...args: any) {
 
  
 
-export function ifElseNumCall(condition: number, config?: {ttl?: number}): Promise<void>;
-export function ifElseNumCall(peer: FluencePeer, condition: number, config?: {ttl?: number}): Promise<void>;
+export function ifElseNumCall(
+    condition: number,
+    config?: {ttl?: number}
+): Promise<void>;
+
+export function ifElseNumCall(
+    peer: FluencePeer,
+    condition: number,
+    config?: {ttl?: number}
+): Promise<void>;
+
 export function ifElseNumCall(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)

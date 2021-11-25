@@ -203,12 +203,21 @@ export function registerMoreMembers(...args: any) {
 // Functions
  
 
-export function f1(callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void | Promise<void>, config?: {ttl?: number}): Promise<void>;
-export function f1(peer: FluencePeer, callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void | Promise<void>, config?: {ttl?: number}): Promise<void>;
+export function f1(
+    callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void | Promise<void>,
+    config?: {ttl?: number}
+): Promise<void>;
+
+export function f1(
+    peer: FluencePeer,
+    callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void | Promise<void>,
+    config?: {ttl?: number}
+): Promise<void>;
+
 export function f1(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
                       (xor
@@ -269,12 +278,23 @@ export function f1(...args: any) {
 
  
 
-export function f2(num: number, callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void | Promise<void>, config?: {ttl?: number}): Promise<void>;
-export function f2(peer: FluencePeer, num: number, callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void | Promise<void>, config?: {ttl?: number}): Promise<void>;
+export function f2(
+    num: number,
+    callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void | Promise<void>,
+    config?: {ttl?: number}
+): Promise<void>;
+
+export function f2(
+    peer: FluencePeer,
+    num: number,
+    callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void | Promise<void>,
+    config?: {ttl?: number}
+): Promise<void>;
+
 export function f2(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
@@ -344,12 +364,23 @@ export function f2(...args: any) {
 
  
 
-export function f3(num: number, callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void | Promise<void>, config?: {ttl?: number}): Promise<string>;
-export function f3(peer: FluencePeer, num: number, callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void | Promise<void>, config?: {ttl?: number}): Promise<string>;
+export function f3(
+    num: number,
+    callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void | Promise<void>,
+    config?: {ttl?: number}
+): Promise<string>;
+
+export function f3(
+    peer: FluencePeer,
+    num: number,
+    callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void | Promise<void>,
+    config?: {ttl?: number}
+): Promise<string>;
+
 export function f3(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq
@@ -425,12 +456,21 @@ export function f3(...args: any) {
 
  
 
-export function callBackZeroArgs(callback: (callParams: CallParams<null>) => void | Promise<void>, config?: {ttl?: number}): Promise<void>;
-export function callBackZeroArgs(peer: FluencePeer, callback: (callParams: CallParams<null>) => void | Promise<void>, config?: {ttl?: number}): Promise<void>;
+export function callBackZeroArgs(
+    callback: (callParams: CallParams<null>) => void | Promise<void>,
+    config?: {ttl?: number}
+): Promise<void>;
+
+export function callBackZeroArgs(
+    peer: FluencePeer,
+    callback: (callParams: CallParams<null>) => void | Promise<void>,
+    config?: {ttl?: number}
+): Promise<void>;
+
 export function callBackZeroArgs(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
                       (xor

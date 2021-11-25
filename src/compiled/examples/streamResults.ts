@@ -53,12 +53,21 @@ export function registerDTGetter(...args: any) {
 // Functions
  
 
-export function use_name1(name: string, config?: {ttl?: number}): Promise<string>;
-export function use_name1(peer: FluencePeer, name: string, config?: {ttl?: number}): Promise<string>;
+export function use_name1(
+    name: string,
+    config?: {ttl?: number}
+): Promise<string>;
+
+export function use_name1(
+    peer: FluencePeer,
+    name: string,
+    config?: {ttl?: number}
+): Promise<string>;
+
 export function use_name1(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq
@@ -106,12 +115,21 @@ export function use_name1(...args: any) {
 
  
 
-export function use_name2(name: string, config?: {ttl?: number}): Promise<string[]>;
-export function use_name2(peer: FluencePeer, name: string, config?: {ttl?: number}): Promise<string[]>;
+export function use_name2(
+    name: string,
+    config?: {ttl?: number}
+): Promise<string[]>;
+
+export function use_name2(
+    peer: FluencePeer,
+    name: string,
+    config?: {ttl?: number}
+): Promise<string[]>;
+
 export function use_name2(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq

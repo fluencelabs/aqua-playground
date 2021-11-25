@@ -19,12 +19,21 @@ import {
 // Functions
  
 
-export function getPeerExternalAddresses(otherNodePeerId: string, config?: {ttl?: number}): Promise<string[]>;
-export function getPeerExternalAddresses(peer: FluencePeer, otherNodePeerId: string, config?: {ttl?: number}): Promise<string[]>;
+export function getPeerExternalAddresses(
+    otherNodePeerId: string,
+    config?: {ttl?: number}
+): Promise<string[]>;
+
+export function getPeerExternalAddresses(
+    peer: FluencePeer,
+    otherNodePeerId: string,
+    config?: {ttl?: number}
+): Promise<string[]>;
+
 export function getPeerExternalAddresses(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq
@@ -84,12 +93,23 @@ export function getPeerExternalAddresses(...args: any) {
 
  
 
-export function getDistantAddresses(target: string, viaNode: string, config?: {ttl?: number}): Promise<string[]>;
-export function getDistantAddresses(peer: FluencePeer, target: string, viaNode: string, config?: {ttl?: number}): Promise<string[]>;
+export function getDistantAddresses(
+    target: string,
+    viaNode: string,
+    config?: {ttl?: number}
+): Promise<string[]>;
+
+export function getDistantAddresses(
+    peer: FluencePeer,
+    target: string,
+    viaNode: string,
+    config?: {ttl?: number}
+): Promise<string[]>;
+
 export function getDistantAddresses(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq

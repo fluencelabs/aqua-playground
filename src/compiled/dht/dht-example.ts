@@ -19,12 +19,23 @@ import {
 // Functions
  
 
-export function put_value(initial_peer: string, value: string, config?: {ttl?: number}): Promise<string>;
-export function put_value(peer: FluencePeer, initial_peer: string, value: string, config?: {ttl?: number}): Promise<string>;
+export function put_value(
+    initial_peer: string,
+    value: string,
+    config?: {ttl?: number}
+): Promise<string>;
+
+export function put_value(
+    peer: FluencePeer,
+    initial_peer: string,
+    value: string,
+    config?: {ttl?: number}
+): Promise<string>;
+
 export function put_value(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq
@@ -34,41 +45,35 @@ export function put_value(...args: any) {
                         )
                         (call %init_peer_id% ("getDataSrv" "value") [] value)
                        )
-                       (par
-                        (seq
+                       (xor
+                        (par
                          (seq
-                          (call -relay- ("op" "noop") [])
-                          (xor
-                           (seq
-                            (call initial_peer ("op" "string_to_b58") ["some-const3"] k)
-                            (call initial_peer ("kad" "neighborhood") [k [] []] nodes)
-                           )
+                          (seq
+                           (call -relay- ("op" "string_to_b58") [initial_peer] k)
+                           (call -relay- ("kad" "neighborhood") [k [] []] nodes)
+                          )
+                          (call %init_peer_id% ("op" "noop") [])
+                         )
+                         (fold nodes n
+                          (par
                            (seq
                             (call -relay- ("op" "noop") [])
-                            (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
-                           )
-                          )
-                         )
-                         (call %init_peer_id% ("op" "noop") [])
-                        )
-                        (fold nodes n
-                         (par
-                          (seq
-                           (call -relay- ("op" "noop") [])
-                           (xor
-                            (seq
+                            (xor
                              (seq
-                              (call n ("peer" "timestamp_sec") [] t)
-                              (call n ("aqua-dht" "register_key") ["some-const3" t false 0])
+                              (seq
+                               (call n ("peer" "timestamp_sec") [] t)
+                               (call n ("aqua-dht" "register_key") [initial_peer t false 0])
+                              )
+                              (call n ("aqua-dht" "put_value") [initial_peer value t [] [] 0])
                              )
-                             (call n ("aqua-dht" "put_value") ["some-const3" value t [] [] 0])
+                             (null)
                             )
-                            (null)
                            )
+                           (next n)
                           )
-                          (next n)
                          )
                         )
+                        (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
                        )
                       )
                       (xor
@@ -116,12 +121,29 @@ export function put_value(...args: any) {
 
  
 
-export function registerKeyPutValue(node_id: string, key: string, value: string, relay_id: string | null, service_id: string | null, config?: {ttl?: number}): Promise<string[]>;
-export function registerKeyPutValue(peer: FluencePeer, node_id: string, key: string, value: string, relay_id: string | null, service_id: string | null, config?: {ttl?: number}): Promise<string[]>;
+export function registerKeyPutValue(
+    node_id: string,
+    key: string,
+    value: string,
+    relay_id: string | null,
+    service_id: string | null,
+    config?: {ttl?: number}
+): Promise<string[]>;
+
+export function registerKeyPutValue(
+    peer: FluencePeer,
+    node_id: string,
+    key: string,
+    value: string,
+    relay_id: string | null,
+    service_id: string | null,
+    config?: {ttl?: number}
+): Promise<string[]>;
+
 export function registerKeyPutValue(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq
@@ -143,17 +165,8 @@ export function registerKeyPutValue(...args: any) {
                        (par
                         (seq
                          (seq
-                          (call -relay- ("op" "noop") [])
-                          (xor
-                           (seq
-                            (call key ("op" "string_to_b58") [node_id] k)
-                            (call key ("kad" "neighborhood") [k [] []] nodes)
-                           )
-                           (seq
-                            (call -relay- ("op" "noop") [])
-                            (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
-                           )
-                          )
+                          (call %init_peer_id% ("op" "string_to_b58") [key] k)
+                          (call %init_peer_id% ("kad" "neighborhood") [k [] []] nodes)
                          )
                          (call %init_peer_id% ("op" "noop") [])
                         )
@@ -165,7 +178,7 @@ export function registerKeyPutValue(...args: any) {
                             (call n ("peer" "timestamp_sec") [] t)
                             (seq
                              (call -relay- ("op" "noop") [])
-                             (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+                             (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
                             )
                            )
                           )
@@ -176,10 +189,10 @@ export function registerKeyPutValue(...args: any) {
                       )
                       (xor
                        (call %init_peer_id% ("callbackSrv" "response") [nodes])
-                       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
+                       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
                       )
                      )
-                     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 4])
+                     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
                     )
     `
     return callFunction(
@@ -237,44 +250,38 @@ export function registerKeyPutValue(...args: any) {
 
  
 
-export function getNeighbours(node_id: string, topic: string, config?: {ttl?: number}): Promise<string[]>;
-export function getNeighbours(peer: FluencePeer, node_id: string, topic: string, config?: {ttl?: number}): Promise<string[]>;
+export function getNeighbours(
+    topic: string,
+    config?: {ttl?: number}
+): Promise<string[]>;
+
+export function getNeighbours(
+    peer: FluencePeer,
+    topic: string,
+    config?: {ttl?: number}
+): Promise<string[]>;
+
 export function getNeighbours(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq
                         (seq
-                         (seq
-                          (seq
-                           (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-                           (call %init_peer_id% ("getDataSrv" "node_id") [] node_id)
-                          )
-                          (call %init_peer_id% ("getDataSrv" "topic") [] topic)
-                         )
-                         (call -relay- ("op" "noop") [])
+                         (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+                         (call %init_peer_id% ("getDataSrv" "topic") [] topic)
                         )
-                        (xor
-                         (seq
-                          (call node_id ("op" "string_to_b58") [topic] k)
-                          (call node_id ("kad" "neighborhood") [k [] []] nodes)
-                         )
-                         (seq
-                          (call -relay- ("op" "noop") [])
-                          (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
-                         )
-                        )
+                        (call %init_peer_id% ("op" "string_to_b58") [topic] k)
                        )
-                       (call -relay- ("op" "noop") [])
+                       (call %init_peer_id% ("kad" "neighborhood") [k [] []] nodes)
                       )
                       (xor
                        (call %init_peer_id% ("callbackSrv" "response") [nodes])
-                       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+                       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
                       )
                      )
-                     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
+                     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
                     )
     `
     return callFunction(
@@ -286,12 +293,6 @@ export function getNeighbours(...args: any) {
     },
     "argDefs" : [
         {
-            "name" : "node_id",
-            "argType" : {
-                "tag" : "primitive"
-            }
-        },
-        {
             "name" : "topic",
             "argType" : {
                 "tag" : "primitive"
@@ -314,90 +315,69 @@ export function getNeighbours(...args: any) {
 
  
 
-export function findSubscribers(node_id: string, topic: string, config?: {ttl?: number}): Promise<{ peer_id: string; relay_id: string[]; service_id: string[]; set_by: string; timestamp_created: number; value: string; weight: number; }[]>;
-export function findSubscribers(peer: FluencePeer, node_id: string, topic: string, config?: {ttl?: number}): Promise<{ peer_id: string; relay_id: string[]; service_id: string[]; set_by: string; timestamp_created: number; value: string; weight: number; }[]>;
+export function findSubscribers(
+    topic: string,
+    config?: {ttl?: number}
+): Promise<{ peer_id: string; relay_id: string[]; service_id: string[]; set_by: string; timestamp_created: number; value: string; weight: number; }[]>;
+
+export function findSubscribers(
+    peer: FluencePeer,
+    topic: string,
+    config?: {ttl?: number}
+): Promise<{ peer_id: string; relay_id: string[]; service_id: string[]; set_by: string; timestamp_created: number; value: string; weight: number; }[]>;
+
 export function findSubscribers(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq
-                        (seq
-                         (seq
-                          (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-                          (call %init_peer_id% ("getDataSrv" "node_id") [] node_id)
-                         )
-                         (call %init_peer_id% ("getDataSrv" "topic") [] topic)
-                        )
-                        (new $res
+                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+                        (call %init_peer_id% ("getDataSrv" "topic") [] topic)
+                       )
+                       (new $res
+                        (xor
                          (seq
                           (seq
                            (seq
-                            (seq
-                             (call -relay- ("op" "noop") [])
-                             (xor
-                              (seq
-                               (call node_id ("op" "string_to_b58") [topic] k)
-                               (call node_id ("kad" "neighborhood") [k [] []] nodes)
-                              )
-                              (seq
-                               (seq
-                                (call -relay- ("op" "noop") [])
-                                (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
-                               )
-                               (call -relay- ("op" "noop") [])
-                              )
-                             )
-                            )
-                            (call -relay- ("op" "noop") [])
+                            (call -relay- ("op" "string_to_b58") [topic] k)
+                            (call -relay- ("kad" "neighborhood") [k [] []] nodes)
                            )
                            (par
                             (seq
-                             (seq
-                              (call -relay- ("op" "noop") [])
-                              (fold nodes n
-                               (par
-                                (seq
-                                 (xor
-                                  (seq
-                                   (call n ("peer" "timestamp_sec") [] t)
-                                   (call n ("aqua-dht" "get_values") [topic t] $res)
-                                  )
-                                  (null)
+                             (fold nodes n
+                              (par
+                               (seq
+                                (xor
+                                 (seq
+                                  (call n ("peer" "timestamp_sec") [] t)
+                                  (call n ("aqua-dht" "get_values") [topic t] $res)
                                  )
-                                 (call node_id ("op" "noop") [])
+                                 (null)
                                 )
-                                (seq
-                                 (call -relay- ("op" "noop") [])
-                                 (next n)
-                                )
+                                (call -relay- ("op" "noop") [])
                                )
+                               (next n)
                               )
                              )
-                             (call node_id ("op" "noop") [])
+                             (call -relay- ("op" "noop") [])
                             )
                             (null)
                            )
                           )
-                          (xor
-                           (call node_id ("aqua-dht" "merge_two") [$res.$.[0].result! $res.$.[1].result!] v)
-                           (seq
-                            (call -relay- ("op" "noop") [])
-                            (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
-                           )
-                          )
+                          (call -relay- ("aqua-dht" "merge_two") [$res.$.[0].result! $res.$.[1].result!] v)
                          )
+                         (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
                         )
                        )
-                       (call -relay- ("op" "noop") [])
                       )
                       (xor
                        (call %init_peer_id% ("callbackSrv" "response") [v.$.result!])
-                       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
+                       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
                       )
                      )
-                     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 4])
+                     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
                     )
     `
     return callFunction(
@@ -409,12 +389,6 @@ export function findSubscribers(...args: any) {
     },
     "argDefs" : [
         {
-            "name" : "node_id",
-            "argType" : {
-                "tag" : "primitive"
-            }
-        },
-        {
             "name" : "topic",
             "argType" : {
                 "tag" : "primitive"
@@ -437,21 +411,33 @@ export function findSubscribers(...args: any) {
 
  
 
-export function initTopicAndSubscribe(node_id: string, topic: string, value: string, relay_id: string | null, service_id: string | null, config?: {ttl?: number}): Promise<void>;
-export function initTopicAndSubscribe(peer: FluencePeer, node_id: string, topic: string, value: string, relay_id: string | null, service_id: string | null, config?: {ttl?: number}): Promise<void>;
+export function initTopicAndSubscribe(
+    topic: string,
+    value: string,
+    relay_id: string | null,
+    service_id: string | null,
+    config?: {ttl?: number}
+): Promise<void>;
+
+export function initTopicAndSubscribe(
+    peer: FluencePeer,
+    topic: string,
+    value: string,
+    relay_id: string | null,
+    service_id: string | null,
+    config?: {ttl?: number}
+): Promise<void>;
+
 export function initTopicAndSubscribe(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq
                         (seq
                          (seq
-                          (seq
-                           (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-                           (call %init_peer_id% ("getDataSrv" "node_id") [] node_id)
-                          )
+                          (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
                           (call %init_peer_id% ("getDataSrv" "topic") [] topic)
                          )
                          (call %init_peer_id% ("getDataSrv" "value") [] value)
@@ -460,41 +446,35 @@ export function initTopicAndSubscribe(...args: any) {
                        )
                        (call %init_peer_id% ("getDataSrv" "service_id") [] service_id)
                       )
-                      (par
-                       (seq
+                      (xor
+                       (par
                         (seq
-                         (call -relay- ("op" "noop") [])
-                         (xor
-                          (seq
-                           (call node_id ("op" "string_to_b58") [topic] k)
-                           (call node_id ("kad" "neighborhood") [k [] []] nodes)
-                          )
+                         (seq
+                          (call -relay- ("op" "string_to_b58") [topic] k)
+                          (call -relay- ("kad" "neighborhood") [k [] []] nodes)
+                         )
+                         (call %init_peer_id% ("op" "noop") [])
+                        )
+                        (fold nodes n
+                         (par
                           (seq
                            (call -relay- ("op" "noop") [])
-                           (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
-                          )
-                         )
-                        )
-                        (call %init_peer_id% ("op" "noop") [])
-                       )
-                       (fold nodes n
-                        (par
-                         (seq
-                          (call -relay- ("op" "noop") [])
-                          (xor
-                           (seq
+                           (xor
                             (seq
-                             (call n ("peer" "timestamp_sec") [] t)
-                             (call n ("aqua-dht" "register_key") [topic t false 0])
+                             (seq
+                              (call n ("peer" "timestamp_sec") [] t)
+                              (call n ("aqua-dht" "register_key") [topic t false 0])
+                             )
+                             (call n ("aqua-dht" "put_value") [topic value t relay_id service_id 0])
                             )
-                            (call n ("aqua-dht" "put_value") [topic value t relay_id service_id 0])
+                            (null)
                            )
-                           (null)
                           )
+                          (next n)
                          )
-                         (next n)
                         )
                        )
+                       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
                       )
                      )
                      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
@@ -508,12 +488,6 @@ export function initTopicAndSubscribe(...args: any) {
         "tag" : "void"
     },
     "argDefs" : [
-        {
-            "name" : "node_id",
-            "argType" : {
-                "tag" : "primitive"
-            }
-        },
         {
             "name" : "topic",
             "argType" : {

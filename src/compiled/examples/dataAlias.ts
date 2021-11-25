@@ -47,12 +47,19 @@ export function registerNodeIdGetter(...args: any) {
 // Functions
  
 
-export function getAliasedData(config?: {ttl?: number}): Promise<string>;
-export function getAliasedData(peer: FluencePeer, config?: {ttl?: number}): Promise<string>;
+export function getAliasedData(
+    config?: {ttl?: number}
+): Promise<string>;
+
+export function getAliasedData(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<string>;
+
 export function getAliasedData(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)

@@ -47,12 +47,19 @@ export function registerOpA(...args: any) {
 // Functions
  
 
-export function get_results(config?: {ttl?: number}): Promise<string[]>;
-export function get_results(peer: FluencePeer, config?: {ttl?: number}): Promise<string[]>;
+export function get_results(
+    config?: {ttl?: number}
+): Promise<string[]>;
+
+export function get_results(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<string[]>;
+
 export function get_results(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)

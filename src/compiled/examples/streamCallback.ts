@@ -19,12 +19,21 @@ import {
 // Functions
  
 
-export function someFunc(cb: (arg0: string[], callParams: CallParams<'arg0'>) => void | Promise<void>, config?: {ttl?: number}): Promise<void>;
-export function someFunc(peer: FluencePeer, cb: (arg0: string[], callParams: CallParams<'arg0'>) => void | Promise<void>, config?: {ttl?: number}): Promise<void>;
+export function someFunc(
+    cb: (arg0: string[], callParams: CallParams<'arg0'>) => void | Promise<void>,
+    config?: {ttl?: number}
+): Promise<void>;
+
+export function someFunc(
+    peer: FluencePeer,
+    cb: (arg0: string[], callParams: CallParams<'arg0'>) => void | Promise<void>,
+    config?: {ttl?: number}
+): Promise<void>;
+
 export function someFunc(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
                       (new $ifaces

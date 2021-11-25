@@ -89,12 +89,19 @@ export function registerOpO(...args: any) {
 // Functions
  
 
-export function callConstant(config?: {ttl?: number}): Promise<string[]>;
-export function callConstant(peer: FluencePeer, config?: {ttl?: number}): Promise<string[]>;
+export function callConstant(
+    config?: {ttl?: number}
+): Promise<string[]>;
+
+export function callConstant(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<string[]>;
+
 export function callConstant(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)

@@ -92,12 +92,21 @@ export function registerSomeS(...args: any) {
 // Functions
  
 
-export function checkU32AndU8(a: number | null, config?: {ttl?: number}): Promise<void>;
-export function checkU32AndU8(peer: FluencePeer, a: number | null, config?: {ttl?: number}): Promise<void>;
+export function checkU32AndU8(
+    a: number | null,
+    config?: {ttl?: number}
+): Promise<void>;
+
+export function checkU32AndU8(
+    peer: FluencePeer,
+    a: number | null,
+    config?: {ttl?: number}
+): Promise<void>;
+
 export function checkU32AndU8(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
@@ -139,12 +148,21 @@ export function checkU32AndU8(...args: any) {
 
  
 
-export function useOptional(opt: string | null, config?: {ttl?: number}): Promise<string>;
-export function useOptional(peer: FluencePeer, opt: string | null, config?: {ttl?: number}): Promise<string>;
+export function useOptional(
+    opt: string | null,
+    config?: {ttl?: number}
+): Promise<string>;
+
+export function useOptional(
+    peer: FluencePeer,
+    opt: string | null,
+    config?: {ttl?: number}
+): Promise<string>;
+
 export function useOptional(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq
@@ -200,12 +218,19 @@ export function useOptional(...args: any) {
 
  
 
-export function returnOptional(config?: {ttl?: number}): Promise<string | null>;
-export function returnOptional(peer: FluencePeer, config?: {ttl?: number}): Promise<string | null>;
+export function returnOptional(
+    config?: {ttl?: number}
+): Promise<string | null>;
+
+export function returnOptional(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<string | null>;
+
 export function returnOptional(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
@@ -244,12 +269,19 @@ export function returnOptional(...args: any) {
 
  
 
-export function returnNone(config?: {ttl?: number}): Promise<string | null>;
-export function returnNone(peer: FluencePeer, config?: {ttl?: number}): Promise<string | null>;
+export function returnNone(
+    config?: {ttl?: number}
+): Promise<string | null>;
+
+export function returnNone(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<string | null>;
+
 export function returnNone(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)

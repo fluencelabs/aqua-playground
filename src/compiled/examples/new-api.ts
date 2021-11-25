@@ -62,12 +62,21 @@ export function registerHelloWorld(...args: any) {
 // Functions
  
 
-export function callMeBack(callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void | Promise<void>, config?: {ttl?: number}): Promise<void>;
-export function callMeBack(peer: FluencePeer, callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void | Promise<void>, config?: {ttl?: number}): Promise<void>;
+export function callMeBack(
+    callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void | Promise<void>,
+    config?: {ttl?: number}
+): Promise<void>;
+
+export function callMeBack(
+    peer: FluencePeer,
+    callback: (arg0: string, arg1: number, callParams: CallParams<'arg0' | 'arg1'>) => void | Promise<void>,
+    config?: {ttl?: number}
+): Promise<void>;
+
 export function callMeBack(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
                       (xor

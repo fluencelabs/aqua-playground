@@ -122,12 +122,21 @@ export function registerTest(...args: any) {
 // Functions
  
 
-export function betterMessage(relay: string, config?: {ttl?: number}): Promise<void>;
-export function betterMessage(peer: FluencePeer, relay: string, config?: {ttl?: number}): Promise<void>;
+export function betterMessage(
+    relay: string,
+    config?: {ttl?: number}
+): Promise<void>;
+
+export function betterMessage(
+    peer: FluencePeer,
+    relay: string,
+    config?: {ttl?: number}
+): Promise<void>;
+
 export function betterMessage(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq

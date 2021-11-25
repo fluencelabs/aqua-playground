@@ -83,12 +83,21 @@ export function registerOpA(...args: any) {
 // Functions
  
 
-export function tryCatchTest(node_id: string, config?: {ttl?: number}): Promise<string[]>;
-export function tryCatchTest(peer: FluencePeer, node_id: string, config?: {ttl?: number}): Promise<string[]>;
+export function tryCatchTest(
+    node_id: string,
+    config?: {ttl?: number}
+): Promise<string[]>;
+
+export function tryCatchTest(
+    peer: FluencePeer,
+    node_id: string,
+    config?: {ttl?: number}
+): Promise<string[]>;
+
 export function tryCatchTest(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq

@@ -53,12 +53,23 @@ export function registerTestService(...args: any) {
 // Functions
  
 
-export function append_records(peer_: string, srum: string[][], config?: {ttl?: number}): Promise<void>;
-export function append_records(peer: FluencePeer, peer_: string, srum: string[][], config?: {ttl?: number}): Promise<void>;
+export function append_records(
+    peer_: string,
+    srum: string[][],
+    config?: {ttl?: number}
+): Promise<void>;
+
+export function append_records(
+    peer: FluencePeer,
+    peer_: string,
+    srum: string[][],
+    config?: {ttl?: number}
+): Promise<void>;
+
 export function append_records(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq
@@ -117,12 +128,21 @@ export function append_records(...args: any) {
 
  
 
-export function retrieve_records(peer_: string, config?: {ttl?: number}): Promise<string[][]>;
-export function retrieve_records(peer: FluencePeer, peer_: string, config?: {ttl?: number}): Promise<string[][]>;
+export function retrieve_records(
+    peer_: string,
+    config?: {ttl?: number}
+): Promise<string[][]>;
+
+export function retrieve_records(
+    peer: FluencePeer,
+    peer_: string,
+    config?: {ttl?: number}
+): Promise<string[][]>;
+
 export function retrieve_records(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq

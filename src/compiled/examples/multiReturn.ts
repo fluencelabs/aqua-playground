@@ -83,12 +83,19 @@ export function registerGetNum(...args: any) {
 // Functions
  
 export type TupleFuncResult = [string, number]
-export function tupleFunc(config?: {ttl?: number}): Promise<TupleFuncResult>;
-export function tupleFunc(peer: FluencePeer, config?: {ttl?: number}): Promise<TupleFuncResult>;
+export function tupleFunc(
+    config?: {ttl?: number}
+): Promise<TupleFuncResult>;
+
+export function tupleFunc(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<TupleFuncResult>;
+
 export function tupleFunc(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq
@@ -138,12 +145,23 @@ export function tupleFunc(...args: any) {
 
  
 export type MultiReturnFuncResult = [string[], number, string, number[], string | null, number]
-export function multiReturnFunc(somethingToReturn: number[], smthOption: string | null, config?: {ttl?: number}): Promise<MultiReturnFuncResult>;
-export function multiReturnFunc(peer: FluencePeer, somethingToReturn: number[], smthOption: string | null, config?: {ttl?: number}): Promise<MultiReturnFuncResult>;
+export function multiReturnFunc(
+    somethingToReturn: number[],
+    smthOption: string | null,
+    config?: {ttl?: number}
+): Promise<MultiReturnFuncResult>;
+
+export function multiReturnFunc(
+    peer: FluencePeer,
+    somethingToReturn: number[],
+    smthOption: string | null,
+    config?: {ttl?: number}
+): Promise<MultiReturnFuncResult>;
+
 export function multiReturnFunc(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq
@@ -218,97 +236,6 @@ export function multiReturnFunc(...args: any) {
             "name" : "smthOption",
             "argType" : {
                 "tag" : "optional"
-            }
-        }
-    ],
-    "names" : {
-        "relay" : "-relay-",
-        "getDataSrv" : "getDataSrv",
-        "callbackSrv" : "callbackSrv",
-        "responseSrv" : "callbackSrv",
-        "responseFnName" : "response",
-        "errorHandlingSrv" : "errorHandlingSrv",
-        "errorFnName" : "error"
-    }
-},
-        script
-    )
-}
-
- 
-export type CallResult = [string, string | null, string]
-export function call(a: string | null, node: string, config?: {ttl?: number}): Promise<CallResult>;
-export function call(peer: FluencePeer, a: string | null, node: string, config?: {ttl?: number}): Promise<CallResult>;
-export function call(...args: any) {
-
-    let script = `
-                        (xor
-                     (seq
-                      (seq
-                       (seq
-                        (seq
-                         (seq
-                          (seq
-                           (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-                           (call %init_peer_id% ("getDataSrv" "a") [] a)
-                          )
-                          (call %init_peer_id% ("getDataSrv" "node") [] node)
-                         )
-                         (call -relay- ("op" "noop") [])
-                        )
-                        (xor
-                         (seq
-                          (seq
-                           (call -relay- ("op" "noop") [])
-                           (call node ("op" "identity") [a] res2)
-                          )
-                          (call node ("peer" "identify") [] info)
-                         )
-                         (seq
-                          (call -relay- ("op" "noop") [])
-                          (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
-                         )
-                        )
-                       )
-                       (call -relay- ("op" "noop") [])
-                      )
-                      (xor
-                       (call %init_peer_id% ("callbackSrv" "response") ["aaa" res2 "aaa"])
-                       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
-                      )
-                     )
-                     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
-                    )
-    `
-    return callFunction(
-        args,
-        {
-    "functionName" : "call",
-    "returnType" : {
-        "tag" : "multiReturn",
-        "returnItems" : [
-            {
-                "tag" : "primitive"
-            },
-            {
-                "tag" : "optional"
-            },
-            {
-                "tag" : "primitive"
-            }
-        ]
-    },
-    "argDefs" : [
-        {
-            "name" : "a",
-            "argType" : {
-                "tag" : "optional"
-            }
-        },
-        {
-            "name" : "node",
-            "argType" : {
-                "tag" : "primitive"
             }
         }
     ],

@@ -83,12 +83,21 @@ export function registerOpE(...args: any) {
 // Functions
  
 
-export function tryOtherwiseTest(node_id: string, config?: {ttl?: number}): Promise<string>;
-export function tryOtherwiseTest(peer: FluencePeer, node_id: string, config?: {ttl?: number}): Promise<string>;
+export function tryOtherwiseTest(
+    node_id: string,
+    config?: {ttl?: number}
+): Promise<string>;
+
+export function tryOtherwiseTest(
+    peer: FluencePeer,
+    node_id: string,
+    config?: {ttl?: number}
+): Promise<string>;
+
 export function tryOtherwiseTest(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq

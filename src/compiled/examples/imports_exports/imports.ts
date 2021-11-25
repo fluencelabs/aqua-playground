@@ -59,12 +59,19 @@ export function registerStringService(...args: any) {
 // Functions
  
 
-export function concat_foobars(config?: {ttl?: number}): Promise<string>;
-export function concat_foobars(peer: FluencePeer, config?: {ttl?: number}): Promise<string>;
+export function concat_foobars(
+    config?: {ttl?: number}
+): Promise<string>;
+
+export function concat_foobars(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<string>;
+
 export function concat_foobars(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq

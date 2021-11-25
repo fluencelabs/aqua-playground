@@ -59,12 +59,21 @@ export function registerConcatSubs(...args: any) {
 // Functions
  
 export type SubImportUsageResult = { one: string; two: number; }
-export function subImportUsage(s: string, config?: {ttl?: number}): Promise<SubImportUsageResult>;
-export function subImportUsage(peer: FluencePeer, s: string, config?: {ttl?: number}): Promise<SubImportUsageResult>;
+export function subImportUsage(
+    s: string,
+    config?: {ttl?: number}
+): Promise<SubImportUsageResult>;
+
+export function subImportUsage(
+    peer: FluencePeer,
+    s: string,
+    config?: {ttl?: number}
+): Promise<SubImportUsageResult>;
+
 export function subImportUsage(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq

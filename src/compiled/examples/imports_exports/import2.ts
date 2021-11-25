@@ -19,12 +19,19 @@ import {
 // Functions
  
 
-export function wrap(config?: {ttl?: number}): Promise<string>;
-export function wrap(peer: FluencePeer, config?: {ttl?: number}): Promise<string>;
+export function wrap(
+    config?: {ttl?: number}
+): Promise<string>;
+
+export function wrap(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<string>;
+
 export function wrap(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq
@@ -66,12 +73,19 @@ export function wrap(...args: any) {
 
  
 
-export function barfoo(config?: {ttl?: number}): Promise<string[]>;
-export function barfoo(peer: FluencePeer, config?: {ttl?: number}): Promise<string[]>;
+export function barfoo(
+    config?: {ttl?: number}
+): Promise<string[]>;
+
+export function barfoo(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<string[]>;
+
 export function barfoo(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)

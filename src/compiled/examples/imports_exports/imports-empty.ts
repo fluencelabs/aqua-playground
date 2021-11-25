@@ -17,11 +17,11 @@ import {
 // Services
 
 export interface NoopDef {
-    array: (a: string, b: string | null, c: string | null, d: string | null, callParams: CallParams<'a' | 'b' | 'c' | 'd'>) => string[] | Promise<string[]>;
+    array: (a: string, b: string, c: string, d: string, callParams: CallParams<'a' | 'b' | 'c' | 'd'>) => string[] | Promise<string[]>;
     array_length: (array: string[], callParams: CallParams<'array'>) => number | Promise<number>;
     bytes_from_b58: (b: string, callParams: CallParams<'b'>) => number[] | Promise<number[]>;
     bytes_to_b58: (bs: number[], callParams: CallParams<'bs'>) => string | Promise<string>;
-    concat: (a: string[], b: string[] | null, c: string[] | null, d: string[] | null, callParams: CallParams<'a' | 'b' | 'c' | 'd'>) => string[] | Promise<string[]>;
+    concat: (a: string[], b: string[], c: string[], d: string[], callParams: CallParams<'a' | 'b' | 'c' | 'd'>) => string[] | Promise<string[]>;
     concat_strings: (a: string, b: string, callParams: CallParams<'a' | 'b'>) => string | Promise<string>;
     identity: (s: string | null, callParams: CallParams<'s'>) => string | null | Promise<string | null>;
     noop: (callParams: CallParams<null>) => void | Promise<void>;
@@ -53,19 +53,19 @@ export function registerNoop(...args: any) {
                 {
                     "name" : "b",
                     "argType" : {
-                        "tag" : "optional"
+                        "tag" : "primitive"
                     }
                 },
                 {
                     "name" : "c",
                     "argType" : {
-                        "tag" : "optional"
+                        "tag" : "primitive"
                     }
                 },
                 {
                     "name" : "d",
                     "argType" : {
-                        "tag" : "optional"
+                        "tag" : "primitive"
                     }
                 }
             ],
@@ -127,19 +127,19 @@ export function registerNoop(...args: any) {
                 {
                     "name" : "b",
                     "argType" : {
-                        "tag" : "optional"
+                        "tag" : "primitive"
                     }
                 },
                 {
                     "name" : "c",
                     "argType" : {
-                        "tag" : "optional"
+                        "tag" : "primitive"
                     }
                 },
                 {
                     "name" : "d",
                     "argType" : {
-                        "tag" : "optional"
+                        "tag" : "primitive"
                     }
                 }
             ],
@@ -269,12 +269,19 @@ export function registerMyExportSrv(...args: any) {
 // Functions
  
 
-export function some_str(config?: {ttl?: number}): Promise<string>;
-export function some_str(peer: FluencePeer, config?: {ttl?: number}): Promise<string>;
+export function some_str(
+    config?: {ttl?: number}
+): Promise<string>;
+
+export function some_str(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<string>;
+
 export function some_str(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
                       (xor
@@ -310,12 +317,19 @@ export function some_str(...args: any) {
 
  
 
-export function some_string(config?: {ttl?: number}): Promise<string>;
-export function some_string(peer: FluencePeer, config?: {ttl?: number}): Promise<string>;
+export function some_string(
+    config?: {ttl?: number}
+): Promise<string>;
+
+export function some_string(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<string>;
+
 export function some_string(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
                       (xor
@@ -351,12 +365,19 @@ export function some_string(...args: any) {
 
  
 
-export function decl_foo(config?: {ttl?: number}): Promise<string>;
-export function decl_foo(peer: FluencePeer, config?: {ttl?: number}): Promise<string>;
+export function decl_foo(
+    config?: {ttl?: number}
+): Promise<string>;
+
+export function decl_foo(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<string>;
+
 export function decl_foo(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
@@ -395,12 +416,19 @@ export function decl_foo(...args: any) {
 
  
 
-export function decl_bar(config?: {ttl?: number}): Promise<string>;
-export function decl_bar(peer: FluencePeer, config?: {ttl?: number}): Promise<string>;
+export function decl_bar(
+    config?: {ttl?: number}
+): Promise<string>;
+
+export function decl_bar(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<string>;
+
 export function decl_bar(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
                       (xor
@@ -436,12 +464,19 @@ export function decl_bar(...args: any) {
 
  
 
-export function some_random_func(config?: {ttl?: number}): Promise<string>;
-export function some_random_func(peer: FluencePeer, config?: {ttl?: number}): Promise<string>;
+export function some_random_func(
+    config?: {ttl?: number}
+): Promise<string>;
+
+export function some_random_func(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<string>;
+
 export function some_random_func(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
                       (xor

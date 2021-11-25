@@ -65,12 +65,25 @@ export function registerAquaDHT(...args: any) {
 // Functions
  
 
-export function putHostValue(key: string, value: string, service_id: string | null, config?: {ttl?: number}): Promise<string>;
-export function putHostValue(peer: FluencePeer, key: string, value: string, service_id: string | null, config?: {ttl?: number}): Promise<string>;
+export function putHostValue(
+    key: string,
+    value: string,
+    service_id: string | null,
+    config?: {ttl?: number}
+): Promise<string>;
+
+export function putHostValue(
+    peer: FluencePeer,
+    key: string,
+    value: string,
+    service_id: string | null,
+    config?: {ttl?: number}
+): Promise<string>;
+
 export function putHostValue(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq
@@ -136,12 +149,21 @@ export function putHostValue(...args: any) {
 
  
 
-export function create_client_util(service_id: string, config?: {ttl?: number}): Promise<string>;
-export function create_client_util(peer: FluencePeer, service_id: string, config?: {ttl?: number}): Promise<string>;
+export function create_client_util(
+    service_id: string,
+    config?: {ttl?: number}
+): Promise<string>;
+
+export function create_client_util(
+    peer: FluencePeer,
+    service_id: string,
+    config?: {ttl?: number}
+): Promise<string>;
+
 export function create_client_util(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq

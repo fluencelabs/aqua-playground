@@ -89,12 +89,27 @@ export function registerLocalPrint(...args: any) {
 // Functions
  
 
-export function topologyTest(me: string, myRelay: string, friend: string, friendRelay: string, config?: {ttl?: number}): Promise<string>;
-export function topologyTest(peer: FluencePeer, me: string, myRelay: string, friend: string, friendRelay: string, config?: {ttl?: number}): Promise<string>;
+export function topologyTest(
+    me: string,
+    myRelay: string,
+    friend: string,
+    friendRelay: string,
+    config?: {ttl?: number}
+): Promise<string>;
+
+export function topologyTest(
+    peer: FluencePeer,
+    me: string,
+    myRelay: string,
+    friend: string,
+    friendRelay: string,
+    config?: {ttl?: number}
+): Promise<string>;
+
 export function topologyTest(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq
@@ -199,12 +214,23 @@ export function topologyTest(...args: any) {
 
  
 
-export function topologyBug205(node_id: string, n2: string | null, config?: {ttl?: number}): Promise<string[]>;
-export function topologyBug205(peer: FluencePeer, node_id: string, n2: string | null, config?: {ttl?: number}): Promise<string[]>;
+export function topologyBug205(
+    node_id: string,
+    n2: string | null,
+    config?: {ttl?: number}
+): Promise<string[]>;
+
+export function topologyBug205(
+    peer: FluencePeer,
+    node_id: string,
+    n2: string | null,
+    config?: {ttl?: number}
+): Promise<string[]>;
+
 export function topologyBug205(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq

@@ -53,12 +53,21 @@ export function registerReturn(...args: any) {
 // Functions
  
 
-export function test(node: string, config?: {ttl?: number}): Promise<void>;
-export function test(peer: FluencePeer, node: string, config?: {ttl?: number}): Promise<void>;
+export function test(
+    node: string,
+    config?: {ttl?: number}
+): Promise<void>;
+
+export function test(
+    peer: FluencePeer,
+    node: string,
+    config?: {ttl?: number}
+): Promise<void>;
+
 export function test(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq

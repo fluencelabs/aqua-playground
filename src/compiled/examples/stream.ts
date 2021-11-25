@@ -53,12 +53,19 @@ export function registerStringer(...args: any) {
 // Functions
  
 
-export function returnNone(config?: {ttl?: number}): Promise<string | null>;
-export function returnNone(peer: FluencePeer, config?: {ttl?: number}): Promise<string | null>;
+export function returnNone(
+    config?: {ttl?: number}
+): Promise<string | null>;
+
+export function returnNone(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<string | null>;
+
 export function returnNone(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
@@ -99,12 +106,19 @@ export function returnNone(...args: any) {
 
  
 
-export function stringNone(config?: {ttl?: number}): Promise<string | null>;
-export function stringNone(peer: FluencePeer, config?: {ttl?: number}): Promise<string | null>;
+export function stringNone(
+    config?: {ttl?: number}
+): Promise<string | null>;
+
+export function stringNone(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<string | null>;
+
 export function stringNone(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
@@ -145,12 +159,19 @@ export function stringNone(...args: any) {
 
  
 
-export function returnNil(config?: {ttl?: number}): Promise<string[]>;
-export function returnNil(peer: FluencePeer, config?: {ttl?: number}): Promise<string[]>;
+export function returnNil(
+    config?: {ttl?: number}
+): Promise<string[]>;
+
+export function returnNil(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<string[]>;
+
 export function returnNil(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq
@@ -192,12 +213,19 @@ export function returnNil(...args: any) {
 
  
 
-export function stringNil(config?: {ttl?: number}): Promise<string[]>;
-export function stringNil(peer: FluencePeer, config?: {ttl?: number}): Promise<string[]>;
+export function stringNil(
+    config?: {ttl?: number}
+): Promise<string[]>;
+
+export function stringNil(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<string[]>;
+
 export function stringNil(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
                       (xor
@@ -233,12 +261,21 @@ export function stringNil(...args: any) {
 
  
 
-export function checkStreams(ch: string[], config?: {ttl?: number}): Promise<string[]>;
-export function checkStreams(peer: FluencePeer, ch: string[], config?: {ttl?: number}): Promise<string[]>;
+export function checkStreams(
+    ch: string[],
+    config?: {ttl?: number}
+): Promise<string[]>;
+
+export function checkStreams(
+    peer: FluencePeer,
+    ch: string[],
+    config?: {ttl?: number}
+): Promise<string[]>;
+
 export function checkStreams(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq

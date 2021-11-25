@@ -80,12 +80,33 @@ export function registerTestS(...args: any) {
 // Functions
  
 
-export function doStuff(a: string, b: string, c: boolean, d: boolean, e: string[], g: string[], str: string, config?: {ttl?: number}): Promise<string[]>;
-export function doStuff(peer: FluencePeer, a: string, b: string, c: boolean, d: boolean, e: string[], g: string[], str: string, config?: {ttl?: number}): Promise<string[]>;
+export function doStuff(
+    a: string,
+    b: string,
+    c: boolean,
+    d: boolean,
+    e: string[],
+    g: string[],
+    str: string,
+    config?: {ttl?: number}
+): Promise<string[]>;
+
+export function doStuff(
+    peer: FluencePeer,
+    a: string,
+    b: string,
+    c: boolean,
+    d: boolean,
+    e: string[],
+    g: string[],
+    str: string,
+    config?: {ttl?: number}
+): Promise<string[]>;
+
 export function doStuff(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq

@@ -53,12 +53,23 @@ export function registerCustomId(...args: any) {
 // Functions
  
 export type ViaArrResult = { external_addresses: string[]; }
-export function viaArr(node_id: string, viaAr: string[], config?: {ttl?: number}): Promise<ViaArrResult>;
-export function viaArr(peer: FluencePeer, node_id: string, viaAr: string[], config?: {ttl?: number}): Promise<ViaArrResult>;
+export function viaArr(
+    node_id: string,
+    viaAr: string[],
+    config?: {ttl?: number}
+): Promise<ViaArrResult>;
+
+export function viaArr(
+    peer: FluencePeer,
+    node_id: string,
+    viaAr: string[],
+    config?: {ttl?: number}
+): Promise<ViaArrResult>;
+
 export function viaArr(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq
@@ -154,12 +165,23 @@ export function viaArr(...args: any) {
 
  
 export type ViaStreamResult = { external_addresses: string[]; }
-export function viaStream(node_id: string, viaStr: string[], config?: {ttl?: number}): Promise<ViaStreamResult>;
-export function viaStream(peer: FluencePeer, node_id: string, viaStr: string[], config?: {ttl?: number}): Promise<ViaStreamResult>;
+export function viaStream(
+    node_id: string,
+    viaStr: string[],
+    config?: {ttl?: number}
+): Promise<ViaStreamResult>;
+
+export function viaStream(
+    peer: FluencePeer,
+    node_id: string,
+    viaStr: string[],
+    config?: {ttl?: number}
+): Promise<ViaStreamResult>;
+
 export function viaStream(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq
@@ -263,12 +285,25 @@ export function viaStream(...args: any) {
 
  
 export type ViaOptResult = { external_addresses: string[]; }
-export function viaOpt(relay: string, node_id: string, viaOpt: string | null, config?: {ttl?: number}): Promise<ViaOptResult>;
-export function viaOpt(peer: FluencePeer, relay: string, node_id: string, viaOpt: string | null, config?: {ttl?: number}): Promise<ViaOptResult>;
+export function viaOpt(
+    relay: string,
+    node_id: string,
+    viaOpt: string | null,
+    config?: {ttl?: number}
+): Promise<ViaOptResult>;
+
+export function viaOpt(
+    peer: FluencePeer,
+    relay: string,
+    node_id: string,
+    viaOpt: string | null,
+    config?: {ttl?: number}
+): Promise<ViaOptResult>;
+
 export function viaOpt(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq

@@ -47,12 +47,23 @@ export function registerParService(...args: any) {
 // Functions
  
 
-export function parFunc(node: string, c: (arg0: { external_addresses: string[]; }, callParams: CallParams<'arg0'>) => void | Promise<void>, config?: {ttl?: number}): Promise<void>;
-export function parFunc(peer: FluencePeer, node: string, c: (arg0: { external_addresses: string[]; }, callParams: CallParams<'arg0'>) => void | Promise<void>, config?: {ttl?: number}): Promise<void>;
+export function parFunc(
+    node: string,
+    c: (arg0: { external_addresses: string[]; }, callParams: CallParams<'arg0'>) => void | Promise<void>,
+    config?: {ttl?: number}
+): Promise<void>;
+
+export function parFunc(
+    peer: FluencePeer,
+    node: string,
+    c: (arg0: { external_addresses: string[]; }, callParams: CallParams<'arg0'>) => void | Promise<void>,
+    config?: {ttl?: number}
+): Promise<void>;
+
 export function parFunc(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)

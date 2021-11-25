@@ -47,12 +47,19 @@ export function registerTestSrv(...args: any) {
 // Functions
  
 
-export function testFunc(config?: {ttl?: number}): Promise<string>;
-export function testFunc(peer: FluencePeer, config?: {ttl?: number}): Promise<string>;
+export function testFunc(
+    config?: {ttl?: number}
+): Promise<string>;
+
+export function testFunc(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<string>;
+
 export function testFunc(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)

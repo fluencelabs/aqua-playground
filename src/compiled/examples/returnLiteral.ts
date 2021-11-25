@@ -19,12 +19,19 @@ import {
 // Functions
  
 
-export function returnLiteral(config?: {ttl?: number}): Promise<string>;
-export function returnLiteral(peer: FluencePeer, config?: {ttl?: number}): Promise<string>;
+export function returnLiteral(
+    config?: {ttl?: number}
+): Promise<string>;
+
+export function returnLiteral(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<string>;
+
 export function returnLiteral(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
                       (xor

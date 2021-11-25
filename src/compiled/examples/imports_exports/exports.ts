@@ -47,12 +47,19 @@ export function registerMyExportSrv(...args: any) {
 // Functions
  
 
-export function string_from_lib(config?: {ttl?: number}): Promise<string>;
-export function string_from_lib(peer: FluencePeer, config?: {ttl?: number}): Promise<string>;
+export function string_from_lib(
+    config?: {ttl?: number}
+): Promise<string>;
+
+export function string_from_lib(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<string>;
+
 export function string_from_lib(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
                       (xor

@@ -19,12 +19,25 @@ import {
 // Functions
  
 
-export function passFunctionAsArg(node: string, str: string, c: (arg0: string, callParams: CallParams<'arg0'>) => string | Promise<string>, config?: {ttl?: number}): Promise<void>;
-export function passFunctionAsArg(peer: FluencePeer, node: string, str: string, c: (arg0: string, callParams: CallParams<'arg0'>) => string | Promise<string>, config?: {ttl?: number}): Promise<void>;
+export function passFunctionAsArg(
+    node: string,
+    str: string,
+    c: (arg0: string, callParams: CallParams<'arg0'>) => string | Promise<string>,
+    config?: {ttl?: number}
+): Promise<void>;
+
+export function passFunctionAsArg(
+    peer: FluencePeer,
+    node: string,
+    str: string,
+    c: (arg0: string, callParams: CallParams<'arg0'>) => string | Promise<string>,
+    config?: {ttl?: number}
+): Promise<void>;
+
 export function passFunctionAsArg(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq

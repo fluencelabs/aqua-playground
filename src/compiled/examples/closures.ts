@@ -47,12 +47,21 @@ export function registerLocalSrv(...args: any) {
 // Functions
  
 
-export function closureIn(peer1: string, config?: {ttl?: number}): Promise<string>;
-export function closureIn(peer: FluencePeer, peer1: string, config?: {ttl?: number}): Promise<string>;
+export function closureIn(
+    peer1: string,
+    config?: {ttl?: number}
+): Promise<string>;
+
+export function closureIn(
+    peer: FluencePeer,
+    peer1: string,
+    config?: {ttl?: number}
+): Promise<string>;
+
 export function closureIn(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq
@@ -126,12 +135,21 @@ export function closureIn(...args: any) {
 
  
 export type ClosureOutResult = { external_addresses: string[]; }
-export function closureOut(peer2: string, config?: {ttl?: number}): Promise<ClosureOutResult>;
-export function closureOut(peer: FluencePeer, peer2: string, config?: {ttl?: number}): Promise<ClosureOutResult>;
+export function closureOut(
+    peer2: string,
+    config?: {ttl?: number}
+): Promise<ClosureOutResult>;
+
+export function closureOut(
+    peer: FluencePeer,
+    peer2: string,
+    config?: {ttl?: number}
+): Promise<ClosureOutResult>;
+
 export function closureOut(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq
@@ -208,12 +226,23 @@ export function closureOut(...args: any) {
 
  
 export type ClosureBigResult = [string, string]
-export function closureBig(peer1: string, peer2: string, config?: {ttl?: number}): Promise<ClosureBigResult>;
-export function closureBig(peer: FluencePeer, peer1: string, peer2: string, config?: {ttl?: number}): Promise<ClosureBigResult>;
+export function closureBig(
+    peer1: string,
+    peer2: string,
+    config?: {ttl?: number}
+): Promise<ClosureBigResult>;
+
+export function closureBig(
+    peer: FluencePeer,
+    peer1: string,
+    peer2: string,
+    config?: {ttl?: number}
+): Promise<ClosureBigResult>;
+
 export function closureBig(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq

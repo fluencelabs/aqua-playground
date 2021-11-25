@@ -53,12 +53,21 @@ export function registerStringExtra(...args: any) {
 // Functions
  
 
-export function helloWorld(name: string, config?: {ttl?: number}): Promise<string>;
-export function helloWorld(peer: FluencePeer, name: string, config?: {ttl?: number}): Promise<string>;
+export function helloWorld(
+    name: string,
+    config?: {ttl?: number}
+): Promise<string>;
+
+export function helloWorld(
+    peer: FluencePeer,
+    name: string,
+    config?: {ttl?: number}
+): Promise<string>;
+
 export function helloWorld(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq

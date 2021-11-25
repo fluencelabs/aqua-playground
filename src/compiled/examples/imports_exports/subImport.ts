@@ -53,12 +53,19 @@ export function registerSubService(...args: any) {
 // Functions
  
 export type SubImportResult = { one: string; two: number; }
-export function subImport(config?: {ttl?: number}): Promise<SubImportResult>;
-export function subImport(peer: FluencePeer, config?: {ttl?: number}): Promise<SubImportResult>;
+export function subImport(
+    config?: {ttl?: number}
+): Promise<SubImportResult>;
+
+export function subImport(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<SubImportResult>;
+
 export function subImport(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)

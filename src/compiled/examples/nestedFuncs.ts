@@ -53,12 +53,21 @@ export function registerOpH(...args: any) {
 // Functions
  
 
-export function a(b: string, config?: {ttl?: number}): Promise<string>;
-export function a(peer: FluencePeer, b: string, config?: {ttl?: number}): Promise<string>;
+export function a(
+    b: string,
+    config?: {ttl?: number}
+): Promise<string>;
+
+export function a(
+    peer: FluencePeer,
+    b: string,
+    config?: {ttl?: number}
+): Promise<string>;
+
 export function a(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq
@@ -106,12 +115,21 @@ export function a(...args: any) {
 
  
 
-export function d(e: string, config?: {ttl?: number}): Promise<string>;
-export function d(peer: FluencePeer, e: string, config?: {ttl?: number}): Promise<string>;
+export function d(
+    e: string,
+    config?: {ttl?: number}
+): Promise<string>;
+
+export function d(
+    peer: FluencePeer,
+    e: string,
+    config?: {ttl?: number}
+): Promise<string>;
+
 export function d(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq

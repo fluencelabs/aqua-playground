@@ -70,12 +70,27 @@ export type DoSmthArgD = { otherValue: number; value: string; }
 export type DoSmthArgD2 = { otherValue: number; value: string; }
 export type DoSmthArgSd = { complex: { someNum: number; someStr: string; }; value: string; } 
 export type DoSmthResult = { complex: { otherValue: number; value: string; }; value: string; }
-export function doSmth(d: DoSmthArgD, d2: DoSmthArgD2, sd: DoSmthArgSd, c: (arg0: { someNum: number; someStr: string; }, arg1: { complex: { someNum: number; someStr: string; }; value: string; }, callParams: CallParams<'arg0' | 'arg1'>) => { complex: { otherValue: number; value: string; }; value: string; } | Promise<{ complex: { otherValue: number; value: string; }; value: string; }>, config?: {ttl?: number}): Promise<DoSmthResult>;
-export function doSmth(peer: FluencePeer, d: DoSmthArgD, d2: DoSmthArgD2, sd: DoSmthArgSd, c: (arg0: { someNum: number; someStr: string; }, arg1: { complex: { someNum: number; someStr: string; }; value: string; }, callParams: CallParams<'arg0' | 'arg1'>) => { complex: { otherValue: number; value: string; }; value: string; } | Promise<{ complex: { otherValue: number; value: string; }; value: string; }>, config?: {ttl?: number}): Promise<DoSmthResult>;
+export function doSmth(
+    d: DoSmthArgD,
+    d2: DoSmthArgD2,
+    sd: DoSmthArgSd,
+    c: (arg0: { someNum: number; someStr: string; }, arg1: { complex: { someNum: number; someStr: string; }; value: string; }, callParams: CallParams<'arg0' | 'arg1'>) => { complex: { otherValue: number; value: string; }; value: string; } | Promise<{ complex: { otherValue: number; value: string; }; value: string; }>,
+    config?: {ttl?: number}
+): Promise<DoSmthResult>;
+
+export function doSmth(
+    peer: FluencePeer,
+    d: DoSmthArgD,
+    d2: DoSmthArgD2,
+    sd: DoSmthArgSd,
+    c: (arg0: { someNum: number; someStr: string; }, arg1: { complex: { someNum: number; someStr: string; }; value: string; }, callParams: CallParams<'arg0' | 'arg1'>) => { complex: { otherValue: number; value: string; }; value: string; } | Promise<{ complex: { otherValue: number; value: string; }; value: string; }>,
+    config?: {ttl?: number}
+): Promise<DoSmthResult>;
+
 export function doSmth(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq

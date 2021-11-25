@@ -53,12 +53,21 @@ export function registerOp2(...args: any) {
 // Functions
  
 
-export function getTwoResults(relay: string, config?: {ttl?: number}): Promise<number[]>;
-export function getTwoResults(peer: FluencePeer, relay: string, config?: {ttl?: number}): Promise<number[]>;
+export function getTwoResults(
+    relay: string,
+    config?: {ttl?: number}
+): Promise<number[]>;
+
+export function getTwoResults(
+    peer: FluencePeer,
+    relay: string,
+    config?: {ttl?: number}
+): Promise<number[]>;
+
 export function getTwoResults(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq

@@ -19,12 +19,21 @@ import {
 // Functions
  
 
-export function toOpt(s: string, config?: {ttl?: number}): Promise<string | null>;
-export function toOpt(peer: FluencePeer, s: string, config?: {ttl?: number}): Promise<string | null>;
+export function toOpt(
+    s: string,
+    config?: {ttl?: number}
+): Promise<string | null>;
+
+export function toOpt(
+    peer: FluencePeer,
+    s: string,
+    config?: {ttl?: number}
+): Promise<string | null>;
+
 export function toOpt(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq
@@ -77,12 +86,19 @@ export function toOpt(...args: any) {
 
  
 
-export function accumRes(config?: {ttl?: number}): Promise<string | null[]>;
-export function accumRes(peer: FluencePeer, config?: {ttl?: number}): Promise<string | null[]>;
+export function accumRes(
+    config?: {ttl?: number}
+): Promise<string | null[]>;
+
+export function accumRes(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<string | null[]>;
+
 export function accumRes(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq

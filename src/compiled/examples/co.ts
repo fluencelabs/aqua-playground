@@ -47,12 +47,23 @@ export function registerCoService(...args: any) {
 // Functions
  
 
-export function coFunc(node: string, c: (arg0: { external_addresses: string[]; }, callParams: CallParams<'arg0'>) => void | Promise<void>, config?: {ttl?: number}): Promise<void>;
-export function coFunc(peer: FluencePeer, node: string, c: (arg0: { external_addresses: string[]; }, callParams: CallParams<'arg0'>) => void | Promise<void>, config?: {ttl?: number}): Promise<void>;
+export function coFunc(
+    node: string,
+    c: (arg0: { external_addresses: string[]; }, callParams: CallParams<'arg0'>) => void | Promise<void>,
+    config?: {ttl?: number}
+): Promise<void>;
+
+export function coFunc(
+    peer: FluencePeer,
+    node: string,
+    c: (arg0: { external_addresses: string[]; }, callParams: CallParams<'arg0'>) => void | Promise<void>,
+    config?: {ttl?: number}
+): Promise<void>;
+
 export function coFunc(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq

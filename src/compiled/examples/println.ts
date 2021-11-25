@@ -53,12 +53,21 @@ export function registerPrintln(...args: any) {
 // Functions
  
 
-export function print(str: string, config?: {ttl?: number}): Promise<void>;
-export function print(peer: FluencePeer, str: string, config?: {ttl?: number}): Promise<void>;
+export function print(
+    str: string,
+    config?: {ttl?: number}
+): Promise<void>;
+
+export function print(
+    peer: FluencePeer,
+    str: string,
+    config?: {ttl?: number}
+): Promise<void>;
+
 export function print(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)

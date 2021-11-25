@@ -74,12 +74,21 @@ export function registerOpHa(...args: any) {
 // Functions
 export type DoSmthArgArg = { value: string; } 
 
-export function doSmth(arg: DoSmthArgArg, config?: {ttl?: number}): Promise<string[]>;
-export function doSmth(peer: FluencePeer, arg: DoSmthArgArg, config?: {ttl?: number}): Promise<string[]>;
+export function doSmth(
+    arg: DoSmthArgArg,
+    config?: {ttl?: number}
+): Promise<string[]>;
+
+export function doSmth(
+    peer: FluencePeer,
+    arg: DoSmthArgArg,
+    config?: {ttl?: number}
+): Promise<string[]>;
+
 export function doSmth(...args: any) {
 
     let script = `
-                        (xor
+                    (xor
                      (seq
                       (seq
                        (seq
