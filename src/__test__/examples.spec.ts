@@ -43,6 +43,7 @@ var peer2: FluencePeer;
 const relays = config.relays
 
 // setLogLevel('debug');
+jest.setTimeout(1000*100);
 
 describe('Testing examples', () => {
     beforeAll(async () => {

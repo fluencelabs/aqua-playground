@@ -1,15 +1,22 @@
 import { Fluence } from '@fluencelabs/fluence';
 import { iterateAndPrint, iterateAndPrintParallel } from '../compiled/examples/fold';
+import { registerStringer} from '../compiled/examples/stream';
+
 
 export async function foldCall() {
     const relayPeerId = Fluence.getPeer().getStatus().relayPeerId;
+    registerStringer({
+        returnString: (args0) => {
+            return args0;
+        },
+    });
 
-    await iterateAndPrint([relayPeerId],  {ttl: 10000});
+    await iterateAndPrint([relayPeerId],  {ttl: 1000000});
 
     return new Promise<string[]>((resolve, reject) => {
-        iterateAndPrintParallel([relayPeerId], (c) => {
+        iterateAndPrintParallel([relayPeerId, relayPeerId], (c) => {
             console.log('iterateAndPrintParallel. external addresses: ' + c.external_addresses);
             resolve(c.external_addresses);
-        },  {ttl: 10000});
+        },  {ttl: 1000000});
     });
 }

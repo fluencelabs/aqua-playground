@@ -1,4 +1,5 @@
 import "println.aqua"
+import "stream.aqua"
 import "@fluencelabs/aqua-lib/builtin.aqua"
 
 -- showcases `for` instruction that compiles to `fold` in AIR
@@ -7,7 +8,18 @@ func iterateAndPrint(strings: []string):
         print(s)
 
 func iterateAndPrintParallel(nodes: []string, c: Info -> ()):
+    stream: *string
+
     for s <- nodes par:
+         for s2 <- nodes par:
+             for s3 <- nodes par:
+                 for s4 <- nodes par:
+                      for s5 <- nodes par:
+                          for s6 <- nodes par:
+                             -- for s7 <- nodes par:
+                                stream <- Stringer.returnString(s)
+
+    for s <- stream par:
         on s:
             ads <- Peer.identify()
             c(ads)
