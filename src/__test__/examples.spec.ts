@@ -11,7 +11,7 @@ import { parCall } from '../examples/parCall';
 import { complexCall } from '../examples/complex';
 import { constantsCall } from '../examples/constantsCall';
 import { returnNilCall, returnNoneCall, streamCall } from '../examples/streamCall';
-import {topologyBug205Call, topologyCall} from '../examples/topologyCall';
+import {topologyBug205Call, topologyBug394Call, topologyCall} from '../examples/topologyCall';
 import { foldJoinCall } from '../examples/foldJoinCall';
 import { registerHandlers, returnNull, returnOptionalCall, useOptionalCall } from '../examples/useOptionalCall';
 import { viaCall } from '../examples/viaCall';
@@ -163,6 +163,12 @@ describe('Testing examples', () => {
         const peerId2 = peer2.getStatus().relayPeerId
         const res: string[] = [peerId2]
         expect(topologyResult).toStrictEqual(res);
+    });
+
+    it('topology.aqua bug 394', async () => {
+        let topologyResult = await topologyBug394Call(peer2);
+
+        expect(topologyResult).toStrictEqual(selfPeerId);
     });
 
     it('foldJoin.aqua', async () => {

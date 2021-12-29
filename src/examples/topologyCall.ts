@@ -1,5 +1,21 @@
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
-import {topologyTest, registerTesto, registerLocalPrint, topologyBug205} from '../compiled/examples/topology';
+import {
+    topologyTest,
+    registerTesto,
+    registerLocalPrint,
+    topologyBug205,
+    topologyBug394
+} from '../compiled/examples/topology';
+
+export async function topologyBug394Call(peer2: FluencePeer): Promise<string> {
+    const relayPeerId = Fluence.getPeer().getStatus().relayPeerId;
+    const selfPeerId = Fluence.getPeer().getStatus().peerId;
+
+    const relayPeerId2 = peer2.getStatus().relayPeerId;
+    const selfPeerId2 = peer2.getStatus().peerId;
+
+    return topologyBug394(relayPeerId, selfPeerId2, relayPeerId2)
+}
 
 export async function topologyBug205Call(peer2: FluencePeer): Promise<string[]> {
     const relayPeerId = Fluence.getPeer().getStatus().relayPeerId;

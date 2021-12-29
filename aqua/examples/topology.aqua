@@ -24,3 +24,18 @@ func topologyBug205(node_id: string, n2: ?string) -> []string:
         on n:
           Peer.identify()
   <- nodes
+
+service IOp("op"):
+  identity: string -> string
+
+func topologyBug394(peer: string, peer2: string, peer3: string) -> string:
+    -- execute computation on a Peer in the network
+    on peer:
+        comp <- IOp.identity(%init_peer_id%)
+
+    -- send the result to target browser in the background
+    co on peer2 via peer3:
+        res <- IOp.identity(%init_peer_id%)
+
+    -- send the result to the initiator
+    <- comp
