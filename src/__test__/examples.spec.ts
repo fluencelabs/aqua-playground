@@ -74,12 +74,12 @@ describe('Testing examples', () => {
     it('streamRestrictions.aqua', async () => {
         let streamResResult = await streamResCall();
 
-        expect(streamResResult).toStrictEqual([[], ["a", "b", "c"]]);
+        expect(streamResResult).toEqual([[], ["a", "b", "c"]]);
     });
 
     it('fold.aqua', async () => {
         let foldCallResult = await foldCall();
-        expect(foldCallResult).toStrictEqual(config.externalAddressesRelay1);
+        expect(foldCallResult).toEqual(config.externalAddressesRelay1);
     });
 
     it('if.aqua', async () => {
@@ -103,7 +103,7 @@ describe('Testing examples', () => {
 
     it('on.aqua', async () => {
         let onCallResult = await onCall();
-        expect(onCallResult).toStrictEqual(config.externalAddressesRelay1);
+        expect(onCallResult).toEqual(config.externalAddressesRelay1);
     });
 
     it('dataAlias.aqua', async () => {
@@ -113,7 +113,7 @@ describe('Testing examples', () => {
 
     it('complex.aqua', async () => {
         let complexCallResult = await complexCall();
-        expect(complexCallResult).toStrictEqual([
+        expect(complexCallResult).toEqual([
             'some str',
             '3',
             '1',
@@ -131,26 +131,26 @@ describe('Testing examples', () => {
 
     it('constants.aqua', async () => {
         let constantCallResult = await constantsCall();
-        expect(constantCallResult).toStrictEqual(['1', 'ab']);
+        expect(constantCallResult).toEqual(['1', 'ab']);
     });
 
     it('stream.aqua', async () => {
         let streamResult = await streamCall();
-        expect(streamResult).toStrictEqual(['first updated', 'second updated', 'third updated', 'fourth updated']);
+        expect(streamResult).toEqual(['first updated', 'second updated', 'third updated', 'fourth updated']);
         let returnNilResult = await returnNilCall();
-        expect(returnNilResult).toStrictEqual([]);
+        expect(returnNilResult).toEqual([]);
         let returnNoneResult = await returnNoneCall();
         expect(returnNoneResult).toBe(null);
     });
 
     it('streamCan.aqua', async () => {
         let streamCanResult = await streamCanCall();
-        expect(streamCanResult).toStrictEqual([["a"], ["b"], []]);
+        expect(streamCanResult).toEqual([["a"], ["b"], []]);
     });
 
     it('streamCallback.aqua', async () => {
         let streamCallResult = await streamCallbackCall();
-        expect(streamCallResult).toStrictEqual([]);
+        expect(streamCallResult).toEqual([]);
     });
 
     it('topology.aqua', async () => {
@@ -162,13 +162,13 @@ describe('Testing examples', () => {
         let topologyResult = await topologyBug205Call(peer2);
         const peerId2 = peer2.getStatus().relayPeerId
         const res: string[] = [peerId2]
-        expect(topologyResult).toStrictEqual(res);
+        expect(topologyResult).toEqual(res);
     });
 
     it('topology.aqua bug 394', async () => {
         let topologyResult = await topologyBug394Call(peer2);
 
-        expect(topologyResult).toStrictEqual(selfPeerId);
+        expect(topologyResult).toEqual(selfPeerId);
     });
 
     it('foldJoin.aqua', async () => {
@@ -188,9 +188,9 @@ describe('Testing examples', () => {
 
     it('via.aqua', async () => {
         let [res1, res2, res3, res4] = await viaCall();
-        expect(res1).toStrictEqual(res2);
-        expect(res2).toStrictEqual(res3);
-        expect(res3).toStrictEqual(res4);
+        expect(res1).toEqual(res2);
+        expect(res2).toEqual(res3);
+        expect(res3).toEqual(res4);
     });
 
     it('nestedFuncs.aqua', async () => {
@@ -202,12 +202,12 @@ describe('Testing examples', () => {
         let closuresResult = await closuresCall();
         let res1 = config.externalAddressesRelay2
         let res2 = ["in", config.externalAddressesRelay2[0]]
-        expect(closuresResult).toStrictEqual(["in", res1, res2]);
+        expect(closuresResult).toEqual(["in", res1, res2]);
     });
 
     it('assignment.aqua', async () => {
         let assignmentResult = await assignmentCall();
-        expect(assignmentResult).toStrictEqual(['abc', 'hello']);
+        expect(assignmentResult).toEqual(['abc', 'hello']);
     });
 
     it('tryOtherwise.aqua', async () => {
@@ -224,7 +224,7 @@ describe('Testing examples', () => {
 
     it('coCall.aqua', async () => {
         let coCallResult = await coCall();
-        expect(coCallResult).toStrictEqual(config.externalAddressesRelay1);
+        expect(coCallResult).toEqual(config.externalAddressesRelay1);
     });
 
     it('passArgsCall.aqua', async () => {
@@ -234,17 +234,17 @@ describe('Testing examples', () => {
 
     it('streamArgs.aqua', async () => {
         let streamArgsResult = await streamArgsCall();
-        expect(streamArgsResult).toStrictEqual([['peer_id', 'peer_id']]);
+        expect(streamArgsResult).toEqual([['peer_id', 'peer_id']]);
     });
 
     it('streamResults.aqua', async () => {
         let streamResultsResult = await streamResultsCall();
-        expect(streamResultsResult).toStrictEqual(['new_name', 'new_name', 'new_name']);
+        expect(streamResultsResult).toEqual(['new_name', 'new_name', 'new_name']);
     });
 
     it('pushToStream.aqua', async () => {
         let pushToStreamResult = await pushToStreamCall();
-        expect(pushToStreamResult).toStrictEqual(['hello', 'get_string']);
+        expect(pushToStreamResult).toEqual(['hello', 'get_string']);
     });
 
     it('literalCall.aqua', async () => {
@@ -254,7 +254,7 @@ describe('Testing examples', () => {
 
     it('multiReturn.aqua', async () => {
         let multiReturnResult = await multiReturnCall();
-        expect(multiReturnResult).toStrictEqual([
+        expect(multiReturnResult).toEqual([
             ['some-str', 'random-str', 'some-str'],
             5,
             'some-str',
@@ -271,6 +271,6 @@ describe('Testing examples', () => {
 
     it('option_gen.aqua', async () => {
         let optionGenResult = await genOptions();
-        expect(optionGenResult).toStrictEqual(['none', 'some']);
+        expect(optionGenResult).toEqual(['none', 'some']);
     });
 });
