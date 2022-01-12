@@ -6,13 +6,13 @@ const main = async () => {
     await Fluence.start({ connectTo: krasnodar[0] });
     const relayPeerId = krasnodar[0].peerId;
 
-    const nodes = await getNeighbours(relayPeerId, 'random');
+    const nodes = await getNeighbours(relayPeerId);
     console.log(nodes);
 
     const topic = 'random';
-    await initTopicAndSubscribe(relayPeerId, topic, 'random value', null, null);
+    await initTopicAndSubscribe(relayPeerId, topic, null, null);
 
-    const result = await findSubscribers(relayPeerId, topic);
+    const result = await findSubscribers(topic);
 
     console.log(result);
 

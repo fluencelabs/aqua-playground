@@ -31,7 +31,9 @@ import { literalCall } from './examples/returnLiteralCall';
 import { multiReturnCall } from './examples/multiReturnCall';
 import { declareCall } from './examples/declareCall';
 import { genOptions } from './examples/optionsCall';
-import { relays } from './config';
+import { config } from './config';
+
+const relays = config.relays
 
 export const runExamples = async () => {
     // stop the currently running peer to start with the clean state

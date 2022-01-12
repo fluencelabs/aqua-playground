@@ -117,7 +117,7 @@ export function tryCatchTest(...args: any) {
                             (seq
                              (seq
                               (seq
-                               (call node_id ("op" "identity") [%last_error%.$.msg!] $f)
+                               (call node_id ("op" "identity") [%last_error%.$.message!] $f)
                                (call node_id ("peer" "identify") [] i)
                               )
                               (call node_id ("op" "identity") [i.$.external_addresses.[0]!] $f)
