@@ -33,6 +33,8 @@ import {closuresCall} from "../examples/closures";
 import {streamCanCall} from "../examples/streamCan";
 import {streamCallbackCall} from "../examples/streamCallback";
 import {streamResCall} from "../examples/streamRestrictionsCall";
+import {joinIdx} from "../compiled/examples/join";
+import {joinIdxCall} from "../examples/joinCall";
 
 var selfPeerId: string;
 var peer2: FluencePeer;
@@ -250,6 +252,11 @@ describe('Testing examples', () => {
     it('literalCall.aqua', async () => {
         let literalCallResult = await literalCall();
         expect(literalCallResult).toBe('some literal');
+    });
+
+    it('join.aqua', async () => {
+        let joinCallResult = await joinIdxCall();
+        expect(joinCallResult.length).toBeGreaterThanOrEqual(2);
     });
 
     it('multiReturn.aqua', async () => {

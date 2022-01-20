@@ -1,0 +1,9 @@
+import "@fluencelabs/aqua-lib/builtin.aqua"
+
+func joinIdx(idx: i16, nodes: []string) -> []Info:
+    infos: *Info
+    for node <- nodes par:
+      on node:
+        infos <- Peer.identify()
+    join infos[idx]
+    <- infos
