@@ -1,6 +1,7 @@
 import {krasnodar, stage, testNet} from '@fluencelabs/fluence-network-environment';
 
-import {exec} from "child_process";
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
 
 
 describe('Testing run command', () => {
@@ -12,28 +13,27 @@ describe('Testing run command', () => {
     const func = `\"call(\\\"${message}\\\", \\\"${message2}\\\", \\\"${nodeId}\\\")\"`
     const call = `npm run aqua run -- --addr ${addr} -i cli-run-aqua/caller.aqua -m node_modules/ --func ${func}`
 
-    it.skip('run simple command', async (done) => {
-        console.log("alala")
+    it('run simple command', (done) => {
         exec(call, (error, stdout, stderr) => {
             if (error) {
                 console.error(`error: ${error.message}`);
-                process.exit(1);
             } else if (stderr) {
                 console.error(`stderr: ${stderr}`);
-                process.exit(1);
             } else {
                 // get element before last in output
-                const result = stdout
-                console.log(result)
-                const toCheck = [message, message2].join(",")
-                if (result.includes(message) && result.includes(message2)) {
-                    console.log("Test passed.")
-                    process.exit(0);
+                const result = stdout;
+                console.log(result);
+                const toCheck = [message, message2].join(',');
+                const res = result.includes(message) && result.includes(message2);
+                if (res) {
+                    console.log('Test passed.');
                 } else {
-                    console.log(`Incorrect message returned. Returned: ${result}. Expected: ${toCheck}`)
-                    process.exit(1);
+                    console.log(`Incorrect message returned. Returned: ${result}. Expected: ${toCheck}`);
                 }
+
+                expect(res).toBeTruthy();
             }
+            done();
         });
-    }, 10000);
+    }, 16000);
 })
