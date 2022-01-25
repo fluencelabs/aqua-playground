@@ -28,7 +28,7 @@
         "aqua": "aqua"
     },
     "devDependencies": {
-        "@fluencelabs/aqua": "0.5.2-257",
+        "@fluencelabs/aqua": "0.5.3-260",
         "@fluencelabs/aqua-dht": "0.2.4",
         "@fluencelabs/aqua-lib": "0.3.2",
         "@types/jest": "^27.0.2",
