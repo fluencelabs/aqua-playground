@@ -15,12 +15,12 @@ func joinIdxRelay(idx: i16, nodes: []string) -> []string:
       join nodes2[idx], nodes
     <- nodes2
 
-func joinIdx(idx: i16, nodes: []string) -> []Info:
-    infos: *Info
-    nodes2: *string
-    for node <- nodes par:
-      on node:
-        infos <- Peer.identify()
-        nodes2 <<- node
-    join infos[idx], nodes2[idx]
-    <- infos
+-- func joinIdx(idx: i16, nodes: []string) -> []Info:
+--     infos: *Info
+--     nodes2: *string
+--     for node <- nodes par:
+--       on node:
+--         infos <- Peer.identify()
+--         nodes2 <<- node
+--     join infos[idx], nodes2[idx]
+--     <- infos
