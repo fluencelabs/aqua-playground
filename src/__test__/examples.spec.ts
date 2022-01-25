@@ -33,6 +33,8 @@ import {closuresCall} from "../examples/closures";
 import {streamCanCall} from "../examples/streamCan";
 import {streamCallbackCall} from "../examples/streamCallback";
 import {streamResCall} from "../examples/streamRestrictionsCall";
+import {joinIdx} from "../compiled/examples/join";
+import {joinIdxCall, joinIdxLocalCall, joinIdxRelayCall} from "../examples/joinCall";
 
 var selfPeerId: string;
 var peer2: FluencePeer;
@@ -44,11 +46,11 @@ const relays = config.relays
 
 describe('Testing examples', () => {
     beforeAll(async () => {
-        await Fluence.start({ connectTo: relays[0] });
+        await Fluence.start({ connectTo: relays[3] });
         selfPeerId = Fluence.getStatus().peerId;
 
         peer2 = new FluencePeer();
-        await peer2.start({ connectTo: relays[1] });
+        await peer2.start({ connectTo: relays[4] });
 
         // this could be called from `println.aqua`
         registerPrintln({
@@ -250,6 +252,21 @@ describe('Testing examples', () => {
     it('literalCall.aqua', async () => {
         let literalCallResult = await literalCall();
         expect(literalCallResult).toBe('some literal');
+    });
+
+    it('join.aqua local', async () => {
+        let joinLocalCallResult = await joinIdxLocalCall();
+        expect(joinLocalCallResult.length).toBeGreaterThanOrEqual(2);
+    });
+
+    it('join.aqua relay', async () => {
+        let joinRelayCallResult = await joinIdxRelayCall();
+        expect(joinRelayCallResult.length).toBeGreaterThanOrEqual(2);
+    });
+
+    it('join.aqua network', async () => {
+        let joinCallResult = await joinIdxCall();
+        expect(joinCallResult.length).toBeGreaterThanOrEqual(2);
     });
 
     it('multiReturn.aqua', async () => {
