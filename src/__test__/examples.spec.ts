@@ -45,11 +45,11 @@ const relays = config.relays
 
 describe('Testing examples', () => {
     beforeAll(async () => {
-        await Fluence.start({ connectTo: relays[3] });
+        await Fluence.start({ connectTo: relays[0] });
         selfPeerId = Fluence.getStatus().peerId;
 
         peer2 = new FluencePeer();
-        await peer2.start({ connectTo: relays[4] });
+        await peer2.start({ connectTo: relays[1] });
 
         // this could be called from `println.aqua`
         registerPrintln({
