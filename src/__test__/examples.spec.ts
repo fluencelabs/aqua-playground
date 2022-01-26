@@ -33,7 +33,6 @@ import {closuresCall} from "../examples/closures";
 import {streamCanCall} from "../examples/streamCan";
 import {streamCallbackCall} from "../examples/streamCallback";
 import {streamResCall} from "../examples/streamRestrictionsCall";
-import {joinIdx} from "../compiled/examples/join";
 import {joinIdxCall, joinIdxLocalCall, joinIdxRelayCall} from "../examples/joinCall";
 
 var selfPeerId: string;
