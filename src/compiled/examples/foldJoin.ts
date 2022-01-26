@@ -16,51 +16,17 @@ import {
 
 // Services
 
-export interface Op2Def {
-    identity: (s: number, callParams: CallParams<'s'>) => void | Promise<void>;
-}
-export function registerOp2(service: Op2Def): void;
-export function registerOp2(serviceId: string, service: Op2Def): void;
-export function registerOp2(peer: FluencePeer, service: Op2Def): void;
-export function registerOp2(peer: FluencePeer, serviceId: string, service: Op2Def): void;
-       
-
-export function registerOp2(...args: any) {
-    registerService(
-        args,
-        {
-    "defaultServiceId" : "op",
-    "functions" : [
-        {
-            "functionName" : "identity",
-            "argDefs" : [
-                {
-                    "name" : "s",
-                    "argType" : {
-                        "tag" : "primitive"
-                    }
-                }
-            ],
-            "returnType" : {
-                "tag" : "void"
-            }
-        }
-    ]
-}
-    );
-}
-      
 // Functions
  
 
 export function getTwoResults(
-    relay: string,
+    node: string,
     config?: {ttl?: number}
 ): Promise<number[]>;
 
 export function getTwoResults(
     peer: FluencePeer,
-    relay: string,
+    node: string,
     config?: {ttl?: number}
 ): Promise<number[]>;
 
@@ -72,7 +38,7 @@ export function getTwoResults(...args: any) {
                       (seq
                        (seq
                         (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-                        (call %init_peer_id% ("getDataSrv" "relay") [] relay)
+                        (call %init_peer_id% ("getDataSrv" "node") [] node)
                        )
                        (new $res
                         (seq
@@ -84,7 +50,7 @@ export function getTwoResults(...args: any) {
                              (seq
                               (seq
                                (seq
-                                (call relay ("kad" "neighborhood") [%init_peer_id% [] []] nodes)
+                                (call node ("kad" "neighborhood") [%init_peer_id% [] []] nodes)
                                 (par
                                  (fold nodes n
                                   (par
@@ -93,7 +59,7 @@ export function getTwoResults(...args: any) {
                                      (call n ("peer" "timestamp_sec") [] $res)
                                      (null)
                                     )
-                                    (call relay ("op" "noop") [])
+                                    (call node ("op" "noop") [])
                                    )
                                    (next n)
                                   )
@@ -101,11 +67,11 @@ export function getTwoResults(...args: any) {
                                  (null)
                                 )
                                )
-                               (call relay ("op" "identity") [$res.$.[0]!])
+                               (call node ("op" "identity") [$res.$.[0]!])
                               )
-                              (call relay ("op" "identity") [$res.$.[1]!])
+                              (call node ("op" "identity") [$res.$.[1]!])
                              )
-                             (call relay ("op" "identity") [$res.$.[2]!])
+                             (call node ("op" "identity") [$res.$.[2]!])
                             )
                             (call -relay- ("op" "noop") [])
                            )
@@ -136,7 +102,7 @@ export function getTwoResults(...args: any) {
     },
     "argDefs" : [
         {
-            "name" : "relay",
+            "name" : "node",
             "argType" : {
                 "tag" : "primitive"
             }

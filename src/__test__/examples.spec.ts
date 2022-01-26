@@ -1,4 +1,4 @@
-import { Fluence, FluencePeer } from '@fluencelabs/fluence';
+import {Fluence, FluencePeer, setLogLevel} from '@fluencelabs/fluence';
 import { registerPrintln } from '../compiled/examples/println';
 import { callArrowCall } from '../examples/callArrowCall';
 import { dataAliasCall } from '../examples/dataAliasCall';
@@ -41,7 +41,7 @@ var peer2: FluencePeer;
 
 const relays = config.relays
 
-// setLogLevel('trace');
+// setLogLevel('debug');
 
 describe('Testing examples', () => {
     beforeAll(async () => {
