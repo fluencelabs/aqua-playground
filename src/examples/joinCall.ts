@@ -8,7 +8,7 @@ export async function joinIdxCall() {
     // join.aqua
     const relayPeerId = Fluence.getPeer().getStatus().relayPeerId;
 
-    return await joinIdx(2, [relayPeerId, relays[2].peerId, relays[4].peerId]);
+    return await joinIdx(1, [relayPeerId, relays[2].peerId, relays[4].peerId, relays[5].peerId], {ttl: 16000});
 }
 
 export async function joinIdxLocalCall() {

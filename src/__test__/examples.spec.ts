@@ -263,10 +263,10 @@ describe('Testing examples', () => {
         expect(joinRelayCallResult.length).toBeGreaterThanOrEqual(2);
     });
 
-    it('join.aqua network', async () => {
+    it.skip('join.aqua network', async () => {
         let joinCallResult = await joinIdxCall();
         expect(joinCallResult.length).toBeGreaterThanOrEqual(2);
-    });
+    }, 16000);
 
     it('multiReturn.aqua', async () => {
         let multiReturnResult = await multiReturnCall();
