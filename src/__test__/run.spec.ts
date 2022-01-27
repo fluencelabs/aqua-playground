@@ -12,7 +12,11 @@ describe('Testing run command', () => {
     const message2 = "aaa"
     const func = `\"call(\\\"${message}\\\", \\\"${message2}\\\", \\\"${nodeId}\\\")\"`
     const call = `npm run aqua run -- --addr ${addr} -i cli-run-aqua/caller.aqua -m node_modules/ --func ${func}`
-    const listModulesCall = `npm run aqua listBlueprints -- --addr ${addr}`
+    const listBlueprintsCall = `npm run aqua listBlueprints -- --addr ${addr}`
+    const listModulesCall = `npm run aqua listModules -- --addr ${addr}`
+    const listInterfacesCall = `npm run aqua listInterfaces -- --addr ${addr}`
+    const getInterfaceCall = `npm run aqua getInterface -- --addr ${addr}`
+    const getModuleInterfaceCall = `npm run aqua getModuleInterface -- --addr ${addr}`
 
     it('run simple command', (done) => {
         exec(call, (error, stdout, stderr) => {
@@ -23,7 +27,7 @@ describe('Testing run command', () => {
             } else {
                 // get element before last in output
                 const result = stdout;
-                console.log(result);
+
                 const toCheck = [message, message2].join(',');
                 const res = result.includes(message) && result.includes(message2);
                 if (res) {
@@ -39,6 +43,22 @@ describe('Testing run command', () => {
     }, 16000);
 
     it.skip('run listBlueprints', (done) => {
+        exec(listBlueprintsCall, (error, stdout, stderr) => {
+            if (error) {
+                console.error(`error: ${error.message}`);
+            } else if (stderr) {
+                console.error(`stderr: ${stderr}`);
+            } else {
+                // get element before last in output
+                const result = JSON.parse(stdout);
+
+                expect(Array.isArray(result)).toBeTruthy();
+            }
+            done();
+        });
+    }, 16000);
+
+    it.skip('run listModules', (done) => {
         exec(listModulesCall, (error, stdout, stderr) => {
             if (error) {
                 console.error(`error: ${error.message}`);
@@ -46,17 +66,25 @@ describe('Testing run command', () => {
                 console.error(`stderr: ${stderr}`);
             } else {
                 // get element before last in output
-                const result = stdout;
-                console.log(result);
-                const toCheck = [message, message2].join(',');
-                const res = result.includes(message) && result.includes(message2);
-                if (res) {
-                    console.log('Test passed.');
-                } else {
-                    console.log(`Incorrect message returned. Returned: ${result}. Expected: ${toCheck}`);
-                }
+                const result = JSON.parse(stdout);
 
-                expect(res).toBeTruthy();
+                expect(Array.isArray(result)).toBeTruthy();
+            }
+            done();
+        });
+    }, 16000);
+
+    it.skip('run listInterfaces', (done) => {
+        exec(listInterfacesCall, (error, stdout, stderr) => {
+            if (error) {
+                console.error(`error: ${error.message}`);
+            } else if (stderr) {
+                console.error(`stderr: ${stderr}`);
+            } else {
+                // get element before last in output
+                const result = JSON.parse(stdout);
+
+                expect(Array.isArray(result)).toBeTruthy();
             }
             done();
         });
