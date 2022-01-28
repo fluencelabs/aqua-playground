@@ -175,7 +175,7 @@ describe('Testing examples', () => {
     it('foldJoin.aqua', async () => {
         let foldJoinResult = await foldJoinCall();
         expect(foldJoinResult.length).toBeGreaterThanOrEqual(3)
-    });
+    }, 16000);
 
     it('option.aqua', async () => {
         registerHandlers();
@@ -192,7 +192,7 @@ describe('Testing examples', () => {
         expect(res1).toEqual(res2);
         expect(res2).toEqual(res3);
         expect(res3).toEqual(res4);
-    });
+    }, 16000);
 
     it('nestedFuncs.aqua', async () => {
         let nestedFuncsResult = await nestedFuncsCall();
