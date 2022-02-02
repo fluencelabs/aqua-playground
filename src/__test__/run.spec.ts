@@ -42,7 +42,7 @@ describe('Testing run command', () => {
         });
     }, 16000);
 
-    it('run listBlueprints', (done) => {
+    it.skip('run listBlueprints', (done) => {
         exec(listBlueprintsCall, (error, stdout, stderr) => {
             if (error) {
                 console.error(`error: ${error.message}`);
@@ -58,7 +58,7 @@ describe('Testing run command', () => {
         });
     }, 16000);
 
-    it('run listModules', (done) => {
+    it.skip('run listModules', (done) => {
         exec(listModulesCall, (error, stdout, stderr) => {
             if (error) {
                 console.error(`error: ${error.message}`);
@@ -74,7 +74,7 @@ describe('Testing run command', () => {
         });
     }, 16000);
 
-    it('run listInterfaces', (done) => {
+    it.skip('run listInterfaces', (done) => {
         exec(listInterfacesCall, (error, stdout, stderr) => {
             if (error) {
                 console.error(`error: ${error.message}`);
@@ -82,7 +82,6 @@ describe('Testing run command', () => {
                 console.error(`stderr: ${stderr}`);
             } else {
                 let arr = stdout.split("\n").slice(2)
-                console.log(stdout)
                 const result = JSON.parse(arr.join(""));
 
                 expect(Array.isArray(result)).toBeTruthy();
