@@ -42,7 +42,7 @@ describe('Testing run command', () => {
         });
     }, 16000);
 
-    it.skip('run listBlueprints', (done) => {
+    it('run listBlueprints', (done) => {
         exec(listBlueprintsCall, (error, stdout, stderr) => {
             if (error) {
                 console.error(`error: ${error.message}`);
@@ -58,7 +58,7 @@ describe('Testing run command', () => {
         });
     }, 16000);
 
-    it.skip('run listModules', (done) => {
+    it('run listModules', (done) => {
         exec(listModulesCall, (error, stdout, stderr) => {
             if (error) {
                 console.error(`error: ${error.message}`);
@@ -74,7 +74,7 @@ describe('Testing run command', () => {
         });
     }, 16000);
 
-    it.skip('run listInterfaces', (done) => {
+    it('run listInterfaces', (done) => {
         exec(listInterfacesCall, (error, stdout, stderr) => {
             if (error) {
                 console.error(`error: ${error.message}`);
