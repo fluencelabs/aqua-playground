@@ -49,8 +49,8 @@ describe('Testing run command', () => {
             } else if (stderr) {
                 console.error(`stderr: ${stderr}`);
             } else {
-                // get element before last in output
-                const result = JSON.parse(stdout);
+                let arr = stdout.split("\n").slice(2)
+                const result = JSON.parse(arr.join(""));
 
                 expect(Array.isArray(result)).toBeTruthy();
             }
@@ -65,8 +65,8 @@ describe('Testing run command', () => {
             } else if (stderr) {
                 console.error(`stderr: ${stderr}`);
             } else {
-                // get element before last in output
-                const result = JSON.parse(stdout);
+                let arr = stdout.split("\n").slice(2)
+                const result = JSON.parse(arr.join(""));
 
                 expect(Array.isArray(result)).toBeTruthy();
             }
@@ -81,8 +81,8 @@ describe('Testing run command', () => {
             } else if (stderr) {
                 console.error(`stderr: ${stderr}`);
             } else {
-                // get element before last in output
-                const result = JSON.parse(stdout);
+                let arr = stdout.split("\n").slice(2)
+                const result = JSON.parse(arr.join(""));
 
                 expect(Array.isArray(result)).toBeTruthy();
             }
