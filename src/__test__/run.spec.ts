@@ -82,6 +82,7 @@ describe('Testing run command', () => {
                 console.error(`stderr: ${stderr}`);
             } else {
                 let arr = stdout.split("\n").slice(2)
+                console.log(stdout)
                 const result = JSON.parse(arr.join(""));
 
                 expect(Array.isArray(result)).toBeTruthy();
