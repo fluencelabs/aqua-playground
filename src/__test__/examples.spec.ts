@@ -6,7 +6,7 @@ import { onCall } from '../examples/onCall';
 import { funcCall } from '../examples/funcCall';
 import { helloWorldCall } from '../examples/helloWorldCall';
 import { foldCall } from '../examples/foldCall';
-import { ifCall } from '../examples/if';
+import {ifCall, ifWrapCall} from '../examples/if';
 import { parCall } from '../examples/parCall';
 import { complexCall } from '../examples/complex';
 import { constantsCall } from '../examples/constantsCall';
@@ -85,6 +85,11 @@ describe('Testing examples', () => {
 
     it('if.aqua', async () => {
         await ifCall();
+    });
+
+    it('if.aqua xor wrap', async () => {
+        let res = await ifWrapCall(peer2.getStatus().peerId);
+        expect(res).toBe('0x');
     });
 
     it(' par.aqua', async () => {
