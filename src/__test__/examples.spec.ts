@@ -88,8 +88,8 @@ describe('Testing examples', () => {
     });
 
     it('if.aqua xor wrap', async () => {
-        let res = await ifWrapCall(peer2.getStatus().peerId);
-        expect(res).toBe('0x');
+        let res = await ifWrapCall(peer2.getStatus().relayPeerId);
+        expect(res).toBe('1x');
     });
 
     it(' par.aqua', async () => {
