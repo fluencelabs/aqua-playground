@@ -11,7 +11,7 @@ import { parCall } from '../examples/parCall';
 import { complexCall } from '../examples/complex';
 import { constantsCall } from '../examples/constantsCall';
 import { returnNilCall, returnNoneCall, streamCall } from '../examples/streamCall';
-import {topologyBug205Call, topologyBug394Call, topologyCall} from '../examples/topologyCall';
+import {topologyBug205Call, topologyBug394Call, topologyBug427Call, topologyCall} from '../examples/topologyCall';
 import { foldJoinCall } from '../examples/foldJoinCall';
 import { registerHandlers, returnNull, returnOptionalCall, useOptionalCall } from '../examples/useOptionalCall';
 import { viaCall } from '../examples/viaCall';
@@ -34,6 +34,7 @@ import {streamCanCall} from "../examples/streamCan";
 import {streamCallbackCall} from "../examples/streamCallback";
 import {streamResCall} from "../examples/streamRestrictionsCall";
 import {joinIdxCall, joinIdxLocalCall, joinIdxRelayCall} from "../examples/joinCall";
+import {topologyBug427} from "../compiled/examples/topology";
 
 var selfPeerId: string;
 var peer2: FluencePeer;
@@ -169,6 +170,12 @@ describe('Testing examples', () => {
         const peerId2 = peer2.getStatus().relayPeerId
         const res: string[] = [peerId2]
         expect(topologyResult).toEqual(res);
+    });
+
+    it('topology.aqua bug 427', async () => {
+        let topologyResult = await topologyBug427Call(peer2);
+
+        expect(topologyResult).toEqual(["some string", "some string"]);
     });
 
     it('topology.aqua bug 394', async () => {

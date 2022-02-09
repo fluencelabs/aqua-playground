@@ -4,7 +4,7 @@ import {
     registerTesto,
     registerLocalPrint,
     topologyBug205,
-    topologyBug394
+    topologyBug394, topologyBug427
 } from '../compiled/examples/topology';
 
 export async function topologyBug394Call(peer2: FluencePeer): Promise<string> {
@@ -25,6 +25,14 @@ export async function topologyBug205Call(peer2: FluencePeer): Promise<string[]> 
     const selfPeerId2 = peer2.getStatus().peerId;
 
     return topologyBug205(relayPeerId, relayPeerId2)
+}
+
+export async function topologyBug427Call(peer2: FluencePeer): Promise<string[]> {
+    const relayPeerId = Fluence.getPeer().getStatus().relayPeerId;
+
+    const relayPeerId2 = peer2.getStatus().relayPeerId;
+
+    return topologyBug427([relayPeerId, relayPeerId2])
 }
 
 export async function topologyCall(peer2: FluencePeer): Promise<string> {

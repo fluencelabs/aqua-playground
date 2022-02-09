@@ -25,10 +25,11 @@
         "compile-aqua": "aqua -i ./aqua/ -o ./src/compiled",
         "compile-aqua:air": "aqua -i ./aqua/ -o ./compiled-air -a",
         "prettify-compiled": "prettier --write src/compiled",
-        "aqua": "aqua"
+        "aqua": "aqua",
+        "do": "aqua dist deploy --addr /dns4/kras-04.fluence.dev/tcp/19001/wss/p2p/12D3KooWFEwNWcHqi9rtsmDhsYcDbRUCDXH84RC4FW6UfsFWaoHi --data-path deploy.json --service tsOracle"
     },
     "devDependencies": {
-        "@fluencelabs/aqua": "0.6.0-263",
+        "@fluencelabs/aqua": "0.6.0-272",
         "@fluencelabs/aqua-dht": "0.2.4",
         "@fluencelabs/aqua-lib": "0.3.2",
         "@types/jest": "^27.0.2",

@@ -6,6 +6,9 @@ service Testo("testo"):
 service LocalPrint("lp"):
     print: string -> ()
 
+service Opop("op"):
+    identity(s: string) -> string
+
 
 func topologyTest(me: string, myRelay: string, friend: string, friendRelay: string) -> string:
     on friend via friendRelay:
@@ -39,3 +42,12 @@ func topologyBug394(peer: string, peer2: string, peer3: string) -> string:
 
     -- send the result to the initiator
     <- comp
+
+func topologyBug427(peers: []string) -> []string:
+    results: *string
+    for peer <- peers par:
+        on peer:
+            results <- Opop.identity("some string")
+
+    join results[1]
+    <- results
