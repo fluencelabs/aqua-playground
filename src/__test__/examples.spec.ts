@@ -178,7 +178,7 @@ describe('Testing examples', () => {
         expect(topologyResult).toEqual(res);
     });
 
-    it('topology.aqua bug 427', async () => {
+    it.skip('topology.aqua bug 427', async () => {
         let topologyResult = await topologyBug427Call(peer2);
 
         expect(topologyResult).toEqual(["some string", "some string"]);
