@@ -11,3 +11,6 @@ func passFunctionAsArg(node: string, str: string, c: string -> string):
         -- then return on a node
         Peer.identify()
     print(res)
+
+func reproArgsBug426(log: string -> (), arg: string):
+    log(arg)

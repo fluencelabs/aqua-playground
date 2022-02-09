@@ -1,6 +1,6 @@
 import {Fluence, FluencePeer, setLogLevel} from '@fluencelabs/fluence';
 import { registerPrintln } from '../compiled/examples/println';
-import { callArrowCall } from '../examples/callArrowCall';
+import {callArrowCall, reproArgsBug426Call} from '../examples/callArrowCall';
 import { dataAliasCall } from '../examples/dataAliasCall';
 import { onCall } from '../examples/onCall';
 import { funcCall } from '../examples/funcCall';
@@ -71,6 +71,12 @@ describe('Testing examples', () => {
         let callArrowResult = await callArrowCall();
 
         expect(callArrowResult).toBe('Hello, callArrow call!');
+    });
+
+    it('callArrow.aqua args bug 426', async () => {
+        let argResult = await reproArgsBug426Call();
+
+        expect(argResult).toBe("privet");
     });
 
     it('streamRestrictions.aqua', async () => {
