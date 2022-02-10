@@ -15,8 +15,6 @@ describe('Testing run command', () => {
     const listBlueprintsCall = `npm run aqua listBlueprints -- --addr ${addr}`
     const listModulesCall = `npm run aqua listModules -- --addr ${addr}`
     const listInterfacesCall = `npm run aqua listInterfaces -- --addr ${addr}`
-    const getInterfaceCall = `npm run aqua getInterface -- --addr ${addr}`
-    const getModuleInterfaceCall = `npm run aqua getModuleInterface -- --addr ${addr}`
 
     it('run simple command', (done) => {
         exec(call, (error, stdout, stderr) => {
@@ -42,49 +40,64 @@ describe('Testing run command', () => {
         });
     }, 16000);
 
-    it.skip('run listBlueprints', (done) => {
+    it('run listBlueprints', (done) => {
         exec(listBlueprintsCall, (error, stdout, stderr) => {
             if (error) {
                 console.error(`error: ${error.message}`);
             } else if (stderr) {
                 console.error(`stderr: ${stderr}`);
             } else {
-                let arr = stdout.split("\n").slice(2)
-                const result = JSON.parse(arr.join(""));
+                try {
+                    let arr = stdout.split("\n").slice(5)
+                    console.log(arr)
+                    const result = JSON.parse(arr.join(""));
 
-                expect(Array.isArray(result)).toBeTruthy();
+                    expect(Array.isArray(result)).toBeTruthy();
+                } catch (e) {
+                    console.error(e)
+                }
             }
             done();
         });
     }, 16000);
 
-    it.skip('run listModules', (done) => {
+    it('run listModules', (done) => {
         exec(listModulesCall, (error, stdout, stderr) => {
             if (error) {
                 console.error(`error: ${error.message}`);
             } else if (stderr) {
                 console.error(`stderr: ${stderr}`);
             } else {
-                let arr = stdout.split("\n").slice(2)
-                const result = JSON.parse(arr.join(""));
+                try {
+                    let arr = stdout.split("\n").slice(5)
+                    console.log(arr)
+                    const result = JSON.parse(arr.join(""));
 
-                expect(Array.isArray(result)).toBeTruthy();
+                    expect(Array.isArray(result)).toBeTruthy();
+                } catch (e) {
+                    console.error(e)
+                }
             }
             done();
         });
     }, 16000);
 
-    it.skip('run listInterfaces', (done) => {
+    it('run listInterfaces', (done) => {
         exec(listInterfacesCall, (error, stdout, stderr) => {
             if (error) {
                 console.error(`error: ${error.message}`);
             } else if (stderr) {
                 console.error(`stderr: ${stderr}`);
             } else {
-                let arr = stdout.split("\n").slice(2)
-                const result = JSON.parse(arr.join(""));
+                try {
+                    let arr = stdout.split("\n").slice(5)
+                    console.log(arr)
+                    const result = JSON.parse(arr.join(""));
 
-                expect(Array.isArray(result)).toBeTruthy();
+                    expect(Array.isArray(result)).toBeTruthy();
+                } catch (e) {
+                    console.error(e)
+                }
             }
             done();
         });

@@ -29,9 +29,9 @@
         "do": "aqua dist deploy --addr /dns4/kras-04.fluence.dev/tcp/19001/wss/p2p/12D3KooWFEwNWcHqi9rtsmDhsYcDbRUCDXH84RC4FW6UfsFWaoHi --data-path deploy.json --service tsOracle"
     },
     "devDependencies": {
-        "@fluencelabs/aqua": "0.6.0-272",
-        "@fluencelabs/aqua-dht": "0.2.4",
-        "@fluencelabs/aqua-lib": "0.3.2",
+        "@fluencelabs/aqua": "0.6.0-274",
+        "@fluencelabs/aqua-dht": "0.2.5",
+        "@fluencelabs/aqua-lib": "0.4.0",
         "@types/jest": "^27.0.2",
         "jest": "^27.2.4",
         "ts-jest": "^27.0.5",
@@ -40,8 +40,8 @@
     },
     "dependencies": {
         "@fluencelabs/aqua-dht-ts": "0.1.38",
-        "@fluencelabs/avm": "0.20.2",
-        "@fluencelabs/fluence": "0.19.0",
+        "@fluencelabs/avm": "0.20.3",
+        "@fluencelabs/fluence": "0.19.1",
         "@fluencelabs/fluence-network-environment": "1.0.13",
         "deep-equal": "^2.0.5"
     },
