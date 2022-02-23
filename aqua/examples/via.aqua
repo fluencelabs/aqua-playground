@@ -1,8 +1,5 @@
 import "@fluencelabs/aqua-lib/builtin.aqua"
 
-service CustomId("cid"):
-  id(s: string) -> string
-
 func viaArr(node_id: string, viaAr: []string) -> Info:
     on node_id via viaAr:
         p <- Peer.identify()

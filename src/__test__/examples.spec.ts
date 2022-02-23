@@ -14,7 +14,7 @@ import { returnNilCall, returnNoneCall, streamCall } from '../examples/streamCal
 import {topologyBug205Call, topologyBug394Call, topologyBug427Call, topologyCall} from '../examples/topologyCall';
 import { foldJoinCall } from '../examples/foldJoinCall';
 import { registerHandlers, returnNull, returnOptionalCall, useOptionalCall } from '../examples/useOptionalCall';
-import { viaCall } from '../examples/viaCall';
+import {viaArrCall, viaOptCall, viaOptNullCall, viaStreamCall} from '../examples/viaCall';
 import { nestedFuncsCall } from '../examples/nestedFuncsCall';
 import { assignmentCall } from '../examples/assignment';
 import { tryCatchCall } from '../examples/tryCatchCall';
@@ -206,7 +206,10 @@ describe('Testing examples', () => {
     });
 
     it('via.aqua', async () => {
-        let [res1, res2, res3, res4] = await viaCall();
+        let res1 = await viaArrCall();
+        let res2 = await viaOptCall();
+        let res3 = await viaOptNullCall();
+        let res4 = await viaStreamCall();
         expect(res1).toEqual(res2);
         expect(res2).toEqual(res3);
         expect(res3).toEqual(res4);
