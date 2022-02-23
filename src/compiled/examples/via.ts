@@ -16,40 +16,6 @@ import {
 
 // Services
 
-export interface CustomIdDef {
-    id: (s: string, callParams: CallParams<'s'>) => string | Promise<string>;
-}
-export function registerCustomId(service: CustomIdDef): void;
-export function registerCustomId(serviceId: string, service: CustomIdDef): void;
-export function registerCustomId(peer: FluencePeer, service: CustomIdDef): void;
-export function registerCustomId(peer: FluencePeer, serviceId: string, service: CustomIdDef): void;
-       
-
-export function registerCustomId(...args: any) {
-    registerService(
-        args,
-        {
-    "defaultServiceId" : "cid",
-    "functions" : [
-        {
-            "functionName" : "id",
-            "argDefs" : [
-                {
-                    "name" : "s",
-                    "argType" : {
-                        "tag" : "primitive"
-                    }
-                }
-            ],
-            "returnType" : {
-                "tag" : "primitive"
-            }
-        }
-    ]
-}
-    );
-}
-      
 // Functions
  
 export type ViaArrResult = { air_version: string; external_addresses: string[]; node_version: string; }

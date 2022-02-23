@@ -1,5 +1,5 @@
 import { Fluence } from '@fluencelabs/fluence';
-import { viaArr, viaOpt, viaStream, registerCustomId } from '../compiled/examples/via';
+import { viaArr, viaOpt, viaStream } from '../compiled/examples/via';
 import { config } from '../config';
 
 const relays = config.relays
