@@ -1,0 +1,25 @@
+func arraySugar(n: u32, m: u32) -> []u32, []u32:
+  arr = [1,2,n]
+  str: *u32
+  for i <- [4,5,m]:
+    str <<- i
+  <- arr, str
+
+func streamSugar(n: u32, m: u32) -> []u32, []u32:
+  arr = *[1,2,n]
+  str: *u32
+  for i <- *[4,5,m]:
+    str <<- i
+  <- arr, str
+
+func optionSugar(numSome: ?u32, strSome: ?string, numNone: ?u32, strNone: ?string) -> []u32, []string, []string:
+  arr = ?[numNone!, numSome!]
+  str: *string
+  str2 = ?[strNone!, strNone!]
+  for i <- ?[strSome!,strNone!, "random string"]:
+    str <<- i
+
+  for i <- ?[strNone!,strNone!]:
+    str <<- i
+  <- arr, str, str2
+

@@ -9,7 +9,5 @@ func recursiveStream() -> []string:
   for l <- loop:
     if l == "yes":
       loop <- YesNoService.get()
-    else:
-      loop <- YesNoService.get()
     result <<- "success"
   <- result

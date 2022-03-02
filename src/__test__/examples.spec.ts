@@ -36,6 +36,7 @@ import {streamResCall} from "../examples/streamRestrictionsCall";
 import {joinIdxCall, joinIdxLocalCall, joinIdxRelayCall} from "../examples/joinCall";
 import {topologyBug427} from "../compiled/examples/topology";
 import {recursiveStreamsCall} from "../examples/recursiveStreamsCall";
+import {arraySugarCall, optionSugarCall, streamSugarCall} from "../examples/collectionSugarCall";
 
 var selfPeerId: string;
 var peer2: FluencePeer;
@@ -160,6 +161,21 @@ describe('Testing examples', () => {
     it('streamCan.aqua', async () => {
         let streamCanResult = await streamCanCall();
         expect(streamCanResult).toEqual([["a"], ["b"], []]);
+    });
+
+    it.skip('collectionSugar.aqua array', async () => {
+        let result = await arraySugarCall();
+        expect(result).toEqual([[1,2,3], [4,5,6]]);
+    });
+
+    it.skip('collectionSugar.aqua stream', async () => {
+        let result = await streamSugarCall();
+        expect(result).toEqual([[1,2,3], [4,5,6]]);
+    });
+
+    it.skip('collectionSugar.aqua option', async () => {
+        let result = await optionSugarCall()
+        expect(result).toEqual([[1], ["some"], []]);
     });
 
     it.skip('recursiveStreams.aqua', async () => {
