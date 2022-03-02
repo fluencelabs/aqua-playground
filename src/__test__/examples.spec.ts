@@ -35,6 +35,7 @@ import {streamCallbackCall} from "../examples/streamCallback";
 import {streamResCall} from "../examples/streamRestrictionsCall";
 import {joinIdxCall, joinIdxLocalCall, joinIdxRelayCall} from "../examples/joinCall";
 import {topologyBug427} from "../compiled/examples/topology";
+import {recursiveStreamsCall} from "../examples/recursiveStreamsCall";
 
 var selfPeerId: string;
 var peer2: FluencePeer;
@@ -159,6 +160,13 @@ describe('Testing examples', () => {
     it('streamCan.aqua', async () => {
         let streamCanResult = await streamCanCall();
         expect(streamCanResult).toEqual([["a"], ["b"], []]);
+    });
+
+    it.skip('recursiveStreams.aqua', async () => {
+
+        let recResult = await recursiveStreamsCall();
+        console.log(recResult)
+        expect(recResult.length).toEqual(3);
     });
 
     it('streamCallback.aqua', async () => {
