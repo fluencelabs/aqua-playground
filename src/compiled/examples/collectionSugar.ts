@@ -49,40 +49,37 @@ export function arraySugar(...args: any) {
                         (seq
                          (seq
                           (seq
-                           (seq
+                           (new $array-sugar
                             (seq
-                             (new $array-sugar
+                             (seq
                               (seq
-                               (seq
-                                (seq
-                                 (ap 1 $array-sugar)
-                                 (ap 2 $array-sugar)
-                                )
-                                (ap n $array-sugar)
-                               )
-                               (call %init_peer_id% ("op" "identity") [$array-sugar] array-sugar-0)
+                               (ap 1 $array-sugar)
+                               (ap 2 $array-sugar)
                               )
+                              (ap n $array-sugar)
                              )
-                             (new $array-sugar-1
-                              (seq
-                               (seq
-                                (seq
-                                 (ap 4 $array-sugar-1)
-                                 (ap 5 $array-sugar-1)
-                                )
-                                (ap m $array-sugar-1)
-                               )
-                               (call %init_peer_id% ("op" "identity") [$array-sugar-1] array-sugar-1-0)
-                              )
-                             )
-                            )
-                            (fold array-sugar-1-0 i
-                             (null)
+                             (call %init_peer_id% ("op" "identity") [$array-sugar] array-sugar-0)
                             )
                            )
-                           (ap i $str)
+                           (new $array-sugar-1
+                            (seq
+                             (seq
+                              (seq
+                               (ap 4 $array-sugar-1)
+                               (ap 5 $array-sugar-1)
+                              )
+                              (ap m $array-sugar-1)
+                             )
+                             (call %init_peer_id% ("op" "identity") [$array-sugar-1] array-sugar-1-0)
+                            )
+                           )
                           )
-                          (next i)
+                          (fold array-sugar-1-0 i
+                           (seq
+                            (ap i $str)
+                            (next i)
+                           )
+                          )
                          )
                          (call %init_peer_id% ("op" "identity") [$str] str-fix)
                         )
@@ -177,26 +174,23 @@ export function streamSugar(...args: any) {
                               (seq
                                (seq
                                 (seq
-                                 (seq
-                                  (seq
-                                   (ap 1 $stream-sugar)
-                                   (ap 2 $stream-sugar)
-                                  )
-                                  (ap n $stream-sugar)
-                                 )
-                                 (ap 4 $stream-sugar-0)
+                                 (ap 1 $stream-sugar)
+                                 (ap 2 $stream-sugar)
                                 )
-                                (ap 5 $stream-sugar-0)
+                                (ap n $stream-sugar)
                                )
-                               (ap m $stream-sugar-0)
+                               (ap 4 $stream-sugar-0)
                               )
-                              (fold $stream-sugar-0 i
-                               (null)
-                              )
+                              (ap 5 $stream-sugar-0)
                              )
-                             (ap i $str)
+                             (ap m $stream-sugar-0)
                             )
-                            (next i)
+                            (fold $stream-sugar-0 i
+                             (seq
+                              (ap i $str)
+                              (next i)
+                             )
+                            )
                            )
                            (call %init_peer_id% ("op" "identity") [$stream-sugar] arr-fix)
                           )
@@ -301,67 +295,82 @@ export function optionSugar(...args: any) {
                            (seq
                             (seq
                              (seq
-                              (seq
+                              (new $option-sugar
                                (seq
-                                (seq
-                                 (seq
-                                  (new $option-sugar
-                                   (seq
-                                    (xor
-                                     (ap numNone.$.[0]! $option-sugar)
-                                     (ap numSome.$.[0]! $option-sugar)
-                                    )
-                                    (call %init_peer_id% ("op" "identity") [$option-sugar] option-sugar-0)
-                                   )
-                                  )
-                                  (new $option-sugar-1
-                                   (seq
-                                    (xor
-                                     (ap strNone.$.[0]! $option-sugar-1)
-                                     (ap strNone.$.[0]! $option-sugar-1)
-                                    )
-                                    (call %init_peer_id% ("op" "identity") [$option-sugar-1] option-sugar-1-0)
-                                   )
-                                  )
+                                (xor
+                                 (xor
+                                  (ap numNone.$.[0]! $option-sugar)
+                                  (ap numSome.$.[0]! $option-sugar)
                                  )
-                                 (new $option-sugar-2
-                                  (seq
-                                   (xor
-                                    (xor
-                                     (ap strSome.$.[0]! $option-sugar-2)
-                                     (ap strNone.$.[0]! $option-sugar-2)
-                                    )
-                                    (ap "random string" $option-sugar-2)
-                                   )
-                                   (call %init_peer_id% ("op" "identity") [$option-sugar-2] option-sugar-2-0)
-                                  )
-                                 )
-                                )
-                                (fold option-sugar-2-0 i
                                  (null)
                                 )
+                                (call %init_peer_id% ("op" "identity") [$option-sugar] option-sugar-0)
                                )
-                               (ap i $str)
                               )
-                              (next i)
+                              (new $option-sugar-1
+                               (seq
+                                (xor
+                                 (xor
+                                  (xor
+                                   (xor
+                                    (xor
+                                     (ap strNone.$.[0]! $option-sugar-1)
+                                     (ap strNone.$.[0]! $option-sugar-1)
+                                    )
+                                    (ap strNone.$.[0]! $option-sugar-1)
+                                   )
+                                   (ap strNone.$.[0]! $option-sugar-1)
+                                  )
+                                  (ap strNone.$.[0]! $option-sugar-1)
+                                 )
+                                 (null)
+                                )
+                                (call %init_peer_id% ("op" "identity") [$option-sugar-1] option-sugar-1-0)
+                               )
+                              )
                              )
-                             (new $option-sugar-3
+                             (new $option-sugar-2
                               (seq
                                (xor
-                                (ap strNone.$.[0]! $option-sugar-3)
-                                (ap strNone.$.[0]! $option-sugar-3)
+                                (xor
+                                 (xor
+                                  (ap strSome.$.[0]! $option-sugar-2)
+                                  (ap strNone.$.[0]! $option-sugar-2)
+                                 )
+                                 (ap "random string" $option-sugar-2)
+                                )
+                                (null)
                                )
-                               (call %init_peer_id% ("op" "identity") [$option-sugar-3] option-sugar-3-0)
+                               (call %init_peer_id% ("op" "identity") [$option-sugar-2] option-sugar-2-0)
                               )
                              )
                             )
-                            (fold option-sugar-3-0 i
-                             (null)
+                            (fold option-sugar-2-0 i
+                             (seq
+                              (ap i $str)
+                              (next i)
+                             )
                             )
                            )
-                           (ap i $str)
+                           (new $option-sugar-3
+                            (seq
+                             (xor
+                              (xor
+                               (ap strNone.$.[0]! $option-sugar-3)
+                               (ap strNone.$.[0]! $option-sugar-3)
+                              )
+                              (null)
+                             )
+                             (call %init_peer_id% ("op" "identity") [$option-sugar-3] option-sugar-3-0)
+                            )
+                           )
                           )
-                          (next i)
+                          (fold option-sugar-3-0 i
+                           (seq
+                            (ap i $str)
+                            (next i)
+                           )
+                          )
                          )
                          (call %init_peer_id% ("op" "identity") [$str] str-fix)
                         )

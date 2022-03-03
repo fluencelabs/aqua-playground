@@ -15,7 +15,7 @@ func streamSugar(n: u32, m: u32) -> []u32, []u32:
 func optionSugar(numSome: ?u32, strSome: ?string, numNone: ?u32, strNone: ?string) -> []u32, []string, []string:
   arr = ?[numNone!, numSome!]
   str: *string
-  str2 = ?[strNone!, strNone!]
+  str2 = ?[strNone!, strNone!, strNone!, strNone!, strNone!]
   for i <- ?[strSome!,strNone!, "random string"]:
     str <<- i
 

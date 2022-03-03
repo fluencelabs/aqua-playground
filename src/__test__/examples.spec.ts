@@ -163,17 +163,20 @@ describe('Testing examples', () => {
         expect(streamCanResult).toEqual([["a"], ["b"], []]);
     });
 
-    it.skip('collectionSugar.aqua array', async () => {
+    it('collectionSugar array', async () => {
+        console.log("collectionSugar array")
         let result = await arraySugarCall();
         expect(result).toEqual([[1,2,3], [4,5,6]]);
     });
 
-    it.skip('collectionSugar.aqua stream', async () => {
+    it('collectionSugar stream', async () => {
+        console.log("collectionSugar stream")
         let result = await streamSugarCall();
         expect(result).toEqual([[1,2,3], [4,5,6]]);
     });
 
-    it.skip('collectionSugar.aqua option', async () => {
+    it('collectionSugar option', async () => {
+        console.log("collectionSugar option")
         let result = await optionSugarCall()
         expect(result).toEqual([[1], ["some"], []]);
     });
