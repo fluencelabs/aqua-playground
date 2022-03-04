@@ -36,7 +36,7 @@ import {streamResCall} from "../examples/streamRestrictionsCall";
 import {joinIdxCall, joinIdxLocalCall, joinIdxRelayCall} from "../examples/joinCall";
 import {topologyBug427} from "../compiled/examples/topology";
 import {recursiveStreamsCall} from "../examples/recursiveStreamsCall";
-import {arraySugarCall, optionSugarCall, streamSugarCall} from "../examples/collectionSugarCall";
+import {allEmptySugarCall, arraySugarCall, optionSugarCall, streamSugarCall} from "../examples/collectionSugarCall";
 
 var selfPeerId: string;
 var peer2: FluencePeer;
@@ -164,21 +164,23 @@ describe('Testing examples', () => {
     });
 
     it('collectionSugar array', async () => {
-        console.log("collectionSugar array")
         let result = await arraySugarCall();
         expect(result).toEqual([[1,2,3], [4,5,6]]);
     });
 
     it('collectionSugar stream', async () => {
-        console.log("collectionSugar stream")
         let result = await streamSugarCall();
         expect(result).toEqual([[1,2,3], [4,5,6]]);
     });
 
     it('collectionSugar option', async () => {
-        console.log("collectionSugar option")
         let result = await optionSugarCall()
         expect(result).toEqual([[1], ["some"], []]);
+    });
+
+    it('collectionSugar empty', async () => {
+        let result = await allEmptySugarCall()
+        expect(result).toEqual([[], [], [], [], null, [], null]);
     });
 
     it.skip('recursiveStreams.aqua', async () => {

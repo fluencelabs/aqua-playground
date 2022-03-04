@@ -441,3 +441,89 @@ export function optionSugar(...args: any) {
         script
     )
 }
+
+ 
+export type EmptySugarResult = [number[], string[], string[], string[], number | null, number[], string | null]
+export function emptySugar(
+    config?: {ttl?: number}
+): Promise<EmptySugarResult>;
+
+export function emptySugar(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<EmptySugarResult>;
+
+export function emptySugar(...args: any) {
+
+    let script = `
+                    (xor
+                     (seq
+                      (seq
+                       (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+                       (new $strStream
+                        (seq
+                         (new $strArr
+                          (seq
+                           (new $numOp
+                            (call %init_peer_id% ("op" "identity") [[]] numOp-fix)
+                           )
+                           (call %init_peer_id% ("op" "identity") [[]] strArr-fix)
+                          )
+                         )
+                         (call %init_peer_id% ("op" "identity") [[]] strStream-fix)
+                        )
+                       )
+                      )
+                      (xor
+                       (call %init_peer_id% ("callbackSrv" "response") [numOp-fix strArr-fix strStream-fix $strEmptyStream [] [] []])
+                       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+                      )
+                     )
+                     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+                    )
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "emptySugar",
+    "returnType" : {
+        "tag" : "multiReturn",
+        "returnItems" : [
+            {
+                "tag" : "primitive"
+            },
+            {
+                "tag" : "primitive"
+            },
+            {
+                "tag" : "primitive"
+            },
+            {
+                "tag" : "primitive"
+            },
+            {
+                "tag" : "optional"
+            },
+            {
+                "tag" : "primitive"
+            },
+            {
+                "tag" : "optional"
+            }
+        ]
+    },
+    "argDefs" : [
+    ],
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
+}

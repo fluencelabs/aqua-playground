@@ -23,3 +23,15 @@ func optionSugar(numSome: ?u32, strSome: ?string, numNone: ?u32, strNone: ?strin
     str <<- i
   <- arr, str, str2
 
+func emptySugar() -> []u32, []string, []string, *string, ?u32, []u32, ?string:
+  numOp = ?[]
+  strArr = []
+  strStream = *[]
+  strEmptyStream: *string
+  for i <- ?[]:
+    strEmptyStream <<- "some"
+  for i <- *[]:
+    strEmptyStream <<- "some"
+  for i <- []:
+    strEmptyStream <<- "some"
+  <- numOp, strArr, strStream, strEmptyStream, [], ?[], *[]
