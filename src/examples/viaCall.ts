@@ -5,9 +5,7 @@ import { config } from '../config';
 const relays = config.relays
 
 export async function viaArrCall(): Promise<string[]> {
-    const relayPeerId = Fluence.getPeer().getStatus().relayPeerId;
-
-    let res = await viaArr(relays[4].peerId, [relays[2].peerId, relays[1].peerId]);
+    let res = await viaArr(relays[4].peerId, [relays[2].peerId, relays[1].peerId], {ttl: 10000});
 
     return res.external_addresses;
 }
