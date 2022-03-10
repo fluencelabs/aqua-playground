@@ -1,6 +1,6 @@
 import {recursiveStream, registerYesNoService} from "../compiled/examples/recursiveStreams";
 
-export async function recursiveStreamsCall(): Promise<string[]> {
+export async function recursiveStreamsCall(): Promise<[string[], string[]]> {
     let i = 0;
     registerYesNoService({
         get: () => {

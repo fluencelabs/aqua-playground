@@ -2,7 +2,7 @@
 service YesNoService("yesno"):
   get() -> string
 
-func recursiveStream() -> []string:
+func recursiveStream() -> []string, []string:
   result: *string
   loop: *string
   loop <<- "yes"
@@ -10,4 +10,4 @@ func recursiveStream() -> []string:
     if l == "yes":
       loop <- YesNoService.get()
     result <<- "success"
-  <- result
+  <- result, loop

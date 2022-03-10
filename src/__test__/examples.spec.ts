@@ -185,9 +185,11 @@ describe('Testing examples', () => {
 
     it('recursiveStreams.aqua', async () => {
 
-        let recResult = await recursiveStreamsCall();
-        console.log(recResult)
-        expect(recResult.length).toEqual(3);
+        let [sucList, loopList] = await recursiveStreamsCall();
+        console.log(sucList)
+        console.log(loopList)
+        expect(loopList).toEqual(["yes","yes","yes","yes","no"]);
+        expect(sucList.length).toEqual(5);
     });
 
     it('streamCallback.aqua', async () => {
