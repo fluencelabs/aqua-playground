@@ -183,7 +183,7 @@ describe('Testing examples', () => {
         expect(result).toEqual([[], [], [], [], null, [], null]);
     });
 
-    it.skip('recursiveStreams.aqua', async () => {
+    it('recursiveStreams.aqua', async () => {
 
         let recResult = await recursiveStreamsCall();
         console.log(recResult)
@@ -207,7 +207,7 @@ describe('Testing examples', () => {
         expect(topologyResult).toEqual(res);
     });
 
-    it.skip('topology.aqua bug 427', async () => {
+    it('topology.aqua bug 427', async () => {
         let topologyResult = await topologyBug427Call(peer2);
 
         expect(topologyResult).toEqual(["some string", "some string"]);
@@ -313,7 +313,7 @@ describe('Testing examples', () => {
         expect(joinRelayCallResult.length).toBeGreaterThanOrEqual(2);
     });
 
-    it.skip('join.aqua network', async () => {
+    it('join.aqua network', async () => {
         let joinCallResult = await joinIdxCall();
         expect(joinCallResult.length).toBeGreaterThanOrEqual(2);
     }, 16000);
