@@ -8,9 +8,12 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    CallParams,
     callFunction,
     registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v3';
+
+import {
+    CallParams
 } from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
@@ -30,22 +33,32 @@ export function registerOpO(...args: any) {
         args,
         {
     "defaultServiceId" : "op",
-    "functions" : [
-        {
-            "functionName" : "identity",
-            "argDefs" : [
-                {
-                    "name" : "arg0",
-                    "argType" : {
-                        "tag" : "primitive"
-                    }
+    "functions" : {
+        "tag" : "labeledProduct",
+        "fields" : {
+            "identity" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
+                    ]
+                },
+                "codomain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
+                    ]
                 }
-            ],
-            "returnType" : {
-                "tag" : "primitive"
             }
         }
-    ]
+    }
 }
     );
 }
@@ -66,22 +79,32 @@ export function registerGetter(...args: any) {
         args,
         {
     "defaultServiceId" : "test",
-    "functions" : [
-        {
-            "functionName" : "createStr",
-            "argDefs" : [
-                {
-                    "name" : "arg0",
-                    "argType" : {
-                        "tag" : "primitive"
-                    }
+    "functions" : {
+        "tag" : "labeledProduct",
+        "fields" : {
+            "createStr" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "scalar",
+                            "name" : "u32"
+                        }
+                    ]
+                },
+                "codomain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
+                    ]
                 }
-            ],
-            "returnType" : {
-                "tag" : "primitive"
             }
         }
-    ]
+    }
 }
     );
 }
@@ -102,22 +125,32 @@ export function registerOpN(...args: any) {
         args,
         {
     "defaultServiceId" : "op",
-    "functions" : [
-        {
-            "functionName" : "identity",
-            "argDefs" : [
-                {
-                    "name" : "arg0",
-                    "argType" : {
-                        "tag" : "primitive"
-                    }
+    "functions" : {
+        "tag" : "labeledProduct",
+        "fields" : {
+            "identity" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "scalar",
+                            "name" : "i32"
+                        }
+                    ]
+                },
+                "codomain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "scalar",
+                            "name" : "i32"
+                        }
+                    ]
                 }
-            ],
-            "returnType" : {
-                "tag" : "primitive"
             }
         }
-    ]
+    }
 }
     );
 }
@@ -157,11 +190,18 @@ export function compareConstants(...args: any) {
         args,
         {
     "functionName" : "compareConstants",
-    "returnType" : {
-        "tag" : "void"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                
+            }
+        },
+        "codomain" : {
+            "tag" : "nil"
+        }
     },
-    "argDefs" : [
-    ],
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",
@@ -216,11 +256,27 @@ export function callConstant(...args: any) {
         args,
         {
     "functionName" : "callConstant",
-    "returnType" : {
-        "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                
+            }
+        },
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                }
+            ]
+        }
     },
-    "argDefs" : [
-    ],
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",

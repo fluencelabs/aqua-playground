@@ -8,9 +8,12 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    CallParams,
     callFunction,
     registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v3';
+
+import {
+    CallParams
 } from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
@@ -66,17 +69,30 @@ export function getPeerExternalAddresses(...args: any) {
         args,
         {
     "functionName" : "getPeerExternalAddresses",
-    "returnType" : {
-        "tag" : "primitive"
-    },
-    "argDefs" : [
-        {
-            "name" : "otherNodePeerId",
-            "argType" : {
-                "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "otherNodePeerId" : {
+                    "tag" : "scalar",
+                    "name" : "string"
+                }
             }
+        },
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                }
+            ]
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",
@@ -154,23 +170,34 @@ export function getDistantAddresses(...args: any) {
         args,
         {
     "functionName" : "getDistantAddresses",
-    "returnType" : {
-        "tag" : "primitive"
-    },
-    "argDefs" : [
-        {
-            "name" : "target",
-            "argType" : {
-                "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "target" : {
+                    "tag" : "scalar",
+                    "name" : "string"
+                },
+                "viaNode" : {
+                    "tag" : "scalar",
+                    "name" : "string"
+                }
             }
         },
-        {
-            "name" : "viaNode",
-            "argType" : {
-                "tag" : "primitive"
-            }
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                }
+            ]
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",

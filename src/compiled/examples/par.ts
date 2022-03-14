@@ -8,9 +8,12 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    CallParams,
     callFunction,
     registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v3';
+
+import {
+    CallParams
 } from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
@@ -30,16 +33,26 @@ export function registerParService(...args: any) {
         args,
         {
     "defaultServiceId" : "parservice-id",
-    "functions" : [
-        {
-            "functionName" : "call",
-            "argDefs" : [
-            ],
-            "returnType" : {
-                "tag" : "primitive"
+    "functions" : {
+        "tag" : "labeledProduct",
+        "fields" : {
+            "call" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "nil"
+                },
+                "codomain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
+                    ]
+                }
             }
         }
-    ]
+    }
 }
     );
 }
@@ -108,36 +121,53 @@ export function parFunc(...args: any) {
         args,
         {
     "functionName" : "parFunc",
-    "returnType" : {
-        "tag" : "void"
-    },
-    "argDefs" : [
-        {
-            "name" : "node",
-            "argType" : {
-                "tag" : "primitive"
-            }
-        },
-        {
-            "name" : "c",
-            "argType" : {
-                "tag" : "callback",
-                "callback" : {
-                    "argDefs" : [
-                        {
-                            "name" : "arg0",
-                            "argType" : {
-                                "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "node" : {
+                    "tag" : "scalar",
+                    "name" : "string"
+                },
+                "c" : {
+                    "tag" : "arrow",
+                    "domain" : {
+                        "tag" : "unlabeledProduct",
+                        "items" : [
+                            {
+                                "tag" : "struct",
+                                "name" : "Info",
+                                "fields" : {
+                                    "air_version" : {
+                                        "tag" : "scalar",
+                                        "name" : "string"
+                                    },
+                                    "external_addresses" : {
+                                        "tag" : "array",
+                                        "type" : {
+                                            "tag" : "scalar",
+                                            "name" : "string"
+                                        }
+                                    },
+                                    "node_version" : {
+                                        "tag" : "scalar",
+                                        "name" : "string"
+                                    }
+                                }
                             }
-                        }
-                    ],
-                    "returnType" : {
-                        "tag" : "void"
+                        ]
+                    },
+                    "codomain" : {
+                        "tag" : "nil"
                     }
                 }
             }
+        },
+        "codomain" : {
+            "tag" : "nil"
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",

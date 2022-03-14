@@ -8,9 +8,12 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    CallParams,
     callFunction,
     registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v3';
+
+import {
+    CallParams
 } from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
@@ -30,22 +33,42 @@ export function registerSubService(...args: any) {
         args,
         {
     "defaultServiceId" : "sub_service",
-    "functions" : [
-        {
-            "functionName" : "sub",
-            "argDefs" : [
-                {
-                    "name" : "s",
-                    "argType" : {
-                        "tag" : "primitive"
+    "functions" : {
+        "tag" : "labeledProduct",
+        "fields" : {
+            "sub" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "labeledProduct",
+                    "fields" : {
+                        "s" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
                     }
+                },
+                "codomain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "struct",
+                            "name" : "SomeResult",
+                            "fields" : {
+                                "one" : {
+                                    "tag" : "scalar",
+                                    "name" : "string"
+                                },
+                                "two" : {
+                                    "tag" : "scalar",
+                                    "name" : "u32"
+                                }
+                            }
+                        }
+                    ]
                 }
-            ],
-            "returnType" : {
-                "tag" : "primitive"
             }
         }
-    ]
+    }
 }
     );
 }
@@ -83,11 +106,34 @@ export function subImport(...args: any) {
         args,
         {
     "functionName" : "subImport",
-    "returnType" : {
-        "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                
+            }
+        },
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "struct",
+                    "name" : "SomeResult",
+                    "fields" : {
+                        "one" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        },
+                        "two" : {
+                            "tag" : "scalar",
+                            "name" : "u32"
+                        }
+                    }
+                }
+            ]
+        }
     },
-    "argDefs" : [
-    ],
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",

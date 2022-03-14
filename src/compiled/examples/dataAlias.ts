@@ -8,9 +8,12 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    CallParams,
     callFunction,
     registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v3';
+
+import {
+    CallParams
 } from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
@@ -30,16 +33,36 @@ export function registerNodeIdGetter(...args: any) {
         args,
         {
     "defaultServiceId" : "somesrv",
-    "functions" : [
-        {
-            "functionName" : "get",
-            "argDefs" : [
-            ],
-            "returnType" : {
-                "tag" : "primitive"
+    "functions" : {
+        "tag" : "labeledProduct",
+        "fields" : {
+            "get" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "nil"
+                },
+                "codomain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "struct",
+                            "name" : "NodeId",
+                            "fields" : {
+                                "name" : {
+                                    "tag" : "scalar",
+                                    "name" : "string"
+                                },
+                                "peerId" : {
+                                    "tag" : "scalar",
+                                    "name" : "string"
+                                }
+                            }
+                        }
+                    ]
+                }
             }
         }
-    ]
+    }
 }
     );
 }
@@ -77,11 +100,24 @@ export function getAliasedData(...args: any) {
         args,
         {
     "functionName" : "getAliasedData",
-    "returnType" : {
-        "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                
+            }
+        },
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "scalar",
+                    "name" : "string"
+                }
+            ]
+        }
     },
-    "argDefs" : [
-    ],
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",

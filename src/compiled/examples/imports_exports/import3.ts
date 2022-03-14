@@ -8,9 +8,12 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    CallParams,
     callFunction,
     registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v3';
+
+import {
+    CallParams
 } from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
@@ -46,11 +49,24 @@ export function foo_wrapper(...args: any) {
         args,
         {
     "functionName" : "foo_wrapper",
-    "returnType" : {
-        "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                
+            }
+        },
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "scalar",
+                    "name" : "string"
+                }
+            ]
+        }
     },
-    "argDefs" : [
-    ],
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",

@@ -8,9 +8,12 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    CallParams,
     callFunction,
     registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v3';
+
+import {
+    CallParams
 } from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
@@ -30,34 +33,43 @@ export function registerAquaDHT(...args: any) {
         args,
         {
     "defaultServiceId" : "test-dht",
-    "functions" : [
-        {
-            "functionName" : "put_host_value",
-            "argDefs" : [
-                {
-                    "name" : "key",
-                    "argType" : {
-                        "tag" : "primitive"
+    "functions" : {
+        "tag" : "labeledProduct",
+        "fields" : {
+            "put_host_value" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "labeledProduct",
+                    "fields" : {
+                        "key" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        },
+                        "value" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        },
+                        "service_id" : {
+                            "tag" : "array",
+                            "type" : {
+                                "tag" : "scalar",
+                                "name" : "string"
+                            }
+                        }
                     }
                 },
-                {
-                    "name" : "value",
-                    "argType" : {
-                        "tag" : "primitive"
-                    }
-                },
-                {
-                    "name" : "service_id",
-                    "argType" : {
-                        "tag" : "primitive"
-                    }
+                "codomain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
+                    ]
                 }
-            ],
-            "returnType" : {
-                "tag" : "primitive"
             }
         }
-    ]
+    }
 }
     );
 }
@@ -110,29 +122,38 @@ export function putHostValue(...args: any) {
         args,
         {
     "functionName" : "putHostValue",
-    "returnType" : {
-        "tag" : "primitive"
-    },
-    "argDefs" : [
-        {
-            "name" : "key",
-            "argType" : {
-                "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "key" : {
+                    "tag" : "scalar",
+                    "name" : "string"
+                },
+                "value" : {
+                    "tag" : "scalar",
+                    "name" : "string"
+                },
+                "service_id" : {
+                    "tag" : "option",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                }
             }
         },
-        {
-            "name" : "value",
-            "argType" : {
-                "tag" : "primitive"
-            }
-        },
-        {
-            "name" : "service_id",
-            "argType" : {
-                "tag" : "optional"
-            }
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "scalar",
+                    "name" : "string"
+                }
+            ]
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",
@@ -184,17 +205,27 @@ export function create_client_util(...args: any) {
         args,
         {
     "functionName" : "create_client_util",
-    "returnType" : {
-        "tag" : "primitive"
-    },
-    "argDefs" : [
-        {
-            "name" : "service_id",
-            "argType" : {
-                "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "service_id" : {
+                    "tag" : "scalar",
+                    "name" : "string"
+                }
             }
+        },
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "scalar",
+                    "name" : "string"
+                }
+            ]
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",

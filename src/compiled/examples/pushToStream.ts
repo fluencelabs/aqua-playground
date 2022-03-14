@@ -8,9 +8,12 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    CallParams,
     callFunction,
     registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v3';
+
+import {
+    CallParams
 } from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
@@ -30,16 +33,26 @@ export function registerOpA(...args: any) {
         args,
         {
     "defaultServiceId" : "pop",
-    "functions" : [
-        {
-            "functionName" : "get_str",
-            "argDefs" : [
-            ],
-            "returnType" : {
-                "tag" : "primitive"
+    "functions" : {
+        "tag" : "labeledProduct",
+        "fields" : {
+            "get_str" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "nil"
+                },
+                "codomain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
+                    ]
+                }
             }
         }
-    ]
+    }
 }
     );
 }
@@ -88,11 +101,27 @@ export function get_results(...args: any) {
         args,
         {
     "functionName" : "get_results",
-    "returnType" : {
-        "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                
+            }
+        },
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                }
+            ]
+        }
     },
-    "argDefs" : [
-    ],
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",

@@ -8,9 +8,12 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    CallParams,
     callFunction,
     registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v3';
+
+import {
+    CallParams
 } from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
@@ -59,17 +62,30 @@ export function toOpt(...args: any) {
         args,
         {
     "functionName" : "toOpt",
-    "returnType" : {
-        "tag" : "optional"
-    },
-    "argDefs" : [
-        {
-            "name" : "s",
-            "argType" : {
-                "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "s" : {
+                    "tag" : "scalar",
+                    "name" : "string"
+                }
             }
+        },
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "option",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                }
+            ]
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",
@@ -138,11 +154,30 @@ export function accumRes(...args: any) {
         args,
         {
     "functionName" : "accumRes",
-    "returnType" : {
-        "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                
+            }
+        },
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "option",
+                        "type" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
+                    }
+                }
+            ]
+        }
     },
-    "argDefs" : [
-    ],
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",

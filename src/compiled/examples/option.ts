@@ -8,9 +8,12 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    CallParams,
     callFunction,
     registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v3';
+
+import {
+    CallParams
 } from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
@@ -33,58 +36,95 @@ export function registerSomeS(...args: any) {
         args,
         {
     "defaultServiceId" : "test2",
-    "functions" : [
-        {
-            "functionName" : "checkU32",
-            "argDefs" : [
-                {
-                    "name" : "u",
-                    "argType" : {
-                        "tag" : "optional"
+    "functions" : {
+        "tag" : "labeledProduct",
+        "fields" : {
+            "checkU32" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "labeledProduct",
+                    "fields" : {
+                        "u" : {
+                            "tag" : "option",
+                            "type" : {
+                                "tag" : "scalar",
+                                "name" : "u32"
+                            }
+                        }
                     }
+                },
+                "codomain" : {
+                    "tag" : "nil"
                 }
-            ],
-            "returnType" : {
-                "tag" : "void"
-            }
-        },
-        {
-            "functionName" : "getStr",
-            "argDefs" : [
-                {
-                    "name" : "arg0",
-                    "argType" : {
-                        "tag" : "optional"
-                    }
+            },
+            "getStr" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "option",
+                            "type" : {
+                                "tag" : "scalar",
+                                "name" : "string"
+                            }
+                        }
+                    ]
+                },
+                "codomain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "option",
+                            "type" : {
+                                "tag" : "scalar",
+                                "name" : "string"
+                            }
+                        }
+                    ]
                 }
-            ],
-            "returnType" : {
-                "tag" : "optional"
-            }
-        },
-        {
-            "functionName" : "getStr1",
-            "argDefs" : [
-            ],
-            "returnType" : {
-                "tag" : "optional"
-            }
-        },
-        {
-            "functionName" : "getStr2",
-            "argDefs" : [
-                {
-                    "name" : "arg0",
-                    "argType" : {
-                        "tag" : "primitive"
-                    }
+            },
+            "getStr1" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "nil"
+                },
+                "codomain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "option",
+                            "type" : {
+                                "tag" : "scalar",
+                                "name" : "string"
+                            }
+                        }
+                    ]
                 }
-            ],
-            "returnType" : {
-                "tag" : "primitive"
+            },
+            "getStr2" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
+                    ]
+                },
+                "codomain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
+                    ]
+                }
             }
         }
-    ]
+    }
 }
     );
 }
@@ -127,11 +167,27 @@ export function returnNone(...args: any) {
         args,
         {
     "functionName" : "returnNone",
-    "returnType" : {
-        "tag" : "optional"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                
+            }
+        },
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "option",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                }
+            ]
+        }
     },
-    "argDefs" : [
-    ],
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",
@@ -177,17 +233,24 @@ export function checkU32AndU8(...args: any) {
         args,
         {
     "functionName" : "checkU32AndU8",
-    "returnType" : {
-        "tag" : "void"
-    },
-    "argDefs" : [
-        {
-            "name" : "a",
-            "argType" : {
-                "tag" : "optional"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "a" : {
+                    "tag" : "option",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "u8"
+                    }
+                }
             }
+        },
+        "codomain" : {
+            "tag" : "nil"
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",
@@ -247,17 +310,30 @@ export function useOptional(...args: any) {
         args,
         {
     "functionName" : "useOptional",
-    "returnType" : {
-        "tag" : "primitive"
-    },
-    "argDefs" : [
-        {
-            "name" : "opt",
-            "argType" : {
-                "tag" : "optional"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "opt" : {
+                    "tag" : "option",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                }
             }
+        },
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "scalar",
+                    "name" : "string"
+                }
+            ]
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",
@@ -304,11 +380,27 @@ export function returnOptional(...args: any) {
         args,
         {
     "functionName" : "returnOptional",
-    "returnType" : {
-        "tag" : "optional"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                
+            }
+        },
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "option",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                }
+            ]
+        }
     },
-    "argDefs" : [
-    ],
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",

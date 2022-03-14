@@ -8,9 +8,12 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    CallParams,
     callFunction,
     registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v3';
+
+import {
+    CallParams
 } from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
@@ -31,42 +34,60 @@ export function registerOpHa(...args: any) {
         args,
         {
     "defaultServiceId" : "op",
-    "functions" : [
-        {
-            "functionName" : "array",
-            "argDefs" : [
-                {
-                    "name" : "a",
-                    "argType" : {
-                        "tag" : "primitive"
+    "functions" : {
+        "tag" : "labeledProduct",
+        "fields" : {
+            "array" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "labeledProduct",
+                    "fields" : {
+                        "a" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        },
+                        "b" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
                     }
                 },
-                {
-                    "name" : "b",
-                    "argType" : {
-                        "tag" : "primitive"
-                    }
+                "codomain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "array",
+                            "type" : {
+                                "tag" : "scalar",
+                                "name" : "string"
+                            }
+                        }
+                    ]
                 }
-            ],
-            "returnType" : {
-                "tag" : "primitive"
-            }
-        },
-        {
-            "functionName" : "identity",
-            "argDefs" : [
-                {
-                    "name" : "a",
-                    "argType" : {
-                        "tag" : "primitive"
+            },
+            "identity" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "labeledProduct",
+                    "fields" : {
+                        "a" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
                     }
+                },
+                "codomain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
+                    ]
                 }
-            ],
-            "returnType" : {
-                "tag" : "primitive"
             }
         }
-    ]
+    }
 }
     );
 }
@@ -112,17 +133,36 @@ export function doSmth(...args: any) {
         args,
         {
     "functionName" : "doSmth",
-    "returnType" : {
-        "tag" : "primitive"
-    },
-    "argDefs" : [
-        {
-            "name" : "arg",
-            "argType" : {
-                "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "arg" : {
+                    "tag" : "struct",
+                    "name" : "Prod",
+                    "fields" : {
+                        "value" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
+                    }
+                }
             }
+        },
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                }
+            ]
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",

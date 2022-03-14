@@ -8,9 +8,12 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    CallParams,
     callFunction,
     registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v3';
+
+import {
+    CallParams
 } from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
@@ -95,23 +98,51 @@ export function viaArr(...args: any) {
         args,
         {
     "functionName" : "viaArr",
-    "returnType" : {
-        "tag" : "primitive"
-    },
-    "argDefs" : [
-        {
-            "name" : "node_id",
-            "argType" : {
-                "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "node_id" : {
+                    "tag" : "scalar",
+                    "name" : "string"
+                },
+                "viaAr" : {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                }
             }
         },
-        {
-            "name" : "viaAr",
-            "argType" : {
-                "tag" : "primitive"
-            }
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "struct",
+                    "name" : "Info",
+                    "fields" : {
+                        "air_version" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        },
+                        "external_addresses" : {
+                            "tag" : "array",
+                            "type" : {
+                                "tag" : "scalar",
+                                "name" : "string"
+                            }
+                        },
+                        "node_version" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
+                    }
+                }
+            ]
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",
@@ -212,23 +243,51 @@ export function viaStream(...args: any) {
         args,
         {
     "functionName" : "viaStream",
-    "returnType" : {
-        "tag" : "primitive"
-    },
-    "argDefs" : [
-        {
-            "name" : "node_id",
-            "argType" : {
-                "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "node_id" : {
+                    "tag" : "scalar",
+                    "name" : "string"
+                },
+                "viaStr" : {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                }
             }
         },
-        {
-            "name" : "viaStr",
-            "argType" : {
-                "tag" : "primitive"
-            }
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "struct",
+                    "name" : "Info",
+                    "fields" : {
+                        "air_version" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        },
+                        "external_addresses" : {
+                            "tag" : "array",
+                            "type" : {
+                                "tag" : "scalar",
+                                "name" : "string"
+                            }
+                        },
+                        "node_version" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
+                    }
+                }
+            ]
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",
@@ -326,29 +385,55 @@ export function viaOpt(...args: any) {
         args,
         {
     "functionName" : "viaOpt",
-    "returnType" : {
-        "tag" : "primitive"
-    },
-    "argDefs" : [
-        {
-            "name" : "relay",
-            "argType" : {
-                "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "relay" : {
+                    "tag" : "scalar",
+                    "name" : "string"
+                },
+                "node_id" : {
+                    "tag" : "scalar",
+                    "name" : "string"
+                },
+                "viaOpt" : {
+                    "tag" : "option",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                }
             }
         },
-        {
-            "name" : "node_id",
-            "argType" : {
-                "tag" : "primitive"
-            }
-        },
-        {
-            "name" : "viaOpt",
-            "argType" : {
-                "tag" : "optional"
-            }
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "struct",
+                    "name" : "Info",
+                    "fields" : {
+                        "air_version" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        },
+                        "external_addresses" : {
+                            "tag" : "array",
+                            "type" : {
+                                "tag" : "scalar",
+                                "name" : "string"
+                            }
+                        },
+                        "node_version" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
+                    }
+                }
+            ]
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",

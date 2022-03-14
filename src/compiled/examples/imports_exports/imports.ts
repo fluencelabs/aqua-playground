@@ -8,9 +8,12 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    CallParams,
     callFunction,
     registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v3';
+
+import {
+    CallParams
 } from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
@@ -30,28 +33,36 @@ export function registerStringService(...args: any) {
         args,
         {
     "defaultServiceId" : "string_service",
-    "functions" : [
-        {
-            "functionName" : "concat",
-            "argDefs" : [
-                {
-                    "name" : "a",
-                    "argType" : {
-                        "tag" : "primitive"
+    "functions" : {
+        "tag" : "labeledProduct",
+        "fields" : {
+            "concat" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "labeledProduct",
+                    "fields" : {
+                        "a" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        },
+                        "b" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
                     }
                 },
-                {
-                    "name" : "b",
-                    "argType" : {
-                        "tag" : "primitive"
-                    }
+                "codomain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
+                    ]
                 }
-            ],
-            "returnType" : {
-                "tag" : "primitive"
             }
         }
-    ]
+    }
 }
     );
 }
@@ -107,11 +118,24 @@ export function concat_foobars(...args: any) {
         args,
         {
     "functionName" : "concat_foobars",
-    "returnType" : {
-        "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                
+            }
+        },
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "scalar",
+                    "name" : "string"
+                }
+            ]
+        }
     },
-    "argDefs" : [
-    ],
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",

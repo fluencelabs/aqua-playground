@@ -8,9 +8,12 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    CallParams,
     callFunction,
     registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v3';
+
+import {
+    CallParams
 } from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
@@ -30,22 +33,32 @@ export function registerOpR(...args: any) {
         args,
         {
     "defaultServiceId" : "op",
-    "functions" : [
-        {
-            "functionName" : "identity",
-            "argDefs" : [
-                {
-                    "name" : "s",
-                    "argType" : {
-                        "tag" : "primitive"
+    "functions" : {
+        "tag" : "labeledProduct",
+        "fields" : {
+            "identity" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "labeledProduct",
+                    "fields" : {
+                        "s" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
                     }
+                },
+                "codomain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
+                    ]
                 }
-            ],
-            "returnType" : {
-                "tag" : "primitive"
             }
         }
-    ]
+    }
 }
     );
 }
@@ -90,17 +103,21 @@ export function ifElseCall(...args: any) {
         args,
         {
     "functionName" : "ifElseCall",
-    "returnType" : {
-        "tag" : "void"
-    },
-    "argDefs" : [
-        {
-            "name" : "condition",
-            "argType" : {
-                "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "condition" : {
+                    "tag" : "scalar",
+                    "name" : "bool"
+                }
             }
+        },
+        "codomain" : {
+            "tag" : "nil"
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",
@@ -154,17 +171,21 @@ export function ifElseNumCall(...args: any) {
         args,
         {
     "functionName" : "ifElseNumCall",
-    "returnType" : {
-        "tag" : "void"
-    },
-    "argDefs" : [
-        {
-            "name" : "condition",
-            "argType" : {
-                "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "condition" : {
+                    "tag" : "scalar",
+                    "name" : "u32"
+                }
             }
+        },
+        "codomain" : {
+            "tag" : "nil"
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",
@@ -250,17 +271,27 @@ export function ifCorrectXorWrap(...args: any) {
         args,
         {
     "functionName" : "ifCorrectXorWrap",
-    "returnType" : {
-        "tag" : "primitive"
-    },
-    "argDefs" : [
-        {
-            "name" : "node",
-            "argType" : {
-                "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "node" : {
+                    "tag" : "scalar",
+                    "name" : "string"
+                }
             }
+        },
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "scalar",
+                    "name" : "string"
+                }
+            ]
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",

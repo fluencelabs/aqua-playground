@@ -8,9 +8,12 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    CallParams,
     callFunction,
     registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v3';
+
+import {
+    CallParams
 } from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
@@ -30,16 +33,20 @@ export function registerLocalSrv(...args: any) {
         args,
         {
     "defaultServiceId" : "local_srv",
-    "functions" : [
-        {
-            "functionName" : "inside",
-            "argDefs" : [
-            ],
-            "returnType" : {
-                "tag" : "void"
+    "functions" : {
+        "tag" : "labeledProduct",
+        "fields" : {
+            "inside" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "nil"
+                },
+                "codomain" : {
+                    "tag" : "nil"
+                }
             }
         }
-    ]
+    }
 }
     );
 }
@@ -111,108 +118,27 @@ export function closureIn(...args: any) {
         args,
         {
     "functionName" : "closureIn",
-    "returnType" : {
-        "tag" : "primitive"
-    },
-    "argDefs" : [
-        {
-            "name" : "peer1",
-            "argType" : {
-                "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "peer1" : {
+                    "tag" : "scalar",
+                    "name" : "string"
+                }
             }
+        },
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "scalar",
+                    "name" : "string"
+                }
+            ]
         }
-    ],
-    "names" : {
-        "relay" : "-relay-",
-        "getDataSrv" : "getDataSrv",
-        "callbackSrv" : "callbackSrv",
-        "responseSrv" : "callbackSrv",
-        "responseFnName" : "response",
-        "errorHandlingSrv" : "errorHandlingSrv",
-        "errorFnName" : "error"
-    }
-},
-        script
-    )
-}
-
- 
-export type ClosureOutResult = { air_version: string; external_addresses: string[]; node_version: string; }
-export function closureOut(
-    peer2: string,
-    config?: {ttl?: number}
-): Promise<ClosureOutResult>;
-
-export function closureOut(
-    peer: FluencePeer,
-    peer2: string,
-    config?: {ttl?: number}
-): Promise<ClosureOutResult>;
-
-export function closureOut(...args: any) {
-
-    let script = `
-                    (xor
-                     (seq
-                      (seq
-                       (seq
-                        (seq
-                         (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-                         (call %init_peer_id% ("getDataSrv" "peer2") [] peer2)
-                        )
-                        (call -relay- ("op" "noop") [])
-                       )
-                       (xor
-                        (seq
-                         (seq
-                          (xor
-                           (match "on" "in"
-                            (xor
-                             (call peer2 ("local_srv" "inside") [])
-                             (seq
-                              (seq
-                               (call -relay- ("op" "noop") [])
-                               (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
-                              )
-                              (call -relay- ("op" "noop") [])
-                             )
-                            )
-                           )
-                           (null)
-                          )
-                          (call peer2 ("peer" "identify") [] p2Id)
-                         )
-                         (call -relay- ("op" "noop") [])
-                        )
-                        (seq
-                         (call -relay- ("op" "noop") [])
-                         (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
-                        )
-                       )
-                      )
-                      (xor
-                       (call %init_peer_id% ("callbackSrv" "response") [p2Id])
-                       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
-                      )
-                     )
-                     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 4])
-                    )
-    `
-    return callFunction(
-        args,
-        {
-    "functionName" : "closureOut",
-    "returnType" : {
-        "tag" : "primitive"
     },
-    "argDefs" : [
-        {
-            "name" : "peer2",
-            "argType" : {
-                "tag" : "primitive"
-            }
-        }
-    ],
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",
@@ -346,31 +272,35 @@ export function closureBig(...args: any) {
         args,
         {
     "functionName" : "closureBig",
-    "returnType" : {
-        "tag" : "multiReturn",
-        "returnItems" : [
-            {
-                "tag" : "primitive"
-            },
-            {
-                "tag" : "primitive"
-            }
-        ]
-    },
-    "argDefs" : [
-        {
-            "name" : "peer1",
-            "argType" : {
-                "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "peer1" : {
+                    "tag" : "scalar",
+                    "name" : "string"
+                },
+                "peer2" : {
+                    "tag" : "scalar",
+                    "name" : "string"
+                }
             }
         },
-        {
-            "name" : "peer2",
-            "argType" : {
-                "tag" : "primitive"
-            }
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "scalar",
+                    "name" : "string"
+                },
+                {
+                    "tag" : "scalar",
+                    "name" : "string"
+                }
+            ]
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",

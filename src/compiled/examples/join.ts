@@ -8,9 +8,12 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    CallParams,
     callFunction,
     registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v3';
+
+import {
+    CallParams
 } from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
@@ -75,23 +78,37 @@ export function joinIdxLocal(...args: any) {
         args,
         {
     "functionName" : "joinIdxLocal",
-    "returnType" : {
-        "tag" : "primitive"
-    },
-    "argDefs" : [
-        {
-            "name" : "idx",
-            "argType" : {
-                "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "idx" : {
+                    "tag" : "scalar",
+                    "name" : "i16"
+                },
+                "nodes" : {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                }
             }
         },
-        {
-            "name" : "nodes",
-            "argType" : {
-                "tag" : "primitive"
-            }
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                }
+            ]
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",
@@ -167,23 +184,37 @@ export function joinIdxRelay(...args: any) {
         args,
         {
     "functionName" : "joinIdxRelay",
-    "returnType" : {
-        "tag" : "primitive"
-    },
-    "argDefs" : [
-        {
-            "name" : "idx",
-            "argType" : {
-                "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "idx" : {
+                    "tag" : "scalar",
+                    "name" : "i16"
+                },
+                "nodes" : {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                }
             }
         },
-        {
-            "name" : "nodes",
-            "argType" : {
-                "tag" : "primitive"
-            }
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                }
+            ]
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",
@@ -276,23 +307,54 @@ export function joinIdx(...args: any) {
         args,
         {
     "functionName" : "joinIdx",
-    "returnType" : {
-        "tag" : "primitive"
-    },
-    "argDefs" : [
-        {
-            "name" : "idx",
-            "argType" : {
-                "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "idx" : {
+                    "tag" : "scalar",
+                    "name" : "i16"
+                },
+                "nodes" : {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                }
             }
         },
-        {
-            "name" : "nodes",
-            "argType" : {
-                "tag" : "primitive"
-            }
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "struct",
+                        "name" : "Info",
+                        "fields" : {
+                            "air_version" : {
+                                "tag" : "scalar",
+                                "name" : "string"
+                            },
+                            "external_addresses" : {
+                                "tag" : "array",
+                                "type" : {
+                                    "tag" : "scalar",
+                                    "name" : "string"
+                                }
+                            },
+                            "node_version" : {
+                                "tag" : "scalar",
+                                "name" : "string"
+                            }
+                        }
+                    }
+                }
+            ]
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",

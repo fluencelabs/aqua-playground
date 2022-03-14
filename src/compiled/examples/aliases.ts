@@ -8,9 +8,12 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    CallParams,
     callFunction,
     registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v3';
+
+import {
+    CallParams
 } from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
@@ -31,36 +34,111 @@ export function registerComplexService(...args: any) {
         args,
         {
     "defaultServiceId" : "op-ha",
-    "functions" : [
-        {
-            "functionName" : "call",
-            "argDefs" : [
-                {
-                    "name" : "d",
-                    "argType" : {
-                        "tag" : "primitive"
+    "functions" : {
+        "tag" : "labeledProduct",
+        "fields" : {
+            "call" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "labeledProduct",
+                    "fields" : {
+                        "d" : {
+                            "tag" : "struct",
+                            "name" : "SomeData",
+                            "fields" : {
+                                "otherValue" : {
+                                    "tag" : "scalar",
+                                    "name" : "u64"
+                                },
+                                "value" : {
+                                    "tag" : "scalar",
+                                    "name" : "string"
+                                }
+                            }
+                        },
+                        "sd" : {
+                            "tag" : "struct",
+                            "name" : "SecondData",
+                            "fields" : {
+                                "complex" : {
+                                    "tag" : "struct",
+                                    "name" : "SubData",
+                                    "fields" : {
+                                        "someNum" : {
+                                            "tag" : "scalar",
+                                            "name" : "i32"
+                                        },
+                                        "someStr" : {
+                                            "tag" : "scalar",
+                                            "name" : "string"
+                                        }
+                                    }
+                                },
+                                "value" : {
+                                    "tag" : "scalar",
+                                    "name" : "string"
+                                }
+                            }
+                        }
                     }
                 },
-                {
-                    "name" : "sd",
-                    "argType" : {
-                        "tag" : "primitive"
-                    }
+                "codomain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "struct",
+                            "name" : "SubData",
+                            "fields" : {
+                                "someNum" : {
+                                    "tag" : "scalar",
+                                    "name" : "i32"
+                                },
+                                "someStr" : {
+                                    "tag" : "scalar",
+                                    "name" : "string"
+                                }
+                            }
+                        }
+                    ]
                 }
-            ],
-            "returnType" : {
-                "tag" : "primitive"
-            }
-        },
-        {
-            "functionName" : "identity",
-            "argDefs" : [
-            ],
-            "returnType" : {
-                "tag" : "primitive"
+            },
+            "identity" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "nil"
+                },
+                "codomain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "struct",
+                            "name" : "SecondData",
+                            "fields" : {
+                                "complex" : {
+                                    "tag" : "struct",
+                                    "name" : "SubData",
+                                    "fields" : {
+                                        "someNum" : {
+                                            "tag" : "scalar",
+                                            "name" : "i32"
+                                        },
+                                        "someStr" : {
+                                            "tag" : "scalar",
+                                            "name" : "string"
+                                        }
+                                    }
+                                },
+                                "value" : {
+                                    "tag" : "scalar",
+                                    "name" : "string"
+                                }
+                            }
+                        }
+                    ]
+                }
             }
         }
-    ]
+    }
 }
     );
 }
@@ -123,54 +201,170 @@ export function doSmth(...args: any) {
         args,
         {
     "functionName" : "doSmth",
-    "returnType" : {
-        "tag" : "primitive"
-    },
-    "argDefs" : [
-        {
-            "name" : "d",
-            "argType" : {
-                "tag" : "primitive"
-            }
-        },
-        {
-            "name" : "d2",
-            "argType" : {
-                "tag" : "primitive"
-            }
-        },
-        {
-            "name" : "sd",
-            "argType" : {
-                "tag" : "primitive"
-            }
-        },
-        {
-            "name" : "c",
-            "argType" : {
-                "tag" : "callback",
-                "callback" : {
-                    "argDefs" : [
-                        {
-                            "name" : "arg0",
-                            "argType" : {
-                                "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "d" : {
+                    "tag" : "struct",
+                    "name" : "SomeData",
+                    "fields" : {
+                        "otherValue" : {
+                            "tag" : "scalar",
+                            "name" : "u64"
+                        },
+                        "value" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
+                    }
+                },
+                "d2" : {
+                    "tag" : "struct",
+                    "name" : "SomeData",
+                    "fields" : {
+                        "otherValue" : {
+                            "tag" : "scalar",
+                            "name" : "u64"
+                        },
+                        "value" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
+                    }
+                },
+                "sd" : {
+                    "tag" : "struct",
+                    "name" : "SecondData",
+                    "fields" : {
+                        "complex" : {
+                            "tag" : "struct",
+                            "name" : "SubData",
+                            "fields" : {
+                                "someNum" : {
+                                    "tag" : "scalar",
+                                    "name" : "i32"
+                                },
+                                "someStr" : {
+                                    "tag" : "scalar",
+                                    "name" : "string"
+                                }
                             }
                         },
-                        {
-                            "name" : "arg1",
-                            "argType" : {
-                                "tag" : "primitive"
-                            }
+                        "value" : {
+                            "tag" : "scalar",
+                            "name" : "string"
                         }
-                    ],
-                    "returnType" : {
-                        "tag" : "primitive"
+                    }
+                },
+                "c" : {
+                    "tag" : "arrow",
+                    "domain" : {
+                        "tag" : "unlabeledProduct",
+                        "items" : [
+                            {
+                                "tag" : "struct",
+                                "name" : "SubData",
+                                "fields" : {
+                                    "someNum" : {
+                                        "tag" : "scalar",
+                                        "name" : "i32"
+                                    },
+                                    "someStr" : {
+                                        "tag" : "scalar",
+                                        "name" : "string"
+                                    }
+                                }
+                            },
+                            {
+                                "tag" : "struct",
+                                "name" : "SecondData",
+                                "fields" : {
+                                    "complex" : {
+                                        "tag" : "struct",
+                                        "name" : "SubData",
+                                        "fields" : {
+                                            "someNum" : {
+                                                "tag" : "scalar",
+                                                "name" : "i32"
+                                            },
+                                            "someStr" : {
+                                                "tag" : "scalar",
+                                                "name" : "string"
+                                            }
+                                        }
+                                    },
+                                    "value" : {
+                                        "tag" : "scalar",
+                                        "name" : "string"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "codomain" : {
+                        "tag" : "unlabeledProduct",
+                        "items" : [
+                            {
+                                "tag" : "struct",
+                                "name" : "ThirdData",
+                                "fields" : {
+                                    "complex" : {
+                                        "tag" : "struct",
+                                        "name" : "SomeData",
+                                        "fields" : {
+                                            "otherValue" : {
+                                                "tag" : "scalar",
+                                                "name" : "u64"
+                                            },
+                                            "value" : {
+                                                "tag" : "scalar",
+                                                "name" : "string"
+                                            }
+                                        }
+                                    },
+                                    "value" : {
+                                        "tag" : "scalar",
+                                        "name" : "string"
+                                    }
+                                }
+                            }
+                        ]
                     }
                 }
             }
+        },
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "struct",
+                    "name" : "ThirdData",
+                    "fields" : {
+                        "complex" : {
+                            "tag" : "struct",
+                            "name" : "SomeData",
+                            "fields" : {
+                                "otherValue" : {
+                                    "tag" : "scalar",
+                                    "name" : "u64"
+                                },
+                                "value" : {
+                                    "tag" : "scalar",
+                                    "name" : "string"
+                                }
+                            }
+                        },
+                        "value" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
+                    }
+                }
+            ]
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",

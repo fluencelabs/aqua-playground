@@ -8,9 +8,12 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    CallParams,
     callFunction,
     registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v3';
+
+import {
+    CallParams
 } from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
@@ -50,30 +53,35 @@ export function someFunc(...args: any) {
         args,
         {
     "functionName" : "someFunc",
-    "returnType" : {
-        "tag" : "void"
-    },
-    "argDefs" : [
-        {
-            "name" : "cb",
-            "argType" : {
-                "tag" : "callback",
-                "callback" : {
-                    "argDefs" : [
-                        {
-                            "name" : "arg0",
-                            "argType" : {
-                                "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "cb" : {
+                    "tag" : "arrow",
+                    "domain" : {
+                        "tag" : "unlabeledProduct",
+                        "items" : [
+                            {
+                                "tag" : "array",
+                                "type" : {
+                                    "tag" : "scalar",
+                                    "name" : "string"
+                                }
                             }
-                        }
-                    ],
-                    "returnType" : {
-                        "tag" : "void"
+                        ]
+                    },
+                    "codomain" : {
+                        "tag" : "nil"
                     }
                 }
             }
+        },
+        "codomain" : {
+            "tag" : "nil"
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",

@@ -8,9 +8,12 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    CallParams,
     callFunction,
     registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v3';
+
+import {
+    CallParams
 } from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
@@ -30,22 +33,26 @@ export function registerPrintln(...args: any) {
         args,
         {
     "defaultServiceId" : "println-service-id",
-    "functions" : [
-        {
-            "functionName" : "print",
-            "argDefs" : [
-                {
-                    "name" : "arg0",
-                    "argType" : {
-                        "tag" : "primitive"
-                    }
+    "functions" : {
+        "tag" : "labeledProduct",
+        "fields" : {
+            "print" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
+                    ]
+                },
+                "codomain" : {
+                    "tag" : "nil"
                 }
-            ],
-            "returnType" : {
-                "tag" : "void"
             }
         }
-    ]
+    }
 }
     );
 }
@@ -82,17 +89,21 @@ export function print(...args: any) {
         args,
         {
     "functionName" : "print",
-    "returnType" : {
-        "tag" : "void"
-    },
-    "argDefs" : [
-        {
-            "name" : "str",
-            "argType" : {
-                "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "str" : {
+                    "tag" : "scalar",
+                    "name" : "string"
+                }
             }
+        },
+        "codomain" : {
+            "tag" : "nil"
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",

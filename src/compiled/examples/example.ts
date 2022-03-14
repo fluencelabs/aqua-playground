@@ -8,9 +8,12 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    CallParams,
     callFunction,
     registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v3';
+
+import {
+    CallParams
 } from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
@@ -30,16 +33,20 @@ export function registerOp(...args: any) {
         args,
         {
     "defaultServiceId" : "op",
-    "functions" : [
-        {
-            "functionName" : "identity",
-            "argDefs" : [
-            ],
-            "returnType" : {
-                "tag" : "void"
+    "functions" : {
+        "tag" : "labeledProduct",
+        "fields" : {
+            "identity" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "nil"
+                },
+                "codomain" : {
+                    "tag" : "nil"
+                }
             }
         }
-    ]
+    }
 }
     );
 }
@@ -61,24 +68,58 @@ export function registerTest(...args: any) {
         args,
         {
     "defaultServiceId" : "test",
-    "functions" : [
-        {
-            "functionName" : "doSomething",
-            "argDefs" : [
-            ],
-            "returnType" : {
-                "tag" : "primitive"
-            }
-        },
-        {
-            "functionName" : "getUserList",
-            "argDefs" : [
-            ],
-            "returnType" : {
-                "tag" : "primitive"
+    "functions" : {
+        "tag" : "labeledProduct",
+        "fields" : {
+            "doSomething" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "nil"
+                },
+                "codomain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "scalar",
+                            "name" : "bool"
+                        }
+                    ]
+                }
+            },
+            "getUserList" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "nil"
+                },
+                "codomain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "array",
+                            "type" : {
+                                "tag" : "struct",
+                                "name" : "User",
+                                "fields" : {
+                                    "name" : {
+                                        "tag" : "scalar",
+                                        "name" : "string"
+                                    },
+                                    "peer_id" : {
+                                        "tag" : "scalar",
+                                        "name" : "string"
+                                    },
+                                    "relay_id" : {
+                                        "tag" : "scalar",
+                                        "name" : "string"
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
             }
         }
-    ]
+    }
 }
     );
 }
@@ -99,22 +140,32 @@ export function registerPeer(...args: any) {
         args,
         {
     "defaultServiceId" : "peer",
-    "functions" : [
-        {
-            "functionName" : "is_connected",
-            "argDefs" : [
-                {
-                    "name" : "arg0",
-                    "argType" : {
-                        "tag" : "primitive"
-                    }
+    "functions" : {
+        "tag" : "labeledProduct",
+        "fields" : {
+            "is_connected" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
+                    ]
+                },
+                "codomain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "scalar",
+                            "name" : "bool"
+                        }
+                    ]
                 }
-            ],
-            "returnType" : {
-                "tag" : "primitive"
             }
         }
-    ]
+    }
 }
     );
 }
@@ -174,17 +225,21 @@ export function betterMessage(...args: any) {
         args,
         {
     "functionName" : "betterMessage",
-    "returnType" : {
-        "tag" : "void"
-    },
-    "argDefs" : [
-        {
-            "name" : "relay",
-            "argType" : {
-                "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "relay" : {
+                    "tag" : "scalar",
+                    "name" : "string"
+                }
             }
+        },
+        "codomain" : {
+            "tag" : "nil"
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",

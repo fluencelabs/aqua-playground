@@ -8,9 +8,12 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    CallParams,
     callFunction,
     registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v3';
+
+import {
+    CallParams
 } from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
@@ -31,30 +34,41 @@ export function registerHelloWorld(...args: any) {
         args,
         {
     "defaultServiceId" : "default",
-    "functions" : [
-        {
-            "functionName" : "getNumber",
-            "argDefs" : [
-            ],
-            "returnType" : {
-                "tag" : "primitive"
-            }
-        },
-        {
-            "functionName" : "sayHello",
-            "argDefs" : [
-                {
-                    "name" : "s",
-                    "argType" : {
-                        "tag" : "primitive"
-                    }
+    "functions" : {
+        "tag" : "labeledProduct",
+        "fields" : {
+            "getNumber" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "nil"
+                },
+                "codomain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "scalar",
+                            "name" : "i32"
+                        }
+                    ]
                 }
-            ],
-            "returnType" : {
-                "tag" : "void"
+            },
+            "sayHello" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "labeledProduct",
+                    "fields" : {
+                        "s" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
+                    }
+                },
+                "codomain" : {
+                    "tag" : "nil"
+                }
             }
         }
-    ]
+    }
 }
     );
 }
@@ -91,36 +105,36 @@ export function callMeBack(...args: any) {
         args,
         {
     "functionName" : "callMeBack",
-    "returnType" : {
-        "tag" : "void"
-    },
-    "argDefs" : [
-        {
-            "name" : "callback",
-            "argType" : {
-                "tag" : "callback",
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
                 "callback" : {
-                    "argDefs" : [
-                        {
-                            "name" : "arg0",
-                            "argType" : {
-                                "tag" : "primitive"
+                    "tag" : "arrow",
+                    "domain" : {
+                        "tag" : "unlabeledProduct",
+                        "items" : [
+                            {
+                                "tag" : "scalar",
+                                "name" : "string"
+                            },
+                            {
+                                "tag" : "scalar",
+                                "name" : "i32"
                             }
-                        },
-                        {
-                            "name" : "arg1",
-                            "argType" : {
-                                "tag" : "primitive"
-                            }
-                        }
-                    ],
-                    "returnType" : {
-                        "tag" : "void"
+                        ]
+                    },
+                    "codomain" : {
+                        "tag" : "nil"
                     }
                 }
             }
+        },
+        "codomain" : {
+            "tag" : "nil"
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",

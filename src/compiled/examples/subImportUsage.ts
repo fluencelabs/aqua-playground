@@ -8,9 +8,12 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    CallParams,
     callFunction,
     registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v3';
+
+import {
+    CallParams
 } from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
@@ -30,28 +33,56 @@ export function registerConcatSubs(...args: any) {
         args,
         {
     "defaultServiceId" : "concat_subs",
-    "functions" : [
-        {
-            "functionName" : "get_some",
-            "argDefs" : [
-                {
-                    "name" : "s",
-                    "argType" : {
-                        "tag" : "primitive"
+    "functions" : {
+        "tag" : "labeledProduct",
+        "fields" : {
+            "get_some" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "labeledProduct",
+                    "fields" : {
+                        "s" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        },
+                        "sr" : {
+                            "tag" : "struct",
+                            "name" : "SomeResult",
+                            "fields" : {
+                                "one" : {
+                                    "tag" : "scalar",
+                                    "name" : "string"
+                                },
+                                "two" : {
+                                    "tag" : "scalar",
+                                    "name" : "u32"
+                                }
+                            }
+                        }
                     }
                 },
-                {
-                    "name" : "sr",
-                    "argType" : {
-                        "tag" : "primitive"
-                    }
+                "codomain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "struct",
+                            "name" : "SomeResult",
+                            "fields" : {
+                                "one" : {
+                                    "tag" : "scalar",
+                                    "name" : "string"
+                                },
+                                "two" : {
+                                    "tag" : "scalar",
+                                    "name" : "u32"
+                                }
+                            }
+                        }
+                    ]
                 }
-            ],
-            "returnType" : {
-                "tag" : "primitive"
             }
         }
-    ]
+    }
 }
     );
 }
@@ -100,17 +131,37 @@ export function subImportUsage(...args: any) {
         args,
         {
     "functionName" : "subImportUsage",
-    "returnType" : {
-        "tag" : "primitive"
-    },
-    "argDefs" : [
-        {
-            "name" : "s",
-            "argType" : {
-                "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "s" : {
+                    "tag" : "scalar",
+                    "name" : "string"
+                }
             }
+        },
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "struct",
+                    "name" : "SomeResult",
+                    "fields" : {
+                        "one" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        },
+                        "two" : {
+                            "tag" : "scalar",
+                            "name" : "u32"
+                        }
+                    }
+                }
+            ]
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",

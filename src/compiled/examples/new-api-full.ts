@@ -8,9 +8,12 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    CallParams,
     callFunction,
     registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v3';
+
+import {
+    CallParams
 } from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
@@ -31,102 +34,112 @@ export function registerMoreMembers(...args: any) {
     registerService(
         args,
         {
-    "functions" : [
-        {
-            "functionName" : "member1",
-            "argDefs" : [
-            ],
-            "returnType" : {
-                "tag" : "void"
-            }
-        },
-        {
-            "functionName" : "member2",
-            "argDefs" : [
-                {
-                    "name" : "s1",
-                    "argType" : {
-                        "tag" : "primitive"
-                    }
+    "functions" : {
+        "tag" : "labeledProduct",
+        "fields" : {
+            "member1" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "nil"
+                },
+                "codomain" : {
+                    "tag" : "nil"
                 }
-            ],
-            "returnType" : {
-                "tag" : "void"
-            }
-        },
-        {
-            "functionName" : "member3",
-            "argDefs" : [
-                {
-                    "name" : "s1",
-                    "argType" : {
-                        "tag" : "primitive"
+            },
+            "member2" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "labeledProduct",
+                    "fields" : {
+                        "s1" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
                     }
                 },
-                {
-                    "name" : "s2",
-                    "argType" : {
-                        "tag" : "primitive"
-                    }
+                "codomain" : {
+                    "tag" : "nil"
                 }
-            ],
-            "returnType" : {
-                "tag" : "void"
-            }
-        },
-        {
-            "functionName" : "member4",
-            "argDefs" : [
-                {
-                    "name" : "s1",
-                    "argType" : {
-                        "tag" : "primitive"
+            },
+            "member3" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "labeledProduct",
+                    "fields" : {
+                        "s1" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        },
+                        "s2" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
                     }
                 },
-                {
-                    "name" : "s2",
-                    "argType" : {
-                        "tag" : "primitive"
-                    }
-                },
-                {
-                    "name" : "i",
-                    "argType" : {
-                        "tag" : "primitive"
-                    }
+                "codomain" : {
+                    "tag" : "nil"
                 }
-            ],
-            "returnType" : {
-                "tag" : "primitive"
-            }
-        },
-        {
-            "functionName" : "member5",
-            "argDefs" : [
-                {
-                    "name" : "s1",
-                    "argType" : {
-                        "tag" : "primitive"
+            },
+            "member4" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "labeledProduct",
+                    "fields" : {
+                        "s1" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        },
+                        "s2" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        },
+                        "i" : {
+                            "tag" : "scalar",
+                            "name" : "i32"
+                        }
                     }
                 },
-                {
-                    "name" : "s2",
-                    "argType" : {
-                        "tag" : "primitive"
-                    }
-                },
-                {
-                    "name" : "i",
-                    "argType" : {
-                        "tag" : "primitive"
-                    }
+                "codomain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "scalar",
+                            "name" : "i32"
+                        }
+                    ]
                 }
-            ],
-            "returnType" : {
-                "tag" : "primitive"
+            },
+            "member5" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "labeledProduct",
+                    "fields" : {
+                        "s1" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        },
+                        "s2" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        },
+                        "i" : {
+                            "tag" : "scalar",
+                            "name" : "i32"
+                        }
+                    }
+                },
+                "codomain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "scalar",
+                            "name" : "i32"
+                        }
+                    ]
+                }
             }
         }
-    ]
+    }
 }
     );
 }
@@ -144,22 +157,26 @@ export function registerServiceWithOUTDefaultId(...args: any) {
     registerService(
         args,
         {
-    "functions" : [
-        {
-            "functionName" : "hello",
-            "argDefs" : [
-                {
-                    "name" : "s",
-                    "argType" : {
-                        "tag" : "primitive"
+    "functions" : {
+        "tag" : "labeledProduct",
+        "fields" : {
+            "hello" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "labeledProduct",
+                    "fields" : {
+                        "s" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
                     }
+                },
+                "codomain" : {
+                    "tag" : "nil"
                 }
-            ],
-            "returnType" : {
-                "tag" : "void"
             }
         }
-    ]
+    }
 }
     );
 }
@@ -180,22 +197,26 @@ export function registerServiceWithDefaultId(...args: any) {
         args,
         {
     "defaultServiceId" : "defaultId",
-    "functions" : [
-        {
-            "functionName" : "hello",
-            "argDefs" : [
-                {
-                    "name" : "s",
-                    "argType" : {
-                        "tag" : "primitive"
+    "functions" : {
+        "tag" : "labeledProduct",
+        "fields" : {
+            "hello" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "labeledProduct",
+                    "fields" : {
+                        "s" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
                     }
+                },
+                "codomain" : {
+                    "tag" : "nil"
                 }
-            ],
-            "returnType" : {
-                "tag" : "void"
             }
         }
-    ]
+    }
 }
     );
 }
@@ -232,24 +253,26 @@ export function callBackZeroArgs(...args: any) {
         args,
         {
     "functionName" : "callBackZeroArgs",
-    "returnType" : {
-        "tag" : "void"
-    },
-    "argDefs" : [
-        {
-            "name" : "callback",
-            "argType" : {
-                "tag" : "callback",
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
                 "callback" : {
-                    "argDefs" : [
-                    ],
-                    "returnType" : {
-                        "tag" : "void"
+                    "tag" : "arrow",
+                    "domain" : {
+                        "tag" : "nil"
+                    },
+                    "codomain" : {
+                        "tag" : "nil"
                     }
                 }
             }
+        },
+        "codomain" : {
+            "tag" : "nil"
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",
@@ -295,36 +318,36 @@ export function f1(...args: any) {
         args,
         {
     "functionName" : "f1",
-    "returnType" : {
-        "tag" : "void"
-    },
-    "argDefs" : [
-        {
-            "name" : "callback",
-            "argType" : {
-                "tag" : "callback",
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
                 "callback" : {
-                    "argDefs" : [
-                        {
-                            "name" : "arg0",
-                            "argType" : {
-                                "tag" : "primitive"
+                    "tag" : "arrow",
+                    "domain" : {
+                        "tag" : "unlabeledProduct",
+                        "items" : [
+                            {
+                                "tag" : "scalar",
+                                "name" : "string"
+                            },
+                            {
+                                "tag" : "scalar",
+                                "name" : "i32"
                             }
-                        },
-                        {
-                            "name" : "arg1",
-                            "argType" : {
-                                "tag" : "primitive"
-                            }
-                        }
-                    ],
-                    "returnType" : {
-                        "tag" : "void"
+                        ]
+                    },
+                    "codomain" : {
+                        "tag" : "nil"
                     }
                 }
             }
+        },
+        "codomain" : {
+            "tag" : "nil"
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",
@@ -381,42 +404,46 @@ export function f3(...args: any) {
         args,
         {
     "functionName" : "f3",
-    "returnType" : {
-        "tag" : "primitive"
-    },
-    "argDefs" : [
-        {
-            "name" : "num",
-            "argType" : {
-                "tag" : "primitive"
-            }
-        },
-        {
-            "name" : "callback",
-            "argType" : {
-                "tag" : "callback",
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "num" : {
+                    "tag" : "scalar",
+                    "name" : "i32"
+                },
                 "callback" : {
-                    "argDefs" : [
-                        {
-                            "name" : "arg0",
-                            "argType" : {
-                                "tag" : "primitive"
+                    "tag" : "arrow",
+                    "domain" : {
+                        "tag" : "unlabeledProduct",
+                        "items" : [
+                            {
+                                "tag" : "scalar",
+                                "name" : "string"
+                            },
+                            {
+                                "tag" : "scalar",
+                                "name" : "i32"
                             }
-                        },
-                        {
-                            "name" : "arg1",
-                            "argType" : {
-                                "tag" : "primitive"
-                            }
-                        }
-                    ],
-                    "returnType" : {
-                        "tag" : "void"
+                        ]
+                    },
+                    "codomain" : {
+                        "tag" : "nil"
                     }
                 }
             }
+        },
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "scalar",
+                    "name" : "string"
+                }
+            ]
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",
@@ -467,42 +494,40 @@ export function f2(...args: any) {
         args,
         {
     "functionName" : "f2",
-    "returnType" : {
-        "tag" : "void"
-    },
-    "argDefs" : [
-        {
-            "name" : "num",
-            "argType" : {
-                "tag" : "primitive"
-            }
-        },
-        {
-            "name" : "callback",
-            "argType" : {
-                "tag" : "callback",
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "num" : {
+                    "tag" : "scalar",
+                    "name" : "i32"
+                },
                 "callback" : {
-                    "argDefs" : [
-                        {
-                            "name" : "arg0",
-                            "argType" : {
-                                "tag" : "primitive"
+                    "tag" : "arrow",
+                    "domain" : {
+                        "tag" : "unlabeledProduct",
+                        "items" : [
+                            {
+                                "tag" : "scalar",
+                                "name" : "string"
+                            },
+                            {
+                                "tag" : "scalar",
+                                "name" : "i32"
                             }
-                        },
-                        {
-                            "name" : "arg1",
-                            "argType" : {
-                                "tag" : "primitive"
-                            }
-                        }
-                    ],
-                    "returnType" : {
-                        "tag" : "void"
+                        ]
+                    },
+                    "codomain" : {
+                        "tag" : "nil"
                     }
                 }
             }
+        },
+        "codomain" : {
+            "tag" : "nil"
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",

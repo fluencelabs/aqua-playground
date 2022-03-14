@@ -8,9 +8,12 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    CallParams,
     callFunction,
     registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v3';
+
+import {
+    CallParams
 } from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
@@ -97,31 +100,41 @@ export function arraySugar(...args: any) {
         args,
         {
     "functionName" : "arraySugar",
-    "returnType" : {
-        "tag" : "multiReturn",
-        "returnItems" : [
-            {
-                "tag" : "primitive"
-            },
-            {
-                "tag" : "primitive"
-            }
-        ]
-    },
-    "argDefs" : [
-        {
-            "name" : "n",
-            "argType" : {
-                "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "n" : {
+                    "tag" : "scalar",
+                    "name" : "u32"
+                },
+                "m" : {
+                    "tag" : "scalar",
+                    "name" : "u32"
+                }
             }
         },
-        {
-            "name" : "m",
-            "argType" : {
-                "tag" : "primitive"
-            }
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "u32"
+                    }
+                },
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "u32"
+                    }
+                }
+            ]
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",
@@ -211,31 +224,41 @@ export function streamSugar(...args: any) {
         args,
         {
     "functionName" : "streamSugar",
-    "returnType" : {
-        "tag" : "multiReturn",
-        "returnItems" : [
-            {
-                "tag" : "primitive"
-            },
-            {
-                "tag" : "primitive"
-            }
-        ]
-    },
-    "argDefs" : [
-        {
-            "name" : "n",
-            "argType" : {
-                "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "n" : {
+                    "tag" : "scalar",
+                    "name" : "u32"
+                },
+                "m" : {
+                    "tag" : "scalar",
+                    "name" : "u32"
+                }
             }
         },
-        {
-            "name" : "m",
-            "argType" : {
-                "tag" : "primitive"
-            }
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "u32"
+                    }
+                },
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "u32"
+                    }
+                }
+            ]
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",
@@ -388,46 +411,68 @@ export function optionSugar(...args: any) {
         args,
         {
     "functionName" : "optionSugar",
-    "returnType" : {
-        "tag" : "multiReturn",
-        "returnItems" : [
-            {
-                "tag" : "primitive"
-            },
-            {
-                "tag" : "primitive"
-            },
-            {
-                "tag" : "primitive"
-            }
-        ]
-    },
-    "argDefs" : [
-        {
-            "name" : "numSome",
-            "argType" : {
-                "tag" : "optional"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "numSome" : {
+                    "tag" : "option",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "u32"
+                    }
+                },
+                "strSome" : {
+                    "tag" : "option",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                },
+                "numNone" : {
+                    "tag" : "option",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "u32"
+                    }
+                },
+                "strNone" : {
+                    "tag" : "option",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                }
             }
         },
-        {
-            "name" : "strSome",
-            "argType" : {
-                "tag" : "optional"
-            }
-        },
-        {
-            "name" : "numNone",
-            "argType" : {
-                "tag" : "optional"
-            }
-        },
-        {
-            "name" : "strNone",
-            "argType" : {
-                "tag" : "optional"
-            }
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "u32"
+                    }
+                },
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                },
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                }
+            ]
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",
@@ -486,34 +531,69 @@ export function emptySugar(...args: any) {
         args,
         {
     "functionName" : "emptySugar",
-    "returnType" : {
-        "tag" : "multiReturn",
-        "returnItems" : [
-            {
-                "tag" : "primitive"
-            },
-            {
-                "tag" : "primitive"
-            },
-            {
-                "tag" : "primitive"
-            },
-            {
-                "tag" : "primitive"
-            },
-            {
-                "tag" : "optional"
-            },
-            {
-                "tag" : "primitive"
-            },
-            {
-                "tag" : "optional"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                
             }
-        ]
+        },
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "u32"
+                    }
+                },
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                },
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                },
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                },
+                {
+                    "tag" : "option",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "u32"
+                    }
+                },
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "u32"
+                    }
+                },
+                {
+                    "tag" : "option",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                }
+            ]
+        }
     },
-    "argDefs" : [
-    ],
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",

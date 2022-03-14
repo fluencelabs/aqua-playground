@@ -8,9 +8,12 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    CallParams,
     callFunction,
     registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v3';
+
+import {
+    CallParams
 } from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
@@ -88,42 +91,46 @@ export function passFunctionAsArg(...args: any) {
         args,
         {
     "functionName" : "passFunctionAsArg",
-    "returnType" : {
-        "tag" : "void"
-    },
-    "argDefs" : [
-        {
-            "name" : "node",
-            "argType" : {
-                "tag" : "primitive"
-            }
-        },
-        {
-            "name" : "str",
-            "argType" : {
-                "tag" : "primitive"
-            }
-        },
-        {
-            "name" : "c",
-            "argType" : {
-                "tag" : "callback",
-                "callback" : {
-                    "argDefs" : [
-                        {
-                            "name" : "arg0",
-                            "argType" : {
-                                "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "node" : {
+                    "tag" : "scalar",
+                    "name" : "string"
+                },
+                "str" : {
+                    "tag" : "scalar",
+                    "name" : "string"
+                },
+                "c" : {
+                    "tag" : "arrow",
+                    "domain" : {
+                        "tag" : "unlabeledProduct",
+                        "items" : [
+                            {
+                                "tag" : "scalar",
+                                "name" : "string"
                             }
-                        }
-                    ],
-                    "returnType" : {
-                        "tag" : "primitive"
+                        ]
+                    },
+                    "codomain" : {
+                        "tag" : "unlabeledProduct",
+                        "items" : [
+                            {
+                                "tag" : "scalar",
+                                "name" : "string"
+                            }
+                        ]
                     }
                 }
             }
+        },
+        "codomain" : {
+            "tag" : "nil"
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",
@@ -174,36 +181,36 @@ export function reproArgsBug426(...args: any) {
         args,
         {
     "functionName" : "reproArgsBug426",
-    "returnType" : {
-        "tag" : "void"
-    },
-    "argDefs" : [
-        {
-            "name" : "log",
-            "argType" : {
-                "tag" : "callback",
-                "callback" : {
-                    "argDefs" : [
-                        {
-                            "name" : "arg0",
-                            "argType" : {
-                                "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "log" : {
+                    "tag" : "arrow",
+                    "domain" : {
+                        "tag" : "unlabeledProduct",
+                        "items" : [
+                            {
+                                "tag" : "scalar",
+                                "name" : "string"
                             }
-                        }
-                    ],
-                    "returnType" : {
-                        "tag" : "void"
+                        ]
+                    },
+                    "codomain" : {
+                        "tag" : "nil"
                     }
+                },
+                "arg" : {
+                    "tag" : "scalar",
+                    "name" : "string"
                 }
             }
         },
-        {
-            "name" : "arg",
-            "argType" : {
-                "tag" : "primitive"
-            }
+        "codomain" : {
+            "tag" : "nil"
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",

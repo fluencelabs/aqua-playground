@@ -8,9 +8,12 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    CallParams,
     callFunction,
     registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v3';
+
+import {
+    CallParams
 } from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
@@ -30,22 +33,32 @@ export function registerGetStr(...args: any) {
         args,
         {
     "defaultServiceId" : "multiret-test",
-    "functions" : [
-        {
-            "functionName" : "retStr",
-            "argDefs" : [
-                {
-                    "name" : "arg0",
-                    "argType" : {
-                        "tag" : "primitive"
-                    }
+    "functions" : {
+        "tag" : "labeledProduct",
+        "fields" : {
+            "retStr" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
+                    ]
+                },
+                "codomain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
+                    ]
                 }
-            ],
-            "returnType" : {
-                "tag" : "primitive"
             }
         }
-    ]
+    }
 }
     );
 }
@@ -66,16 +79,26 @@ export function registerGetNum(...args: any) {
         args,
         {
     "defaultServiceId" : "multiret-num",
-    "functions" : [
-        {
-            "functionName" : "retNum",
-            "argDefs" : [
-            ],
-            "returnType" : {
-                "tag" : "primitive"
+    "functions" : {
+        "tag" : "labeledProduct",
+        "fields" : {
+            "retNum" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "nil"
+                },
+                "codomain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "scalar",
+                            "name" : "u8"
+                        }
+                    ]
+                }
             }
         }
-    ]
+    }
 }
     );
 }
@@ -140,43 +163,66 @@ export function multiReturnFunc(...args: any) {
         args,
         {
     "functionName" : "multiReturnFunc",
-    "returnType" : {
-        "tag" : "multiReturn",
-        "returnItems" : [
-            {
-                "tag" : "primitive"
-            },
-            {
-                "tag" : "primitive"
-            },
-            {
-                "tag" : "primitive"
-            },
-            {
-                "tag" : "primitive"
-            },
-            {
-                "tag" : "optional"
-            },
-            {
-                "tag" : "primitive"
-            }
-        ]
-    },
-    "argDefs" : [
-        {
-            "name" : "somethingToReturn",
-            "argType" : {
-                "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "somethingToReturn" : {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "u8"
+                    }
+                },
+                "smthOption" : {
+                    "tag" : "option",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                }
             }
         },
-        {
-            "name" : "smthOption",
-            "argType" : {
-                "tag" : "optional"
-            }
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                },
+                {
+                    "tag" : "scalar",
+                    "name" : "u8"
+                },
+                {
+                    "tag" : "scalar",
+                    "name" : "string"
+                },
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "u8"
+                    }
+                },
+                {
+                    "tag" : "option",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                },
+                {
+                    "tag" : "scalar",
+                    "name" : "u8"
+                }
+            ]
         }
-    ],
+    },
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",
@@ -226,19 +272,28 @@ export function tupleFunc(...args: any) {
         args,
         {
     "functionName" : "tupleFunc",
-    "returnType" : {
-        "tag" : "multiReturn",
-        "returnItems" : [
-            {
-                "tag" : "primitive"
-            },
-            {
-                "tag" : "primitive"
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                
             }
-        ]
+        },
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "scalar",
+                    "name" : "string"
+                },
+                {
+                    "tag" : "scalar",
+                    "name" : "u8"
+                }
+            ]
+        }
     },
-    "argDefs" : [
-    ],
     "names" : {
         "relay" : "-relay-",
         "getDataSrv" : "getDataSrv",

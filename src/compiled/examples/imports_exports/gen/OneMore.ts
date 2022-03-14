@@ -8,9 +8,12 @@
  */
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import {
-    CallParams,
     callFunction,
     registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v3';
+
+import {
+    CallParams
 } from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
 
 
@@ -27,16 +30,20 @@ export function registerOneMore(...args: any) {
     registerService(
         args,
         {
-    "functions" : [
-        {
-            "functionName" : "more_call",
-            "argDefs" : [
-            ],
-            "returnType" : {
-                "tag" : "void"
+    "functions" : {
+        "tag" : "labeledProduct",
+        "fields" : {
+            "more_call" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "nil"
+                },
+                "codomain" : {
+                    "tag" : "nil"
+                }
             }
         }
-    ]
+    }
 }
     );
 }
