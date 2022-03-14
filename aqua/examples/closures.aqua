@@ -2,7 +2,7 @@ module Closure declares *
 
 import "@fluencelabs/aqua-lib/builtin.aqua"
 
-export LocalSrv, closureIn, closureOut, closureBig
+export LocalSrv, closureIn, closureOut, closureBig, closureOut2
 
 service MyOp("op"):
   identity(s: string) -> string
@@ -32,15 +32,15 @@ func closureOut(peer2: string) -> Info:
   p2Id <- closure("on")
   <- p2Id
 
--- func closureOut2(peer2: string) -> Info:
---   closure = func (s: string) -> Info:
---     if s == "in":
---         LocalSrv.inside()
---     p2Id <- Peer.identify()
---     <- p2Id
---   on peer2:
---     p2Id <- closure("on")
---   <- p2Id
+func closureOut2(peer2: string) -> Info:
+  closure = func (s: string) -> Info:
+    if s == "in":
+        LocalSrv.inside()
+    p2Id <- Peer.identify()
+    <- p2Id
+  on peer2:
+    p2Id <- closure("on")
+  <- p2Id
 
 
 func closureBig(peer1: string, peer2: string) -> string, string:

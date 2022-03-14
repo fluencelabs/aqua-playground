@@ -255,7 +255,7 @@ describe('Testing examples', () => {
         let closuresResult = await closuresCall();
         let res1 = config.externalAddressesRelay2
         let res2 = ["in", config.externalAddressesRelay2[0]]
-        expect(closuresResult).toEqual(["in", res1, res2]);
+        expect(closuresResult).toEqual(["in", res1, res1, res2]);
     });
 
     it('assignment.aqua', async () => {
