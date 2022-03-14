@@ -47,7 +47,7 @@ func closureBig(peer1: string, peer2: string) -> string, string:
   variable = "const"
   co on peer1:
     p1Id <- MyOp.identity("co on")
-  closure = (s: string) -> string:
+  closure = func (s: string) -> string:
     p2Id: *string
     if s == "in":
       p2 <- MyOp.identity(s)
