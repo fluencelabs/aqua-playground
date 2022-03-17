@@ -160,7 +160,7 @@ describe('Testing examples', () => {
 
     it('streamCan.aqua', async () => {
         let streamCanResult = await streamCanCall();
-        expect(streamCanResult).toEqual([["a"], ["b"], []]);
+        expect(streamCanResult).toEqual(["a", "b", null]);
     });
 
     it('collectionSugar array', async () => {
