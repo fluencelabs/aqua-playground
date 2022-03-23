@@ -14,7 +14,7 @@ describe('Testing run command', () => {
     const call = `npm run aqua run -- --addr ${addr} -i cli-run-aqua/caller.aqua -m node_modules/ --func ${func}`
     const listBlueprintsCall = `npm run aqua remote list_blueprints -- --addr ${addr}`
     const listModulesCall = `npm run aqua remote list_modules -- --addr ${addr}`
-    const listInterfacesCall = `npm run aqua remot list_interfaces -- --addr ${addr}`
+    const listInterfacesCall = `npm run aqua remote list_interfaces -- --addr ${addr}`
 
     it('run simple command', (done) => {
         exec(call, (error, stdout, stderr) => {
