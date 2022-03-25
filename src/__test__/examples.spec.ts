@@ -37,6 +37,7 @@ import {joinIdxCall, joinIdxLocalCall, joinIdxRelayCall} from "../examples/joinC
 import {topologyBug427} from "../compiled/examples/topology";
 import {recursiveStreamsCall} from "../examples/recursiveStreamsCall";
 import {allEmptySugarCall, arraySugarCall, optionSugarCall, streamSugarCall} from "../examples/collectionSugarCall";
+import {funcsCall} from "../examples/funcsCall";
 
 var selfPeerId: string;
 var peer2: FluencePeer;
@@ -225,6 +226,11 @@ describe('Testing examples', () => {
         let foldJoinResult = await foldJoinCall();
         expect(foldJoinResult.length).toBeGreaterThanOrEqual(3)
     }, 16000);
+
+    it('funcs.aqua', async () => {
+        let result = await funcsCall();
+        expect(result).toEqual([10, 6]);
+    }, 7000);
 
     it('option.aqua', async () => {
         registerHandlers();
