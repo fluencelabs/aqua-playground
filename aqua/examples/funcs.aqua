@@ -5,26 +5,23 @@ export main, A, calc
 service A("a"):
   getJ(i: i32) -> i32
 
-func getEl(b: []i32, i: i32) -> i32:
-  <- b[A.getJ(i)]
-
 func main(log: string, []i32 -> ()) -> i32:
   closure = (i: []i32, j: i32) -> i32:
       some <- A.getJ(i[j])
       <- some
-  closure2 = func(i: []i32, j: i32) -> i32:
+  closure2 = func (i: []i32, j: i32) -> i32:
       some <- A.getJ(i[j])
       <- some
   arr = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
-  idx1 <- A.getJ(arr[A.getJ(3) + 2 * 3 - (2 + 2) * 2])            -- 1
-  idx2 <- A.getJ(arr[A.getJ(3) + 3] + arr[A.getJ(1) - 1] - 4)     -- 2
-  <- A.getJ(arr[(idx1 + idx2) * 7 - (A.getJ(3) + 5) * (1 + 1) + closure(arr, 2) + closure2(arr, 3)])   -- should be 10
+  idx1 <- A.getJ(arr[A.getJ(3) + 2])            -- 5
+  idx2 <- A.getJ(arr[A.getJ(3) + 3] + arr[A.getJ(1) - 1] - 3)     -- 3
+  <- A.getJ(arr[(idx1 + idx2) + closure(arr, 2) + closure2(arr, 3)])   -- should be 13
 
 
 func calc(log: string, []i32 -> ()) -> i32:
   arr = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
   log("calc 1", arr)
-  num <- A.getJ((5-2)*2-10+(3-1)*5) -- 6
+  num <- A.getJ((5-2)*3-3) -- 6
   log("calc 2", [num])
   <- arr[num]                       -- should be 6
 

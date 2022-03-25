@@ -229,7 +229,7 @@ describe('Testing examples', () => {
 
     it('funcs.aqua', async () => {
         let result = await funcsCall();
-        expect(result).toEqual([10, 6]);
+        expect(result).toEqual([13, 6]);
     }, 7000);
 
     it('option.aqua', async () => {
