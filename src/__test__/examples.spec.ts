@@ -38,6 +38,7 @@ import {topologyBug427} from "../compiled/examples/topology";
 import {recursiveStreamsCall} from "../examples/recursiveStreamsCall";
 import {allEmptySugarCall, arraySugarCall, optionSugarCall, streamSugarCall} from "../examples/collectionSugarCall";
 import {funcsCall} from "../examples/funcsCall";
+import {nestedDataCall} from "../examples/nestedDataCall";
 
 var selfPeerId: string;
 var peer2: FluencePeer;
@@ -255,6 +256,15 @@ describe('Testing examples', () => {
     it('nestedFuncs.aqua', async () => {
         let nestedFuncsResult = await nestedFuncsCall();
         expect(nestedFuncsResult).toBe('some-str');
+    });
+
+    it.skip('nestedData.aqua', async () => {
+        let nestedDataResult = await nestedDataCall();
+        expect(nestedDataResult).toBe({
+            one: {
+                val: "hellohello"
+            }
+        });
     });
 
     it('closures.aqua', async () => {
