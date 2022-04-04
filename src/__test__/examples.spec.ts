@@ -258,9 +258,9 @@ describe('Testing examples', () => {
         expect(nestedFuncsResult).toBe('some-str');
     });
 
-    it.skip('nestedData.aqua', async () => {
+    it('nestedData.aqua', async () => {
         let nestedDataResult = await nestedDataCall();
-        expect(nestedDataResult).toBe({
+        expect(nestedDataResult).toEqual({
             one: {
                 val: "hellohello"
             }
