@@ -1,4 +1,4 @@
-import {main, registerA, calc} from '../compiled/examples/funcs';
+import {main, registerA, calc, calc2} from '../compiled/examples/funcs';
 
 export async function funcsCall() {
 
@@ -16,5 +16,9 @@ export async function funcsCall() {
         console.log(c + ": " + arr)
     })
 
-    return [res1, res2]
+    let res3 = await calc2((c, arr) => {
+        console.log(c + ": " + arr)
+    })
+
+    return [res1, res2, res3]
 }

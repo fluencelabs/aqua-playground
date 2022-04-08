@@ -39,6 +39,7 @@ import {recursiveStreamsCall} from "../examples/recursiveStreamsCall";
 import {allEmptySugarCall, arraySugarCall, optionSugarCall, streamSugarCall} from "../examples/collectionSugarCall";
 import {funcsCall} from "../examples/funcsCall";
 import {nestedDataCall} from "../examples/nestedDataCall";
+import {mathTest1Call, mathTest2Call} from "../examples/mathCall";
 
 var selfPeerId: string;
 var peer2: FluencePeer;
@@ -223,6 +224,18 @@ describe('Testing examples', () => {
         expect(topologyResult).toEqual(selfPeerId);
     });
 
+    it('math.aqua test 1', async () => {
+        let res = await mathTest1Call();
+
+        expect(res).toEqual(-10);
+    });
+
+    it('math.aqua test 2', async () => {
+        let res = await mathTest2Call();
+
+        expect(res).toEqual(-5);
+    });
+
     it('foldJoin.aqua', async () => {
         let foldJoinResult = await foldJoinCall();
         expect(foldJoinResult.length).toBeGreaterThanOrEqual(3)
@@ -230,7 +243,7 @@ describe('Testing examples', () => {
 
     it('funcs.aqua', async () => {
         let result = await funcsCall();
-        expect(result).toEqual([13, 6]);
+        expect(result).toEqual([13, 6, 0]);
     }, 7000);
 
     it('option.aqua', async () => {

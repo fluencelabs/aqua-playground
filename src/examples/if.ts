@@ -1,4 +1,3 @@
-import { FluencePeer } from '@fluencelabs/fluence';
 import {ifCorrectXorWrap, ifElseCall, ifElseNumCall} from '../compiled/examples/if';
 
 export async function ifCall() {
