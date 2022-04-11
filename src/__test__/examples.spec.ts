@@ -233,7 +233,7 @@ describe('Testing examples', () => {
     it('math.aqua test 2', async () => {
         let res = await mathTest2Call();
 
-        expect(res).toEqual(-5);
+        expect(res).toEqual(3);
     });
 
     it('foldJoin.aqua', async () => {
@@ -243,7 +243,7 @@ describe('Testing examples', () => {
 
     it('funcs.aqua', async () => {
         let result = await funcsCall();
-        expect(result).toEqual([13, 6, 0]);
+        expect(result).toEqual([13, 6, 3]);
     }, 7000);
 
     it('option.aqua', async () => {
