@@ -7,6 +7,7 @@ const exec = util.promisify(require('child_process').exec);
 describe('Testing run command', () => {
 
     const addr = krasnodar[4].multiaddr
+    const addr2 = krasnodar[1].multiaddr
     const nodeId = krasnodar[5].peerId
     const message = "hello"
     const message2 = "aaa"
@@ -48,9 +49,8 @@ describe('Testing run command', () => {
                 console.error(`stderr: ${stderr}`);
             } else {
                 try {
-                    let arr = stdout.split("\n").slice(5)
-                    console.log(arr)
-                    const result = JSON.parse(arr.join(""));
+                    let arr = stdout.split("\n").slice(3)
+                    const result = JSON.parse(arr.join("\n"));
 
                     expect(Array.isArray(result)).toBeTruthy();
                 } catch (e) {
@@ -69,9 +69,8 @@ describe('Testing run command', () => {
                 console.error(`stderr: ${stderr}`);
             } else {
                 try {
-                    let arr = stdout.split("\n").slice(5)
-                    console.log(arr)
-                    const result = JSON.parse(arr.join(""));
+                    let arr = stdout.split("\n").slice(3)
+                    const result = JSON.parse(arr.join("\n"));
 
                     expect(Array.isArray(result)).toBeTruthy();
                 } catch (e) {
@@ -82,16 +81,15 @@ describe('Testing run command', () => {
         });
     }, 16000);
 
-    it('run listInterfaces', (done) => {
+    it.skip('run listInterfaces', (done) => {
         exec(listInterfacesCall, (error, stdout, stderr) => {
             if (error) {
-                console.error(`error: ${error.message}`);
+                console.error(`error: ${error}`);
             } else if (stderr) {
                 console.error(`stderr: ${stderr}`);
             } else {
                 try {
-                    let arr = stdout.split("\n").slice(5)
-                    console.log(arr)
+                    let arr = stdout.split("\n").slice(3)
                     const result = JSON.parse(arr.join(""));
 
                     expect(Array.isArray(result)).toBeTruthy();

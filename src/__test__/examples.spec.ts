@@ -34,12 +34,11 @@ import {streamCanCall} from "../examples/streamCan";
 import {streamCallbackCall} from "../examples/streamCallback";
 import {streamResCall} from "../examples/streamRestrictionsCall";
 import {joinIdxCall, joinIdxLocalCall, joinIdxRelayCall} from "../examples/joinCall";
-import {topologyBug427} from "../compiled/examples/topology";
 import {recursiveStreamsCall} from "../examples/recursiveStreamsCall";
 import {allEmptySugarCall, arraySugarCall, optionSugarCall, streamSugarCall} from "../examples/collectionSugarCall";
 import {funcsCall} from "../examples/funcsCall";
 import {nestedDataCall} from "../examples/nestedDataCall";
-import {ifCalcCall, mathTest1Call, mathTest2Call} from "../examples/mathCall";
+import {mathTest1Call, mathTest2Call} from "../examples/mathCall";
 
 var selfPeerId: string;
 var peer2: FluencePeer;
@@ -241,12 +240,6 @@ describe('Testing examples', () => {
         expect(res).toEqual(3);
     });
 
-    it('math.aqua if test', async () => {
-        let res = await ifCalcCall();
-
-        expect(res).toEqual(1);
-    });
-
     it('foldJoin.aqua', async () => {
         let foldJoinResult = await foldJoinCall();
         expect(foldJoinResult.length).toBeGreaterThanOrEqual(3)
@@ -254,7 +247,7 @@ describe('Testing examples', () => {
 
     it('funcs.aqua', async () => {
         let result = await funcsCall();
-        expect(result).toEqual([13, 6, 3]);
+        expect(result).toEqual([13, 6, 3, 1]);
     }, 7000);
 
     it('option.aqua', async () => {
