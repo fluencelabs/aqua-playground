@@ -1,5 +1,6 @@
 import { Fluence } from '@fluencelabs/fluence';
-import { parFunc, registerParService } from '../compiled/examples/par';
+import {parFunc, registerParService, testTimeout} from '../compiled/examples/par';
+import {config} from "../config";
 
 export async function parCall() {
     const relayPeerId = Fluence.getPeer().getStatus().relayPeerId;
@@ -20,4 +21,10 @@ export async function parCall() {
     });
 
     return promise;
+}
+
+const relays = config.relays
+
+export async function testTimeoutCall() {
+    return testTimeout([relays[3].peerId, relays[4].peerId])
 }

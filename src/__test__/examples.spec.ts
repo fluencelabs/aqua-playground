@@ -7,7 +7,7 @@ import { funcCall } from '../examples/funcCall';
 import { helloWorldCall } from '../examples/helloWorldCall';
 import { foldCall } from '../examples/foldCall';
 import {ifCall, ifWrapCall} from '../examples/if';
-import { parCall } from '../examples/parCall';
+import {parCall, testTimeoutCall} from '../examples/parCall';
 import { complexCall } from '../examples/complex';
 import { constantsCall } from '../examples/constantsCall';
 import { returnNilCall, returnNoneCall, streamCall } from '../examples/streamCall';
@@ -107,6 +107,11 @@ describe('Testing examples', () => {
     it(' par.aqua', async () => {
         let parCallResult = await parCall();
         expect(parCallResult).toBe('hello');
+    });
+
+    it(' par.aqua testTimeout', async () => {
+        let testTimeoutResult = await testTimeoutCall();
+        expect(testTimeoutResult).toBe('timeout');
     });
 
     it('helloWorld.aqua', async () => {

@@ -11,3 +11,24 @@ func parFunc( node: string, c: Info -> () ):
         t <- Peer.identify()
         c(t)
     par x <- ParService.call()
+
+func testTimeout(nodes: []string) -> string:
+  on HOST_PEER_ID:
+
+    results: *Info
+
+    for node <- nodes par:
+      on node:
+        results <- Peer.identify()
+
+  timeout: *string
+  join results[999]
+  par timeout <- Peer.timeout(400, "timeout")
+
+  status: *string
+  if timeout == nil:
+    status <<- "ok"
+  else:
+    status <<- timeout!
+
+  <- status!
