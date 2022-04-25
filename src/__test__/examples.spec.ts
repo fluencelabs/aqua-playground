@@ -5,7 +5,7 @@ import { dataAliasCall } from '../examples/dataAliasCall';
 import { onCall } from '../examples/onCall';
 import { funcCall } from '../examples/funcCall';
 import { helloWorldCall } from '../examples/helloWorldCall';
-import { foldCall } from '../examples/foldCall';
+import {foldBug499Call, foldCall} from '../examples/foldCall';
 import {ifCall, ifWrapCall} from '../examples/if';
 import {parCall, testTimeoutCall} from '../examples/parCall';
 import { complexCall } from '../examples/complex';
@@ -92,6 +92,11 @@ describe('Testing examples', () => {
     it('fold.aqua', async () => {
         let foldCallResult = await foldCall();
         expect(foldCallResult).toEqual(config.externalAddressesRelay1);
+    });
+
+    it('fold.aqua bug #499', async () => {
+        let foldCallResult = await foldBug499Call()
+        expect(foldCallResult).toEqual([5]);
     });
 
     it('if.aqua', async () => {

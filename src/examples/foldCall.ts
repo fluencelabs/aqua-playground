@@ -1,5 +1,5 @@
 import { Fluence } from '@fluencelabs/fluence';
-import { iterateAndPrint, iterateAndPrintParallel } from '../compiled/examples/fold';
+import {forBug499, iterateAndPrint, iterateAndPrintParallel} from '../compiled/examples/fold';
 
 export async function foldCall() {
     const relayPeerId = Fluence.getPeer().getStatus().relayPeerId;
@@ -12,4 +12,8 @@ export async function foldCall() {
             resolve(c.external_addresses);
         },  {ttl: 10000});
     });
+}
+
+export async function foldBug499Call(): Promise<number[]> {
+    return forBug499()
 }
