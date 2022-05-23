@@ -9,7 +9,7 @@ import {foldBug499Call, foldCall} from '../examples/foldCall';
 import {ifCall, ifWrapCall} from '../examples/if';
 import {parCall, testTimeoutCall} from '../examples/parCall';
 import { complexCall } from '../examples/complex';
-import { constantsCall } from '../examples/constantsCall';
+import {constantsCall, particleTtlAndTimestampCall} from '../examples/constantsCall';
 import { returnNilCall, returnNoneCall, streamCall } from '../examples/streamCall';
 import {topologyBug205Call, topologyBug394Call, topologyBug427Call, topologyCall} from '../examples/topologyCall';
 import { foldJoinCall } from '../examples/foldJoinCall';
@@ -159,6 +159,13 @@ describe('Testing examples', () => {
     it('constants.aqua', async () => {
         let constantCallResult = await constantsCall();
         expect(constantCallResult).toEqual(['1', 'ab']);
+    });
+
+    it('PARTICLE_TTL and PARTICLE_TIMESTAMP', async () => {
+        const ttl = 1234
+        let result = await particleTtlAndTimestampCall(ttl);
+        expect(result[1]).toBeDefined()
+        expect(result[0]).toEqual(ttl);
     });
 
     it('stream.aqua', async () => {

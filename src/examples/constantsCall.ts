@@ -1,5 +1,4 @@
-import { FluencePeer } from '@fluencelabs/fluence';
-import { callConstant, registerGetter } from '../compiled/examples/constants';
+import {callConstant, registerGetter, timestampAndTtl} from '../compiled/examples/constants';
 
 export async function constantsCall(): Promise<string[]> {
     registerGetter({
@@ -9,4 +8,9 @@ export async function constantsCall(): Promise<string[]> {
     });
 
     return await callConstant();
+}
+
+export async function particleTtlAndTimestampCall(ttl: number): Promise<[number, number]> {
+
+    return await timestampAndTtl({ttl: ttl});
 }
