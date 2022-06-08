@@ -20,7 +20,7 @@ import { assignmentCall } from '../examples/assignment';
 import { tryCatchCall } from '../examples/tryCatchCall';
 import { tryOtherwiseCall } from '../examples/tryOtherwiseCall';
 import { coCall } from '../examples/coCall';
-import { passArgsCall } from '../examples/passArgsCall';
+import {bugLNG60Call, passArgsCall} from '../examples/passArgsCall';
 import { streamArgsCall } from '../examples/streamArgsCall';
 import { streamResultsCall } from '../examples/streamResultsCall';
 import { pushToStreamCall } from '../examples/pushToStreamCall';
@@ -328,6 +328,11 @@ describe('Testing examples', () => {
     it('passArgsCall.aqua', async () => {
         let passArgsResult = await passArgsCall();
         expect(passArgsResult).toBe('client-utilsid');
+    });
+
+    it('passArgsCall.aqua bugLNG60', async () => {
+        let result = await bugLNG60Call();
+        expect(result).toBe(true);
     });
 
     it('streamArgs.aqua', async () => {

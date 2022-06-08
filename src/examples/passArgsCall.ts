@@ -1,5 +1,5 @@
-import { FluencePeer } from '@fluencelabs/fluence';
-import { create_client_util, registerAquaDHT } from '../compiled/examples/passArgs';
+import { Fluence } from '@fluencelabs/fluence';
+import {bugLNG60, create_client_util, registerAquaDHT} from '../compiled/examples/passArgs';
 
 export async function passArgsCall() {
     registerAquaDHT({
@@ -9,4 +9,8 @@ export async function passArgsCall() {
     });
 
     return await create_client_util('sid');
+}
+
+export async function bugLNG60Call(): Promise<boolean> {
+    return bugLNG60(Fluence.getPeer().getStatus().relayPeerId)
 }
