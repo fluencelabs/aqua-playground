@@ -16,136 +16,51 @@ import {
 
 // Services
 
-// Functions
- 
-export type ArraySugarResult = [number[], number[]]
-export function arraySugar(
-    n: number,
-    m: number,
-    config?: {ttl?: number}
-): Promise<ArraySugarResult>;
+export interface OpODef {
+    identity: (arg0: string, callParams: CallParams<'arg0'>) => string | Promise<string>;
+}
+export function registerOpO(service: OpODef): void;
+export function registerOpO(serviceId: string, service: OpODef): void;
+export function registerOpO(peer: FluencePeer, service: OpODef): void;
+export function registerOpO(peer: FluencePeer, serviceId: string, service: OpODef): void;
+       
 
-export function arraySugar(
-    peer: FluencePeer,
-    n: number,
-    m: number,
-    config?: {ttl?: number}
-): Promise<ArraySugarResult>;
-
-export function arraySugar(...args: any) {
-
-    let script = `
-                    (xor
-                     (seq
-                      (seq
-                       (seq
-                        (seq
-                         (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-                         (call %init_peer_id% ("getDataSrv" "n") [] n)
-                        )
-                        (call %init_peer_id% ("getDataSrv" "m") [] m)
-                       )
-                       (new $str
-                        (seq
-                         (seq
-                          (seq
-                           (new $array-inline
-                            (seq
-                             (seq
-                              (seq
-                               (ap 1 $array-inline)
-                               (ap 2 $array-inline)
-                              )
-                              (ap n $array-inline)
-                             )
-                             (call %init_peer_id% ("op" "identity") [$array-inline] array-inline-0)
-                            )
-                           )
-                           (new $array-inline-1
-                            (seq
-                             (seq
-                              (seq
-                               (ap 4 $array-inline-1)
-                               (ap 5 $array-inline-1)
-                              )
-                              (ap m $array-inline-1)
-                             )
-                             (call %init_peer_id% ("op" "identity") [$array-inline-1] array-inline-1-0)
-                            )
-                           )
-                          )
-                          (fold array-inline-1-0 i-0
-                           (seq
-                            (ap i-0 $str)
-                            (next i-0)
-                           )
-                          )
-                         )
-                         (call %init_peer_id% ("op" "identity") [$str] str-fix)
-                        )
-                       )
-                      )
-                      (xor
-                       (call %init_peer_id% ("callbackSrv" "response") [array-inline-0 str-fix])
-                       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
-                      )
-                     )
-                     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
-                    )
-    `
-    return callFunction(
+export function registerOpO(...args: any) {
+    registerService(
         args,
         {
-    "functionName" : "arraySugar",
-    "arrow" : {
-        "tag" : "arrow",
-        "domain" : {
-            "tag" : "labeledProduct",
-            "fields" : {
-                "n" : {
-                    "tag" : "scalar",
-                    "name" : "u32"
+    "defaultServiceId" : "op",
+    "functions" : {
+        "tag" : "labeledProduct",
+        "fields" : {
+            "identity" : {
+                "tag" : "arrow",
+                "domain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
+                    ]
                 },
-                "m" : {
-                    "tag" : "scalar",
-                    "name" : "u32"
+                "codomain" : {
+                    "tag" : "unlabeledProduct",
+                    "items" : [
+                        {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
+                    ]
                 }
             }
-        },
-        "codomain" : {
-            "tag" : "unlabeledProduct",
-            "items" : [
-                {
-                    "tag" : "array",
-                    "type" : {
-                        "tag" : "scalar",
-                        "name" : "u32"
-                    }
-                },
-                {
-                    "tag" : "array",
-                    "type" : {
-                        "tag" : "scalar",
-                        "name" : "u32"
-                    }
-                }
-            ]
         }
-    },
-    "names" : {
-        "relay" : "-relay-",
-        "getDataSrv" : "getDataSrv",
-        "callbackSrv" : "callbackSrv",
-        "responseSrv" : "callbackSrv",
-        "responseFnName" : "response",
-        "errorHandlingSrv" : "errorHandlingSrv",
-        "errorFnName" : "error"
     }
-},
-        script
-    )
 }
-
+    );
+}
+      
+// Functions
  
 export type StreamSugarResult = [number[], number[]]
 export function streamSugar(
@@ -586,6 +501,281 @@ export function emptySugar(...args: any) {
                     "type" : {
                         "tag" : "scalar",
                         "name" : "string"
+                    }
+                }
+            ]
+        }
+    },
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
+}
+
+ 
+
+export function getNeighbours(
+    config?: {ttl?: number}
+): Promise<string[]>;
+
+export function getNeighbours(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<string[]>;
+
+export function getNeighbours(...args: any) {
+
+    let script = `
+                    (xor
+                     (seq
+                      (seq
+                       (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+                       (call %init_peer_id% ("kad" "neighborhood") ["123" [] []] nodes)
+                      )
+                      (xor
+                       (call %init_peer_id% ("callbackSrv" "response") [nodes])
+                       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+                      )
+                     )
+                     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+                    )
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "getNeighbours",
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                
+            }
+        },
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                }
+            ]
+        }
+    },
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
+}
+
+ 
+
+export function bugLNG59(
+    config?: {ttl?: number}
+): Promise<string>;
+
+export function bugLNG59(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<string>;
+
+export function bugLNG59(...args: any) {
+
+    let script = `
+                    (xor
+                     (seq
+                      (seq
+                       (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+                       (xor
+                        (seq
+                         (call -relay- ("kad" "neighborhood") ["123" [] []] nodes)
+                         (xor
+                          (seq
+                           (call nodes.$.[0]! ("op" "identity") ["some str"] res)
+                           (call -relay- ("op" "noop") [])
+                          )
+                          (seq
+                           (call -relay- ("op" "noop") [])
+                           (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+                          )
+                         )
+                        )
+                        (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+                       )
+                      )
+                      (xor
+                       (call %init_peer_id% ("callbackSrv" "response") [res])
+                       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
+                      )
+                     )
+                     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 4])
+                    )
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "bugLNG59",
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                
+            }
+        },
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "scalar",
+                    "name" : "string"
+                }
+            ]
+        }
+    },
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
+}
+
+ 
+export type ArraySugarResult = [number[], number[]]
+export function arraySugar(
+    n: number,
+    m: number,
+    config?: {ttl?: number}
+): Promise<ArraySugarResult>;
+
+export function arraySugar(
+    peer: FluencePeer,
+    n: number,
+    m: number,
+    config?: {ttl?: number}
+): Promise<ArraySugarResult>;
+
+export function arraySugar(...args: any) {
+
+    let script = `
+                    (xor
+                     (seq
+                      (seq
+                       (seq
+                        (seq
+                         (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+                         (call %init_peer_id% ("getDataSrv" "n") [] n)
+                        )
+                        (call %init_peer_id% ("getDataSrv" "m") [] m)
+                       )
+                       (new $str
+                        (seq
+                         (seq
+                          (seq
+                           (new $array-inline
+                            (seq
+                             (seq
+                              (seq
+                               (ap 1 $array-inline)
+                               (ap 2 $array-inline)
+                              )
+                              (ap n $array-inline)
+                             )
+                             (call %init_peer_id% ("op" "identity") [$array-inline] array-inline-0)
+                            )
+                           )
+                           (new $array-inline-1
+                            (seq
+                             (seq
+                              (seq
+                               (ap 4 $array-inline-1)
+                               (ap 5 $array-inline-1)
+                              )
+                              (ap m $array-inline-1)
+                             )
+                             (call %init_peer_id% ("op" "identity") [$array-inline-1] array-inline-1-0)
+                            )
+                           )
+                          )
+                          (fold array-inline-1-0 i-0
+                           (seq
+                            (ap i-0 $str)
+                            (next i-0)
+                           )
+                          )
+                         )
+                         (call %init_peer_id% ("op" "identity") [$str] str-fix)
+                        )
+                       )
+                      )
+                      (xor
+                       (call %init_peer_id% ("callbackSrv" "response") [array-inline-0 str-fix])
+                       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+                      )
+                     )
+                     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+                    )
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "arraySugar",
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                "n" : {
+                    "tag" : "scalar",
+                    "name" : "u32"
+                },
+                "m" : {
+                    "tag" : "scalar",
+                    "name" : "u32"
+                }
+            }
+        },
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "u32"
+                    }
+                },
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "u32"
                     }
                 }
             ]

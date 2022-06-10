@@ -109,7 +109,10 @@ export function wrap(...args: any) {
                     (xor
                      (seq
                       (seq
-                       (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+                       (seq
+                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+                        (call %init_peer_id% ("hello" "more_call") [])
+                       )
                        (call %init_peer_id% ("ohmygod" "more_call") [])
                       )
                       (xor

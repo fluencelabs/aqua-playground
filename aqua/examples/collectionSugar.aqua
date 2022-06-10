@@ -1,3 +1,5 @@
+import "@fluencelabs/aqua-lib/builtin.aqua"
+
 func arraySugar(n: u32, m: u32) -> []u32, []u32:
   arr = [1,2,n]
   str: *u32
@@ -35,3 +37,18 @@ func emptySugar() -> []u32, []string, []string, *string, ?u32, []u32, ?string:
   for i <- []:
     strEmptyStream <<- "some"
   <- numOp, strArr, strStream, strEmptyStream, [], ?[], *[]
+
+service OpO("op"):
+    identity: string -> string
+
+func getNeighbours() -> []string:
+  nodes <- Kademlia.neighborhood("123", nil, nil)
+  <- nodes
+
+func bugLNG59() -> string:
+  on HOST_PEER_ID:
+    nodes <- getNeighbours()
+    n = nodes[0]
+    on n:
+      res <- OpO.identity("some str")
+  <- res

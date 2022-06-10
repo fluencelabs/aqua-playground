@@ -39,6 +39,7 @@ import {allEmptySugarCall, arraySugarCall, optionSugarCall, streamSugarCall} fro
 import {funcsCall} from "../examples/funcsCall";
 import {nestedDataCall} from "../examples/nestedDataCall";
 import {mathTest1Call, mathTest2Call} from "../examples/mathCall";
+import {bugLNG59} from "../compiled/examples/collectionSugar";
 
 var selfPeerId: string;
 var peer2: FluencePeer;
@@ -200,6 +201,11 @@ describe('Testing examples', () => {
     it('collectionSugar empty', async () => {
         let result = await allEmptySugarCall()
         expect(result).toEqual([[], [], [], [], null, [], null]);
+    });
+
+    it('collectionSugar bug LNG-59', async () => {
+        let result = await bugLNG59()
+        expect(result).toEqual("some str");
     });
 
     it('recursiveStreams.aqua', async () => {
