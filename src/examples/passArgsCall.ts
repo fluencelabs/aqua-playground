@@ -12,5 +12,5 @@ export async function passArgsCall() {
 }
 
 export async function bugLNG60Call(): Promise<boolean> {
-    return bugLNG60(Fluence.getPeer().getStatus().relayPeerId)
+    return bugLNG60(Fluence.getPeer().getStatus().relayPeerId, {ttl: 10000})
 }
