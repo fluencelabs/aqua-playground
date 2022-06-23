@@ -173,12 +173,12 @@ export function retrieve_records(...args: any) {
                        (new $records
                         (seq
                          (call %init_peer_id% ("test-service" "get_records") [peer] $records)
-                         (call %init_peer_id% ("op" "identity") [$records] records-fix)
+                         (call %init_peer_id% ("op" "identity") [$records] $records-fix-0)
                         )
                        )
                       )
                       (xor
-                       (call %init_peer_id% ("callbackSrv" "response") [records-fix])
+                       (call %init_peer_id% ("callbackSrv" "response") [$records-fix-0])
                        (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
                       )
                      )

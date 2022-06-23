@@ -19,6 +19,104 @@ import {
 // Functions
  
 
+export function accumRes(
+    config?: {ttl?: number}
+): Promise<string | null[]>;
+
+export function accumRes(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<string | null[]>;
+
+export function accumRes(...args: any) {
+
+    let script = `
+                    (xor
+                     (seq
+                      (seq
+                       (seq
+                        (seq
+                         (seq
+                          (seq
+                           (seq
+                            (seq
+                             (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+                             (new $str
+                              (seq
+                               (ap "a" $str)
+                               (call %init_peer_id% ("op" "identity") [$str] $str-fix-0)
+                              )
+                             )
+                            )
+                            (call %init_peer_id% ("op" "identity") [$str-fix-0] push-to-stream-10)
+                           )
+                           (ap push-to-stream-10 $res_accum)
+                          )
+                          (new $str-0
+                           (seq
+                            (ap "b" $str-0)
+                            (call %init_peer_id% ("op" "identity") [$str-0] $str-fix-0-0)
+                           )
+                          )
+                         )
+                         (call %init_peer_id% ("op" "identity") [$str-fix-0-0] push-to-stream-17)
+                        )
+                        (ap push-to-stream-17 $res_accum)
+                       )
+                       (ap [] $res_accum)
+                      )
+                      (xor
+                       (call %init_peer_id% ("callbackSrv" "response") [$res_accum])
+                       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+                      )
+                     )
+                     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+                    )
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "accumRes",
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                
+            }
+        },
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "option",
+                        "type" : {
+                            "tag" : "scalar",
+                            "name" : "string"
+                        }
+                    }
+                }
+            ]
+        }
+    },
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
+}
+
+ 
+
 export function toOpt(
     s: string,
     config?: {ttl?: number}
@@ -43,12 +141,12 @@ export function toOpt(...args: any) {
                        (new $str
                         (seq
                          (ap s $str)
-                         (call %init_peer_id% ("op" "identity") [$str] str-fix)
+                         (call %init_peer_id% ("op" "identity") [$str] $str-fix-0)
                         )
                        )
                       )
                       (xor
-                       (call %init_peer_id% ("callbackSrv" "response") [str-fix])
+                       (call %init_peer_id% ("callbackSrv" "response") [$str-fix-0])
                        (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
                       )
                      )
@@ -99,48 +197,31 @@ export function toOpt(...args: any) {
 
  
 
-export function accumRes(
+export function returnCanStream(
     config?: {ttl?: number}
-): Promise<string | null[]>;
+): Promise<string>;
 
-export function accumRes(
+export function returnCanStream(
     peer: FluencePeer,
     config?: {ttl?: number}
-): Promise<string | null[]>;
+): Promise<string>;
 
-export function accumRes(...args: any) {
+export function returnCanStream(...args: any) {
 
     let script = `
                     (xor
                      (seq
                       (seq
-                       (seq
+                       (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+                       (new $status
                         (seq
-                         (seq
-                          (seq
-                           (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-                           (new $str
-                            (seq
-                             (ap "a" $str)
-                             (call %init_peer_id% ("op" "identity") [$str] str-fix)
-                            )
-                           )
-                          )
-                          (ap str-fix $res_accum)
-                         )
-                         (new $str-0
-                          (seq
-                           (ap "b" $str-0)
-                           (call %init_peer_id% ("op" "identity") [$str-0] str-fix-0)
-                          )
-                         )
+                         (ap "ok" $status)
+                         (call %init_peer_id% ("op" "identity") [$status.$.[0]!] stat-fix-0)
                         )
-                        (ap str-fix-0 $res_accum)
                        )
-                       (ap [] $res_accum)
                       )
                       (xor
-                       (call %init_peer_id% ("callbackSrv" "response") [$res_accum])
+                       (call %init_peer_id% ("callbackSrv" "response") [stat-fix-0])
                        (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
                       )
                      )
@@ -150,7 +231,7 @@ export function accumRes(...args: any) {
     return callFunction(
         args,
         {
-    "functionName" : "accumRes",
+    "functionName" : "returnCanStream",
     "arrow" : {
         "tag" : "arrow",
         "domain" : {
@@ -163,13 +244,341 @@ export function accumRes(...args: any) {
             "tag" : "unlabeledProduct",
             "items" : [
                 {
+                    "tag" : "scalar",
+                    "name" : "string"
+                }
+            ]
+        }
+    },
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
+}
+
+ 
+export type BugLNG63_2Result = [string, string[], string[]]
+export function bugLNG63_2(
+    config?: {ttl?: number}
+): Promise<BugLNG63_2Result>;
+
+export function bugLNG63_2(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<BugLNG63_2Result>;
+
+export function bugLNG63_2(...args: any) {
+
+    let script = `
+                    (xor
+                     (seq
+                      (seq
+                       (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+                       (new $status
+                        (seq
+                         (seq
+                          (seq
+                           (seq
+                            (seq
+                             (seq
+                              (ap "ok" $status)
+                              (call %init_peer_id% ("op" "identity") [$status.$.[0]!] stat-fix-0)
+                             )
+                             (call %init_peer_id% ("op" "identity") [$status] $status-fix-1)
+                            )
+                            (new $array-inline
+                             (seq
+                              (seq
+                               (seq
+                                (seq
+                                 (call %init_peer_id% ("op" "identity") [$status.$.[0]!] push-to-stream-18)
+                                 (ap push-to-stream-18 $array-inline)
+                                )
+                                (call %init_peer_id% ("op" "identity") [$status.$.[0]!] push-to-stream-19)
+                               )
+                               (ap push-to-stream-19 $array-inline)
+                              )
+                              (call %init_peer_id% ("op" "identity") [$array-inline] array-inline-0)
+                             )
+                            )
+                           )
+                           (call %init_peer_id% ("op" "identity") [array-inline-0] status-fix-2)
+                          )
+                          (new $array-inline-1
+                           (seq
+                            (seq
+                             (seq
+                              (seq
+                               (seq
+                                (call %init_peer_id% ("op" "identity") [$status.$.[0]!] push-to-stream-24)
+                                (ap push-to-stream-24 $array-inline-1)
+                               )
+                               (ap "no" $array-inline-1)
+                              )
+                              (call %init_peer_id% ("op" "identity") [$status.$.[0]!] push-to-stream-26)
+                             )
+                             (ap push-to-stream-26 $array-inline-1)
+                            )
+                            (call %init_peer_id% ("op" "identity") [$array-inline-1] array-inline-1-0)
+                           )
+                          )
+                         )
+                         (call %init_peer_id% ("op" "identity") [array-inline-1-0] status-fix-3)
+                        )
+                       )
+                      )
+                      (xor
+                       (call %init_peer_id% ("callbackSrv" "response") [stat-fix-0 $status-fix-1 status-fix-3])
+                       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+                      )
+                     )
+                     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+                    )
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "bugLNG63_2",
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                
+            }
+        },
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "scalar",
+                    "name" : "string"
+                },
+                {
                     "tag" : "array",
                     "type" : {
-                        "tag" : "option",
-                        "type" : {
-                            "tag" : "scalar",
-                            "name" : "string"
-                        }
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                },
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                }
+            ]
+        }
+    },
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
+}
+
+ 
+
+export function bugLNG63(
+    config?: {ttl?: number}
+): Promise<string>;
+
+export function bugLNG63(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<string>;
+
+export function bugLNG63(...args: any) {
+
+    let script = `
+                    (xor
+                     (seq
+                      (seq
+                       (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+                       (new $status
+                        (seq
+                         (ap "ok" $status)
+                         (call %init_peer_id% ("op" "identity") [$status.$.[0]!] stat-fix-0)
+                        )
+                       )
+                      )
+                      (xor
+                       (call %init_peer_id% ("callbackSrv" "response") [stat-fix-0])
+                       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+                      )
+                     )
+                     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+                    )
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "bugLNG63",
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                
+            }
+        },
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "scalar",
+                    "name" : "string"
+                }
+            ]
+        }
+    },
+    "names" : {
+        "relay" : "-relay-",
+        "getDataSrv" : "getDataSrv",
+        "callbackSrv" : "callbackSrv",
+        "responseSrv" : "callbackSrv",
+        "responseFnName" : "response",
+        "errorHandlingSrv" : "errorHandlingSrv",
+        "errorFnName" : "error"
+    }
+},
+        script
+    )
+}
+
+ 
+export type ReturnMultipleStreamResultsResult = [string, string[], string[], string[]]
+export function returnMultipleStreamResults(
+    config?: {ttl?: number}
+): Promise<ReturnMultipleStreamResultsResult>;
+
+export function returnMultipleStreamResults(
+    peer: FluencePeer,
+    config?: {ttl?: number}
+): Promise<ReturnMultipleStreamResultsResult>;
+
+export function returnMultipleStreamResults(...args: any) {
+
+    let script = `
+                    (xor
+                     (seq
+                      (seq
+                       (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+                       (new $status
+                        (seq
+                         (seq
+                          (seq
+                           (seq
+                            (seq
+                             (seq
+                              (ap "ok" $status)
+                              (call %init_peer_id% ("op" "identity") [$status.$.[0]!] stat-fix-0)
+                             )
+                             (call %init_peer_id% ("op" "identity") [$status] $status-fix-1)
+                            )
+                            (new $array-inline
+                             (seq
+                              (seq
+                               (seq
+                                (seq
+                                 (call %init_peer_id% ("op" "identity") [$status.$.[0]!] push-to-stream-18)
+                                 (ap push-to-stream-18 $array-inline)
+                                )
+                                (call %init_peer_id% ("op" "identity") [$status.$.[0]!] push-to-stream-19)
+                               )
+                               (ap push-to-stream-19 $array-inline)
+                              )
+                              (call %init_peer_id% ("op" "identity") [$array-inline] array-inline-0)
+                             )
+                            )
+                           )
+                           (call %init_peer_id% ("op" "identity") [array-inline-0] status-fix-2)
+                          )
+                          (new $array-inline-1
+                           (seq
+                            (seq
+                             (seq
+                              (seq
+                               (seq
+                                (call %init_peer_id% ("op" "identity") [$status.$.[0]!] push-to-stream-24)
+                                (ap push-to-stream-24 $array-inline-1)
+                               )
+                               (ap "no" $array-inline-1)
+                              )
+                              (call %init_peer_id% ("op" "identity") [$status.$.[0]!] push-to-stream-26)
+                             )
+                             (ap push-to-stream-26 $array-inline-1)
+                            )
+                            (call %init_peer_id% ("op" "identity") [$array-inline-1] array-inline-1-0)
+                           )
+                          )
+                         )
+                         (call %init_peer_id% ("op" "identity") [array-inline-1-0] status-fix-3)
+                        )
+                       )
+                      )
+                      (xor
+                       (call %init_peer_id% ("callbackSrv" "response") [stat-fix-0 $status-fix-1 status-fix-2 status-fix-3])
+                       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+                      )
+                     )
+                     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+                    )
+    `
+    return callFunction(
+        args,
+        {
+    "functionName" : "returnMultipleStreamResults",
+    "arrow" : {
+        "tag" : "arrow",
+        "domain" : {
+            "tag" : "labeledProduct",
+            "fields" : {
+                
+            }
+        },
+        "codomain" : {
+            "tag" : "unlabeledProduct",
+            "items" : [
+                {
+                    "tag" : "scalar",
+                    "name" : "string"
+                },
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                },
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
+                    }
+                },
+                {
+                    "tag" : "array",
+                    "type" : {
+                        "tag" : "scalar",
+                        "name" : "string"
                     }
                 }
             ]

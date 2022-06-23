@@ -148,12 +148,12 @@ export function returnNone(...args: any) {
                        (new $result
                         (seq
                          (call %init_peer_id% ("op" "noop") [])
-                         (call %init_peer_id% ("op" "identity") [$result] result-fix)
+                         (call %init_peer_id% ("op" "identity") [$result] $result-fix-0)
                         )
                        )
                       )
                       (xor
-                       (call %init_peer_id% ("callbackSrv" "response") [result-fix])
+                       (call %init_peer_id% ("callbackSrv" "response") [$result-fix-0])
                        (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
                       )
                      )

@@ -30,7 +30,7 @@ import { declareCall } from '../examples/declareCall';
 import { genOptions } from '../examples/optionsCall';
 import { config } from '../config';
 import {closuresCall} from "../examples/closures";
-import {streamCanCall} from "../examples/streamCan";
+import {bugLNG63Call, streamCanCall} from "../examples/streamCanCall";
 import {streamCallbackCall} from "../examples/streamCallback";
 import {streamResCall} from "../examples/streamRestrictionsCall";
 import {joinIdxCall, joinIdxLocalCall, joinIdxRelayCall} from "../examples/joinCall";
@@ -182,6 +182,16 @@ describe('Testing examples', () => {
         let streamCanResult = await streamCanCall();
         expect(streamCanResult).toEqual(["a", "b", null]);
     });
+
+    //it('streamCan.aqua LNG-63', async () => {
+    //    let result = await bugLNG63Call();
+    //    expect(result).toEqual(["a", "b", null]);
+    //});
+//
+    //it('streamCan.aqua LNG-63 2', async () => {
+    //    let result = await bugLNG63Call();
+    //    expect(result).toEqual(["a", "b", null]);
+    //});
 
     it('collectionSugar array', async () => {
         let result = await arraySugarCall();

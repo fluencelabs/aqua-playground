@@ -1,3 +1,5 @@
+export accumRes, bugLNG63, bugLNG63_2
+
 func toOpt(s: string) -> ?string:
   str: *string
   str <<- s
@@ -10,3 +12,23 @@ func accumRes() -> *?string:
   res_accum <- toOpt("b")
   res_accum <<- nil
   <- res_accum
+
+func returnCanStream() -> string:
+    status: *string
+    status <<- "ok"
+    stat = status!
+  <- stat
+
+func bugLNG63() -> string:
+    res <- returnCanStream()
+  <- res
+
+func returnMultipleStreamResults() -> string, []string, []string, []string:
+    status: *string
+    status <<- "ok"
+    stat = status!
+  <- stat, status, [status!, status!], [status!, "no", status!]
+
+func bugLNG63_2() -> string, []string, []string:
+    res, res2, res3, res4 <- returnMultipleStreamResults()
+    <- res, res2, res4

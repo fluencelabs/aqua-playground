@@ -84,10 +84,10 @@ export function checkEmpty(...args: any) {
                        (seq
                         (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
                         (new $valueEmpty
-                         (call %init_peer_id% ("op" "identity") [$valueEmpty] valueEmpty-fix)
+                         (call %init_peer_id% ("op" "identity") [$valueEmpty] $valueEmpty-fix-0)
                         )
                        )
-                       (call %init_peer_id% ("opt_str" "checkOption") [valueEmpty-fix] res)
+                       (call %init_peer_id% ("opt_str" "checkOption") [$valueEmpty-fix-0] res)
                       )
                       (xor
                        (call %init_peer_id% ("callbackSrv" "response") [res])
@@ -152,11 +152,11 @@ export function emptyString(...args: any) {
                       (seq
                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
                        (new $valueEmpty
-                        (call %init_peer_id% ("op" "identity") [$valueEmpty] valueEmpty-fix)
+                        (call %init_peer_id% ("op" "identity") [$valueEmpty] $valueEmpty-fix-0)
                        )
                       )
                       (xor
-                       (call %init_peer_id% ("callbackSrv" "response") [valueEmpty-fix])
+                       (call %init_peer_id% ("callbackSrv" "response") [$valueEmpty-fix-0])
                        (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
                       )
                      )
@@ -229,11 +229,11 @@ export function checkNoneEmpty(...args: any) {
                         (new $valueEmpty
                          (seq
                           (ap str $valueEmpty)
-                          (call %init_peer_id% ("op" "identity") [$valueEmpty] valueEmpty-fix)
+                          (call %init_peer_id% ("op" "identity") [$valueEmpty] $valueEmpty-fix-0)
                          )
                         )
                        )
-                       (call %init_peer_id% ("opt_str" "checkOption") [valueEmpty-fix] res)
+                       (call %init_peer_id% ("opt_str" "checkOption") [$valueEmpty-fix-0] res)
                       )
                       (xor
                        (call %init_peer_id% ("callbackSrv" "response") [res])
@@ -308,12 +308,12 @@ export function stringAsOption(...args: any) {
                        (new $valueEmpty
                         (seq
                          (ap str $valueEmpty)
-                         (call %init_peer_id% ("op" "identity") [$valueEmpty] valueEmpty-fix)
+                         (call %init_peer_id% ("op" "identity") [$valueEmpty] $valueEmpty-fix-0)
                         )
                        )
                       )
                       (xor
-                       (call %init_peer_id% ("callbackSrv" "response") [valueEmpty-fix])
+                       (call %init_peer_id% ("callbackSrv" "response") [$valueEmpty-fix-0])
                        (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
                       )
                      )

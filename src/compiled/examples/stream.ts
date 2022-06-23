@@ -80,11 +80,11 @@ export function returnNone(...args: any) {
                       (seq
                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
                        (new $valueNone
-                        (call %init_peer_id% ("op" "identity") [$valueNone] valueNone-fix)
+                        (call %init_peer_id% ("op" "identity") [$valueNone] $valueNone-fix-0)
                        )
                       )
                       (xor
-                       (call %init_peer_id% ("callbackSrv" "response") [valueNone-fix])
+                       (call %init_peer_id% ("callbackSrv" "response") [$valueNone-fix-0])
                        (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
                       )
                      )
@@ -149,11 +149,11 @@ export function stringNone(...args: any) {
                       (seq
                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
                        (new $valueNone
-                        (call %init_peer_id% ("op" "identity") [$valueNone] valueNone-fix)
+                        (call %init_peer_id% ("op" "identity") [$valueNone] $valueNone-fix-0)
                        )
                       )
                       (xor
-                       (call %init_peer_id% ("callbackSrv" "response") [valueNone-fix])
+                       (call %init_peer_id% ("callbackSrv" "response") [$valueNone-fix-0])
                        (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
                       )
                      )
@@ -370,12 +370,12 @@ export function checkStreams(...args: any) {
                            )
                           )
                          )
-                         (call %init_peer_id% ("op" "identity") [$stream] stream-fix)
+                         (call %init_peer_id% ("op" "identity") [$stream] $stream-fix-0)
                         )
                        )
                       )
                       (xor
-                       (call %init_peer_id% ("callbackSrv" "response") [stream-fix])
+                       (call %init_peer_id% ("callbackSrv" "response") [$stream-fix-0])
                        (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
                       )
                      )
