@@ -30,7 +30,7 @@ import { declareCall } from '../examples/declareCall';
 import { genOptions } from '../examples/optionsCall';
 import { config } from '../config';
 import {closuresCall} from "../examples/closures";
-import {bugLNG63Call, streamCanCall} from "../examples/streamCanCall";
+import {bugLNG63_2Call, bugLNG63_3Call, bugLNG63Call, streamCanCall} from "../examples/streamCanCall";
 import {streamCallbackCall} from "../examples/streamCallback";
 import {streamResCall} from "../examples/streamRestrictionsCall";
 import {joinIdxCall, joinIdxLocalCall, joinIdxRelayCall} from "../examples/joinCall";
@@ -183,15 +183,20 @@ describe('Testing examples', () => {
         expect(streamCanResult).toEqual(["a", "b", null]);
     });
 
-    //it('streamCan.aqua LNG-63', async () => {
-    //    let result = await bugLNG63Call();
-    //    expect(result).toEqual(["a", "b", null]);
-    //});
-//
-    //it('streamCan.aqua LNG-63 2', async () => {
-    //    let result = await bugLNG63Call();
-    //    expect(result).toEqual(["a", "b", null]);
-    //});
+    it('streamCan.aqua LNG-63', async () => {
+       let result = await bugLNG63Call();
+       expect(result).toEqual("ok");
+    });
+
+    it('streamCan.aqua LNG-63 2', async () => {
+       let result = await bugLNG63_2Call();
+       expect(result).toEqual(["ok", ["ok"], ["ok", "no", "ok"]]);
+    });
+
+    it('streamCan.aqua LNG-63 3', async () => {
+        let result = await bugLNG63_3Call();
+        expect(result).toEqual(["ok", 1, [1,3,2]]);
+    });
 
     it('collectionSugar array', async () => {
         let result = await arraySugarCall();
