@@ -6,7 +6,7 @@ import { onCall } from '../examples/onCall';
 import { funcCall } from '../examples/funcCall';
 import { helloWorldCall } from '../examples/helloWorldCall';
 import {foldBug499Call, foldCall} from '../examples/foldCall';
-import {ifCall, ifWrapCall} from '../examples/if';
+import {bugNG69Call, ifCall, ifWrapCall} from '../examples/ifCall';
 import {parCall, testTimeoutCall} from '../examples/parCall';
 import { complexCall } from '../examples/complex';
 import {constantsCall, particleTtlAndTimestampCall} from '../examples/constantsCall';
@@ -35,7 +35,13 @@ import {streamCallbackCall} from "../examples/streamCallback";
 import {streamResCall} from "../examples/streamRestrictionsCall";
 import {joinIdxCall, joinIdxLocalCall, joinIdxRelayCall} from "../examples/joinCall";
 import {recursiveStreamsCall} from "../examples/recursiveStreamsCall";
-import {allEmptySugarCall, arraySugarCall, optionSugarCall, streamSugarCall} from "../examples/collectionSugarCall";
+import {
+    allEmptySugarCall,
+    arraySugarCall,
+    bugLNG59Call,
+    optionSugarCall,
+    streamSugarCall
+} from "../examples/collectionSugarCall";
 import {funcsCall} from "../examples/funcsCall";
 import {nestedDataCall} from "../examples/nestedDataCall";
 import {mathTest1Call, mathTest2Call} from "../examples/mathCall";
@@ -107,6 +113,11 @@ describe('Testing examples', () => {
     it('if.aqua xor wrap', async () => {
         let res = await ifWrapCall(peer2.getStatus().relayPeerId);
         expect(res).toBe('1x');
+    });
+
+    it('if.aqua bug LNG-69', async () => {
+        let res = await bugNG69Call(peer2.getStatus().relayPeerId);
+        expect(res).toBe(true);
     });
 
     it(' par.aqua', async () => {
@@ -219,7 +230,7 @@ describe('Testing examples', () => {
     });
 
     it('collectionSugar bug LNG-59', async () => {
-        let result = await bugLNG59()
+        let result = await bugLNG59Call()
         expect(result).toEqual("some str");
     });
 

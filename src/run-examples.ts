@@ -9,7 +9,7 @@ import { onCall } from './examples/onCall';
 import { funcCall } from './examples/funcCall';
 import { helloWorldCall } from './examples/helloWorldCall';
 import { foldCall } from './examples/foldCall';
-import { ifCall } from './examples/if';
+import { ifCall } from './examples/ifCall';
 import { parCall } from './examples/parCall';
 import { complexCall } from './examples/complex';
 import { constantsCall } from './examples/constantsCall';
