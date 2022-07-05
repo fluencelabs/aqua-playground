@@ -115,7 +115,7 @@ describe('Testing examples', () => {
         expect(res).toBe('1x');
     });
 
-    it.skip('if.aqua bug LNG-69', async () => {
+    it('if.aqua bug LNG-69', async () => {
         let res = await bugNG69Call(peer2.getStatus().relayPeerId);
         expect(res).toBe(true);
     });
