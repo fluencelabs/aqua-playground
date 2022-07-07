@@ -48,7 +48,7 @@ func getNeighbours() -> []string:
 func bugLNG59() -> string:
   on HOST_PEER_ID:
     nodes <- getNeighbours()
-    n = nodes[3]
+    n = nodes[4]
     on n:
       res <- OpO.identity("some str")
   <- res
