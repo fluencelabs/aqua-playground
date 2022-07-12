@@ -41,14 +41,17 @@ func emptySugar() -> []u32, []string, []string, *string, ?u32, []u32, ?string:
 service OpO("op"):
     identity: string -> string
 
+service GetArr("getArr"):
+    getArr: -> []string
+
 func getNeighbours() -> []string:
   nodes <- Kademlia.neighborhood("123", nil, nil)
   <- nodes
 
 func bugLNG59() -> string:
   on HOST_PEER_ID:
-    nodes <- getNeighbours()
-    n = nodes[4]
+    nodes <- GetArr.getArr()
+    n = nodes[1]
     on n:
       res <- OpO.identity("some str")
   <- res

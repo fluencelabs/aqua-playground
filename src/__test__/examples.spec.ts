@@ -230,7 +230,7 @@ describe('Testing examples', () => {
     });
 
     it('collectionSugar bug LNG-59', async () => {
-        let result = await bugLNG59Call()
+        let result = await bugLNG59Call([config.relays[2].peerId, config.relays[3].peerId])
         expect(result).toEqual("some str");
     });
 
