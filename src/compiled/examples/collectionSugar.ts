@@ -581,7 +581,7 @@ export function getNeighbours(...args: any) {
                      (seq
                       (seq
                        (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-                       (call %init_peer_id% ("kad" "neighborhood") ["123" [] []] nodes)
+                       (call %init_peer_id% ("getArr" "getArr") [] nodes)
                       )
                       (xor
                        (call %init_peer_id% ("callbackSrv" "response") [nodes])
@@ -647,30 +647,62 @@ export function bugLNG59(...args: any) {
                     (xor
                      (seq
                       (seq
-                       (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-                       (xor
+                       (seq
                         (seq
-                         (call -relay- ("getArr" "getArr") [] nodes)
-                         (xor
+                         (seq
                           (seq
-                           (call nodes.$.[1]! ("op" "identity") ["some str"] res)
-                           (call -relay- ("op" "noop") [])
+                           (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+                           (call %init_peer_id% ("getArr" "getArr") [] nodes)
                           )
-                          (seq
-                           (call -relay- ("op" "noop") [])
-                           (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+                          (new $array-inline
+                           (seq
+                            (ap -relay- $array-inline)
+                            (call %init_peer_id% ("op" "identity") [$array-inline] array-inline-0)
+                           )
                           )
                          )
+                         (call -relay- ("op" "noop") [])
                         )
-                        (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+                        (fold array-inline-0 -via-peer-
+                         (seq
+                          (call -via-peer- ("op" "noop") [])
+                          (next -via-peer-)
+                         )
+                        )
+                       )
+                       (xor
+                        (seq
+                         (seq
+                          (call nodes.$.[1]! ("op" "identity") ["some str"] res)
+                          (fold array-inline-0 -via-peer-
+                           (seq
+                            (next -via-peer-)
+                            (call -via-peer- ("op" "noop") [])
+                           )
+                          )
+                         )
+                         (call -relay- ("op" "noop") [])
+                        )
+                        (seq
+                         (seq
+                          (fold array-inline-0 -via-peer-
+                           (seq
+                            (call -via-peer- ("op" "noop") [])
+                            (next -via-peer-)
+                           )
+                          )
+                          (call -relay- ("op" "noop") [])
+                         )
+                         (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+                        )
                        )
                       )
                       (xor
                        (call %init_peer_id% ("callbackSrv" "response") [res])
-                       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
+                       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
                       )
                      )
-                     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 4])
+                     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
                     )
     `
     return callFunction(

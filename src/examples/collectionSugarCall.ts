@@ -31,5 +31,6 @@ export async function bugLNG59Call(nodes: string[]): Promise<string> {
         }
     })
 
-    return bugLNG59()
+    const a = await bugLNG59()
+    return a
 }

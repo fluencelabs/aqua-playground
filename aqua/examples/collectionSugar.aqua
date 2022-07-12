@@ -45,13 +45,12 @@ service GetArr("getArr"):
     getArr: -> []string
 
 func getNeighbours() -> []string:
-  nodes <- Kademlia.neighborhood("123", nil, nil)
+  nodes <- GetArr.getArr()
   <- nodes
 
 func bugLNG59() -> string:
-  on HOST_PEER_ID:
-    nodes <- GetArr.getArr()
-    n = nodes[1]
-    on n:
-      res <- OpO.identity("some str")
+  nodes <- getNeighbours()
+  n = nodes[1]
+  on n via [HOST_PEER_ID]:
+    res <- OpO.identity("some str")
   <- res
