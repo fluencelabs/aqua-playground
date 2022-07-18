@@ -3,7 +3,7 @@
 import { Fluence, FluencePeer } from '@fluencelabs/fluence';
 import { krasnodar } from '@fluencelabs/fluence-network-environment';
 import { helloWorld, registerStringExtra } from './compiled/examples/helloWorld';
-import { runExamples } from './run-examples';
+// import { runExamples } from './run-examples';
 
 const main = async () => {
     // each compiled aqua function require a connected client
