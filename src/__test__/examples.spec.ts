@@ -50,6 +50,7 @@ import { bugLNG59 } from '../compiled/examples/collectionSugar';
 
 var selfPeerId: string;
 var peer2: FluencePeer;
+var ephemeralNetwork: EphemeralNetwork;
 
 const relays = config.relays;
 
@@ -57,11 +58,23 @@ const relays = config.relays;
 
 describe('Testing examples', () => {
     beforeAll(async () => {
-        await Fluence.start({ connectTo: relays[0] });
-        selfPeerId = Fluence.getStatus().peerId;
+        ephemeralNetwork = new EphemeralNetwork(defaultConfig);
+        await ephemeralNetwork.up();
+
+        const defaultPeer = Fluence.getPeer();
+        await defaultPeer.init({
+            KeyPair: await KeyPair.randomEd25519(),
+        });
+        const conn = ephemeralNetwork.getRelayConnection(relays[0].peerId, defaultPeer);
+        await defaultPeer.connect(conn);
+        selfPeerId = defaultPeer.getStatus().peerId;
 
         peer2 = new FluencePeer();
-        await peer2.start({ connectTo: relays[1] });
+        await peer2.init({
+            KeyPair: await KeyPair.randomEd25519(),
+        });
+        const conn2 = ephemeralNetwork.getRelayConnection(relays[1].peerId, peer2);
+        await peer2.connect(conn2);
 
         // this could be called from `println.aqua`
         registerPrintln({
@@ -72,12 +85,15 @@ describe('Testing examples', () => {
     });
 
     afterAll(async () => {
+        if (ephemeralNetwork) {
+            await ephemeralNetwork.down();
+        }
+
+        await Fluence.stop();
         if (peer2) {
-            Fluence.stop();
             await peer2.stop();
         }
     });
-
     it('callArrow.aqua', async () => {
         let callArrowResult = await callArrowCall();
 
