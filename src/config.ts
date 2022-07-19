@@ -36,4 +36,5 @@ export const ephemeralConfig = {
         "Local service error, ret_code is 1, error message is '\"Service with id 'unex' not found (function getStr)\"'",
 };
 
-export const config = ephemeralConfig;
+// export const config = ephemeralConfig;
+export const config = stageConfig;
