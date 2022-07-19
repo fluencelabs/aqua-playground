@@ -33,7 +33,7 @@ import { declareCall } from './examples/declareCall';
 import { genOptions } from './examples/optionsCall';
 import { config } from './config';
 
-const relays = config.relays
+const relays = config.relays;
 
 export const runExamples = async () => {
     // stop the currently running peer to start with the clean state
